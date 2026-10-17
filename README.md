@@ -2,7 +2,7 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado:** base del frontend y prototipo navegable con pantallas provisionales. No es un sistema apto para usuarios reales todavía.
+> **Estado:** landing institucional implementada y prototipo navegable. Comunidad y administración mantienen sus pantallas provisionales. No es un sistema apto para usuarios reales todavía.
 
 ## Objetivo inmediato
 
@@ -14,7 +14,9 @@ Crear en pocos días una demostración visual navegable para revisar con el clie
 3. **Administración:** gestión visual de alumnos, solicitudes y publicaciones.
 
 ## Estado del repositorio
-Esta rama incluye la base del frontend con **React + TypeScript + Vite**, **Tailwind CSS** y **React Router**. Las tres áreas tienen pantallas provisionales y navegación compartida; el diseño definitivo y los flujos de negocio se implementarán en tareas posteriores.
+Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Router**. La landing adapta la propuesta visual original con Figtree, logotipos CAI, secciones responsive y estilos encapsulados mediante CSS Modules. Los textos comerciales, cifras y testimonios se identifican como contenido de muestra.
+
+`/` utiliza `LandingLayout`; `/community`, `/admin` y la página 404 conservan `AppLayout`. Los formularios de la landing validan datos ficticios y muestran mensajes accesibles: no envían solicitudes, no reservan clases y no almacenan información. Los flujos de comunidad, moderación y roles siguen pendientes.
 
 ## Desarrollo local
 
@@ -42,6 +44,7 @@ Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/ad
 - [Requisitos iniciales](docs/requirements.md)
 - [Plan de prototipo](docs/prototype-plan.md)
 - [Base del frontend y guía de desarrollo](docs/frontend-foundation.md)
+- [Implementación de la landing, pruebas y procedencia de imágenes](docs/landing-implementation.md)
 - [Instrucciones para Codex](AGENTS.md)
 
 ## Flujo de trabajo
@@ -51,7 +54,7 @@ Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/ad
 - Mantener documentación y código alineados.
 
 ## Propuesta visual anterior
-Existe una landing de CAI desarrollada previamente en otro repositorio del equipo. Se utilizará como **referencia** para la identidad visual y los contenidos, respetando la atribución; este repositorio es el nuevo punto de desarrollo.
+La copia local de la propuesta anterior se conserva en `reference/cai-original/`, ignorada por Git. Se adaptó su diseño sin modificarla ni importarla desde la aplicación. Únicamente se copiaron los dos SVG necesarios a `src/assets/cai/`. La procedencia de las fotografías de stock, las diferencias y los contenidos por validar se detallan en la guía de implementación.
 
 ## Privacidad
 El prototipo usará exclusivamente **datos ficticios**. Los controles de acceso y la moderación simulados no ofrecen garantías de seguridad. El uso real con estudiantes requiere una implementación posterior de autenticación, autorización, almacenamiento privado y consentimiento pertinente.
