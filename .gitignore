@@ -10,3 +10,5 @@ Thumbs.db
 *.log
 .vscode/*
 !.vscode/extensions.json
+# Referencia original de CAI (solo uso local)
+/reference/

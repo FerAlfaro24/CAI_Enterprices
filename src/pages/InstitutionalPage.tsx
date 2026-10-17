@@ -1,23 +1,30 @@
-import { PlaceholderPage } from '../components/PlaceholderPage'
+import { useEffect } from 'react'
+import { HeroSection } from '../features/landing/components/HeroSection'
+import { CertificationStrip, StatisticsSection } from '../features/landing/components/TrustSections'
+import { HistorySection } from '../features/landing/components/HistorySection'
+import { ServicesSection } from '../features/landing/components/ServicesSection'
+import { AudienceSection, ProgramsSection, TestimonialsSection, TrialClassSection } from '../features/landing/components/ProgramsSection'
+import { ContactSection, FaqSection, PlatformPreviewSection } from '../features/landing/components/ContactSections'
 
 export function InstitutionalPage() {
+  useEffect(() => {
+    document.title = 'CAI · Aprende inglés con confianza · Prototipo'
+  }, [])
+
   return (
-    <PlaceholderPage
-      area="Área pública"
-      title="Centro de Asesorías Integrales"
-      description="CAI es un centro de enseñanza de inglés. Esta página será el punto de entrada para conocer su propuesta educativa."
-    >
-      <h2 className="text-lg font-semibold text-slate-950">
-        Presentación institucional en preparación
-      </h2>
-      <p className="mt-3 leading-relaxed text-slate-700">
-        Aquí se incorporarán los programas, la metodología y los medios de
-        contacto cuando el cliente valide la información.
-      </p>
-      <p className="mt-3 leading-relaxed text-slate-700">
-        Utiliza la navegación temporal para recorrer las tres áreas del
-        prototipo.
-      </p>
-    </PlaceholderPage>
+    <>
+      <HeroSection />
+      <CertificationStrip />
+      <StatisticsSection />
+      <HistorySection />
+      <ServicesSection />
+      <TestimonialsSection />
+      <AudienceSection />
+      <TrialClassSection />
+      <ProgramsSection />
+      <PlatformPreviewSection />
+      <FaqSection />
+      <ContactSection />
+    </>
   )
 }
