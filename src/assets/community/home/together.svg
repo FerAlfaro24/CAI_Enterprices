@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" fill="none">
+  <path d="M0 0h600v400H0z" fill="#1F56D6"/>
+  <path d="M28 0v400M128 0v400M228 0v400M328 0v400M428 0v400M528 0v400M0 65h600M0 165h600M0 265h600M0 365h600" stroke="#fff" stroke-opacity=".09"/>
+  <path d="m94 50 352 25-22 292-352-25z" fill="#0A1F4D" fill-opacity=".25"/>
+  <g transform="rotate(-7 275 195)">
+    <rect x="81" y="39" width="358" height="292" rx="8" fill="#FFF9EB"/>
+    <path d="M101 69h318M101 291h318" stroke="#0A1F4D" stroke-width="2"/>
+    <text x="105" y="61" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="3">THE COMMUNITY EDITION</text>
+    <text x="100" y="155" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="78" font-weight="900" letter-spacing="-5">HELLO,</text>
+    <text x="104" y="223" fill="#1F56D6" font-family="Arial,sans-serif" font-size="58" font-weight="900" letter-spacing="-3">TOGETHER.</text>
+    <text x="105" y="267" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="1">MORE VOICES. MORE POSSIBILITIES.</text>
+    <path d="m302 311 21-14 20 14 20-14 20 14 20-14" stroke="#1F56D6" stroke-width="3"/>
+  </g>
+  <g transform="rotate(9 460 110)">
+    <path d="M391 51h143a15 15 0 0 1 15 15v79a15 15 0 0 1-15 15h-72l-35 24v-24h-36a15 15 0 0 1-15-15V66a15 15 0 0 1 15-15Z" fill="#BCE9DA" stroke="#0A1F4D" stroke-width="3"/>
+    <path d="M405 87h111M405 107h77M405 127h94" stroke="#0A1F4D" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <path d="m454 229 14 18 23-4 3 23 21 11-11 21 10 21-22 10-5 23-23-6-16 18-18-15-23 3-2-23-20-12 12-20-8-22 22-8 6-22 22 7z" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="2"/>
+  <path d="m439 289 12 12 25-27" stroke="#0A1F4D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m45 148 5 16 16 5-16 5-5 16-5-16-16-5 16-5zM535 211l4 11 11 4-11 4-4 11-4-11-11-4 11-4z" fill="#FFCD1F"/>
+  <path d="M57 335c-12-26-6-53 15-62m-15 62-2-22m2 22 22-7" stroke="#BCE9DA" stroke-width="4" stroke-linecap="round"/>
+</svg>

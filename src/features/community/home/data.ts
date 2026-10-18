@@ -1,11 +1,13 @@
+import type { homeMedia } from './media'
+
 /** Editorial artwork is illustrative, not a record of real CAI events. */
 export interface HeroSlide {
-  id: string
+  id: keyof typeof homeMedia
   category: string
   title: string
   description: string
   cards: [string, string, string]
-  image?: { src: string; alt: string }
+  image?: { src: string; alt: string; credit?: string }
 }
 
 export const heroSlides: HeroSlide[] = [
