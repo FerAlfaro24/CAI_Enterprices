@@ -2,7 +2,7 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado:** landing institucional implementada y prototipo navegable. Comunidad y administración mantienen sus pantallas provisionales. No es un sistema apto para usuarios reales todavía.
+> **Estado:** landing institucional y comunidad interactiva de demostración implementadas. Administración mantiene su pantalla provisional. No es un sistema apto para usuarios reales.
 
 ## Objetivo inmediato
 
@@ -16,7 +16,9 @@ Crear en pocos días una demostración visual navegable para revisar con el clie
 ## Estado del repositorio
 Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Router**. La landing adapta la propuesta visual original con Figtree, logotipos CAI, secciones responsive y estilos encapsulados mediante CSS Modules. Los textos comerciales, cifras y testimonios se identifican como contenido de muestra.
 
-`/` utiliza `LandingLayout`; `/community`, `/admin` y la página 404 conservan `AppLayout`. Los formularios de la landing validan datos ficticios y muestran mensajes accesibles: no envían solicitudes, no reservan clases y no almacenan información. Los flujos de comunidad, moderación y roles siguen pendientes.
+`/` utiliza `LandingLayout`; `/community` tiene su propio `CommunityLayout`; `/admin` y la página 404 conservan `AppLayout`. Los formularios institucionales no envían solicitudes ni reservan clases.
+
+La comunidad incluye 15 publicaciones ficticias, reacciones, comentarios, galerías, filtros, perfiles y retos compartidos. La vista «Moderador» permite demostrar aprobación/rechazo y fijación de avisos dentro de `/community`, sin modificar el futuro panel administrativo. Todo usa estado React en memoria: al salir de la ruta, recargar o pulsar «Reiniciar demo» se restaura el escenario. No hay cuentas, permisos reales, envíos ni almacenamiento de datos de alumnos.
 
 ## Desarrollo local
 
@@ -37,6 +39,8 @@ Abrir la dirección que indique Vite (normalmente `http://localhost:5173`). Si P
 | `npm run build` | Comprobar tipos y generar los archivos estáticos en `dist/`. |
 | `npm run preview` | Revisar localmente la compilación de `dist/`. |
 
+Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: `node scripts/check-community-model.mjs`.
+
 Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/admin` (administración simulada). Las direcciones desconocidas muestran una pantalla 404 dentro del layout compartido. Todas las rutas son públicas durante esta demostración.
 
 ## Documentación
@@ -45,6 +49,7 @@ Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/ad
 - [Plan de prototipo](docs/prototype-plan.md)
 - [Base del frontend y guía de desarrollo](docs/frontend-foundation.md)
 - [Implementación de la landing, pruebas y procedencia de imágenes](docs/landing-implementation.md)
+- [Implementación de la comunidad y guía de demostración](docs/community-implementation.md)
 - [Instrucciones para Codex](AGENTS.md)
 
 ## Flujo de trabajo
