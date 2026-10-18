@@ -1,0 +1,107 @@
+/** Pass this absolute filename to the existing Brave browser_run_code_unsafe tool.
+ * The tool supplies a Playwright page; no browser dependency is added to the app.
+ */
+async function checkCommunityChallenges(page, { baseURL = 'http://127.0.0.1:5173', screenshotDir } = {}) {
+  let checks = 0
+  const check = (value, message) => { if (!value) throw new Error(message); checks += 1 }
+  const nav = () => page.getByRole('navigation', { name: 'Secciones de comunidad' })
+  const quiz = () => page.getByRole('region', { name: 'Reto del día compartido', exact: true })
+  const progress = () => page.getByRole('region', { name: 'Tu progreso en los retos', exact: true })
+  const scoreIs = async (points) => (await progress().innerText()).includes(`${points} puntos demo`)
+  const snapshot = async (name, region) => {
+    if (!screenshotDir) return
+    await page.evaluate(() => document.fonts.ready)
+    await page.evaluate(() => scrollTo(0, 0))
+    await page.waitForTimeout(200)
+    if (region) await region.screenshot({ path: `${screenshotDir}/${name}.png` })
+    else await page.screenshot({ path: `${screenshotDir}/${name}.png`, fullPage: true })
+  }
+  const toggleDemo = () => page.locator('#community-demo-controls > summary').click()
+  const day = async (id) => {
+    if (await page.locator('#community-demo-controls').getAttribute('open') === null) await toggleDemo()
+    await page.getByLabel('Cambiar día · Solo demo', { exact: true }).selectOption(id)
+    await toggleDemo()
+  }
+  const answer = async (option) => {
+    await quiz().getByRole('radio', { name: option, exact: true }).check()
+    await quiz().getByRole('button', { name: '¡Comprobar!', exact: true }).click()
+  }
+  const reset = async () => {
+    if (await page.locator('#community-demo-controls').getAttribute('open') === null) await toggleDemo()
+    await page.getByRole('button', { name: 'Reiniciar demo', exact: true }).click()
+    await toggleDemo()
+    await nav().getByRole('button', { name: 'Retos', exact: true }).click()
+  }
+
+  await page.goto(`${baseURL}/community`)
+  const homeQuestion = await page.locator('[aria-labelledby="home-challenge-title"] > p').innerText()
+  await page.getByRole('button', { name: 'Jugar reto de hoy', exact: true }).first().click()
+  check((await quiz().locator('legend').innerText()) === homeQuestion, 'Inicio y Retos muestran la misma pregunta')
+  check(await scoreIs(0) && await quiz().getByRole('radio').count() === 3, 'Tres opciones y cero puntos iniciales')
+  check(await quiz().getByRole('radio', { checked: true }).count() === 0, 'No se preselecciona una respuesta')
+  const pendingInstruction = 'Una opción es correcta. Toca la que te suene mejor.'
+  const completedInstruction = 'Este reto ya está completado. Aquí puedes revisar tu respuesta y lo que aprendiste.'
+  check(await quiz().getByText(pendingInstruction, { exact: true }).count() === 1, 'Reto pendiente invita a elegir una opción')
+  await snapshot('03-sin-responder')
+  await quiz().getByRole('button', { name: '¡Comprobar!', exact: true }).click()
+  check(await quiz().getByRole('alert').count() === 1 && await scoreIs(0), 'Enviar sin elegir muestra error sin puntos')
+  check(await quiz().getByRole('radio').first().evaluate((element) => document.activeElement === element), 'Error enfoca la primera opción')
+  await quiz().getByRole('radio', { name: 'Nice to meet you.', exact: true }).check()
+  check(await scoreIs(0) && await quiz().getByRole('alert').count() === 0, 'Seleccionar limpia error y no puntúa')
+  await snapshot('04-opcion-seleccionada')
+  await quiz().getByRole('radio', { name: 'Nice to meet you.', exact: true }).press('ArrowLeft')
+  check(await quiz().getByRole('radio', { name: 'You’re welcome!', exact: true }).isChecked(), 'Flecha de teclado selecciona la opción anterior')
+  await quiz().getByRole('button', { name: '¡Comprobar!', exact: true }).click()
+  check(await scoreIs(15) && (await quiz().getByRole('status').innerText()).includes('¡Respuesta correcta!'), 'Acierto concede quince puntos')
+  check(await quiz().getByRole('status').evaluate((element) => document.activeElement === element), 'Resultado recibe foco tras comprobar')
+  check(await quiz().getByText(completedInstruction, { exact: true }).count() === 1 && await quiz().getByText(pendingInstruction, { exact: true }).count() === 0, 'Reto completado sustituye la instrucción de selección por revisión')
+  check(await quiz().getByRole('status').getAttribute('aria-live') === 'polite' && await page.getByText('¡Respuesta correcta! Sumaste 15 puntos ficticios.', { exact: true }).count() === 0, 'Acierto se anuncia en la tarjeta sin confirmación global duplicada')
+  check(await quiz().getByRole('button', { name: '¡Comprobar!', exact: true }).count() === 0 && await quiz().getByRole('radio').first().isDisabled(), 'Reto completado no vuelve a enviarse')
+  await snapshot('05-respuesta-correcta')
+  await nav().getByRole('button', { name: 'Inicio', exact: true }).click()
+  check(await page.getByText('Reto completado · +15 puntos ficticios', { exact: true }).count() === 1, 'Inicio refleja el resultado de Retos')
+  await snapshot('06-sincronizacion-inicio', page.locator('[aria-labelledby="home-challenge-title"]'))
+  await page.getByRole('button', { name: 'Ver mi resultado', exact: true }).click()
+  check(await scoreIs(15) && (await quiz().innerText()).includes('Reto ya completado'), 'Regresar desde Inicio conserva resultado sin doble puntuación')
+  check(await quiz().getByText(completedInstruction, { exact: true }).count() === 1, 'Reabrir reto completado conserva la instrucción contextual')
+  await snapshot('07-ya-completado')
+  await day('day-2')
+  check(await scoreIs(15) && await quiz().getByRole('radio', { checked: true }).count() === 0, 'Nuevo día limpia selección y conserva puntos')
+  check(await quiz().getByText(pendingInstruction, { exact: true }).count() === 1, 'Nuevo día pendiente recupera la instrucción para seleccionar')
+  await toggleDemo()
+  check(await page.getByLabel('Cambiar día · Solo demo', { exact: true }).locator('option').count() === 5, 'Selector de cinco días dentro de opciones demo')
+  await toggleDemo()
+  await answer('go')
+  check(await scoreIs(20) && (await quiz().getByRole('status').innerText()).includes('Respuesta incorrecta'), 'Error concede cinco puntos adicionales, sin penalización')
+  check((await quiz().getByRole('status').innerText()).includes('went'), 'Error explica la respuesta correcta')
+  check(await quiz().getByText(completedInstruction, { exact: true }).count() === 1 && await page.getByText('Gracias por intentarlo. Sumaste 5 puntos ficticios.', { exact: true }).count() === 0, 'Error mantiene texto de revisión y una sola notificación accesible de resultado')
+  await snapshot('08-respuesta-incorrecta')
+  await day('day-3')
+  await answer('Give it a try')
+  check(await scoreIs(35) && (await progress().innerText()).includes('3 días seguidos'), 'Tres días consecutivos y treinta y cinco puntos')
+  check(await page.getByRole('listitem', { name: /^3 días seguidos: conseguida/ }).count() === 1, 'Insignia de constancia ganada')
+  await snapshot('09-constancia-y-recompensas')
+  await snapshot('10-coleccion', page.getByRole('complementary', { name: 'Recompensas e insignias de retos' }).getByRole('region', { name: /Tu pequeña colección/ }))
+  await day('day-1')
+  check(await scoreIs(35) && await quiz().getByRole('radio', { name: 'You’re welcome!', exact: true }).isDisabled(), 'Volver a un reto completado no lo reinicia')
+  await reset()
+  check(await scoreIs(0) && await page.getByRole('listitem', { name: /: conseguida/ }).count() === 0, 'Reinicio limpia puntos e insignias')
+  await answer('You’re welcome!')
+  await day('day-3')
+  await answer('Give it a try')
+  await day('day-5')
+  await answer('Could you say that again, please?')
+  check(await scoreIs(45) && (await progress().innerText()).includes('1 día seguido') && (await progress().innerText()).includes('3 días respondidos'), 'Días uno, tres y cinco: tres respondidos y una serie de uno')
+  check(await page.getByRole('listitem', { name: /^3 días seguidos: por ganar/ }).count() === 1, 'Tres días no consecutivos no conceden insignia de serie')
+  await snapshot('11-dias-no-consecutivos')
+  await day('day-2')
+  await answer('go')
+  await day('day-4')
+  await answer('since')
+  await day('day-5')
+  check(await scoreIs(55) && await page.getByRole('listitem', { name: /: conseguida/ }).count() === 3, 'Cinco días, tres insignias derivadas y 55 puntos')
+  await snapshot('12-cinco-dias-tres-insignias')
+  await reset()
+  check(await scoreIs(0) && (await quiz().locator('legend').innerText()) === homeQuestion, 'Reinicio vuelve al primer día compartido')
+  return { checks, status: 'correcto' }
+}

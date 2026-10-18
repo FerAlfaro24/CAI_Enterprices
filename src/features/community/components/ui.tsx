@@ -2,11 +2,13 @@ import emblem from '../../../assets/cai/logo-cai-emblema.svg'
 import type { Member } from '../types'
 import s from '../community.module.css'
 
-type IconName = 'home' | 'award' | 'gallery' | 'spark' | 'users' | 'arrow' | 'comment' | 'pin' | 'plus' | 'close' | 'check' | 'reset' | 'shield' | 'book'
+type IconName = 'home' | 'award' | 'gallery' | 'spark' | 'users' | 'arrow' | 'comment' | 'pin' | 'plus' | 'close' | 'check' | 'reset' | 'shield' | 'book' | 'sun' | 'moon'
 
 export function CommunityIcon({ name, size = 20 }: { name: IconName; size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      {name === 'sun' && <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></>}
+      {name === 'moon' && <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z" />}
       {name === 'home' && <><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z" /></>}
       {name === 'award' && <><circle cx="12" cy="8" r="5" /><path d="m8.5 12-2 9 5.5-3 5.5 3-2-9" /></>}
       {name === 'gallery' && <><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8" cy="8" r="1" /><path d="m3 17 5-5 4 4 4-6 5 6" /></>}

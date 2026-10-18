@@ -3,7 +3,7 @@ import type { Photo, Post } from '../types'
 import s from '../community.module.css'
 import { CommunityIcon } from './ui'
 
-function StockImage({ photo }: { photo: Photo }) {
+export function StockImage({ photo }: { photo: Photo }) {
   const [failed, setFailed] = useState(false)
   return failed
     ? <div className={s.imageFallback}><CommunityIcon name="gallery" /><span>Fotografía ilustrativa no disponible</span><span>{photo.alt}</span></div>

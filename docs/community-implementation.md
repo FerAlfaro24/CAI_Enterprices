@@ -2,6 +2,8 @@
 
 Prototipo visual e interactivo desarrollado en `feat/community` para el [Issue #3](https://github.com/FerAlfaro24/CAI_Enterprices/issues/3). La comunidad representa cuatro semanas ficticias de actividad, del 22 de septiembre al 17 de octubre de 2026. Ningún perfil, publicación, resultado o interacción representa a alumnos reales.
 
+La base visual y navegación de la fase 1, Inicio de la fase 2, Retos de la fase 3 y Galería de la fase 4 están aprobados. Sus arquitecturas y pruebas se conservan en [fase 1](community-phase-1.md), [fase 2](community-phase-2.md), [fase 3](community-phase-3.md) y [fase 4](community-phase-4.md). La **fase 5 implementa Logros**, pendiente de revisión: catálogo tipado, solicitudes privadas, concesiones derivadas, revisión demo y compartición voluntaria con moderación. Arquitectura y reglas: [community-phase-5.md](community-phase-5.md); capturas: [índice visual](../review/community-phase-5/index.html). Las descripciones históricas de columnas y directorio que siguen abajo corresponden al prototipo inicial; la navegación actual tiene cuatro secciones y los perfiles se abren individualmente.
+
 ## Alcance y arquitectura
 
 - `/community` tiene `CommunityLayout`, separado de la landing y de `AppLayout`.
@@ -9,7 +11,7 @@ Prototipo visual e interactivo desarrollado en `feat/community` para el [Issue #
 - Los datos están tipados; los filtros y el orden se calculan a partir del estado. No se mantiene una segunda copia del feed que pueda quedar desactualizada.
 - `community.module.css` encapsula variables y estilos. Se conservan Figtree, azul `#1f56d6`, azul oscuro `#0a1f4d` y blanco; los colores secundarios distinguen categorías e insignias.
 - La landing, sus recursos, sus estilos y `reference/` no se modifican. `/admin` y 404 conservan sus pantallas y layout anteriores.
-- No se agregaron dependencias, backend, cuentas, servicios de envío, carga de archivos ni localStorage/sessionStorage. Los cambios solo duran mientras permanece montada la ruta de comunidad.
+- No se agregaron dependencias, backend, cuentas, servicios de envío ni carga de archivos. El contenido continúa en memoria; únicamente la preferencia de tema se guarda en localStorage bajo `cai.community.demo.theme.v1`. No se usa sessionStorage.
 
 ## Archivos
 
@@ -27,7 +29,10 @@ Prototipo visual e interactivo desarrollado en `feat/community` para el [Issue #
 | `CommunityWorkspace.tsx` | Composición de las cinco secciones, filtros, creación y foco de navegación. |
 | `community.module.css` | Diseño de tres columnas, tarjetas, formularios, diálogo, responsive y foco. |
 | `components/CommunityShell.tsx` | Aviso, cabecera, navegación entre áreas, selector de vista, reinicio y estados accesibles. |
-| `components/CommunitySidebar.tsx` | Inicio, Logros, Galería, Retos y Alumnos. |
+| `components/CommunityNavigation.tsx` | Navegación horizontal: Inicio, Logros, Galería y Retos. Sustituye a CommunitySidebar. |
+| `components/CommunitySectionLayout.tsx` | Contenido con columna contextual opcional; el shell no impone columnas. |
+| `components/MemberProfileDialog.tsx` | Perfil ficticio de Alex, puntos, insignia actual y acceso al directorio conservado. |
+| `useCommunityTheme.ts` y `communityTheme.module.css` | Preferencia persistente y variables semánticas para ambos temas, limitadas a la comunidad. |
 | `components/PostCard.tsx` | Autor, categoría, fecha, contenido, reacciones, conversación y controles de fijación. |
 | `components/PostMedia.tsx` | Fotografías individuales/compactas y galerías con controles, teclado y fallback de imagen. |
 | `components/Comments.tsx` | Conversaciones y creación de comentarios ficticios. |
@@ -87,7 +92,7 @@ Los guardas del reducer impiden acciones incoherentes en los controles de esta s
 - Etiquetas y errores asociados, foco al primer campo inválido y mensajes mediante `role="status"`/`role="alert"`.
 - Diálogo nativo para la creación: foco inicial en el título, recorrido modal, cierre con Escape y retorno al botón que lo abrió.
 - Galerías con botones y flechas izquierda/derecha; posición anunciada y fotografías con texto alternativo.
-- Tres columnas en escritorio. Hasta 1180 px, navegación horizontal y dos columnas de contenido; hasta 860 px, feed y bloques contextuales apilados. En móvil, las cinco secciones están visibles sin ocultar opciones fuera de pantalla.
+- Cabecera horizontal con cuatro secciones; por debajo de 900 px la navegación ocupa una segunda fila. El contenido actual usa dos columnas opcionales que se apilan; los perfiles ocupan el ancho disponible. El directorio sigue accesible desde el perfil de Alex, Opciones de demostración y las bienvenidas.
 - Fotografías con altura limitada y composiciones variadas; textos largos pueden partirse. Diálogo con altura máxima y scroll propio.
 - Foco visible y colores de texto secundarios ajustados tras revisar contraste de texto sobre fondos sólidos. Esto no equivale a una auditoría WCAG completa.
 - `prefers-reduced-motion` desactiva transiciones y desplazamiento suave; no se usan animaciones continuas.
@@ -117,6 +122,8 @@ Abrir `/community` en la URL que muestre Vite. Probar filtros, reacciones, comen
 En Retos, responder Día 1, cambiar a Día 2 y después Día 3; se pueden mostrar acierto, error, puntos y reconocimiento. Volver al Día 1 demuestra que no se duplican puntos. «Reiniciar demo» restaura todos los datos.
 
 ## Comprobaciones
+
+La tabla siguiente corresponde a la implementación inicial. La validación del rediseño de fase 1 y sus capturas están en [community-phase-1.md](community-phase-1.md).
 
 La revisión del 17 de octubre de 2026 utiliza perfiles de automatización aislados y datos ficticios.
 

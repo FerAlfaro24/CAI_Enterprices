@@ -1,6 +1,7 @@
 import { challenges, pendingPosts, photoLibrary, seedPosts } from './data/fixtures'
 import { getMember } from './data/members'
 import type { CommunityAction, CommunityState, Post } from './types'
+import { requestBadge, reviewBadgeRequest, selectBadgeGrants } from './achievements/model'
 
 export const DEMO_DATE = '2026-10-17T18:30:00-06:00'
 
@@ -8,7 +9,7 @@ export function createInitialState(): CommunityState {
   return {
     posts: structuredClone([...seedPosts, ...pendingPosts]),
     mode: 'student', section: 'home', filter: 'recent', challengeId: 'day-1',
-    attempts: {}, notice: '', sequence: 1, resetKey: 0,
+    attempts: {}, badgeRequests: [], notice: '', sequence: 1, resetKey: 0,
     focusedPostId: null, focusRequest: 0,
   }
 }
@@ -83,6 +84,7 @@ export function communityReducer(state: CommunityState, action: CommunityAction)
       const body = action.body.trim()
       if (title.length < 4 || title.length > 100 || body.length < 10 || body.length > 1200) return state
       if (action.category === 'announcement' && state.mode !== 'moderator') return state
+      if (action.badgeId && (state.mode !== 'student' || action.category !== 'achievement' || !selectBadgeGrants(state).some((grant) => grant.badgeId === action.badgeId))) return state
       const photos = photoLibrary.filter((photo) => action.photoIds.includes(photo.id))
       if (action.category === 'gallery' && !photos.length) return state
       const post: Post = {
@@ -90,6 +92,7 @@ export function communityReducer(state: CommunityState, action: CommunityAction)
         category: action.category, createdAt: nextTime(state), status: 'pending', pinOrder: null,
         layout: photos.length > 1 ? 'gallery' : photos.length === 1 ? 'single' : 'text',
         photos, reactions: { love: 0, wellDone: 0, congrats: 0, amazing: 0, funny: 0 }, myReaction: null, comments: [],
+        ...(action.badgeId ? { badgeId: action.badgeId } : {}),
       }
       return {
         ...state, posts: [post, ...state.posts], sequence: state.sequence + 1,
@@ -119,6 +122,10 @@ export function communityReducer(state: CommunityState, action: CommunityAction)
         notice: pinOrder === null ? 'Aviso retirado de los fijados.' : 'Aviso de CAI fijado al inicio del feed.',
       }
     }
+    case 'requestBadge':
+      return requestBadge(state, action, nextTime(state))
+    case 'reviewBadge':
+      return reviewBadgeRequest(state, action, nextTime(state))
     case 'challengeDay':
       return challenges.some((challenge) => challenge.id === action.id) ? { ...state, challengeId: action.id } : state
     case 'answer': {
@@ -128,7 +135,8 @@ export function communityReducer(state: CommunityState, action: CommunityAction)
       const points = 5 + (correct ? 10 : 0)
       return {
         ...state, attempts: { ...state.attempts, [challenge.id]: { answerIndex: action.answerIndex, correct, points } },
-        notice: `${correct ? '¡Respuesta correcta!' : 'Gracias por intentarlo.'} Sumaste ${points} puntos ficticios.`,
+        // Retos announces its focused result card; avoid a duplicate global announcement.
+        notice: state.section === 'challenges' ? '' : `${correct ? '¡Respuesta correcta!' : 'Gracias por intentarlo.'} Sumaste ${points} puntos ficticios.`,
       }
     }
     case 'focusPost':

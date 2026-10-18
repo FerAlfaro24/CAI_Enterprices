@@ -7,11 +7,12 @@ import type { Post } from '../types'
 import s from '../community.module.css'
 import { CommentItem, Comments } from './Comments'
 import { PostMedia } from './PostMedia'
-import { Avatar, CommunityIcon } from './ui'
+import { CommunityIcon } from './ui'
+import { MemberLink } from './MemberLink'
 
-export function PostCard({ post }: { post: Post }) {
+export function PostCard({ post, initialCommentsOpen = false }: { post: Post; initialCommentsOpen?: boolean }) {
   const { state, dispatch } = useCommunity()
-  const [commentsOpen, setCommentsOpen] = useState(false)
+  const [commentsOpen, setCommentsOpen] = useState(initialCommentsOpen)
   const author = getMember(post.authorId)
   const firstComment = post.comments[0]
   const commentCount = `${post.comments.length} ${post.comments.length === 1 ? 'comentario' : 'comentarios'}`
@@ -19,8 +20,8 @@ export function PostCard({ post }: { post: Post }) {
     <article className={[s.post, post.pinOrder !== null ? s.pinnedPost : ''].join(' ')} id={`post-${post.id}`} tabIndex={-1} aria-labelledby={`post-title-${post.id}`}>
       {post.pinOrder !== null && <div className={s.pinLabel}><CommunityIcon name="pin" size={13} /> Fijado por CAI</div>}
       <header className={s.postHeader}>
-        <Avatar member={author} />
-        <div className={s.authorInfo}><div><strong>{author.alias}</strong>{author.institution && <span className={s.officialBadge}>CAI · Demo</span>}</div><time dateTime={post.createdAt}>{formatPostDate(post.createdAt)}</time></div>
+        <MemberLink member={author} avatar />
+        <div className={s.authorInfo}><div><strong><MemberLink member={author} /></strong>{author.institution && <span className={s.officialBadge}>CAI · Demo</span>}</div><time dateTime={post.createdAt}>{formatPostDate(post.createdAt)}</time></div>
         <span className={[s.category, s[post.category]].join(' ')}>{categoryLabels[post.category]}</span>
       </header>
       <h2 id={`post-title-${post.id}`} className={s.postTitle}>{post.title}</h2>

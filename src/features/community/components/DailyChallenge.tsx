@@ -1,31 +1,20 @@
-import { useId, useState, type FormEvent } from 'react'
+import { useId } from 'react'
 import { useCommunity } from '../context'
 import { challenges } from '../data/fixtures'
 import type { Attempt, Challenge } from '../types'
 import s from '../community.module.css'
 import { CommunityIcon } from './ui'
+import { useChallengeAnswer } from '../challenges/useChallengeAnswer'
 
 function ChallengeQuestion({ challenge, attempt }: { challenge: Challenge; attempt: Attempt | undefined }) {
-  const { dispatch } = useCommunity()
-  const [selected, setSelected] = useState<number | null>(attempt?.answerIndex ?? null)
-  const [error, setError] = useState('')
+  const { selected, error, choose, submit } = useChallengeAnswer(challenge, attempt)
   const id = useId()
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (selected === null) {
-      setError('Elige una opción para participar en el reto.')
-      event.currentTarget.querySelector<HTMLInputElement>('input[type="radio"]')?.focus()
-      return
-    }
-    dispatch({ type: 'answer', challengeId: challenge.id, answerIndex: selected })
-    setError('')
-  }
   return (
     <form className={s.challengeForm} onSubmit={submit} aria-label={`Reto ${challenge.day}: ${challenge.topic}`}>
       <fieldset disabled={Boolean(attempt)} aria-describedby={`${id}-help${error ? ` ${id}-error` : ''}`}>
         <legend>{challenge.question}</legend>
         {challenge.options.map((option, index) => <label className={[s.challengeOption, attempt && index === challenge.correctIndex ? s.correctOption : ''].join(' ')} key={option}>
-          <input type="radio" name={id} value={index} checked={selected === index} onChange={() => { setSelected(index); setError('') }} />
+          <input type="radio" name={id} value={index} checked={selected === index} onChange={() => choose(index)} />
           <span>{option}</span>{attempt && index === challenge.correctIndex && <CommunityIcon name="check" size={16} />}
         </label>)}
       </fieldset>

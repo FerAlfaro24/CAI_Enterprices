@@ -1,0 +1,187 @@
+.challenges { color: var(--text); }
+.pageHeading { display: grid; grid-template-columns: minmax(0,2.04fr) minmax(0,1fr); gap: 24px; align-items: start; }
+.eyebrow { display: flex; align-items: center; gap: 9px; color: var(--primary); font-size: 12px; font-weight: 800; line-height: 1.4; }
+.pageHeading h1 { margin: 9px 0 8px; color: var(--navy); font-size: 36px; line-height: 1.15; font-weight: 800; letter-spacing: -.8px; scroll-margin-top: 140px; }
+.pageHeading > div > p { color: var(--muted); font-size: 17px; line-height: 1.5; }
+.streakCard { display: flex; align-items: center; gap: 16px; min-height: 128px; width: min(100%,382px); margin-left: 4px; padding: 20px; border-radius: 25px; background: var(--paper); }
+.streakSymbol { display: grid; place-items: center; width: 76px; height: 76px; flex: none; border-radius: 20px; background: #ffcd1f; font-size: 30px; }
+.streakCard strong { color: var(--navy); font-size: 21px; font-weight: 800; line-height: 1.2; }
+.streakCard p { margin: 5px 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+.streakCard small { color: var(--text-secondary); font-size: 11px; }
+.challengeGrid { display: grid; grid-template-columns: minmax(0,2.04fr) minmax(0,1fr); gap: 24px; align-items: start; margin-top: 48px; }
+.questionPanel { min-width: 0; border-radius: 29px; background: #1f56d6; color: white; }
+.questionForm { display: flex; flex-direction: column; min-height: 640px; padding: 30px; }
+.questionMeta { display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px; margin-bottom: 18px; }
+.questionMeta > span { display: flex; align-items: center; min-height: 36px; padding: 8px 12px; border-radius: 13px 13px 0 0; font-size: 13px; font-weight: 800; line-height: 1.4; }
+.questionMeta > span:first-child { max-width: 100%; background: #ffcd1f; color: #0a1f4d; }
+.questionMeta > span:last-child { background: #3470d3; color: white; }
+.questionForm fieldset { min-width: 0; padding: 0; border: 0; }
+.questionForm legend { padding: 0; width: 100%; color: white; font-size: 40px; font-weight: 800; line-height: 1.15; letter-spacing: -.5px; overflow-wrap: normal; }
+.questionIntro { margin: 18px 0; font-size: 17px; color: #edf3ff; line-height: 1.5; }
+.options { display: grid; gap: 14px; }
+.option { position: relative; display: grid; grid-template-columns: 48px minmax(0,1fr) auto; align-items: center; gap: 18px; min-height: 90px; padding: 17px 16px; border: 2px solid transparent; border-radius: 20px; background: #3470d3; color: white; cursor: pointer; }
+.option input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: inherit; }
+.option:has(input:focus-visible) { outline: 3px solid white; outline-offset: 4px; }
+.option:hover:not(:has(input:disabled)) { border-color: #ffffffa6; }
+.optionLetter { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 15px; background: #5a90e1; color: white; font-size: 22px; font-weight: 800; }
+.optionText { font-size: 22px; font-weight: 700; line-height: 1.35; }
+.optionState { max-width: 90px; font-size: 11px; font-weight: 750; text-align: right; }
+.selected, .correct { color: #0a1f4d; background: #ffcd1f; }
+.selected .optionLetter, .correct .optionLetter { background: #0a1f4d; color: white; }
+.incorrect { color: #7c3028; background: #ffede7; border-color: #ffb6a4; }
+.incorrect .optionLetter { background: #7c3028; color: white; }
+.option:has(input:disabled) { cursor: default; }
+.checkRow { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: auto; padding-top: 28px; }
+.checkButton { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; min-width: 220px; padding: 12px 18px; border: 0; border-radius: 13px; background: white; color: #0a1f4d; font-size: 14px; font-weight: 800; }
+.checkButton:hover { background: #fff0b8; }
+.questionPanel :where(button):focus-visible { outline-color: #ffcd1f; }
+.checkRow p { color: #e4ecff; font-size: 13px; }
+.completed { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; background: #ffffff26; color: white; font-size: 14px; font-weight: 750; }
+.error { padding: 10px 14px; margin-top: 16px; background: #fff0eb; color: #7c3028; border-radius: 12px; font-size: 14px; }
+.result { margin-top: 22px; padding: 20px; border-radius: 18px; background: white; color: #0a1f4d; }
+.result:focus { outline: 3px solid #ffcd1f; outline-offset: 4px; }
+.result strong { display: block; font-size: 19px; font-weight: 800; line-height: 1.35; }
+.result p { margin-top: 10px; font-size: 14px; line-height: 1.6; }
+.result > span { display: block; margin-top: 14px; font-weight: 750; font-size: 13px; }
+.result small { display: block; margin-top: 8px; color: #52617a; font-size: 12px; }
+.rewards { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.rewardCard { min-height: 247px; padding: 22px; border-radius: 25px; background: #ffcd1f; color: #0a1f4d; }
+.rewardCard .eyebrow { color: #0a1f4d; }
+.rewardCard h2 { margin: 12px 0 9px; font-size: 30px; font-weight: 800; line-height: 1.05; letter-spacing: -.5px; }
+.rewardCard > p { font-size: 14px; line-height: 1.5; }
+.rewardStrip { display: flex; align-items: center; gap: 7px; min-height: 48px; margin-top: 10px; padding: 10px 12px; border-radius: 15px; background: #0a1f4d; color: white; font-size: 14px; font-weight: 750; }
+.rewardStrip > span { color: #ffcd1f; }
+.collection { min-height: 211px; padding: 20px; border-radius: 25px; background: var(--paper); }
+.collection h2, .learnCard h2 { color: var(--navy); font-size: 21px; font-weight: 800; line-height: 1.25; letter-spacing: -.4px; }
+.badges { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.badge { min-width: 0; min-height: 90px; padding: 10px 8px; border-radius: 17px; background: var(--surface-soft); color: var(--text-secondary); border: 1px solid var(--line); }
+.badge > span { display: block; font-size: 22px; line-height: 1; }
+.badge strong { display: block; font-size: 11px; line-height: 1.3; margin: 8px 0 5px; }
+.badge small { display: block; font-size: 10px; line-height: 1.3; }
+.badge.earned { border: 1px solid transparent; color: var(--navy); }
+.first-answer { background: var(--notice-bg); }
+.three-consecutive { background: var(--warm-bg); color: var(--warm-ink); }
+.five-days { background: var(--success-bg); color: var(--success-ink); }
+.first-answer.earned { background: var(--notice-bg); }
+.three-consecutive.earned { background: #ffcd1f; color: #0a1f4d; }
+.five-days.earned { background: var(--success-bg); color: var(--success-ink); }
+.badgeRules { margin-top: 10px; }
+.badgeRules summary, .streakRule summary { display: inline-flex; align-items: center; min-height: 32px; cursor: pointer; color: var(--primary); font-size: 11px; font-weight: 650; }
+.badgeRules ul { padding-left: 16px; margin: 6px 0; color: var(--text-secondary); font-size: 12px; }
+.badgeRules li { margin-bottom: 6px; }
+.badgeRules p { color: var(--muted); font-size: 11px; }
+.learnCard { min-height: 150px; padding: 20px; border-radius: 25px; background: var(--paper); }
+.learnCard h2 { display: flex; align-items: center; gap: 8px; }
+.learnCard p { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.bottomCards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; align-items: start; margin-top: 20px; }
+.bottomCard { min-height: 166px; padding: 20px; border-radius: 25px; background: var(--paper); }
+.bottomCard h2 { color: var(--navy); font-size: 23px; line-height: 1.2; font-weight: 800; letter-spacing: -.5px; margin: 12px 0 10px; }
+.bottomCard > p { color: var(--muted); font-size: 14px; }
+.consistency { background: var(--notice-bg); }
+.consistency > p { color: var(--text); }
+.consistency > small { display: block; color: var(--text-secondary); font-size: 12px; margin-top: 8px; }
+.streakRule p { color: var(--text-secondary); font-size: 12px; line-height: 1.6; margin-top: 8px; }
+.textButton { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 5px 0; margin-top: 8px; border: 0; border-radius: 6px; background: transparent; color: var(--primary); font-size: 12px; font-weight: 700; }
+.demoDay { width: 100%; display: grid; gap: 6px; }
+.demoDay label { color: var(--navy); font-size: 13px; font-weight: 700; }
+.demoDay select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--navy); background: var(--paper); font-size: 13px; }
+.demoDay small { font-size: 12px; color: var(--muted); }
+@media (max-width: 1100px) {
+  .pageHeading h1 { font-size: 31px; }
+  .pageHeading > div > p { font-size: 15px; }
+  .streakCard { gap: 12px; padding: 16px; }
+  .streakSymbol { width: 56px; height: 64px; border-radius: 17px; font-size: 25px; }
+  .streakCard strong { font-size: 19px; }
+  .streakCard small { display: block; }
+  .questionForm { padding: 24px; }
+  .questionForm legend { font-size: 33px; }
+  .option { grid-template-columns: 44px minmax(0,1fr); gap: 14px; }
+  .optionState { grid-column: 2; max-width: none; text-align: left; margin-top: -8px; }
+  .optionText { font-size: 20px; }
+  .optionLetter { width: 44px; height: 44px; }
+  .rewardCard, .collection, .learnCard { padding: 18px; }
+  .collection h2, .learnCard h2 { font-size: 19px; }
+  .rewardCard h2 { font-size: 27px; }
+  .badges { gap: 6px; }
+  .badge { padding: 10px 6px; }
+  .bottomCards { gap: 16px; }
+  .bottomCard { padding: 18px; }
+  .bottomCard h2 { font-size: 21px; }
+}
+@media (max-width: 850px) {
+  .pageHeading { grid-template-columns: minmax(0,1fr); gap: 20px; }
+  .streakCard { margin: 0; width: 100%; max-width: none; min-height: 98px; }
+  .streakSymbol { width: 60px; height: 60px; }
+  .challengeGrid { grid-template-columns: minmax(0,1fr); margin-top: 24px; }
+  .questionForm { min-height: 0; padding: 28px; }
+  .questionForm legend { font-size: 34px; }
+  .option { grid-template-columns: 48px minmax(0,1fr) auto; }
+  .optionState { grid-column: auto; margin: 0; }
+  .optionLetter { width: 48px; height: 48px; }
+  .checkRow { margin-top: 0; padding-top: 28px; }
+  .rewards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .rewardCard, .collection { min-height: 230px; }
+  .learnCard { grid-column: 1 / -1; min-height: 0; }
+  .bottomCards { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .bottomCard { min-height: 0; padding: 22px; }
+}
+@media (max-width: 600px) {
+  .challenges { display: flex; flex-direction: column; }
+  .pageHeading, .challengeGrid { display: contents; }
+  .pageHeading > div { order: 0; }
+  .questionPanel { order: 1; margin-top: 20px; }
+  .streakCard { order: 2; margin-top: 16px; }
+  .rewards { order: 3; margin-top: 16px; }
+  .bottomCards { order: 4; }
+  .pageHeading { gap: 18px; }
+  .eyebrow { font-size: 11px; }
+  .pageHeading h1 { font-size: 30px; line-height: 1.12; margin: 10px 0; }
+  .pageHeading > div > p { font-size: 14px; }
+  .streakCard { min-height: 104px; padding: 16px; border-radius: 22px; }
+  .streakCard strong { font-size: 20px; }
+  .streakCard small { font-size: 12px; }
+  .challengeGrid { margin-top: 20px; gap: 16px; }
+  .questionPanel { border-radius: 24px; }
+  .questionForm { padding: 20px; }
+  .questionMeta { gap: 8px; margin-bottom: 20px; }
+  .questionMeta > span { min-height: 32px; font-size: 11px; padding: 7px 10px; }
+  .questionForm legend { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; }
+  .questionIntro { font-size: 14px; margin: 16px 0; }
+  .options { gap: 12px; }
+  .option { grid-template-columns: 40px minmax(0,1fr); gap: 10px; min-height: 82px; padding: 14px 12px; border-radius: 17px; }
+  .optionLetter { width: 40px; height: 44px; border-radius: 12px; font-size: 20px; }
+  .optionText { font-size: 17px; line-height: 1.4; }
+  .optionState { grid-column: 2; text-align: left; margin-top: -6px; font-size: 12px; }
+  .checkRow { gap: 12px; padding-top: 24px; }
+  .checkButton { width: 100%; min-width: 0; min-height: 48px; }
+  .checkRow p { font-size: 12px; }
+  .completed { font-size: 13px; }
+  .result { padding: 16px; }
+  .result strong { font-size: 18px; }
+  .result p { font-size: 14px; }
+  .rewards { display: flex; gap: 14px; }
+  .rewardCard, .collection { min-height: 0; padding: 22px; border-radius: 24px; }
+  .rewardCard h2 { font-size: 29px; }
+  .rewardStrip { font-size: 13px; }
+  .badges { gap: 8px; }
+  .badge { min-height: 106px; padding: 12px 8px; }
+  .badge strong, .badge small { font-size: 11px; }
+  .collection h2, .learnCard h2 { font-size: 21px; }
+  .badgeRules summary, .streakRule summary, .textButton { min-height: 44px; font-size: 12px; }
+  .learnCard { padding: 22px; border-radius: 24px; }
+  .bottomCards { margin-top: 16px; }
+  .bottomCard h2 { font-size: 23px; }
+}
+@media (max-width: 360px) {
+  .pageHeading h1 { font-size: 28px; }
+  .streakCard { gap: 10px; padding: 14px; }
+  .streakSymbol { width: 50px; height: 56px; }
+  .streakCard strong { font-size: 18px; }
+  .questionForm { padding: 18px; }
+  .questionForm legend { font-size: 26px; }
+  .option { padding-inline: 10px; }
+  .optionText { font-size: 16px; }
+  .rewardCard, .collection, .learnCard { padding: 18px; }
+  .badge { padding: 10px 6px; }
+  .badges { gap: 6px; }
+}

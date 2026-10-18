@@ -3,7 +3,8 @@ import { getMember, members } from '../data/members'
 import { celebrationCount } from '../model'
 import s from '../community.module.css'
 import { DailyChallenge } from './DailyChallenge'
-import { Avatar, CommunityIcon } from './ui'
+import { CommunityIcon } from './ui'
+import { MemberLink } from './MemberLink'
 
 export function CommunityAside() {
   const { state, dispatch } = useCommunity()
@@ -16,8 +17,7 @@ export function CommunityAside() {
       <section className={s.sideCard}>
         <div className={s.sideHeading}><span aria-hidden="true">👋</span><h2>Bienvenidos a CAI</h2></div>
         <p className={s.sideIntro}>Nuevas voces, nuevas historias.</p>
-        <div className={s.memberList}>{newcomers.map((member) => <div key={member.id}><Avatar member={member} small /><span><strong>{member.alias}</strong><small>{member.badge}</small></span><span className={s.welcomeSpark} aria-hidden="true">✦</span></div>)}</div>
-        <button className={s.textButton} type="button" onClick={() => dispatch({ type: 'section', section: 'members' })}>Conocer a la comunidad <CommunityIcon name="arrow" size={16} /></button>
+        <div className={s.memberList}>{newcomers.map((member) => <div key={member.id}><MemberLink member={member} avatar small /><span><strong><MemberLink member={member} /></strong><small>{member.badge}</small></span><span className={s.welcomeSpark} aria-hidden="true">✦</span></div>)}</div>
       </section>
       <section className={[s.sideCard, s.weeklyCard].join(' ')}>
         <div className={s.sideHeading}><span aria-hidden="true">🏅</span><h2>Logros de la semana</h2></div>

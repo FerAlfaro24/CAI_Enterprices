@@ -1,3 +1,5 @@
+import type { BadgeRequest } from './achievements/types'
+
 export type Section = 'home' | 'achievements' | 'gallery' | 'challenges' | 'members'
 export type FeedFilter = 'recent' | 'achievements' | 'experiences' | 'celebrated'
 export type DemoMode = 'student' | 'moderator'
@@ -41,6 +43,7 @@ export interface Post {
   pinOrder: number | null
   layout: 'text' | 'single' | 'compact' | 'gallery' | 'achievement' | 'event'
   photos: Photo[]
+  badgeId?: string
   milestone?: { label: string; detail: string }
   event?: { day: string; month: string; detail: string }
   reactions: ReactionCounts
@@ -71,6 +74,7 @@ export interface CommunityState {
   filter: FeedFilter
   challengeId: string
   attempts: Record<string, Attempt>
+  badgeRequests: BadgeRequest[]
   notice: string
   sequence: number
   resetKey: number
@@ -84,7 +88,9 @@ export type CommunityAction =
   | { type: 'mode'; mode: DemoMode }
   | { type: 'react'; postId: string; reaction: Reaction }
   | { type: 'comment'; postId: string; id: string; body: string }
-  | { type: 'create'; id: string; title: string; body: string; category: Category; photoIds: string[] }
+  | { type: 'create'; id: string; title: string; body: string; category: Category; photoIds: string[]; badgeId?: string }
+  | { type: 'requestBadge'; id: string; badgeId: string; description: string }
+  | { type: 'reviewBadge'; requestId: string; decision: 'approved' | 'rejected'; reason: string }
   | { type: 'moderate'; postId: string; decision: 'approved' | 'rejected' }
   | { type: 'pin'; postId: string }
   | { type: 'challengeDay'; id: string }
