@@ -1,261 +1,321 @@
 .gallery { color: var(--text); }
-.pageHeading { display: grid; grid-template-columns: minmax(0,2.17fr) minmax(0,1fr); gap: 24px; align-items: start; }
-.eyebrow { display: inline-flex; align-items: center; gap: 7px; color: var(--primary); font-size: 12px; font-weight: 800; line-height: 1.4; }
-.pageHeading h1 { margin: 7px 0 4px; color: var(--navy); font-size: 40px; line-height: 1.2; font-weight: 800; letter-spacing: -.8px; scroll-margin-top: 145px; }
-.pageHeading > div > p { color: var(--muted); font-size: 17px; line-height: 1.5; }
-.shareCard { min-height: 118px; padding: 17px 18px 8px; border-radius: 22px; color: white; background: #0a1f4d; }
-.shareCard h2 { font-size: 21px; font-weight: 800; line-height: 1.3; letter-spacing: -.3px; }
-.shareCard p { margin: 6px 0; color: #d9e6ff; font-size: 13px; }
-.shareCard button { display: inline-flex; justify-content: center; align-items: center; gap: 7px; min-width: 165px; min-height: 36px; padding: 7px 12px; border: 0; border-radius: 30px; background: #ffcd1f; color: #0a1f4d; font-size: 12px; font-weight: 800; }
-.shareCard button:hover { background: #ffe183; }
-.featured { display: grid; grid-template-columns: 46% minmax(0,1fr); min-height: 335px; margin-top: 42px; border-radius: 27px; overflow: hidden; background: #1f56d6; color: white; }
-.featuredCopy { padding: 30px; }
-.featuredTag { display: inline-flex; align-items: center; gap: 6px; min-width: 198px; padding: 9px 10px; border-radius: 30px; background: #ffcd1f; color: #0a1f4d; font-size: 12px; font-weight: 800; }
-.featured h2 { margin: 16px 0 12px; font-size: 32px; font-weight: 800; line-height: 1.15; letter-spacing: -.6px; }
-.featured h2 span { display: inline-block; font-size: 27px; }
-.featuredCopy > p { color: #edf3ff; font-size: 16px; line-height: 1.5; }
-.featuredCopy > button { display: inline-flex; justify-content: space-between; align-items: center; gap: 8px; min-width: 184px; min-height: 36px; margin-top: 14px; padding: 9px 12px; border: 0; border-radius: 28px; background: white; color: #1745b2; font-weight: 800; font-size: 12px; }
-.featuredCopy > button:hover { background: #fff0b8; }
-.featuredCopy > button:focus-visible { outline-color: #ffcd1f; }
-.featuredArt { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px 14px; padding: 20px; background: #1344a4; color: #0a1f4d; }
-.speakingTile { grid-row: span 2; padding: 18px; border-radius: 23px; background: #80b4f3; }
-.speakingTile > span { display: block; font-size: 49px; }
-.speakingTile > strong { display: block; margin-top: 18px; font-size: 32px; font-weight: 800; line-height: 1.15; }
-.friendsTile, .successTile { padding: 16px; border-radius: 22px; background: #ffcd1f; }
-.successTile { background: #b7e9e6; }
-.friendsTile > span, .successTile > span { display: block; margin-bottom: 4px; font-size: 30px; line-height: 1.4; }
-.friendsTile > strong, .successTile > strong { font-size: 18px; font-weight: 800; }
-.filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
-.filters button { min-height: 36px; padding: 8px 16px; border: 1px solid transparent; border-radius: 30px; background: var(--paper); color: var(--navy); font-size: 12px; font-weight: 800; }
-.filters button:first-child { min-width: 156px; text-align: left; }
-.filters button[aria-pressed='true'] { color: white; background: #1f56d6; }
+.pageHeading { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 40px; align-items: center; }
+.eyebrow { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--primary); font-size: 11px; font-weight: 800; line-height: 1.5; letter-spacing: 1.2px; }
+.headingIssue { margin-left: 10px; padding-left: 18px; border-left: 1px solid var(--line); color: var(--muted); font-size: 10px; letter-spacing: 1px; }
+.pageHeading h1 { margin: 14px 0 10px; color: var(--navy); font-size: clamp(42px,4.4vw,64px); line-height: 1.03; font-weight: 800; letter-spacing: -2.4px; scroll-margin-top: 145px; }
+.pageHeading h1 em { font-style: normal; color: var(--primary); }
+.pageHeading > div > p { max-width: 520px; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.shareCard { position: relative; padding: 20px 54px 18px 22px; border: 1px solid var(--line); border-top: 3px solid var(--primary); border-radius: 4px 20px 20px; background: var(--paper); color: var(--navy); }
+.shareMark { position: absolute; top: 18px; right: 14px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--warm-bg); color: var(--warm-ink); }
+.shareCard h2 { max-width: 270px; font-size: 19px; font-weight: 750; line-height: 1.2; letter-spacing: -.4px; }
+.shareCard p { margin: 8px 0 10px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.shareCard button { display: inline-flex; justify-content: space-between; align-items: center; gap: 18px; min-height: 44px; padding: 9px 14px; border: 0; border-radius: var(--radius-control); background: #ffcd1f; color: #0a1f4d; font-size: 12px; font-weight: 800; }
+.shareCard button:hover { background: #ffdc60; }
+
+/* A navy headline faces a printed, original conversation poster. */
+.featured { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.04fr); margin-top: 30px; border: 1px solid #34568f; border-radius: 24px; overflow: hidden; background: #0a1f4d; color: white; }
+.featuredCopy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 30px 36px; }
+.featuredTag { display: flex; align-items: center; gap: 8px; width: 100%; color: #ffcd1f; font-size: 10px; font-weight: 800; line-height: 1.5; letter-spacing: 1.1px; }
+.featuredTag > span { margin-left: auto; color: #b4c9ed; }
+.featured h2 { margin: 18px 0 14px; color: white; font-size: clamp(34px,3.05vw,45px); font-weight: 800; line-height: 1.05; letter-spacing: -1.4px; }
+.featured h2 em { font-style: normal; color: #ffcd1f; }
+.featuredCopy > p { max-width: 410px; color: #dce5fa; font-size: 14px; line-height: 1.6; }
+.featuredFooter { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; width: 100%; margin-top: 22px; padding-top: 20px; border-top: 1px solid #34507f; }
+.featuredFooter > button { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; padding: 12px 16px; border: 0; border-radius: var(--radius-control); background: #ffcd1f; color: #0a1f4d; font-size: 13px; font-weight: 800; }
+.featuredFooter > button:hover { background: #ffdc60; }
+.featuredFooter > span { display: grid; gap: 4px; color: #dce5fa; font-size: 11px; }
+.featuredFooter strong { font-size: 11px; font-weight: 600; color: #b4c9ed; }
+.featured :where(button):focus-visible { outline-color: #ffcd1f; }
+.featuredArt { min-width: 0; display: grid; background: #1f56d6; }
+.featuredArt .cover { height: 100%; min-height: 350px; border-radius: 0; }
+.featuredArt .cover > img { object-fit: contain; }
+.featuredArt .coverCount { display: none; }
+.featuredArt .coverFlag { bottom: 0; left: 0; right: 0; justify-content: center; }
+
+/* The filter index is separate from the collection. */
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 24px 0 30px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.filters button { min-height: 44px; padding: 10px 17px; border: 1px solid transparent; border-radius: 99px; background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 700; }
+.filters button[aria-pressed='true'] { color: white; background: var(--primary-fill); box-shadow: var(--shadow-control); }
 .filters button:hover:not([aria-pressed='true']) { border-color: var(--selected-border); background: var(--blue-soft); }
-.mosaicHeading { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-.mosaicHeading h2 { color: var(--navy); font-size: 26px; line-height: 1.3; font-weight: 800; letter-spacing: -.4px; }
-.mosaicHeading p { margin-top: 3px; color: var(--muted); font-size: 13px; }
-.sort { display: grid; gap: 3px; flex: none; color: var(--text-secondary); font-size: 11px; }
-.sort select { min-height: 36px; padding: 5px 8px; border: 1px solid transparent; border-radius: 8px; background: var(--canvas); color: var(--primary); font-size: 13px; font-weight: 700; }
-.counts { margin: 12px 0 18px; color: var(--text-secondary); font-size: 12px; }
-.mosaic { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); grid-template-rows: 174px 174px; grid-auto-rows: minmax(294px,auto); gap: 18px; }
-.albumCard { min-width: 0; border-radius: 25px; background: var(--paper); }
-.albumButton { display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; color: var(--navy); text-align: left; }
-.albumButton:hover h3 { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
-.cover { position: relative; width: 100%; min-height: 0; border-radius: 24px; overflow: hidden; color: #0a1f4d; }
-.cover > img { width: 100%; height: 100%; object-fit: cover; }
-.blue { background: #d5e5ff; }
-.yellow { background: #ffe7a6; }
-.mint { background: #d6f2e9; }
-.purple { background: #ddd6ff; }
-.peach { background: #ffe0c6; }
-.aqua { background: #bfeeee; }
-.illustration { height: 100%; padding: 18px 22px; }
-.coverSymbol { display: grid; place-items: center; width: 120px; height: 110px; border-radius: 20px; background: white; font-size: 35px; line-height: 1; }
-.illustrationLabel { display: flex; align-items: center; width: fit-content; min-width: 220px; min-height: 34px; padding: 7px 8px; border-radius: 13px; background: white; color: #1745b2; font-size: 10px; font-weight: 800; }
-.illustration > strong { display: none; }
-.albumBody { padding: 14px 16px 17px; }
-.albumMeta { display: block; color: var(--primary); font-size: 10px; font-weight: 800; text-transform: uppercase; line-height: 1.5; letter-spacing: .15px; }
-.albumBody h3 { margin: 4px 0; color: var(--navy); font-size: 18px; font-weight: 800; line-height: 1.3; letter-spacing: -.3px; }
-.albumDate { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; }
-.albumLink { display: block; color: var(--primary); font-size: 13px; font-weight: 700; margin-top: 7px; }
+.mosaicHeading { display: flex; justify-content: space-between; align-items: end; gap: 24px; }
+.sectionEyebrow { display: block; margin-bottom: 12px; color: var(--primary); font-size: 10px; font-weight: 800; line-height: 1.5; letter-spacing: 1.7px; }
+.mosaicHeading h2 { max-width: 600px; color: var(--navy); font-size: clamp(27px,2.6vw,38px); line-height: 1.1; font-weight: 800; letter-spacing: -1px; }
+.mosaicHeading h2 > span { color: var(--primary); }
+.mosaicHeading p { margin-top: 10px; max-width: 470px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.sort { display: grid; gap: 5px; flex: none; color: var(--text-secondary); font-size: 11px; }
+.sort select { max-width: 100%; min-height: 44px; padding: 9px 28px 9px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--primary); font-size: 12px; font-weight: 700; }
+.counts { margin: 18px 0; color: var(--text-secondary); font-size: 11px; line-height: 1.6; }
+
+/* Twelve columns, four silhouettes, no duplication of source albums. */
+.mosaic { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 20px; align-items: stretch; }
+.albumCard { min-width: 0; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); box-shadow: var(--shadow-rest); transition: border-color var(--duration-ui), box-shadow var(--duration-ui); }
+.albumCard:hover, .albumCard:focus-within { border-color: var(--border-interactive); box-shadow: var(--shadow-lift); }
+.albumButton { display: flex; flex-direction: column; width: 100%; height: 100%; padding: 10px; border: 0; border-radius: inherit; background: transparent; color: var(--navy); text-align: left; }
+.albumButton:hover h3 { color: var(--primary); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.cover { position: relative; width: 100%; min-width: 0; overflow: hidden; border-radius: 12px; background: #1f56d6; }
+.cover > img { position: absolute; inset: 0 0 auto; display: block; width: 100%; height: calc(100% - 24px); object-fit: contain; }
+.cover > .galleryImage { position: absolute; inset: 0 0 auto; height: calc(100% - 24px); }
+.coverFlag, .coverCount { position: absolute; z-index: 1; display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; border: 1px solid #ffffff30; border-radius: 5px; color: white; background: #0a1f4df5; font-size: 9px; font-weight: 650; line-height: 1.5; }
+.coverFlag { left: 0; bottom: 0; width: 100%; max-width: 100%; height: 24px; padding: 4px 8px; border: 0; border-radius: 0; }
+.coverCount { top: 10px; right: 10px; font-size: 11px; }
+.albumBody { display: flex; flex-direction: column; align-items: flex-start; flex: 1; padding: 16px 10px 8px; min-width: 0; }
+.albumMeta { display: block; color: var(--primary); font-size: 10px; font-weight: 800; line-height: 1.5; letter-spacing: .9px; text-transform: uppercase; }
+.albumBody h3 { margin: 9px 0 8px; color: var(--navy); font-size: 23px; font-weight: 750; line-height: 1.13; letter-spacing: -.7px; }
+.albumDate { display: block; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.albumLink { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin-top: auto; padding-top: 16px; color: var(--primary); font-size: 11px; font-weight: 750; }
 .large { grid-column: span 6; grid-row: span 2; }
-.large .cover { flex: 1; min-height: 220px; }
+.large .cover { aspect-ratio: 3 / 2; flex: 1; min-height: 280px; }
+.large h3 { font-size: 32px; max-width: 420px; }
+.large .albumBody { flex: none; padding: 22px 16px 14px; }
 .compact { grid-column: span 3; }
-.compact .cover { flex: 1; min-height: 66px; }
-.compact .illustration { padding: 16px 22px 0; }
-.compact .coverSymbol { width: 120px; height: 54px; border-radius: 20px; }
-.compact .illustrationLabel { display: none; }
-.compact .albumBody { padding: 10px 16px 14px; }
-.compact .albumBody h3 { font-size: 17px; }
+.compact .cover { aspect-ratio: 3 / 2; }
+.compact h3 { font-size: 20px; }
+.compact .albumDate { font-size: 10px; }
+.compact .albumBody { padding: 12px 6px 6px; }
+.compact .albumLink { padding-top: 10px; }
+.compact .coverFlag { font-size: 9px; }
 .horizontal { grid-column: span 6; }
-.horizontal .albumButton { flex-direction: row; }
-.horizontal .cover { width: 35%; flex: none; }
-.horizontal .coverSymbol { display: block; width: auto; height: auto; margin: 6px 0 14px; background: transparent; }
-.horizontal .illustration { padding: 20px; }
-.horizontal .illustrationLabel { display: none; }
-.horizontal .illustration > strong { display: block; font-size: 17px; line-height: 1.2; }
-.horizontal .albumBody { align-self: center; padding: 18px 22px; }
-.horizontal .albumBody h3 { font-size: 21px; }
-.horizontal .albumBody > p { margin: 8px 0; color: var(--muted); font-size: 13px; }
-.horizontal .albumDate { display: none; }
+.horizontal .albumButton { flex-direction: row; gap: 10px; }
+.horizontal .cover { flex: none; width: 44%; min-height: 180px; }
+.horizontal .albumBody { padding: 16px 10px; align-self: center; }
+.horizontal .coverFlag { font-size: 9px; }
 .standard { grid-column: span 4; }
-.standard .cover { min-height: 200px; flex: 1; }
+.standard .cover { aspect-ratio: 3 / 2; }
 .sixAlbums .standard { grid-column: span 6; }
-.shortMosaic { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: none; grid-auto-rows: auto; align-items: start; }
+.sixAlbums .standard .albumButton { flex-direction: row; gap: 10px; }
+.sixAlbums .standard .cover { width: 52%; aspect-ratio: 3 / 2; flex: none; }
+.sixAlbums .standard .albumBody { align-self: center; padding: 16px 10px; }
+.shortMosaic { grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; }
 .shortMosaic .albumCard { grid-column: auto; grid-row: auto; }
-.shortMosaic .large { min-height: 366px; }
-.shortMosaic .compact { min-height: 225px; }
-.empty { display: grid; justify-items: center; gap: 12px; padding: 48px 24px; border: 1px dashed var(--selected-border); border-radius: 25px; background: var(--paper); text-align: center; }
-.empty > span { font-size: 38px; }
-.empty h3 { color: var(--navy); font-size: 23px; font-weight: 800; }
-.empty p { max-width: 500px; color: var(--muted); font-size: 15px; }
-.empty button, .postLink { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-height: 44px; padding: 10px 16px; border: 0; border-radius: 12px; background: #1f56d6; color: white; font-size: 14px; font-weight: 750; }
+.shortMosaic .cover { aspect-ratio: 3 / 2; min-height: 0; }
+.shortMosaic .albumButton { flex-direction: column; }
+.shortMosaic .albumBody { padding: 16px 10px 8px; }
+
+.empty { display: grid; justify-items: center; gap: 12px; padding: 40px 24px; border: 1px dashed var(--selected-border); border-radius: 20px; background: var(--paper); text-align: center; }
+.emptyFrames { display: grid; place-items: center; width: 80px; height: 68px; margin: 4px 0 10px; border: 2px solid var(--primary); border-radius: 8px; color: var(--primary); background: var(--blue-soft); box-shadow: 8px -6px 0 var(--paper),9px -7px 0 var(--line); transform: rotate(-6deg); }
+.empty .sectionEyebrow { margin-bottom: 0; }
+.empty h3 { color: var(--navy); font-size: 27px; font-weight: 750; line-height: 1.15; letter-spacing: -.6px; }
+.empty p { max-width: 500px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.empty button, .postLink { display: inline-flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 48px; padding: 12px 16px; border: 0; border-radius: var(--radius-control); background: var(--primary-fill); color: white; font-size: 13px; font-weight: 750; }
 .moderation:not(:empty) { margin-top: 24px; }
-.galleryNote { display: flex; align-items: flex-start; gap: 7px; margin-top: 24px; color: var(--muted); font-size: 12px; }
-.galleryNote svg { flex: none; }
-.albumDialog { width: min(1100px,calc(100% - 48px)); max-width: calc(100% - 48px); max-height: 90dvh; margin: auto; padding: 24px; overflow: auto; border: 1px solid var(--line); border-radius: 28px; background: var(--paper); color: var(--text); box-shadow: 0 30px 90px #071b414d; }
-.albumDialog::backdrop { background: #081a3fa6; backdrop-filter: blur(4px); }
-.dialogHeader { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.galleryNote { display: flex; align-items: flex-start; gap: 8px; margin-top: 24px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.galleryNote svg { flex: none; margin-top: 2px; }
+
+/* The stage and caption reserve space while images load, fail or change. */
+.albumDialog { width: min(1140px,calc(100% - 48px)); max-width: calc(100% - 48px); max-height: 90dvh; margin: auto; padding: 24px; overflow: auto; border: 1px solid var(--line); border-radius: 24px; background: var(--paper); color: var(--text); box-shadow: var(--shadow-dialog); }
+.albumDialog::backdrop { background: #081a3fc9; backdrop-filter: blur(5px); }
+.dialogHeader { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
 .closeButton { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 8px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface-soft); color: var(--navy); }
-.dialogGrid { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 30px; }
+.closeButton:hover { background: var(--blue-soft); }
+.dialogGrid { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 32px; }
 .viewer { min-width: 0; }
-.photoStage { display: grid; place-items: center; width: 100%; aspect-ratio: 4/3; overflow: hidden; border-radius: 20px; background: var(--surface-soft); }
-.photoStage > img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.photoStage > div { padding: 24px; color: var(--muted); font-size: 14px; text-align: center; }
+.photoStage { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
+.photoFrame { position: absolute; inset: 0; }
+.galleryImage { position: relative; width: 100%; height: 100%; background: var(--surface-soft); }
+.galleryImage > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.galleryImage[data-image-state='loading'] > img { opacity: 0; }
+.photoStage .galleryImage > img { object-fit: contain; }
+.imagePlaceholder, .imageError, .artworkFallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; padding: 22px; background: var(--surface-soft); color: var(--muted); text-align: center; }
+.imagePlaceholder { background: linear-gradient(135deg,var(--surface-soft),var(--blue-soft)); font-size: 12px; }
+.imageError { font-size: 12px; line-height: 1.6; }
+.imageError strong { color: var(--navy); font-size: 14px; }
+.artworkFallback { background: #1f56d6; color: white; }
+.artworkFallback strong { max-width: 340px; font-size: 23px; }
+.artworkFallback span { font-size: 11px; }
 .photoControls { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 12px 0; }
-.photoControls button { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: var(--blue-soft); color: var(--primary); font-size: 22px; }
+.photoControls button { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: var(--paper); color: var(--primary); font-size: 22px; }
+.photoControls button:hover:not(:disabled) { background: var(--blue-soft); border-color: var(--selected-border); }
 .photoControls button:disabled { opacity: .5; }
-.photoControls > span { color: var(--navy); font-size: 14px; font-weight: 750; }
-.photoCaption { font-size: 12px; color: var(--muted); line-height: 1.5; }
-.navigationHelp { margin: 12px 0; color: var(--text-secondary); font-size: 12px; }
-.thumbnails { display: flex; flex-wrap: wrap; gap: 10px; }
-.thumbnails button { flex: 0 1 90px; height: 66px; padding: 3px; border: 2px solid transparent; border-radius: 12px; background: var(--surface-soft); overflow: hidden; }
-.thumbnails button[aria-pressed='true'] { border-color: var(--primary); }
-.thumbnails img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-.thumbnails button > div { color: var(--muted); font-size: 9px; }
-.albumInfo { min-width: 0; }
-.albumInfo h2 { margin: 10px 0 16px; color: var(--navy); font-size: 28px; font-weight: 800; line-height: 1.2; letter-spacing: -.5px; }
-.description { color: var(--text); font-size: 15px; white-space: pre-line; line-height: 1.7; }
-.byline { display: grid; gap: 7px; margin: 22px 0; font-size: 13px; color: var(--text-secondary); }
+.photoControls > span { color: var(--navy); font-size: 12px; font-weight: 750; letter-spacing: .5px; }
+.photoCaption { min-height: 54px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+.navigationHelp { margin: 10px 0 14px; color: var(--text-secondary); font-size: 11px; line-height: 1.6; }
+.thumbnails { display: grid; grid-template-columns: repeat(3,minmax(0,90px)); gap: 10px; }
+.thumbnails button { position: relative; min-width: 0; height: 68px; padding: 3px; border: 2px solid transparent; border-radius: 9px; background: var(--surface-soft); overflow: hidden; }
+.thumbnails button[aria-pressed='true'] { border-color: var(--primary); box-shadow: 0 0 0 2px var(--paper),0 0 0 3px var(--selected-border); }
+.thumbnails .galleryImage { border-radius: 4px; overflow: hidden; }
+.thumbnails button > span { position: absolute; bottom: 5px; left: 5px; padding: 2px 4px; border-radius: 3px; background: #0a1f4d; color: white; font-size: 9px; }
+.thumbnails .imagePlaceholder, .thumbnails .imageError { padding: 5px; gap: 0; }
+.thumbnails .imagePlaceholder > span, .thumbnails .imageError > span, .thumbnails .imageError > strong { display: none; }
+.albumInfo { min-width: 0; padding-top: 6px; }
+.albumInfo h2 { margin: 12px 0 20px; color: var(--navy); font-size: 31px; font-weight: 800; line-height: 1.1; letter-spacing: -.9px; }
+.description { color: var(--text-secondary); font-size: 14px; white-space: pre-line; line-height: 1.75; }
+.byline { display: grid; gap: 8px; margin: 22px 0; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-secondary); }
 .byline button { color: var(--primary); }
-.byline time { font-size: 12px; }
-.privacy { display: flex; align-items: flex-start; gap: 8px; padding: 14px; border-radius: 14px; background: var(--notice-bg); color: var(--notice-ink); font-size: 12px; }
-.privacy svg { flex: none; }
-.postLink { width: 100%; margin-top: 20px; }
-.associatedNote { display: block; margin-top: 10px; color: var(--muted); font-size: 12px; }
+.byline time { font-size: 11px; line-height: 1.6; }
+.privacy { display: flex; align-items: flex-start; gap: 8px; padding: 14px; border-radius: 12px; background: var(--notice-bg); color: var(--notice-ink); font-size: 11px; line-height: 1.6; }
+.privacy svg { flex: none; margin-top: 1px; }
+.postLink { width: 100%; margin-top: 20px; text-align: left; }
+.postLink svg { flex: none; }
+.associatedNote { display: block; margin-top: 10px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
 @media (max-width: 1100px) {
-  .pageHeading { grid-template-columns: minmax(0,1.7fr) minmax(0,1fr); }
-  .pageHeading h1 { font-size: 36px; }
-  .pageHeading > div > p { font-size: 15px; }
-  .shareCard h2 { font-size: 19px; }
-  .featured { grid-template-columns: 47% minmax(0,1fr); }
+  .pageHeading { gap: 24px; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); }
+  .headingIssue { margin-left: 0; padding-left: 10px; }
   .featuredCopy { padding: 26px; }
-  .featured h2 { font-size: 29px; }
-  .featuredCopy > p { font-size: 15px; }
-  .featuredArt { padding: 16px; gap: 12px; }
-  .speakingTile, .friendsTile, .successTile { padding: 16px; }
-  .speakingTile > strong { font-size: 26px; }
-  .friendsTile > strong, .successTile > strong { font-size: 16px; }
-  .mosaic { grid-template-rows: 200px 200px; gap: 16px; }
-  .shortMosaic { grid-template-rows: none; }
-  .horizontal .albumBody { padding: 16px; }
-  .horizontal .albumBody h3 { font-size: 19px; }
-  .horizontal .illustration { padding: 16px; }
-  .horizontal .illustration > strong { font-size: 15px; }
-  .compact .coverSymbol { width: 90px; }
-  .albumBody h3 { font-size: 17px; }
-  .compact .albumBody h3 { font-size: 16px; }
+  .featured h2 { font-size: 35px; }
+  .featuredArt .cover { min-height: 340px; }
+  .featuredFooter { gap: 12px; }
+  .mosaic { gap: 16px; }
+  .large .cover { min-height: 300px; }
+  .large h3 { font-size: 29px; }
+  .compact h3 { font-size: 18px; }
+  .compact .albumMeta { font-size: 9px; letter-spacing: .3px; }
+  .horizontal .cover { width: 38%; }
+  .horizontal h3, .standard h3 { font-size: 20px; }
+  .sixAlbums .standard .cover { width: 48%; }
+  .dialogGrid { gap: 24px; }
+  .albumInfo h2 { font-size: 27px; }
 }
 @media (max-width: 850px) {
-  .pageHeading { grid-template-columns: minmax(0,1fr); gap: 22px; }
-  .shareCard { min-height: 0; padding: 18px 20px; }
-  .shareCard button { min-height: 44px; }
-  .featured { grid-template-columns: minmax(0,1fr); margin-top: 26px; }
-  .featuredCopy { padding: 28px; }
-  .featured h2 { font-size: 34px; }
-  .featured h2 br { display: none; }
-  .featuredCopy > button { min-height: 44px; }
-  .featuredArt { min-height: 270px; padding: 20px; }
-  .speakingTile > strong { font-size: 30px; }
-  .friendsTile > strong, .successTile > strong { font-size: 18px; }
-  .filters button { min-height: 44px; }
-  .mosaic { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: auto; grid-auto-rows: auto; }
+  .pageHeading { grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: 20px; }
+  .headingIssue { display: block; width: 100%; border: 0; padding: 0; }
+  .pageHeading h1 { font-size: 44px; letter-spacing: -1.6px; }
+  .pageHeading > div > p { font-size: 14px; }
+  .shareCard { padding: 16px 38px 16px 16px; }
+  .shareCard h2 { font-size: 18px; }
+  .shareMark { width: 22px; height: 22px; top: 14px; right: 10px; }
+  .shareMark svg { width: 17px; height: 17px; }
+  .featured { grid-template-columns: minmax(0,1fr) minmax(0,.9fr); margin-top: 24px; }
+  .featuredCopy { padding: 22px; }
+  .featured h2 { font-size: 32px; }
+  .featuredCopy > p { font-size: 13px; }
+  .featuredFooter { margin-top: 18px; padding-top: 16px; }
+  .featuredArt .cover { min-height: 0; }
+  .featuredArt .coverFlag { left: 0; right: auto; bottom: 0; font-size: 9px; }
+  .mosaicHeading { align-items: start; }
+  .mosaicHeading h2 { font-size: 29px; }
+  .sort { max-width: 165px; }
+  .mosaic { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .mosaic .albumCard { grid-column: auto; grid-row: auto; }
-  .mosaic .large { grid-column: 1 / -1; min-height: 360px; }
-  .mosaic .compact { min-height: 200px; }
-  .mosaic .horizontal { grid-column: 1 / -1; min-height: 190px; }
-  .mosaic .standard { min-height: 290px; }
+  .mosaic .large { grid-column: 1 / -1; }
+  .large .albumButton { display: grid; grid-template-columns: 1.1fr 1fr; gap: 12px; }
+  .large .cover { height: 100%; min-height: 220px; }
+  .large .albumBody { padding: 18px 10px; }
+  .large h3 { font-size: 29px; }
+  .compact .cover { aspect-ratio: 3 / 2; }
+  .compact h3 { font-size: 23px; }
+  .horizontal { grid-column: 1 / -1 !important; }
+  .horizontal .cover { width: 44%; min-height: 180px; }
+  .horizontal h3 { font-size: 26px; }
+  .sixAlbums .standard .albumButton { flex-direction: column; gap: 0; }
+  .sixAlbums .standard .cover { width: 100%; }
+  .sixAlbums .standard .albumBody { align-self: stretch; padding: 16px 10px 8px; }
   .shortMosaic .large { grid-column: auto; }
+  .shortMosaic .albumButton { display: flex; flex-direction: column; }
+  .shortMosaic .cover { min-height: 0; }
   .albumDialog { width: calc(100% - 32px); max-width: calc(100% - 32px); padding: 20px; }
-  .dialogGrid { grid-template-columns: minmax(0,1fr); gap: 26px; }
+  .dialogGrid { grid-template-columns: minmax(0,1fr); gap: 24px; }
 }
 @media (max-width: 600px) {
-  .pageHeading h1 { font-size: 34px; margin-top: 10px; }
-  .pageHeading > div > p { font-size: 15px; }
-  .eyebrow { font-size: 11px; }
-  .shareCard { border-radius: 22px; }
-  .shareCard h2 { font-size: 20px; }
-  .shareCard p { margin: 8px 0 12px; font-size: 14px; }
-  .shareCard button { min-height: 44px; font-size: 13px; }
-  .featured { margin-top: 24px; border-radius: 25px; }
-  .featuredCopy { padding: 24px; }
-  .featuredTag { min-width: 0; font-size: 11px; }
-  .featured h2 { font-size: 30px; margin-top: 20px; }
-  .featuredCopy > p { font-size: 15px; }
-  .featuredCopy > button { width: 100%; margin-top: 18px; font-size: 13px; }
-  .featuredArt { min-height: 255px; padding: 14px; gap: 10px; grid-template-columns: 1.1fr 1fr; }
-  .speakingTile { padding: 16px 12px; border-radius: 19px; }
-  .speakingTile > span { font-size: 37px; }
-  .speakingTile > strong { font-size: 23px; margin-top: 18px; }
-  .friendsTile, .successTile { padding: 14px 12px; border-radius: 18px; }
-  .friendsTile > span, .successTile > span { font-size: 26px; }
-  .friendsTile > strong, .successTile > strong { display: block; font-size: 15px; line-height: 1.3; }
-  .filters { gap: 8px; margin: 24px 0; }
-  .filters button, .filters button:first-child { min-width: 0; min-height: 44px; padding: 10px 14px; font-size: 12px; }
-  .mosaicHeading { display: grid; gap: 14px; }
-  .mosaicHeading h2 { font-size: 25px; }
-  .mosaicHeading p { margin-top: 6px; font-size: 14px; }
-  .sort { grid-template-columns: auto 1fr; align-items: center; gap: 10px; font-size: 12px; }
-  .sort select { min-height: 44px; border-color: var(--line); background: var(--paper); }
-  .counts { margin: 14px 0 18px; font-size: 12px; }
-  .mosaic { grid-template-columns: minmax(0,1fr); gap: 18px; }
-  .mosaic .large, .mosaic .horizontal { grid-column: auto; }
-  .mosaic .large { min-height: 350px; }
-  .mosaic .large .cover { min-height: 240px; }
-  .mosaic .compact { min-height: 0; }
-  .compact .albumButton { flex-direction: row; min-height: 142px; }
-  .compact .cover { width: 37%; min-height: 142px; flex: none; border-radius: 22px; }
-  .compact .illustration { padding: 18px 12px; }
-  .compact .coverSymbol { width: 100%; height: 76px; font-size: 30px; }
-  .compact .albumBody { align-self: center; padding: 14px; }
-  .compact .albumBody h3 { font-size: 18px; }
-  .horizontal .albumButton { flex-direction: column; }
-  .horizontal .cover { width: 100%; min-height: 155px; }
-  .horizontal .illustration { display: flex; align-items: center; gap: 20px; padding: 22px; }
-  .horizontal .coverSymbol { font-size: 40px; margin: 0; }
-  .horizontal .illustration > strong { font-size: 21px; max-width: 170px; }
-  .horizontal .albumBody { align-self: stretch; padding: 20px; }
-  .horizontal .albumBody h3 { font-size: 22px; }
-  .horizontal .albumBody > p { font-size: 14px; }
-  .standard .cover { min-height: 190px; }
-  .albumBody { padding: 16px; }
-  .albumBody h3 { font-size: 20px; }
-  .albumMeta { font-size: 11px; }
-  .albumDate { font-size: 12px; }
-  .albumLink { min-height: 32px; display: flex; align-items: center; gap: 6px; font-size: 14px; }
-  .galleryNote { font-size: 12px; line-height: 1.6; }
-  .albumDialog { padding: 16px; border-radius: 22px; width: calc(100% - 20px); max-width: calc(100% - 20px); max-height: 92dvh; }
-  .dialogHeader { gap: 10px; margin-bottom: 16px; }
-  .dialogHeader .eyebrow { font-size: 10px; }
+  .pageHeading { grid-template-columns: minmax(0,1fr); gap: 18px; }
+  .eyebrow { font-size: 10px; letter-spacing: .9px; }
+  .headingIssue { display: inline; width: auto; margin-left: auto; font-size: 8px; letter-spacing: .6px; }
+  .pageHeading h1 { margin: 12px 0 10px; font-size: 41px; letter-spacing: -1.8px; }
+  .pageHeading > div > p { font-size: 14px; }
+  .shareCard { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 7px 12px; padding: 14px; border-radius: 4px 14px 14px; }
+  .shareMark { display: none; }
+  .shareCard h2 { grid-column: 1 / -1; font-size: 18px; }
+  .shareCard p { margin: 0; font-size: 11px; line-height: 1.5; }
+  .shareCard button { align-self: center; padding: 9px 10px; gap: 8px; font-size: 11px; }
+  .featured { grid-template-columns: minmax(0,1fr); margin-top: 20px; border-radius: 18px; }
+  .featuredCopy { padding: 18px; }
+  .featured h2 { margin: 12px 0 10px; font-size: 31px; line-height: 1.04; letter-spacing: -.9px; }
+  .featured h2 br { display: none; }
+  .featuredTag { font-size: 9px; letter-spacing: .7px; }
+  .featuredCopy > p { font-size: 13px; line-height: 1.5; }
+  .featuredFooter { gap: 14px; margin-top: 14px; padding-top: 14px; }
+  .featuredFooter > button { min-height: 44px; padding: 10px 12px; gap: 16px; font-size: 12px; }
+  .featuredFooter > span, .featuredFooter strong { font-size: 10px; }
+  .featuredArt .cover { height: 140px; min-height: 0; }
+  .featuredArt .coverFlag { left: 0; right: auto; bottom: 0; font-size: 9px; padding: 4px 8px; }
+  .filters { gap: 3px; margin: 16px 0 22px; padding-bottom: 16px; }
+  .filters button { padding: 8px 12px; font-size: 11px; }
+  .mosaicHeading { flex-direction: column; gap: 16px; align-items: stretch; }
+  .sectionEyebrow { margin-bottom: 9px; font-size: 9px; letter-spacing: 1.3px; }
+  .mosaicHeading h2 { font-size: 29px; letter-spacing: -.8px; }
+  .mosaicHeading p { font-size: 12px; margin-top: 8px; }
+  .sort { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: none; font-size: 11px; }
+  .sort select { min-width: 0; width: 56%; }
+  .counts { font-size: 10px; margin: 14px 0; }
+  .mosaic { gap: 12px; }
+  .albumCard { border-radius: 16px; }
+  .albumButton { padding: 7px; }
+  .cover { border-radius: 10px; }
+  .large .albumButton { display: flex; flex-direction: row; gap: 10px; }
+  .large .cover { width: 44%; flex: 0 0 44%; height: auto; min-height: 174px; aspect-ratio: auto; }
+  .large .albumBody { flex: 1; align-self: center; padding: 12px 6px 12px 0; }
+  .large h3 { font-size: 23px; }
+  .albumMeta, .compact .albumMeta { font-size: 10px; letter-spacing: .3px; }
+  .albumBody h3 { font-size: 19px; line-height: 1.15; margin: 8px 0; letter-spacing: -.4px; }
+  .albumDate, .compact .albumDate { font-size: 11px; }
+  .albumLink { font-size: 11px; padding-top: 12px; gap: 4px; }
+  .albumBody, .compact .albumBody { padding: 12px 5px 6px; }
+  .compact h3 { font-size: 19px; }
+  .coverFlag, .compact .coverFlag { left: 0; bottom: 0; padding: 4px 6px; height: 36px; font-size: 9px; max-width: 100%; }
+  .cover > img, .cover > .galleryImage { height: calc(100% - 36px); }
+  .featuredArt .cover > img { height: calc(100% - 24px); }
+  .featuredArt .coverFlag { height: 24px; }
+  .coverCount { top: 5px; right: 5px; font-size: 10px; padding: 3px 5px; }
+  .coverCount svg { width: 11px; height: 11px; }
+  .compact .cover { aspect-ratio: 1 / 1; }
+  .horizontal .albumButton { gap: 10px; }
+  .horizontal .cover { width: 45%; min-height: 170px; }
+  .horizontal .albumBody { padding: 12px 5px; }
+  .horizontal h3 { font-size: 23px; }
+  .sixAlbums .standard .cover { aspect-ratio: 3 / 2; }
+  .sixAlbums .standard h3 { font-size: 19px; }
+  .sixAlbums .standard .albumBody { padding: 12px 5px 6px; }
+  .shortMosaic .large { grid-column: 1 / -1; }
+  .shortMosaic .large .cover { width: 47%; min-height: 174px; }
+  .shortMosaic .large .albumButton { flex-direction: row; }
+  .shortMosaic .large .albumBody { padding: 12px 6px; }
+  .galleryNote { font-size: 11px; margin-top: 20px; }
+  .empty { padding: 30px 18px; }
+  .empty h3 { font-size: 24px; }
+  .empty p { font-size: 13px; }
+  .empty .sectionEyebrow { font-size: 8px; }
+  .albumDialog { padding: 16px; border-radius: 20px; width: calc(100% - 20px); max-width: calc(100% - 20px); max-height: 92dvh; }
+  .dialogHeader { gap: 10px; margin-bottom: 16px; padding-bottom: 12px; }
+  .dialogHeader .eyebrow { max-width: 195px; font-size: 9px; }
   .dialogGrid { display: flex; flex-direction: column; gap: 0; }
   .albumInfo { display: contents; }
   .albumInfo > .albumMeta { order: -2; }
-  .albumInfo h2 { order: -1; margin: 6px 0 20px; }
+  .albumInfo h2 { order: -1; margin: 8px 0 18px; font-size: 27px; }
   .viewer { order: 0; }
-  .description { order: 1; margin-top: 22px; }
+  .description { order: 1; margin-top: 20px; }
   .byline { order: 2; }
   .privacy { order: 3; }
   .postLink { order: 4; }
   .associatedNote { order: 5; }
-  .thumbnails { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .thumbnails button { min-width: 0; }
-  .photoStage { aspect-ratio: 4/3; border-radius: 15px; }
-  .photoControls { gap: 8px; }
-  .photoControls > span { font-size: 13px; }
-  .albumInfo h2 { font-size: 26px; }
-  .postLink { font-size: 13px; }
-  .empty { padding: 32px 20px; }
+  .thumbnails { grid-template-columns: repeat(3,minmax(0,90px)); }
+  .photoStage { border-radius: 10px; }
+  .photoCaption { min-height: 72px; }
+  .navigationHelp { font-size: 11px; }
+  .imageError { padding: 16px; font-size: 11px; gap: 8px; }
+  .imageError strong { font-size: 13px; }
+  .imagePlaceholder { padding: 12px; font-size: 11px; }
 }
 @media (max-width: 360px) {
-  .featuredCopy { padding: 22px; }
-  .featured h2 { font-size: 28px; }
-  .featuredArt { min-height: 240px; padding: 12px; gap: 10px; }
-  .speakingTile > strong { font-size: 21px; }
-  .friendsTile, .successTile { padding: 12px 10px; }
-  .friendsTile > strong, .successTile > strong { font-size: 14px; }
-  .filters button { padding-inline: 12px; }
-  .compact .cover { width: 34%; }
-  .compact .albumBody h3 { font-size: 17px; }
-  .compact .albumBody { padding: 12px; }
-  .coverSymbol { width: 105px; }
-  .illustrationLabel { min-width: 0; width: 200px; max-width: 100%; }
+  .pageHeading h1 { font-size: 36px; }
+  .headingIssue { margin-left: 0; font-size: 7px; }
+  .shareCard { gap: 8px; padding: 12px; }
+  .shareCard h2 { font-size: 17px; }
+  .shareCard button { font-size: 10px; gap: 5px; padding-inline: 8px; }
+  .featuredCopy { padding: 18px; }
+  .featured h2 { font-size: 29px; }
+  .featuredArt .cover { height: 134px; }
+  .featuredFooter { gap: 10px; }
+  .featuredFooter > button { gap: 10px; padding-inline: 10px; }
+  .featuredFooter > span, .featuredFooter strong { font-size: 9px; }
+  .filters button { padding-inline: 10px; }
+  .mosaicHeading h2 { font-size: 27px; }
+  .albumBody h3, .compact h3, .sixAlbums .standard h3 { font-size: 17px; }
+  .large h3, .horizontal h3 { font-size: 21px; }
+  .albumDialog { padding: 14px; }
+  .albumInfo h2 { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery *, .gallery *::before, .gallery *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .gallery :where(button,article,dialog) { transform: none !important; }
 }

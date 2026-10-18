@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" fill="none">
+  <path fill="#BCE9DA" d="M0 0h600v400H0z"/>
+  <path d="M0 328h600M0 344h600M0 360h600M0 376h600" stroke="#0A1F4D" stroke-opacity=".12" stroke-width="2"/>
+  <text x="38" y="57" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="3">THE EVERYDAY WINS COLLECTION</text>
+  <text x="31" y="151" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="96" font-weight="900" letter-spacing="-6">EVERY</text>
+  <text x="31" y="241" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="100" font-weight="900" letter-spacing="-6">TRY</text>
+  <path d="M38 268h320v49H38z" fill="#0A1F4D"/>
+  <text x="53" y="304" fill="#FFF9EB" font-family="Arial,sans-serif" font-size="37" font-weight="900" letter-spacing="2">COUNTS.</text>
+  <g transform="rotate(12 460 218)">
+    <path d="m423 218-18 118 49-29 40 37 3-123" fill="#1F56D6" stroke="#0A1F4D" stroke-width="4"/>
+    <path d="m452 92 23 15 28-1 10 27 22 18-8 28 3 28-25 14-16 23-29-5-27 8-20-21-26-10v-29l-11-26 19-22 6-28 29-3z" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="4"/>
+    <circle cx="456" cy="171" r="48" stroke="#0A1F4D" stroke-width="2"/>
+    <path d="m433 172 17 17 30-37" stroke="#0A1F4D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <path d="m352 57 5 14 14 5-14 5-5 14-5-14-14-5 14-5z" fill="#1F56D6"/>
+  <text x="38" y="368" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="2">NO PERFECT WORDS REQUIRED.</text>
+</svg>

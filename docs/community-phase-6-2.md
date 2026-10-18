@@ -2,9 +2,9 @@
 
 ## Alcance y base comprobada
 
-La subronda implementada es **6.2-A: Inicio**. **6.2-B: Galería queda pendiente de aprobación explícita.** Rama comprobada al empezar: `feat/community-visual-polish`; carpeta `C:\Users\feral\Proyectos\CAI_Enterprices\CAI_Enterprices`; HEAD de partida `a8f4d91`.
+**6.2-A: Inicio está aprobado y respaldado en `652b146`. 6.2-B: Galería está aprobada por el usuario y su respaldo está autorizado.** Rama comprobada: `feat/community-visual-polish`; carpeta `C:\Users\feral\Proyectos\CAI_Enterprices\CAI_Enterprices`. La base inicial de Inicio fue `a8f4d91`; la de Galería es `652b146`.
 
-**Estado actual:** fase 6.2-A completa, incluido el ajuste móvil, aprobada por el usuario. Respaldo autorizado mediante commit y push exclusivamente a `origin/feat/community-visual-polish`. Galería sigue pendiente. [Comparativas locales del ajuste](../review/community-phase-6-2/mobile-hero-adjustment/index.html). Las cifras y capturas de la implementación inicial se conservan como histórico; las medidas móviles vigentes figuran al final de este documento.
+**Estado actual:** Inicio y Galería aprobados. El usuario autorizó el commit `style(community): renovar galeria editorial fase 6.2-B` y el push exclusivamente a `origin/feat/community-visual-polish`. La fase 6.3 no está iniciada. [Comparativas locales de Galería](../review/community-phase-6-2/gallery/index.html) · [Ajuste aprobado de Inicio](../review/community-phase-6-2/mobile-hero-adjustment/index.html). Las entregas anteriores para revisión se conservan como histórico.
 
 **Evidencias locales excluidas del respaldo:** los enlaces de este informe a `review/` requieren los archivos de revisión del entorno original; no se incluyen en Git. También se excluyen `.playwright-mcp/`, `design-reference/`, `reference/` y archivos temporales. Las menciones posteriores a entregas «sin commit ni push» describen los puntos de revisión anteriores a esta aprobación.
 
@@ -170,3 +170,137 @@ Se volvieron a ejecutar `typecheck`, `lint`, `build` y las cinco regresiones de 
 Sobre el preview estable, Brave completó **488 comprobaciones**: Inicio premium 141, hero móvil 171 (con el registro anterior local), compositor 19, Retos 30, Galería 40, Logros 55 y presentación compartida de 6.1 32. Inicio, hero y presentación compartida devolvieron cero errores y advertencias de consola. Las medidas finales del hero y el acceso adelantado al feed coinciden con la tabla del ajuste. No se modificaron las otras secciones al comprobar sus regresiones.
 
 El respaldo contiene los 13 archivos de código, SVG originales, pruebas y documentación enumerados arriba. Los registros y capturas locales permanecen fuera del commit. No se autoriza ni se realiza merge, despliegue o implementación de Galería en esta entrega.
+
+## Fase 6.2-B · Galería editorial · Entrega para revisión
+
+### Base y alcance verificados
+
+La implementación parte de `652b146026624c9ce72076ee2a132cdf1f1ec5bc`, con Inicio aprobado y respaldado. Se confirmó `feat/community-visual-polish`, la carpeta del repositorio y la ausencia de modificaciones rastreadas antes de editar. Se conservaron todos los archivos no rastreados. Se leyeron AGENTS, visión, requisitos, la documentación de Galería de fase 4, el sistema visual 6.1, Inicio 6.2-A y las pruebas existentes. Se revisó directamente `design-reference/GALERÍA — DESKTOP.png`; no se obtuvieron capas nuevas de Figma ni se modificó el PNG.
+
+Antes de editar se capturó Galería en 1440, 1024, 768, 375 y 320 px, claro y oscuro. [Índice visual de 6.2-B](../review/community-phase-6-2/gallery/index.html). Las evidencias son locales y permanecen fuera de Git.
+
+Solo se modifica la presentación dentro de `src/features/community/gallery/`, cuatro recursos locales, una prueba nueva y este informe. No se requieren cambios en componentes compartidos. `albums.ts`, los modelos, fixtures, permisos, autenticación, administración, landing, Inicio, Retos y Logros conservan sus fuentes. La comparación SHA-256 de **103 archivos originales de `src/`** detecta únicamente los siete archivos de Galería enumerados abajo; cero cambios fuera de esa carpeta. [Registro](../review/community-phase-6-2/gallery/source-comparison.json).
+
+### Dirección visual y composición
+
+Se mantienen Figtree, marino `#0A1F4D`, azul `#1F56D6`, amarillo `#FFCD1F`, Cloud y ambos temas. El encabezado conserva “Así se vive CAI” con mayor jerarquía y cierre azul; la invitación a compartir se convierte en una cartela de papel con borde institucional y CTA amarillo. En móvil se distribuyen texto y acción en una fila compacta, sin ocultar el mensaje.
+
+Speaking Day pasa de bloques pastel y emojis a una portada editorial: titular marino con cierre amarillo, categoría y cantidad reales, botón destacado y un cartel original con micrófono, diálogo Hello y tipografía impresa. La ilustración no representa una fotografía de un evento. El destacado sigue abriendo `album:cai-club`, derivado de la publicación ficticia original; no se crea otro evento o álbum.
+
+El mosaico conserva orden y datos y usa cuatro siluetas: apertura grande, dos tarjetas compactas, una historia fotográfica horizontal y un cierre de dos portadas. Las portadas de Nico y Vale muestran las fotografías de biblioteca y mesa ya existentes; son dos fuentes distintas. Las otras cuatro son ilustraciones originales específicas. No se añaden ni duplican fotografías para completar espacios. Dentro del visor siguen existiendo las nueve referencias a las tres fotos originales, tal como estaban en las publicaciones.
+
+En tablet, apertura e historia horizontal combinan imagen y texto lateral. En móvil, la primera tarjeta se vuelve horizontal, las compactas conservan dos columnas y los cierres forman otra pareja: no se apilan seis tarjetas de altura grande. Las imágenes ilustradas se muestran completas con `contain`; las fotos de portada usan `cover`, y todas las fotos del visor usan `contain`. Los créditos tienen una franja propia para evitar tapar el dibujo o su tipografía. Las tarjetas siguen siendo artículos con un botón nativo, sin controles anidados.
+
+El modo oscuro utiliza los tokens existentes de superficie, tinta, borde y sombra. Los pósteres conservan su papel menta, coral o lavanda y tinta marino; el destacado mantiene su paleta de marca. No se añaden estilos globales.
+
+### Recursos y sustitución por medios autorizados
+
+Los cuatro SVG originales usan `viewBox="0 0 600 400"` y se importan con `?no-inline`:
+
+| Recurso | Composición y uso |
+| --- | --- |
+| `src/assets/community/gallery/speaking-day.svg` | Cartel Say it out loud / Speaking Day, micrófono ilustrado y diálogo Hello. Destacado y portada de Conversation Club. |
+| `src/assets/community/gallery/every-try.svg` | Every try counts con escarapela, para la nota semanal que celebra el intento. |
+| `src/assets/community/gallery/give-it-a-try.svg` | Nota con cinta y lápiz, para el recordatorio de Teo. |
+| `src/assets/community/gallery/first-week.svg` | Película con tres fotogramas ilustrados y Our first chapter, para la primera semana compartida. |
+
+Son ilustraciones locales hechas para esta fase, sin fotografías de alumnos, packs externos ni rostros generados. Tamaños de build: **2,36 / 1,60 / 1,80 / 1,76 kB**, respectivamente. No se hizo scraping de Instagram ni se añadieron nuevas fotos de stock.
+
+`gallery/media.ts` separa `galleryArtwork` (ruta, alternativa, crédito, fondo) de `galleryCoverSlots`, ligado al `postId` estable. Para usar una portada autorizada se actualiza el `Photo` de la publicación fuente (`id`, `src`, `alt`, `caption`) y se cambia su posición a `{ kind: 'photo' }`. La tarjeta y el visor no necesitan rediseño. También deberá actualizarse el texto de procedencia del álbum cuando deje de tratarse de stock: hoy el contrato de la simulación identifica todas sus fotos como Unsplash. No se simula que esa autorización ya existe.
+
+Los álbumes aprobados nuevos usan automáticamente su primera foto como portada. El manifiesto no copia medios ni mantiene un segundo estado de publicaciones o moderación. Los álbumes sin fotos siguen sin derivarse; “sin fotografía” en esta propuesta se refiere a las cuatro portadas ilustradas de álbumes existentes, no a colecciones vacías inventadas.
+
+Las fotografías oficiales de `@caieducacion` siguen pendientes de entrega, selección y autorización. La atribución de las imágenes de muestra permanece en cada pie de foto y las portadas fotográficas muestran “Foto ilustrativa · Unsplash”.
+
+### Visor, estados y movimiento
+
+Se conservan abrir/cerrar, navegación circular, flechas del teclado, miniaturas, posición anunciada, foco inicial en cerrar, Tab/Shift+Tab, Escape, bloqueo de fondo, restauración de foco, perfiles y publicación/conversación asociada. Un álbum de una sola imagen mantiene desactivados los controles de siguiente/anterior.
+
+El marco de foto reserva proporción 4:3; el pie tiene espacio reservado para sus atribuciones. `GalleryImage` mantiene estados reales de carga, imagen lista y fallo, con alternativa textual, `aria-busy` y dimensiones estables. Las miniaturas tienen indicador de selección y número. El título precede visualmente a la foto en móvil, conservando los handlers y el diálogo nativo. Cambiar de foto, completar una petición o mostrar un error no altera las dimensiones del marco.
+
+Se usa Motion existente para elevación de 3 px en hover, presión de botones, opacidad del conjunto al filtrar/ordenar, apertura del diálogo de 8 px/opacidad y cambio breve de fotografía. No hay entradas por cada tarjeta, movimiento permanente, parallax ni autoavance. El cierre conserva la respuesta inmediata del diálogo nativo y la restauración de foco, sin retraso de salida; el botón de cerrar tiene feedback de presión. No se afirma haber añadido una animación de salida retardada.
+
+`useGalleryMotion` lee la preferencia de movimiento reducido mediante `useSyncExternalStore`, incluida la alternancia en vivo. La guardia CSS local elimina también transformaciones de gestos. Se verificó elevación con movimiento normal y su eliminación al reducir movimiento. No se alteran las primitivas compartidas ni los temporizadores de Inicio.
+
+### Comparativa móvil medida
+
+Valores iguales en claro y oscuro, con fuentes e imágenes cargadas. Alturas de documento completas, incluido el contenedor compartido y su pie; no son tiempos de carga.
+
+| Viewport | Destacado antes → después | Inicio del mosaico antes → después | Documento antes → después |
+| --- | --- | --- | --- |
+| 375 px | 546,0 → **392,5 px** | 1456,7 → **1285,3 px** · 171,3 px antes | 3390 → **2533 px** · −857 px / **25,3 %** |
+| 320 px | 544,9 → **382,3 px** | 1532,6 → **1261,4 px** · 271,2 px antes | 3511 → **2524 px** · −987 px / **28,1 %** |
+
+En 1440 px el documento pasa de 1748 a 2003 px para dar presencia al póster, títulos y metadatos; no se presenta ese crecimiento de escritorio como una reducción. A 768 px el destacado pasa de 510,2 a 285,8 px y el mosaico comienza a 933,4 px frente a 1213,0 px. [Medidas completas y verificaciones](../review/community-phase-6-2/gallery/resultados-galeria.json).
+
+### Validación de 6.2-B
+
+| Comprobación | Resultado real |
+| --- | --- |
+| `npm.cmd run typecheck` | Correcto. |
+| `npm.cmd run lint` | Correcto, sin advertencias. No hay Prettier configurado. |
+| `npm.cmd run build` | Correcto, sin advertencia de tamaño. |
+| Modelo de comunidad | 29 comprobaciones + 4 igualdades correctas. |
+| Publicaciones | 23 comprobaciones correctas. |
+| Modelo de Retos | 27 comprobaciones + 1 igualdad correctas. |
+| Modelo de Galería | 25 comprobaciones + 4 igualdades correctas. |
+| Modelo de Logros | 51 comprobaciones + 4 igualdades correctas. |
+| Galería existente · Brave / preview | **40 comprobaciones correctas**, sin editar el script original. |
+| Galería premium nueva · Brave / preview | **148 comprobaciones correctas**, cero errores y advertencias inesperados. |
+| Inicio premium · Brave / preview | **141 comprobaciones correctas**, cero errores/advertencias. |
+| Hero móvil · Brave / preview, sin registro histórico opcional | **135 comprobaciones correctas**, cero errores/advertencias. |
+| Compositor / Retos / Logros / presentación 6.1 · Brave / preview | **19 / 30 / 55 / 32** comprobaciones correctas. |
+| Compatibilidad · Opera GX / preview | Diez combinaciones: cinco anchos × ambos temas, sin overflow de página o visor; navegación por teclado y restauración de foco correctas, cero errores/advertencias. Es una comprobación adicional, no la regresión completa de Brave. |
+
+La nueva prueba comprueba seis álbumes y orden original; cuatro portadas originales completas y dos fotos distintas; títulos, metadatos y créditos dentro de sus cajas; ritmos y áreas táctiles; navegación, miniaturas, foco y perfiles; ausencia de saltos del visor; filtros y vacíos; pendiente fuera de la colección; álbum derivado nuevo con dos fotos y autor Alex; reinicio; movimiento normal/reducido; carga retenida y fallos de foto y SVG; persistencia del tema.
+
+Los fallos se fuerzan únicamente mediante interceptación de peticiones en páginas aisladas de prueba. Los `net::ERR_FAILED` esperados se separan de errores inesperados; no se modifica el modelo ni se añade una entrada de prueba al producto. La carga se retiene y después se libera para comprobar el mismo marco antes/después. [Regresiones](../review/community-phase-6-2/gallery/regresiones.json) · [Opera GX](../review/community-phase-6-2/gallery/opera-gx.json).
+
+**Incidencia del registro histórico de Inicio:** la ejecución opcional contra el JSON anterior falló en igualdad exacta del ancho de `heroActions`: 350,15625 frente a 350,1875 px (diferencia de **0,03125 px**). Hero, feed y primera historia mantenían sus medidas. Se compiló una copia local de `652b146` dentro de `review/`, sin cambiar de rama ni tocar el trabajo actual: el build aprobado y el actual dieron **geometría exactamente idéntica en los cinco anchos** en claro, incluida esa anchura de CTA. [Comparación directa](../review/community-phase-6-2/gallery/comparacion-inicio-base.json). La variación también está presente en la base aprobada al medirla ahora; no procede de los cambios de Galería. No se modificó la prueba ni el registro histórico para hacerlos pasar. La prueba funcional se ejecutó con su opción predeterminada y pasó 135/135; Inicio premium cubrió además ambos temas y los flujos sociales (141/141).
+
+El build final de producto mide **494,74 kB / 153,94 kB gzip** de JavaScript principal, **46,65 / 17,82 kB** del bloque de Motion y **192,29 / 35,23 kB** de CSS. No se añaden dependencias. No se han medido Web Vitals, redes móviles reales ni tiempos de carga.
+
+### Evidencias, reproducción y archivos
+
+El [índice local](../review/community-phase-6-2/gallery/index.html) permite alternar cinco anchos y ambos temas y comparar antes/después. Incluye el destacado, mosaico/portadas, filtros, dos vacíos, visor en escritorio y móvil, carga/error, póster fallido, pendiente y álbum recién aprobado. Conserva las primeras iteraciones como histórico. Hay diez capturas anteriores, diez vistas generales finales, dieciocho capturas de componentes/estados y dos iteraciones.
+
+El índice se abrió desde archivo local en Brave: sus 24 imágenes visibles/cargables se decodificaron sin fallos y el selector recorrió los diez pares antes/después correctamente. Se comprobó la existencia de sus 32 referencias estáticas, sin destinos ausentes. Se separaron las etiquetas de los dos selectores de sus opciones para conservar nombres accesibles precisos.
+
+Para reproducir: `npm.cmd run build`, `npm.cmd run preview -- --host 127.0.0.1 --port 4173` y abrir `/community` → Galería. `scripts/check-community-gallery-premium.browser.mjs` es una función para `browser_run_code_unsafe` del navegador aislado; no es un ejecutable Node. Acepta `screenshotDir` y, opcionalmente, el array local de `antes.json` mediante `before`. Sin esos argumentos también ejecuta sus comprobaciones del estado final. La regresión de Inicio usa además el servidor de desarrollo existente en 5173 para su fixture vacío.
+
+| Archivo modificado o creado | Responsabilidad |
+| --- | --- |
+| `gallery/GalleryView.tsx` | Encabezado, compartir compacto, filtros Motion, encabezado editorial, mosaico y vacío. |
+| `gallery/FeaturedAlbum.tsx` | Portada editorial, CTA y metadatos del destacado. |
+| `gallery/AlbumCard.tsx` | Jerarquía de la historia, cuatro formatos y hover Motion. |
+| `gallery/AlbumCover.tsx` | Selección gráfica/foto, contador, franja de crédito y fallback SVG. |
+| `gallery/AlbumDialog.tsx` | Presentación Motion del visor, fotos y miniaturas conservando sus interacciones. |
+| `gallery/gallery.module.css` | Composición local, responsive, temas, estados y movimiento reducido. |
+| `gallery/presentation.ts` | Títulos editoriales originales; se retiran símbolos de emoji que ya no se presentan. |
+| `gallery/media.ts` | Manifiesto de cuatro recursos originales y posiciones de portada por publicación. |
+| `gallery/GalleryImage.tsx` | Carga, imagen lista y error de fotografía, solo para Galería. |
+| `gallery/useGalleryMotion.ts` | Preferencia de movimiento reducido sincronizada en vivo. |
+| Los cuatro SVG enumerados arriba | Recursos originales de la subfase. |
+| `scripts/check-community-gallery-premium.browser.mjs` | Nueva regresión específica, sin cambiar las pruebas previas. |
+| `docs/community-phase-6-2.md` | Este informe de 6.2-B. |
+| `review/community-phase-6-2/gallery/` | Capturas, índice, medidas, resultados y copia de diagnóstico de la base; solo evidencia local. |
+
+Las rutas abreviadas `gallery/` de esta tabla corresponden a `src/features/community/gallery/`.
+
+Pendientes tras la aprobación visual del usuario: fotografías oficiales autorizadas, lector de pantalla formal y dispositivos físicos. No se probaron Firefox o Safari. La aplicación sigue siendo un prototipo con datos ficticios y sin autorización real de roles.
+
+**Punto de control 6.2-B: implementación entregada para revisión; sin commit, push, merge ni desarrollo de Retos o Logros.**
+
+### Respaldo aprobado de Galería 6.2-B
+
+El usuario aprobó las comparativas, los cinco tamaños, ambos temas, las cuatro ilustraciones, el mosaico y los estados del visor. Autorizó exclusivamente el commit `style(community): renovar galeria editorial fase 6.2-B` y el push a `origin/feat/community-visual-polish`. Se confirmó que la rama seguía siendo `feat/community-visual-polish`, con HEAD local y remoto en la base aprobada `652b146026624c9ce72076ee2a132cdf1f1ec5bc` antes del respaldo.
+
+Se revisaron el diff y los archivos nuevos y se validó una selección explícita de **16 archivos**: diez de producto en `src/features/community/gallery/`, cuatro SVG originales, la prueba `check-community-gallery-premium.browser.mjs` y este documento. El índice estaba vacío antes de prepararla. Se excluyen íntegramente `review/`, `.playwright-mcp/`, `design-reference/`, `reference/` y temporales. No se cambió el código aprobado durante el respaldo ni se modificaron las pruebas.
+
+Se volvieron a ejecutar `npm.cmd run typecheck`, `npm.cmd run lint`, `npm.cmd run build` y las cinco regresiones del modelo: todas correctas (155 comprobaciones y 13 igualdades). El build conserva los tamaños documentados arriba y no presenta advertencia de tamaño.
+
+Brave completó **600 comprobaciones correctas**: Galería premium 148 (con las medidas locales anteriores), Galería existente 40, Inicio premium 141, hero móvil con sus opciones predeterminadas 135, compositor 19, Retos 30, Logros 55 y presentación compartida 32. Galería premium, Inicio, hero y presentación compartida devolvieron cero errores/advertencias inesperados. La primera ejecución de Inicio se detuvo porque el servidor de desarrollo del fixture vacío devolvía `504 Outdated Optimize Dep`; se reinició Vite con reoptimización y se repitió la prueba original completa, sin editarla, con resultado correcto.
+
+Se conserva íntegro el registro de la discrepancia histórica de **0,03125 px**, junto con la comparación directa que encontró geometría idéntica entre `652b146` recompilado y la versión actual en los cinco anchos. No se altera el JSON histórico ni se relajan aserciones. Sus evidencias permanecen locales y excluidas del commit, igual que el resto de `review/`.
+
+**Límite de esta autorización: respaldo de 6.2-B; sin merge, cambio de rama, despliegue ni comienzo de 6.3.**

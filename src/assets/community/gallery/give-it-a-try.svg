@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" fill="none">
+  <path fill="#F2B39E" d="M0 0h600v400H0z"/>
+  <path d="M0 40h600M0 80h600M0 120h600M0 160h600M0 200h600M0 240h600M0 280h600M0 320h600M0 360h600M40 0v400M80 0v400M120 0v400M160 0v400M200 0v400M240 0v400M280 0v400M320 0v400M360 0v400M400 0v400M440 0v400M480 0v400M520 0v400M560 0v400" stroke="#0A1F4D" stroke-opacity=".09"/>
+  <g transform="rotate(-7 284 198)">
+    <path d="M115 65h338v275H115z" fill="#0A1F4D" fill-opacity=".18"/>
+    <path d="M101 51h338v275H101z" fill="#FFF9EB" stroke="#0A1F4D" stroke-width="3"/>
+    <path d="M208 35h120v36H208z" fill="#FFCD1F" fill-opacity=".85"/>
+    <text x="125" y="106" fill="#1F56D6" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="3">A NOTE TO MYSELF</text>
+    <text x="119" y="175" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="61" font-weight="900" letter-spacing="-3">GIVE IT</text>
+    <text x="119" y="238" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="68" font-weight="900" letter-spacing="-4">A TRY.</text>
+    <path d="M125 253c70 10 151 10 230-5" stroke="#1F56D6" stroke-width="5" stroke-linecap="round"/>
+    <text x="126" y="295" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="12" font-weight="700">TOMORROW STARTS WITH ONE WORD.</text>
+  </g>
+  <g transform="rotate(26 468 222)">
+    <path d="M451 81h32v242l-16 37-16-37z" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="3"/>
+    <path d="M451 81a16 16 0 0 1 32 0v20h-32z" fill="#1F56D6" stroke="#0A1F4D" stroke-width="3"/>
+    <path d="M459 109v212m16-212v212" stroke="#0A1F4D" stroke-width="2"/>
+    <path d="m459 341 8 19 8-19" fill="#0A1F4D"/>
+  </g>
+  <path d="m55 263 5 17 17 5-17 5-5 17-5-17-17-5 17-5z" fill="#0A1F4D"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" fill="none">
+  <path fill="#DCD5FA" d="M0 0h600v400H0z"/>
+  <text x="32" y="48" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="3">THE BEGINNING OF SOMETHING GOOD</text>
+  <path d="M0 92h600v227H0z" fill="#0A1F4D"/>
+  <path d="M14 101h21v10H14zm36 0h21v10H50zm36 0h21v10H86zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21zm36 0h21v10h-21z" fill="#DCD5FA"/>
+  <path d="M14 299h572" stroke="#DCD5FA" stroke-width="7" stroke-dasharray="21 15"/>
+  <path d="M24 124h171v161H24z" fill="#BCE9DA"/>
+  <path d="M214 124h171v161H214z" fill="#FFCD1F"/>
+  <path d="M404 124h171v161H404z" fill="#F2B39E"/>
+  <text x="37" y="153" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="13" font-weight="700">01 / HELLO</text>
+  <text x="228" y="153" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="13" font-weight="700">02 / LET'S</text>
+  <text x="418" y="153" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="13" font-weight="700">03 / GO!</text>
+  <path d="M55 179h104v55H97l-23 19v-19H55z" stroke="#0A1F4D" stroke-width="4"/>
+  <path d="M72 196h71m-71 15h49" stroke="#0A1F4D" stroke-width="4"/>
+  <path d="m302 171 11 28 30 3-23 20 7 30-25-16-26 16 7-30-23-20 30-3z" fill="#0A1F4D"/>
+  <path d="M438 239h102m-50 0v-67m-23 25 23-25 23 25" stroke="#0A1F4D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="32" y="370" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="39" font-weight="900" letter-spacing="-2">OUR FIRST CHAPTER.</text>
+</svg>
