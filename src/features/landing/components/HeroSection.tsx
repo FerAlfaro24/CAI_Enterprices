@@ -23,10 +23,10 @@ export function HeroSection() {
         <ContentNote light>{commercialNotice} Fotografías ilustrativas.</ContentNote>
       </div>
       <div className={cx(s.hero__float, s['hero__float--a'])} aria-hidden="true">
-        <span className={s['hf-icon']}>🎓</span><div><b>95 % de aprobación</b><small>Cifra ficticia de la propuesta</small></div>
+        <span className={s['hf-icon']}><Icon name="award" size={22} /></span><div><b>95 % de aprobación</b><small>Cifra ficticia de la propuesta</small></div>
       </div>
       <div className={cx(s.hero__float, s['hero__float--b'])} aria-hidden="true">
-        <span className={cx(s['hf-icon'], s['hf-icon--blue'])}>💬</span><div><b>Una clase para conocernos</b><small>Disponibilidad por confirmar</small></div>
+        <span className={cx(s['hf-icon'], s['hf-icon--blue'])}><Icon name="chat" size={22} /></span><div><b>Una clase para conocernos</b><small>Disponibilidad por confirmar</small></div>
       </div>
     </section>
   )

@@ -22,7 +22,7 @@ Issue consultado: [Construir landing pública de CAI #2](https://github.com/FerA
 | `CardCarousel.tsx` | Scroll-snap nativo, controles de desplazamiento y acceso por teclado. |
 | `DemoForm.tsx` | Formularios de contacto y lista de interés con validación y mensajes de estado. |
 | `ui.tsx`, `utils.ts` | Botones de enlace, iconos SVG, notas y composición de clases. |
-| `data/content.ts` | Datos TypeScript: navegación, fotos, estadísticas, historia, servicios, testimonios, programas, FAQ y footer. |
+| `data/content.ts` | Datos TypeScript: navegación, fotos, estadísticas, historia, servicios, testimonios, públicos, programas, FAQ y footer. |
 | `hooks/useLandingMotion.ts` | Apariciones progresivas y contadores; respeta movimiento reducido y limpia observadores, animaciones y frames. |
 | `landing.module.css` | Variables de identidad y estilos encapsulados de la landing. |
 | `src/assets/cai/` | Copias de `logo-cai-emblema.svg` y `logo-cai-blanco.svg`. |
@@ -57,13 +57,24 @@ El aviso de prototipo y la navegación entre áreas se muestran antes de la cabe
 1. Se añade el contexto visible de prototipo y la navegación a las tres áreas.
 2. Se mantienen las cifras y fechas originales únicamente como muestras ficticias; se reformulan promociones, afirmaciones y CTA que parecían ofertas vigentes.
 3. Se identifican los testimonios como ficticios y sus fotografías como stock. No se asocian con alumnos reales.
-4. Se sustituyen las fotografías del aula y de niños. Kids utiliza una biblioteca sin personas; trayectoria y programas utilizan reuniones de personas con apariencia adulta.
-5. Se reutiliza una foto empresarial verificable en lugar de la imagen original cuya página de procedencia actualmente devuelve 404.
+4. Se sustituyen las fotografías del aula y de niños. La trayectoria utiliza una reunión de personas con apariencia adulta. Públicos y programas se presentan con tarjetas ilustradas con íconos, sin fotografías (ver «Refinamiento visual»).
+5. Se descarta la imagen empresarial original, cuya página de procedencia devuelve 404, sin reemplazarla por otra fotografía.
 6. Los formularios no prometen contactos ni avisos inexistentes. Se mejoran validación y mensajes accesibles.
 7. Redes, privacidad y términos se muestran como pendientes, sin enlaces `#` que parezcan operativos. No se publica teléfono, dirección o correo inventado como oficial.
 8. Se corrigen foco móvil, estados del desplegable, contraste del texto de éxito y movimiento reducido.
 9. Se añade carga diferida para fotografías fuera del hero, dimensiones declaradas y controles de tarjetas. El hero conserva carga prioritaria.
 10. Los efectos del script original se adaptan al ciclo de vida de React, sin listeners globales permanentes ni manipulación de clases de otras rutas.
+
+## Refinamiento visual
+
+Ajustes posteriores sobre la estructura aprobada, sin cambiar el orden de las secciones:
+
+- **Fotografía repetida:** la misma imagen de reunión aparecía en trayectoria, públicos y dos tarjetas de programas (`photos.business` apuntaba al mismo identificador que `photos.meeting`). Ahora solo se usa en trayectoria.
+- **Públicos:** la sección «De la primaria a la oficina» muestra cuatro tarjetas (niños, adolescentes, adultos y empresas) con rango de edad y descripción, además de un enlace a programas.
+- **Programas:** las tarjetas fotográficas se sustituyen por tarjetas informativas con ícono, público, descripción, tres características y enlace «Pedir información». General English se destaca con el degradado de la marca. Las características provienen de la referencia y de las preguntas frecuentes, y siguen pendientes de validación.
+- **Cifras:** la nota de cifras ficticias pasa debajo de los números para no anteceder al titular.
+- **Ritmo vertical:** dos bloques `.feature` consecutivos (trayectoria y servicios) ya no suman su relleno vertical.
+- **Hero:** las tarjetas flotantes usan íconos SVG en lugar de emojis, coherentes con el resto del sitio.
 
 ## Procedencia de recursos visuales
 
@@ -74,8 +85,7 @@ Las fotografías se sirven desde `images.unsplash.com`. Se contrastaron sus iden
 | Uso | Autor mostrado por la fuente | Página oficial |
 | --- | --- | --- |
 | Hero | Brooke Cagle | [Friends at a coffee shop](https://unsplash.com/photos/a-group-of-friends-at-a-coffee-shop--uHVRvDr7pg) |
-| Trayectoria, públicos y programas | Mimi Thian | [Four people watching a MacBook](https://unsplash.com/photos/four-people-watching-on-white-macbook-on-top-of-glass-top-table-vdXMSiX-n6M) |
-| Programa Kids, sin personas | Janko Ferlič | [Library with turned on lights](https://unsplash.com/photos/photo-of-library-with-turned-on-lights-sfL_QOnmy00) |
+| Trayectoria | Mimi Thian | [Four people watching a MacBook](https://unsplash.com/photos/four-people-watching-on-white-macbook-on-top-of-glass-top-table-vdXMSiX-n6M) |
 | Propuesta de cursos | John, `@johnishappysometimes` | [Person using laptop](https://unsplash.com/photos/person-using-laptop-FlPc9_VocJ4) |
 | Retrato ilustrativo 1 | Michael Dam | [Woman smiling](https://unsplash.com/photos/closeup-photography-of-woman-smiling-mEZ3PoFGs_k) |
 | Retrato ilustrativo 2 | Joseph Gonzalez | [Man wearing white V-neck shirt](https://unsplash.com/photos/man-wearing-white-v-neck-shirt-iFgRcqHznqg) |
