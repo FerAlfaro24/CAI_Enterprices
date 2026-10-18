@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
+import { useDemoStore } from '../app/demoStore'
 import emblem from '../assets/cai/logo-cai-emblema.svg'
 import { PrototypeNotice } from '../components/PrototypeNotice'
 import s from '../features/admin/admin.module.css'
 import { Icon, type IconName } from '../features/admin/components/ui'
-import { adminReducer, countByStatus, initialAdminState, postStatuses, requestStatuses, type AdminContext } from '../features/admin/state'
+import { countByStatus, postStatuses, requestStatuses, type AdminContext } from '../features/admin/state'
 import { cx } from '../features/landing/utils'
 
 type Section = { to: string; label: string; icon: IconName; countKey?: 'requests' | 'posts' }
@@ -22,7 +23,7 @@ const titles: Record<string, string> = Object.fromEntries(
 )
 
 export function AdminLayout() {
-  const [state, dispatch] = useReducer(adminReducer, initialAdminState)
+  const { state, dispatch } = useDemoStore()
   const [message, setMessage] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
@@ -33,7 +34,7 @@ export function AdminLayout() {
   const pageTitle = titles[pathname.replace(/\/$/, '')] ?? 'Administración'
 
   const announce = useCallback((text: string) => setMessage(text), [])
-  const context = useMemo<AdminContext>(() => ({ state, dispatch, announce }), [state, announce])
+  const context = useMemo<AdminContext>(() => ({ state, dispatch, announce }), [state, dispatch, announce])
 
   useEffect(() => { document.title = `${pageTitle} · Administración · CAI · Prototipo` }, [pageTitle])
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])

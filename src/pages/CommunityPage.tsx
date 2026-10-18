@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { PlaceholderPage } from '../components/PlaceholderPage'
 
 export function CommunityPage() {
@@ -17,6 +18,14 @@ export function CommunityPage() {
       </p>
       <p className="mt-3 leading-relaxed text-slate-700">
         No hay cuentas, sesiones ni almacenamiento de información de alumnos.
+      </p>
+      <p className="mt-6">
+        <Link
+          to="/registro"
+          className="inline-flex min-h-11 items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+        >
+          Solicitar acceso a la comunidad
+        </Link>
       </p>
     </PlaceholderPage>
   )

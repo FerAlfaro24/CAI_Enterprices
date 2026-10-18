@@ -15,6 +15,7 @@ Convención: `[C]` confirmado en conversación, `[P]` propuesto para validar, `[
 - **RF-09 [P]** Comentarios y reacciones (pendiente de decisión).
 - **RF-10 [D]** Reproducción/carga de videos reales.
 - **RF-11 [D]** Notificaciones y gamificación.
+- **RF-12 [P]** Formulario de solicitud de acceso por pasos, con autorización de tutor para menores (ver `docs/student-signup.md`).
 
 ## No funcionales
 - **RNF-01 [C]** Experiencia usable en móviles y escritorio.

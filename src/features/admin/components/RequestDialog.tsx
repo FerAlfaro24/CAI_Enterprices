@@ -2,12 +2,14 @@ import { useEffect, useRef } from 'react'
 import { cx } from '../../landing/utils'
 import s from '../admin.module.css'
 import type { AccessRequest } from '../data/mockData'
-import { canApprove, formatDate } from '../state'
+import { canApprove, formatDate, useAdmin } from '../state'
 import { RequestActions } from './RequestActions'
 import { Avatar, Icon, StatusBadge } from './ui'
 
 export function RequestDialog({ request, onClose }: { request: AccessRequest | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null)
+  const applicant = request?.applicant
+  const { dispatch, announce } = useAdmin()
 
   useEffect(() => {
     const dialog = ref.current
@@ -45,6 +47,20 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
                 <><dt>Autorización del tutor</dt><dd>{request.guardianConsent === 'recibida' ? 'Recibida' : 'Pendiente'}</dd></>
               )}
               <dt>Origen</dt><dd>{request.source}</dd>
+              {applicant && (
+                <>
+                  <dt>Llenada por</dt><dd>{applicant.filledBy === 'tutor' ? 'Madre, padre o tutor' : 'El alumno'}</dd>
+                  <dt>Edad</dt><dd>{applicant.age} años</dd>
+                  <dt>Grupo</dt><dd>{applicant.group}</dd>
+                  <dt>Matrícula</dt><dd>{applicant.studentCode ?? 'No indicada'}</dd>
+                  <dt>Correo</dt><dd>{applicant.email}</dd>
+                  <dt>Nombre visible</dt><dd>{applicant.displayName}</dd>
+                  <dt>Perfil</dt><dd>{applicant.visibility === 'privado' ? 'Solo su grupo' : 'Toda la comunidad'}</dd>
+                  {applicant.guardian && (
+                    <><dt>Tutor</dt><dd>{applicant.guardian.name} · {applicant.guardian.relationship}<br />{applicant.guardian.contact}</dd></>
+                  )}
+                </>
+              )}
             </dl>
             <blockquote className={s.quote}>{request.message}</blockquote>
             {request.ageGroup === 'menor' && (
@@ -53,6 +69,14 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
                   ? 'Autorización del tutor registrada (simulada). Su perfil será privado por defecto.'
                   : 'No es posible aprobar a un menor sin la autorización de su padre, madre o tutor.'}
               </p>
+            )}
+            {request.ageGroup === 'menor' && !canApprove(request) && request.status === 'pendiente' && (
+              <button type="button" className={cx(s.btn, s['btn--ghost'], s['btn--sm'])} onClick={() => {
+                dispatch({ type: 'consent', id: request.id })
+                announce(`Autorización del tutor de ${request.name} registrada.`)
+              }}>
+                <Icon name="check" size={16} />Registrar autorización recibida (simulado)
+              </button>
             )}
           </div>
           <div className={s['dialog-foot']}>

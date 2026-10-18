@@ -113,6 +113,7 @@ export function LandingHeader() {
             {navigation.map(({ href, label }) => <a key={href} href={href} onClick={onNavigate}>{label}{href === '#plataforma' && <span className={s.pill}>Propuesta</span>}</a>)}
             <a href="#faq" className={s['nav__mobile-only']} onClick={onNavigate}>Preguntas frecuentes</a>
             <Link to="/community" className={s['nav__mobile-only']} onClick={onNavigate}>Comunidad · Demo</Link>
+            <Link to="/registro" className={s['nav__mobile-only']} onClick={onNavigate}>Solicitar acceso</Link>
             <a href="#contacto" className={s['nav__mobile-only']} onClick={onNavigate}>Contacto</a>
             <div className={s['nav__mobile-cta']}><a href="#contacto" className={cx(s.btn, s['btn--primary'], s['btn--lg'])} onClick={onNavigate}>Explora la clase muestra</a></div>
           </nav>

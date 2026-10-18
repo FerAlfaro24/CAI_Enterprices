@@ -1,10 +1,13 @@
 import { BrowserRouter } from 'react-router'
+import { DemoStoreProvider } from './DemoStoreProvider'
 import { AppRoutes } from './router'
 
 export function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <DemoStoreProvider>
+        <AppRoutes />
+      </DemoStoreProvider>
     </BrowserRouter>
   )
 }

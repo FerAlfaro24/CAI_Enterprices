@@ -7,6 +7,19 @@ export type RequestStatus = 'pendiente' | 'aprobada' | 'rechazada'
 export type AgeGroup = 'adulto' | 'menor'
 export type GuardianConsent = 'recibida' | 'pendiente'
 
+/** Datos capturados por el formulario de registro de la demo (nunca la contraseña). */
+export type Applicant = {
+  filledBy: 'alumno' | 'tutor'
+  email: string
+  age: number
+  group: string
+  studentCode?: string
+  displayName: string
+  avatarColor: string
+  visibility: 'privado' | 'comunidad'
+  guardian?: { name: string; relationship: string; contact: string }
+}
+
 export type AccessRequest = {
   id: string
   name: string
@@ -17,6 +30,7 @@ export type AccessRequest = {
   submittedAt: string
   message: string
   status: RequestStatus
+  applicant?: Applicant
 }
 
 export const accessRequests: AccessRequest[] = [

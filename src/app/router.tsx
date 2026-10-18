@@ -10,6 +10,7 @@ import { AdminStudentsPage } from '../pages/AdminStudentsPage'
 import { CommunityPage } from '../pages/CommunityPage'
 import { InstitutionalPage } from '../pages/InstitutionalPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
+import { SignupPage } from '../pages/SignupPage'
 
 export function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export function AppRoutes() {
       <Route element={<LandingLayout />}>
         <Route index element={<InstitutionalPage />} />
       </Route>
+      <Route path="registro" element={<SignupPage />} />
       <Route path="admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />
         <Route path="solicitudes" element={<AdminRequestsPage />} />

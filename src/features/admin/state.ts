@@ -32,8 +32,10 @@ export type AdminState = {
 }
 
 export type AdminAction =
+  | { type: 'submit'; request: AccessRequest }
   | { type: 'decide'; id: string; status: Exclude<RequestStatus, 'pendiente'> }
   | { type: 'undo'; id: string }
+  | { type: 'consent'; id: string }
   | { type: 'moderate'; id: string; status: 'publicada' | 'rechazada'; reason?: string }
   | { type: 'unmoderate'; id: string }
   | { type: 'suspend' | 'reactivate'; id: string }
@@ -59,10 +61,14 @@ export const initialAdminState: AdminState = {
 
 export function adminReducer(state: AdminState, action: AdminAction): AdminState {
   switch (action.type) {
+    case 'submit':
+      return { ...state, requests: [action.request, ...state.requests] }
     case 'decide':
       return { ...state, requests: state.requests.map((r) => (r.id === action.id ? { ...r, status: action.status } : r)) }
     case 'undo':
       return { ...state, requests: state.requests.map((r) => (r.id === action.id ? { ...r, status: 'pendiente' } : r)) }
+    case 'consent':
+      return { ...state, requests: state.requests.map((r) => (r.id === action.id ? { ...r, guardianConsent: 'recibida' } : r)) }
     case 'moderate':
       return { ...state, posts: state.posts.map((p) => (p.id === action.id ? { ...p, status: action.status, rejectReason: action.reason } : p)) }
     case 'unmoderate':
@@ -107,18 +113,24 @@ export function buildDirectory(state: AdminState): DirectoryStudent[] {
       id: r.id,
       name: r.name,
       program: r.program,
-      group: 'Por asignar',
+      group: r.applicant?.group ?? 'Por asignar',
       ageGroup: r.ageGroup,
       guardianConsent: r.guardianConsent,
       joinedAt: r.submittedAt,
       posts: 0,
-      visibility: 'privado',
+      visibility: r.applicant?.visibility ?? 'privado',
     }))
   return [...fromRequests, ...students].map((student) => ({
     ...student,
     status: state.suspended.includes(student.id) ? 'suspendido' : 'activo',
     isNew: student.id.startsWith('CAI-'),
   }))
+}
+
+/** Siguiente folio de solicitud, por ejemplo CAI-0143. */
+export function nextRequestId(requests: AccessRequest[]) {
+  const max = Math.max(0, ...requests.map((r) => Number(r.id.replace(/\D/g, '')) || 0))
+  return `CAI-${String(max + 1).padStart(4, '0')}`
 }
 
 /** Un menor solo puede aprobarse con la autorización de su tutor registrada. */
