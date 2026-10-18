@@ -3,6 +3,7 @@ import { useCommunity } from '../context'
 import { selectChallengeProgress } from '../challenges/progress'
 import { demoMember } from '../data/members'
 import { MemberLink } from '../components/MemberLink'
+import { MotionFeedback } from '../components/CommunityMotion'
 import { findBadge } from './catalog'
 import { selectBadgeGrants } from './model'
 import { BadgeRequestForm } from './BadgeRequestForm'
@@ -25,7 +26,7 @@ export function MyAchievements({ onRequest, onShare }: { onRequest: (id: string)
   return <>
     <section className={s.stats} aria-label="Resumen personal de Alex">{stats.map((stat) => <div key={stat.label}><span className={`${s.badgeIcon} ${s[stat.tone]}`} aria-hidden="true">{stat.symbol}</span><div><strong>{stat.value}</strong><span>{stat.label}</span></div></div>)}</section>
     <div className={s.progressLine}><MemberLink member={demoMember} /> · <span>{progress.points} puntos de Retos</span> · <span>{progress.answeredDays} días respondidos</span> · <span>Mejor serie: {progress.longestStreak}</span></div>
-    <div className={s.requestGrid}><section className={s.requestCard} aria-labelledby="request-adventure-title"><h2 id="request-adventure-title"><span aria-hidden="true">🎬</span> ¿Conseguiste algo fuera de la plataforma?</h2><p>Selecciona una insignia y cuéntale a CAI cómo la conseguiste.</p><BadgeRequestForm badgeId={selectedBadge} onBadgeChange={setSelectedBadge} /></section><aside className={s.requestPreview} aria-label="Insignia para solicitar"><span className={s.yellowTag}>✦ {alreadyEarned ? 'INSIGNIA CONSEGUIDA' : selectedRequest?.status === 'pending' ? 'SOLICITUD EN REVISIÓN' : 'INSIGNIA POR SOLICITAR'}</span><span className={`${s.previewIcon} ${s[badge.tone]}`} aria-hidden="true">{badge.symbol}</span><h2>{badge.title}</h2><p>{badge.description}</p><span className={s.previewState}>{alreadyEarned ? '✓ Conseguida' : selectedRequest?.status === 'pending' ? 'Pendiente de revisión' : selectedRequest?.status === 'rejected' ? 'Puedes volver a solicitarla' : 'Disponible para solicitar'}</span></aside></div>
+    <div className={s.requestGrid}><section className={s.requestCard} aria-labelledby="request-adventure-title"><h2 id="request-adventure-title"><span aria-hidden="true">🎬</span> ¿Conseguiste algo fuera de la plataforma?</h2><p>Selecciona una insignia y cuéntale a CAI cómo la conseguiste.</p><BadgeRequestForm badgeId={selectedBadge} onBadgeChange={setSelectedBadge} /></section><aside className={s.requestPreview} aria-label="Insignia para solicitar"><span className={s.yellowTag}>✦ {alreadyEarned ? 'INSIGNIA CONSEGUIDA' : selectedRequest?.status === 'pending' ? 'SOLICITUD EN REVISIÓN' : 'INSIGNIA POR SOLICITAR'}</span><span className={`${s.previewIcon} ${s[badge.tone]}`} aria-hidden="true">{badge.symbol}</span><h2>{badge.title}</h2><p>{badge.description}</p><MotionFeedback key={alreadyEarned ? "earned" : selectedRequest?.status ?? "available"} className={s.previewState}>{alreadyEarned ? '✓ Conseguida' : selectedRequest?.status === 'pending' ? 'Pendiente de revisión' : selectedRequest?.status === 'rejected' ? 'Puedes volver a solicitarla' : 'Disponible para solicitar'}</MotionFeedback></aside></div>
     <BadgeCollection onShare={onShare} />
     <BadgeCatalog onRequest={onRequest} />
     <BadgeRequestHistory />

@@ -11,6 +11,7 @@ import { PostDetailDialog } from './PostDetailDialog'
 import { useCommunityDialogs } from '../dialogContext'
 import { Avatar, CommunityIcon } from './ui'
 import { ChallengeDemoSelector } from '../challenges/ChallengeDemoSelector'
+import { CommunityMotion, MotionButton } from './CommunityMotion'
 
 export function CommunityShell({ children }: { children: ReactNode }) {
   const { state, dispatch } = useCommunity()
@@ -26,7 +27,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
     return () => window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
   return (
-    <div className={`${themeStyles.theme} ${s.community}`} data-theme={theme}>
+    <CommunityMotion><div className={`${themeStyles.theme} ${s.community}`} data-theme={theme}>
       <a className={s.skipLink} href="#community-content">Saltar al contenido de comunidad</a>
       <header className={s.topbar}>
         <div className={s.topbarInner}>
@@ -34,10 +35,10 @@ export function CommunityShell({ children }: { children: ReactNode }) {
           <CommunityNavigation />
           <div className={s.headerActions}>
             <div className={s.themeSelector} role="group" aria-label="Tema de la comunidad">
-              <button type="button" aria-label="Modo claro" aria-pressed={theme === 'light'} onClick={() => setTheme('light')} title="Modo claro"><CommunityIcon name="sun" size={19} /></button>
-              <button type="button" aria-label="Modo oscuro" aria-pressed={theme === 'dark'} onClick={() => setTheme('dark')} title="Modo oscuro"><CommunityIcon name="moon" size={18} /></button>
+              <MotionButton type="button" aria-label="Modo claro" aria-pressed={theme === 'light'} onClick={() => setTheme('light')} title="Modo claro"><CommunityIcon name="sun" size={19} /></MotionButton>
+              <MotionButton type="button" aria-label="Modo oscuro" aria-pressed={theme === 'dark'} onClick={() => setTheme('dark')} title="Modo oscuro"><CommunityIcon name="moon" size={18} /></MotionButton>
             </div>
-            <button type="button" className={s.currentMember} aria-label="Abrir perfil ficticio de Alex Demo" aria-haspopup="dialog" onClick={() => setProfileId('alex')}><Avatar member={demoMember} /><span>Alex Demo<small>Mi espacio</small></span></button>
+            <MotionButton type="button" className={s.currentMember} aria-label="Abrir perfil ficticio de Alex Demo" aria-haspopup="dialog" onClick={() => setProfileId('alex')}><Avatar member={demoMember} /><span>Alex Demo<small>Mi espacio</small></span></MotionButton>
           </div>
         </div>
       </header>
@@ -61,6 +62,6 @@ export function CommunityShell({ children }: { children: ReactNode }) {
       <footer className={s.communityFooter}><span>CAI Community · Un prototipo para imaginar lo que podemos construir juntos.</span><span>Sin cuentas reales ni datos de alumnos. <Link to="/">Sitio institucional ↗</Link></span></footer>
       {detail && <PostDetailDialog key={`${detail.postId}-${state.resetKey}`} />}
       {profileId && <MemberProfileDialog key={profileId} memberId={profileId} onClose={() => setProfileId(null)} />}
-    </div>
+    </div></CommunityMotion>
   )
 }

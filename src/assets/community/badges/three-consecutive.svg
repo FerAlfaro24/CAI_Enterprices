@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <title>Tres días seguidos — sticker original CAI</title>
+  <desc>Tres hojas de calendario enlazadas, con el número tres y una pequeña llama de constancia.</desc>
+  <path d="m23 40 20-22 70-2 23 28 8 62-19 30-71 9-28-24-10-51Z" fill="#FFFDF5" stroke="#0A1F4D" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="25" y="39" width="88" height="79" rx="13" transform="rotate(-12 25 39)" fill="#93B6FF" stroke="#0A1F4D" stroke-width="3"/>
+  <rect x="37" y="33" width="88" height="87" rx="13" transform="rotate(6 37 33)" fill="#1F56D6" stroke="#0A1F4D" stroke-width="3"/>
+  <rect x="34" y="42" width="90" height="85" rx="13" fill="#FFF3C7" stroke="#0A1F4D" stroke-width="3"/>
+  <path d="M35 55a12 12 0 0 1 12-12h65a12 12 0 0 1 12 12v13H35Z" fill="#FFCD1F"/>
+  <path d="M35 68h88M52 35v17m52-17v17" stroke="#0A1F4D" stroke-width="5" stroke-linecap="round"/>
+  <path d="M59 82h23L69 94h8a10 10 0 0 1 0 20H58" stroke="#0A1F4D" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M109 83c1 15 15 16 15 30a17 17 0 0 1-34 0c0-9 6-13 8-21l7 9c4-5 4-11 4-18Z" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M107 108c1 5 7 8 7 13a7 7 0 0 1-14 0c0-5 5-8 7-13Z" fill="#F59172"/>
+  <path d="m131 29 5-7m3 21 8-1M20 103l-9 2" stroke="#1F56D6" stroke-width="4" stroke-linecap="round"/>
+  <path d="m48 129 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="#93B6FF" stroke="#0A1F4D" stroke-width="2" stroke-linejoin="round"/>
+</svg>

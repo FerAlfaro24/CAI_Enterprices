@@ -1,5 +1,6 @@
 import { useCommunity } from '../context'
 import s from '../community.module.css'
+import { MotionButton } from './CommunityMotion'
 
 const items = [
   { id: 'home', label: 'Inicio' },
@@ -13,9 +14,9 @@ export function CommunityNavigation() {
   return (
     <nav className={s.sectionNav} aria-label="Secciones de comunidad">
       {items.map(({ id, label }) => (
-        <button key={id} type="button" aria-current={state.section === id ? 'page' : undefined} onClick={() => dispatch({ type: 'section', section: id })}>
+        <MotionButton key={id} type="button" aria-current={state.section === id ? 'page' : undefined} onClick={() => dispatch({ type: 'section', section: id })}>
           {label}
-        </button>
+        </MotionButton>
       ))}
     </nav>
   )

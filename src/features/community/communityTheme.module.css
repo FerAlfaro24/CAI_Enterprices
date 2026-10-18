@@ -32,6 +32,26 @@
   --error-bg: #f7e7e4;
   --error-ink: #9b392b;
   --error-line: #bc5143;
+  /* CAI Playful Premium: foundations, consumed selectively by shared controls. */
+  --radius-control: 12px;
+  --radius-card: 24px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --shadow-rest: 0 2px 4px #0a1f4d04, 0 8px 24px -16px #0a1f4d24;
+  --shadow-lift: 0 4px 8px #0a1f4d06, 0 16px 32px -16px #0a1f4d38;
+  --shadow-control: 0 2px 4px #0a1f4d0a, 0 5px 12px -5px #1f56d64d;
+  --shadow-dialog: 0 24px 80px #071b414d;
+  --border-interactive: #a4b9e2;
+  --surface-accent: #edf3ff;
+  --surface-sheen: #ffffffa6;
+  --duration-fast: 120ms;
+  --duration-ui: 180ms;
+  --ease-ui: cubic-bezier(.22,1,.36,1);
   color-scheme: light;
 }
 
@@ -64,5 +84,12 @@
   --error-bg: #482b30;
   --error-ink: #ffc1b5;
   --error-line: #ef9d91;
+  --shadow-rest: 0 2px 6px #03091626, 0 8px 24px -16px #03091680;
+  --shadow-lift: 0 5px 12px #03091633, 0 18px 32px -16px #030916a6;
+  --shadow-control: 0 2px 4px #03091640, 0 5px 14px -5px #050c20;
+  --shadow-dialog: 0 24px 80px #03091699;
+  --border-interactive: #7b9dcb;
+  --surface-accent: #233a60;
+  --surface-sheen: #a5c2ff08;
   color-scheme: dark;
 }
