@@ -9,9 +9,7 @@ const photo = (id: string, width: number, height?: number) =>
 export const photos = {
   hero: photo('photo-1543269865-cbf427effbad', 1920),
   meeting: photo('photo-1531545514256-b1400bc00f31', 1000),
-  business: photo('photo-1531545514256-b1400bc00f31', 800, 960),
   online: photo('photo-1516321318423-f06f85e504b3', 1000),
-  books: photo('photo-1481627834876-b7833e8f5570', 700, 840),
 }
 
 export const portraits = [
@@ -49,11 +47,19 @@ export const testimonials = [
   { name: 'Sofía L.', detail: 'Programa empresarial · Personaje ficticio', quote: 'Mi equipo tomó el programa empresarial y ahora atendemos a clientes internacionales sin problema. Muy recomendable.', portrait: portraits[2]!.image },
 ]
 
+export const audiences = [
+  { icon: 'smile', title: 'Niños', range: '6–12 años', text: 'Aprender jugando para perder el miedo al idioma desde pequeños.' },
+  { icon: 'cap', title: 'Adolescentes', range: '13–17 años', text: 'Apoyo escolar y preparación para su futuro académico.' },
+  { icon: 'chat', title: 'Adultos', range: '18 años o más', text: 'Conversación para viajar, estudiar o crecer en el trabajo.' },
+  { icon: 'briefcase', title: 'Empresas', range: 'Equipos de trabajo', text: 'Capacitación in-company con diagnóstico y reportes de avance.' },
+] as const
+
+/** Detalles tomados de la referencia y de las preguntas frecuentes; ninguno está confirmado. */
 export const programs = [
-  { id: 'kids', title: 'English for Kids', audience: '6–12 años · Propuesta', image: photos.books, alt: 'Biblioteca con estanterías de libros; imagen ilustrativa sin alumnos' },
-  { id: 'general', title: 'General English A1–C1', audience: 'Adolescentes y adultos · Propuesta', image: photos.meeting, alt: 'Reunión de trabajo entre adultos; fotografía ilustrativa' },
-  { id: 'business', title: 'Business English', audience: 'Empresas · Propuesta', image: photos.business, alt: 'Equipo adulto en una reunión; fotografía ilustrativa' },
-]
+  { id: 'kids', title: 'English for Kids', audience: '6–12 años', icon: 'smile', text: 'Clases dinámicas con juegos, canciones y proyectos para empezar con confianza.', details: ['Aprender jugando', 'Grupos de hasta 10 alumnos', 'Ruta por niveles'] },
+  { id: 'general', title: 'General English A1–C1', audience: 'Adolescentes y adultos', icon: 'book', text: 'La ruta completa del Marco Común Europeo con enfoque en conversación real.', details: ['Examen de ubicación', 'Entre semana o sabatino', '4 a 6 meses por nivel'] },
+  { id: 'business', title: 'Business English', audience: 'Empresas', icon: 'briefcase', text: 'Inglés para reuniones, correos y presentaciones de tu equipo.', details: ['Diagnóstico inicial', 'Capacitación in-company', 'Reportes de avance'] },
+] as const
 
 export const contactPrograms = [
   ...programs.map(({ id, title }) => ({ id, title })),

@@ -18,7 +18,6 @@ export function StatisticsSection() {
   return (
     <section className={s.statline} aria-labelledby="statistics-title">
       <div className={s.container}>
-        <ContentNote light>Cifras ficticias de la referencia original · No representan resultados verificados de CAI.</ContentNote>
         <h2 id="statistics-title" data-reveal>9 de cada 10 alumnos suben un nivel en su primer ciclo: así se presenta la propuesta</h2>
         <div className={s.stats}>
           {statistics.map(({ value, suffix, label }) => (
@@ -28,6 +27,7 @@ export function StatisticsSection() {
             </div>
           ))}
         </div>
+        <ContentNote light>Cifras ficticias de la referencia original · No representan resultados verificados de CAI.</ContentNote>
       </div>
     </section>
   )

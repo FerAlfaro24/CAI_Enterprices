@@ -1,4 +1,4 @@
-import { photos, programs, testimonials } from '../data/content'
+import { audiences, programs, testimonials } from '../data/content'
 import s from '../landing.module.css'
 import { cx } from '../utils'
 import { CardCarousel } from './CardCarousel'
@@ -25,11 +25,23 @@ export function AudienceSection() {
   return (
     <section className={s.feature} aria-labelledby="audience-title">
       <div className={cx(s.container, s.feature__grid)}>
-        <div className={s.feature__media} data-reveal><div className={s['media-card']}>
-          <img src={photos.meeting} alt="Personas adultas colaborando alrededor de una mesa; fotografía ilustrativa" width="1000" height="750" loading="lazy" decoding="async" />
-          <svg className={s.doodle} viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" aria-hidden="true"><path d="M20 30c20 10 50 20 80 15M25 60c25 8 45 12 70 8M30 90c18 6 35 8 55 4" /></svg>
-        </div></div>
-        <div className={s.feature__text} data-reveal><h2 id="audience-title">De la primaria a la oficina: inglés para cada etapa</h2><p>Aprender jugando, prepararse para el futuro académico o dar el siguiente paso profesional. La propuesta de CAI contempla una ruta para cada etapa y cada objetivo.</p><ContentNote>Públicos y modalidades de muestra. No se utilizan fotografías de alumnos menores.</ContentNote></div>
+        <div className={s.feature__text} data-reveal>
+          <span className={s.eyebrow}>Para cada etapa</span>
+          <h2 id="audience-title">De la primaria a la oficina: inglés para cada etapa</h2>
+          <p>Aprender jugando, prepararse para el futuro académico o dar el siguiente paso profesional. La propuesta de CAI contempla una ruta para cada etapa y cada objetivo.</p>
+          <ContentNote>Públicos y modalidades de muestra. No se utilizan fotografías de alumnos menores.</ContentNote>
+          <ButtonLink href="#programas">Ver programas</ButtonLink>
+        </div>
+        <ul className={s.audiences} data-reveal>
+          {audiences.map(({ icon, title, range, text }) => (
+            <li key={title} className={s.audience}>
+              <span className={s.icon}><Icon name={icon} /></span>
+              <h3>{title}</h3>
+              <p className={s.audience__range}>{range}</p>
+              <p>{text}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )
@@ -56,9 +68,18 @@ export function ProgramsSection() {
         <p className={s.lead}>Encuentra una propuesta para ti, para tu familia o para tu equipo.</p>
         <ContentNote>Catálogo de muestra. Edades, niveles y oferta definitiva pendientes de validación.</ContentNote>
         <CardCarousel label="Programas propuestos" kind="programs">
-          {programs.map(({ id, title, audience, image, alt }) => <a className={s['p-card']} key={id} href="#contacto" data-reveal>
-            <img src={image} alt={alt} width="700" height="840" loading="lazy" decoding="async" /><div className={s['p-card__shade']} aria-hidden="true" /><div className={s['p-card__body']}><span>{audience}</span><h3>{title}</h3></div>
-          </a>)}
+          {programs.map(({ id, title, audience, icon, text, details }) => (
+            <article className={cx(s['p-card'], id === 'general' && s['p-card--featured'])} key={id} data-reveal>
+              <div className={s['p-card__top']}>
+                <span className={s['p-card__icon']}><Icon name={icon} /></span>
+                <span className={s['p-card__audience']}>{audience}</span>
+              </div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+              <ul>{details.map((detail) => <li key={detail}><Icon name="check" size={16} />{detail}</li>)}</ul>
+              <a href="#contacto" className={s['p-card__link']}>Pedir información<span className={s['sr-only']}> sobre {title}</span> <Icon name="arrow" size={16} /></a>
+            </article>
+          ))}
         </CardCarousel>
       </div>
     </section>

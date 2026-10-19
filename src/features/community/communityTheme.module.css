@@ -55,7 +55,7 @@
   color-scheme: light;
 }
 
-.theme[data-theme='dark'] {
+:global([data-theme='dark']) .theme {
   --canvas: #0b1427;
   --paper: #15243e;
   --navy: #eef3ff;

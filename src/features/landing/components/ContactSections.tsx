@@ -15,6 +15,7 @@ export function PlatformPreviewSection() {
           <p>Imagina aprender desde cualquier lugar: lecciones en vídeo, ejercicios interactivos, seguimiento de progreso y clases en vivo. Son ideas para una siguiente etapa, pendientes de aprobación.</p>
           <ContentNote>Esta plataforma de cursos no está implementada. Es distinta de la comunidad de alumnos, cuyo prototipo puedes recorrer ahora.</ContentNote>
           <p><Link className={s['demo-link']} to="/community">Explorar la comunidad demo →</Link></p>
+          <p><Link className={s['demo-link']} to="/registro">¿Ya eres alumno? Solicita tu acceso →</Link></p>
           <DemoForm variant="waitlist" />
         </div>
         <div className={s.feature__media} data-reveal><div className={s['media-card']}>
@@ -64,6 +65,7 @@ export function ContactSection() {
           </ul>
           <ContentNote>No hay atención ni reservas conectadas a esta página. La clase muestra, sus condiciones y los medios de contacto deben validarse con el cliente.</ContentNote>
           <Link className={s['demo-link']} to="/community">Conoce también la comunidad demo →</Link>
+          <Link className={s['demo-link']} to="/registro">¿Ya eres alumno? Solicita tu acceso →</Link>
         </div>
         <DemoForm variant="contact" />
       </div>

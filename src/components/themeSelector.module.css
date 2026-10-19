@@ -1,0 +1,5 @@
+.selector { display: inline-flex; flex: none; align-items: center; padding: 3px; border: 1px solid var(--app-line); border-radius: 999px; background: var(--app-secondary); }
+.selector button { display: grid; place-items: center; width: 36px; height: 44px; padding: 0; border: 0; border-radius: 999px; color: var(--app-ink); background: transparent; cursor: pointer; }
+.selector button[aria-pressed='true'] { background: var(--app-paper); box-shadow: 0 2px 6px #0a1f4d18; }
+.selector button:hover { color: var(--app-link); }
+.selector button:focus-visible { outline: 3px solid var(--app-focus); outline-offset: 2px; }

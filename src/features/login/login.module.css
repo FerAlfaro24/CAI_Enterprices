@@ -1,0 +1,58 @@
+.page { min-height: 100dvh; display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); font-family: "Figtree", system-ui, sans-serif; color: var(--app-ink); background: var(--app-canvas); line-height: 1.5; }
+.topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.page * { box-sizing: border-box; }
+.page :focus-visible { outline: 3px solid #1f56d6; outline-offset: 4px; }
+.page a { color: inherit; }
+.page button, .page input { font: inherit; }
+.skip { position: absolute; top: -80px; left: 16px; z-index: 10; padding: 12px 18px; background: white; border-radius: 8px; }
+.skip:focus { top: 12px; }
+.story { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 48px; padding: clamp(28px, 4.5vw, 72px); color: #fff; background: radial-gradient(ellipse at 100% 20%, #1b5eb3 0, transparent 55%), #0a2b59; }
+.story::after { content: ''; position: absolute; width: 440px; height: 440px; border: 1px solid #ffffff24; border-radius: 50%; bottom: -200px; right: -180px; box-shadow: 0 0 0 52px #ffffff05, 0 0 0 104px #ffffff05; pointer-events: none; }
+.brand { display: flex; align-items: center; gap: 14px; width: fit-content; text-decoration: none; font-size: 14px; font-weight: 600; line-height: 1.4; }
+.brand img { flex-shrink: 0; }
+.storyContent { position: relative; z-index: 1; margin-block: auto; padding-block: 35px; }
+.eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .14em; color: #b9dafa; }
+.statement { font-size: clamp(42px, 4.8vw, 72px); font-weight: 650; line-height: 1.06; letter-spacing: -.05em; margin: 24px 0; }
+.statement em { font-style: normal; color: #8fd7ff; }
+.intro { max-width: 340px; font-size: 17px; line-height: 1.7; color: #d1e1f4; }
+.paths { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 30px; font-size: 11px; letter-spacing: .03em; color: #d1e1f4; }
+.storyFooter { font-size: 12px; color: #d1e1f4; margin: 0; }
+.main { min-width: 0; display: flex; flex-direction: column; padding: 24px clamp(24px, 5vw, 88px); }
+.back { align-self: flex-start; display: inline-flex; min-height: 44px; align-items: center; gap: 8px; font-size: 13px; text-decoration: none; color: var(--app-muted) !important; }
+.card { width: 100%; max-width: 440px; margin: auto; padding: 28px 0; }
+.kicker { font-size: 11px; letter-spacing: .13em; font-weight: 750; color: var(--app-link); }
+.card h1 { font-size: clamp(34px, 3.2vw, 46px); line-height: 1.12; letter-spacing: -.04em; margin: 12px 0; font-weight: 650; }
+.card h1:focus { outline: none; }
+.lead { color: var(--app-muted); margin: 0 0 24px; font-size: 15px; }
+.notice { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; background: #eaf1fd; border: 1px solid #d3e2f8; border-radius: 12px; color: #24466e; font-size: 12px; margin: 0 0 24px; }
+.notice svg { flex-shrink: 0; margin-top: 2px; }
+.notice strong { display: block; font-size: 12px; margin-bottom: 3px; }
+.card form { display: grid; }
+.card label { font-size: 13px; font-weight: 650; margin-bottom: 7px; }
+.card input { display: block; width: 100%; min-width: 0; height: 48px; border: 1px solid var(--app-line); background: var(--app-paper); border-radius: 9px; padding: 11px 14px; color: var(--app-ink); font-size: 14px; }
+.card input::placeholder { color: var(--app-muted); }
+.card form > input { margin-bottom: 18px; }
+.password { position: relative; margin-bottom: 22px; }
+.password input { padding-right: 54px; }
+.reveal { position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 7px; background: transparent; color: var(--app-muted); cursor: pointer; }
+.primary { min-height: 48px; display: flex; justify-content: center; align-items: center; gap: 12px; padding: 12px 16px; color: white; background: #1a44a8; border: 1px solid #1a44a8; border-radius: 9px; font-size: 14px !important; font-weight: 650 !important; cursor: pointer; }
+.primary:hover { background: #123783; }
+.signup { margin: 18px 0 24px; text-align: center; color: var(--app-muted); font-size: 13px; }
+.signup a { color: var(--app-link); font-weight: 650; text-underline-offset: 3px; }
+.divider { display: flex; align-items: center; gap: 12px; color: var(--app-muted); font-size: 11px; margin-bottom: 16px; }
+.divider::before, .divider::after { content: ''; height: 1px; background: var(--app-line); flex: 1; }
+.demoChoices { display: grid; gap: 10px; }
+.demoChoices button { display: flex; align-items: center; gap: 12px; text-align: left; min-height: 66px; padding: 12px 16px; background: var(--app-paper); border: 1px solid var(--app-line); border-radius: 10px; color: var(--app-link); cursor: pointer; }
+.demoChoices button:hover { background: var(--app-secondary); border-color: #8ca8d7; }
+.demoChoices button > svg { flex-shrink: 0; }
+.demoChoices button > svg:last-child { margin-left: auto; }
+.demoChoices strong { display: block; font-size: 13px; color: var(--app-ink); }
+.demoChoices small { display: block; font-size: 11px; color: var(--app-muted); margin-top: 2px; }
+.footnote { font-size: 11px; color: var(--app-muted); text-align: center; margin: 16px 0 0; }
+.footer { text-align: center; font-size: 11px; color: var(--app-muted); margin: 16px 0 0; }
+@media (max-width: 900px) { .page { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); } .story { padding: 28px; } .main { padding: 20px 28px; } .statement { font-size: 44px; } .paths { gap: 12px; } }
+@media (max-width: 600px) { .page { display: block; } .story { padding: 24px; gap: 0; } .brand { font-size: 12px; } .brand img { width: 40px; height: 38px; } .storyContent { padding: 25px 0 0; } .eyebrow { font-size: 9px; letter-spacing: .08em; } .statement { font-size: 36px; margin: 12px 0; } .statement br { display: none; } .intro, .paths, .storyFooter { display: none; } .main { padding: 16px 24px 24px; } .card { padding: 20px 0; } .card h1 { font-size: 36px; } .footer { margin: 0; } }
+@media (max-width: 350px) { .story { padding: 22px 20px; } .main { padding-inline: 20px; } .statement { font-size: 32px; } .card h1 { font-size: 34px; } .primary { font-size: 13px !important; gap: 8px; } .demoChoices button { padding-inline: 12px; } }
+
+:global([data-theme='dark']) .notice { background: #1c3454; border-color: var(--app-line); color: #d5e6ff; }
+.page :focus-visible { outline-color: var(--app-focus); }

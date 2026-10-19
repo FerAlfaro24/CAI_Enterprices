@@ -1,7 +1,5 @@
 import { useEffect, useRef, type MouseEvent } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router'
-import { MainNavigation } from '../components/MainNavigation'
-import { PrototypeNotice } from '../components/PrototypeNotice'
 import { LandingFooter } from '../features/landing/components/LandingFooter'
 import { LandingHeader } from '../features/landing/components/LandingHeader'
 import { useLandingMotion } from '../features/landing/hooks/useLandingMotion'
@@ -39,10 +37,6 @@ export function LandingLayout() {
   return (
     <div ref={root} className={s.landing} onClick={onAnchorClick}>
       <a className={s['skip-link']} href="#main-content">Saltar al contenido</a>
-      <div className={s['prototype-area']} data-landing-background>
-        <PrototypeNotice />
-        <div className={s['demo-nav']}><div><p>Recorre las áreas del prototipo</p><MainNavigation /></div></div>
-      </div>
       <LandingHeader />
       <main id="main-content" tabIndex={-1} data-landing-background><Outlet /></main>
       <LandingFooter />

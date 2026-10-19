@@ -5,6 +5,7 @@ import { navigation } from '../data/content'
 import s from '../landing.module.css'
 import { cx } from '../utils'
 import { Icon } from './ui'
+import { ThemeSelector } from '../../../components/ThemeSelector'
 
 export function LandingHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -112,12 +113,14 @@ export function LandingHeader() {
             </div>
             {navigation.map(({ href, label }) => <a key={href} href={href} onClick={onNavigate}>{label}{href === '#plataforma' && <span className={s.pill}>Propuesta</span>}</a>)}
             <a href="#faq" className={s['nav__mobile-only']} onClick={onNavigate}>Preguntas frecuentes</a>
-            <Link to="/community" className={s['nav__mobile-only']} onClick={onNavigate}>Comunidad · Demo</Link>
+            <Link to="/login" className={s['nav__mobile-only']} onClick={onNavigate}>Iniciar sesión / Registrarse</Link>
+            <Link to="/registro" className={s['nav__mobile-only']} onClick={onNavigate}>Solicitar acceso</Link>
             <a href="#contacto" className={s['nav__mobile-only']} onClick={onNavigate}>Contacto</a>
             <div className={s['nav__mobile-cta']}><a href="#contacto" className={cx(s.btn, s['btn--primary'], s['btn--lg'])} onClick={onNavigate}>Explora la clase muestra</a></div>
           </nav>
           <div className={s.nav__actions}>
-            <Link to="/community" className={cx(s.btn, s['btn--ghost'])} onClick={onNavigate}>Comunidad demo</Link>
+            <Link to="/login" className={cx(s.btn, s['btn--ghost'])} onClick={onNavigate}>Iniciar sesión / Registrarse</Link>
+            <ThemeSelector />
             <a href="#contacto" className={cx(s.btn, s['btn--primary'], s['btn--sm'])} onClick={onNavigate}>Contacto</a>
             <button ref={burger} className={s.nav__burger} type="button" aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={menuOpen} aria-controls="landing-navigation" onClick={() => {
               if (menuOpen) closeMenu()

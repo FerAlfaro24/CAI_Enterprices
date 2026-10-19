@@ -27,7 +27,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
     return () => window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
   return (
-    <CommunityMotion><div className={`${themeStyles.theme} ${s.community}`} data-theme={theme}>
+    <CommunityMotion><div className={`${themeStyles.theme} ${s.community}`}>
       <a className={s.skipLink} href="#community-content">Saltar al contenido de comunidad</a>
       <header className={s.topbar}>
         <div className={s.topbarInner}>
