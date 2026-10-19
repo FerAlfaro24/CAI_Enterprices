@@ -36,7 +36,10 @@ async function checkCommunityVisualPolish(page, { baseURL = 'http://127.0.0.1:41
     await page.goto(`${baseURL}/community`)
     await mine().click(); await expand()
     check(await collection().getByRole('article').count() === 0, 'Los prototipos no conceden insignias')
-    check(await page.locator('[data-illustrated] img').count() === 2, 'Solo dos ilustraciones originales en el catálogo')
+    // Phase 6.3 extends the original pair to all six personal catalog badges.
+    // Scope the count: the empty collection and request preview reuse the artwork.
+    check(await page.locator('#badge-catalog-grid [data-illustrated]').evaluateAll((els) => els.map((el) => el.dataset.illustrated).sort().join('|') === ['book-buddy', 'first-answer', 'five-days', 'movie-explorer', 'music-catcher', 'three-consecutive'].join('|')), 'Las seis insignias del catálogo tienen el SVG original correspondiente')
+    check(await page.locator('#badge-catalog-grid [data-illustrated="first-answer"], #badge-catalog-grid [data-illustrated="three-consecutive"]').count() === 2, 'La pareja ilustrada original de 6.1 permanece en el catálogo')
     check(await page.locator('[data-illustrated] img').evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth > 0 && image.alt === '')), 'SVG locales cargados, decorativos junto a texto accesible')
     check(await nav().getByRole('button').allTextContents().then((labels) => labels.join('|') === 'Inicio|Logros|Galería|Retos'), 'Cuatro secciones, sin alterar navegación')
     check(await page.locator('.lucide').count() > 0, 'Iconos Lucide importados correctamente en producción')

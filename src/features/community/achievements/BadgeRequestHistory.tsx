@@ -5,6 +5,7 @@ import { CommunityIcon } from '../components/ui'
 import { useCommunityDialog } from '../useCommunityDialog'
 import { findBadge } from './catalog'
 import type { BadgeRequest } from './types'
+import { BadgeArtwork } from './BadgeArtwork'
 import s from './achievements.module.css'
 
 const labels = { pending: 'Pendiente', approved: 'Aprobada', rejected: 'Rechazada' }
@@ -19,8 +20,8 @@ export function BadgeRequestHistory() {
   const [selected, setSelected] = useState<string | null>(null)
   const requests = state.badgeRequests.filter((request) => request.memberId === 'alex').reverse()
   const current = requests.find((request) => request.id === selected)
-  return <section className={s.history} aria-labelledby="badge-request-history-title" id="badge-request-history" tabIndex={-1}><h2 id="badge-request-history-title"><span aria-hidden="true">⌛</span> Tus solicitudes</h2><p className={s.smallText}>Tu declaración queda en esta demostración. No aparece automáticamente en La comunidad.</p>{requests.length ? requests.map((request) => {
+  return <section className={s.history} aria-labelledby="badge-request-history-title" id="badge-request-history" tabIndex={-1}><h2 id="badge-request-history-title"><CommunityIcon name="comment" size={22} /> Tus solicitudes</h2><p className={s.smallText}>Tu declaración queda en esta demostración. No aparece automáticamente en La comunidad.</p>{requests.length ? requests.map((request) => {
     const badge = findBadge(request.badgeId)!
-    return <article key={request.id} className={s.requestRow} aria-label={`Solicitud de ${badge.title}: ${labels[request.status]}`}><span className={`${s.badgeIcon} ${s[badge.tone]}`} aria-hidden="true">{badge.symbol}</span><div><h3>{badge.title}</h3><p className={s.requestExcerpt}>{request.description}</p><small>{formatPostDate(request.createdAt)} · Declaración ficticia</small></div><div className={s.requestState}><span className={`${s.status} ${s[request.status]}`}>{labels[request.status]}</span><button type="button" className={s.textButton} onClick={() => setSelected(request.id)} aria-haspopup="dialog">Consultar solicitud</button></div></article>
+    return <article key={request.id} className={s.requestRow} aria-label={`Solicitud de ${badge.title}: ${labels[request.status]}`}><BadgeArtwork badgeId={badge.id} symbol={badge.symbol} className={`${s.badgeIcon} ${s[badge.tone]}`} /><div><h3>{badge.title}</h3><p className={s.requestExcerpt}>{request.description}</p><small>{formatPostDate(request.createdAt)} · Declaración ficticia</small></div><div className={s.requestState}><span className={`${s.status} ${s[request.status]}`}>{labels[request.status]}</span><button type="button" className={s.textButton} onClick={() => setSelected(request.id)} aria-haspopup="dialog">Consultar solicitud</button></div></article>
   }) : <p className={s.emptyHistory}>Todavía no enviaste solicitudes. Tu próxima aventura puede empezar arriba.</p>}{current && <RequestDetail request={current} onClose={() => setSelected(null)} />}</section>
 }

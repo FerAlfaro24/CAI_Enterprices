@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <title>Cinco participaciones — ilustración original CAI</title>
+  <path d="m24 29 96-10 25 30-7 77-40 21-68-14-17-56z" fill="#FFFDF5" stroke="#0A1F4D" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="32" y="35" width="93" height="87" rx="12" transform="rotate(7 32 35)" fill="#BCE9DA" stroke="#0A1F4D" stroke-width="3"/>
+  <path d="M42 58h67M48 44v21m48-21v21" stroke="#0A1F4D" stroke-width="4" stroke-linecap="round"/>
+  <path d="M47 77h13v13H47zm24 0h13v13H71zm24 0h13v13H95zM47 101h13v13H47z" fill="#1F56D6"/>
+  <path d="m92 91 8 8 12-1 3 12 10 6-5 11-1 12-12 2-10 7-9-9-11-4 1-12-5-11 11-7z" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="3"/>
+  <path d="m90 117 7 8 13-15" stroke="#0A1F4D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m129 28 4-9m7 24 8-2M18 118l-9 4" stroke="#1F56D6" stroke-width="4" stroke-linecap="round"/>
+</svg>

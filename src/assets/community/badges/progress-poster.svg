@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" fill="none">
+  <path fill="#1F56D6" d="M0 0h600v400H0z"/>
+  <path d="M28 30h544v340H28z" stroke="#88ACFA" stroke-opacity=".45"/>
+  <g transform="rotate(-5 270 202)">
+    <path d="M65 50h368v294H65z" fill="#0A1F4D" fill-opacity=".25"/>
+    <path d="M53 38h368v294H53z" fill="#FFF9EB"/>
+    <text x="77" y="76" fill="#1F56D6" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="2">THE LITTLE BIG WINS EDITION</text>
+    <path d="M77 94h320" stroke="#0A1F4D" stroke-width="2"/>
+    <text x="72" y="157" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-3">NOT PERFECT.</text>
+    <path d="M73 177h323v67H73z" fill="#FFCD1F"/>
+    <text x="78" y="225" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="47" font-weight="900" letter-spacing="-3">PROGRESS.</text>
+    <text x="77" y="285" fill="#0A1F4D" font-family="Arial,sans-serif" font-size="13" font-weight="700">YOUR VOICE. YOUR PACE. YOUR STORY.</text>
+    <path d="M77 302h190" stroke="#1F56D6" stroke-width="3"/>
+  </g>
+  <g transform="rotate(12 452 220)">
+    <path d="m429 237-11 92 34-21 32 24-7-94" fill="#F2B39E" stroke="#0A1F4D" stroke-width="3"/>
+    <path d="m449 121 19 12 24 1 7 23 17 17-10 22-2 24-24 6-19 14-21-15-24-4-4-24-13-19 14-19 6-23 24-1z" fill="#BCE9DA" stroke="#0A1F4D" stroke-width="3"/>
+    <circle cx="452" cy="182" r="31" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="3"/>
+    <path d="m437 183 10 11 22-25" stroke="#0A1F4D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <path d="m507 49 5 18 18 5-18 5-5 18-5-18-18-5 18-5zM44 334l3 10 10 3-10 3-3 10-3-10-10-3 10-3z" fill="#FFCD1F"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <title>Music Catcher — ilustración original CAI</title>
+  <path d="m29 24 84-6 30 35-1 64-49 29-65-15-16-58z" fill="#FFFDF5" stroke="#0A1F4D" stroke-width="3"/>
+  <circle cx="80" cy="83" r="48" fill="#0A1F4D"/>
+  <circle cx="80" cy="83" r="38" stroke="#4A6797" stroke-width="2"/>
+  <circle cx="80" cy="83" r="29" stroke="#4A6797" stroke-width="2"/>
+  <circle cx="80" cy="83" r="20" fill="#DCD5FA"/>
+  <circle cx="80" cy="83" r="4" fill="#0A1F4D"/>
+  <path d="M100 44v59m0-59 26-6v53" stroke="#FFCD1F" stroke-width="7" stroke-linejoin="round"/>
+  <ellipse cx="91" cy="105" rx="12" ry="9" transform="rotate(-22 91 105)" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="2"/>
+  <ellipse cx="117" cy="93" rx="12" ry="9" transform="rotate(-22 117 93)" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="2"/>
+  <path d="m32 43-9 2m15 88-7 7m101-13 9 4" stroke="#1F56D6" stroke-width="4" stroke-linecap="round"/>
+</svg>

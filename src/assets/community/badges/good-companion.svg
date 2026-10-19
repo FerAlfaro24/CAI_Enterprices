@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <title>Buen compañero — ilustración original CAI</title>
+  <path d="m27 27 83-9 32 35-4 66-45 28-65-16-16-61z" fill="#FFFDF5" stroke="#0A1F4D" stroke-width="3"/>
+  <circle cx="54" cy="58" r="18" fill="#BCE9DA" stroke="#0A1F4D" stroke-width="3"/>
+  <circle cx="108" cy="58" r="18" fill="#F2B39E" stroke="#0A1F4D" stroke-width="3"/>
+  <path d="M28 109v-11a26 26 0 0 1 52 0v11m3 0v-11a26 26 0 0 1 52 0v11" fill="#1F56D6" stroke="#0A1F4D" stroke-width="3"/>
+  <path d="M80 98c-18-24-42 3-25 19l25 20 25-20c17-16-7-43-25-19z" fill="#FFCD1F" stroke="#0A1F4D" stroke-width="3" stroke-linejoin="round"/>
+</svg>
