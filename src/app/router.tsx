@@ -13,6 +13,7 @@ import { InstitutionalPage } from '../pages/InstitutionalPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { LoginPage } from '../pages/LoginPage'
 import { SignupPage } from '../pages/SignupPage'
+import { LocalAccessApp } from '../features/local-access/LocalAccessApp'
 
 export function AppRoutes() {
   return (
@@ -22,6 +23,8 @@ export function AppRoutes() {
       </Route>
       <Route path="login" element={<LoginPage />} />
       <Route path="registro" element={<SignupPage />} />
+      <Route path="registro-local" element={<SignupPage local />} />
+      <Route path="gestion/*" element={<LocalAccessApp />} />
       <Route element={<CommunityLayout />}>
         <Route path="community" element={<CommunityPage />} />
       </Route>

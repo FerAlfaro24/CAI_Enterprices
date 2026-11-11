@@ -22,7 +22,7 @@ La comunidad incluye 15 publicaciones ficticias, reacciones, comentarios, galer�
 
 ## Desarrollo local
 
-Requisitos: **Node.js 22.13+ de la rama 22, o Node.js 24+**, y **npm 10 o superior**. La instalación utilizada para validar esta base se detalla en [la guía del frontend](docs/frontend-foundation.md).
+Requisitos: **Node.js 24.12 o posterior** y **npm 10 o superior**. La rama de trabajo incorpora un backend local de solicitudes y alumnos, separado de la demo: consulta [cómo iniciar el guardado local y el acceso administrativo](docs/local-backend.md). Las cuentas de alumnos y Community aún no están conectadas a él.
 
 ```sh
 npm ci
@@ -44,6 +44,7 @@ Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: 
 Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/admin` (administración simulada). Las direcciones desconocidas muestran una pantalla 404 dentro del layout compartido. Todas las rutas son públicas durante esta demostración.
 
 ## Documentación
+- [Backend local: acceso, solicitudes, alumnos y respaldos](docs/local-backend.md)
 - [Plan de entrega local en tres semanas](docs/local-delivery-plan.md)
 - [Visión del producto](docs/vision.md)
 - [Requisitos iniciales](docs/requirements.md)

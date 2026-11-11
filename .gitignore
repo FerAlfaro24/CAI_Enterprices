@@ -12,3 +12,5 @@ Thumbs.db
 !.vscode/extensions.json
 # Referencia original de CAI (solo uso local)
 /reference/
+# Datos y credenciales exclusivos del entorno local de pruebas
+/.local/

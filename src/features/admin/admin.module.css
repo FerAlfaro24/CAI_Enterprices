@@ -245,6 +245,19 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .request-review { display: grid; justify-items: start; gap: 8px; max-width: 28ch; }
 .request-hint { margin: 0; color: var(--muted); font-size: .82rem; }
 .request-review .btn { min-height: 44px; }
+.local-notice { padding: 12px 20px; background: var(--warn-bg); color: var(--warn); font-size: .88rem; }
+.local-nav { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
+.local-nav .nav-item { min-height: 44px; }
+.local-consent { min-width: 0; display: grid; gap: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; }
+.local-consent legend { padding: 0 4px; font-weight: 600; font-size: .9rem; }
+.local-consent input[type='text'] { width: 100%; min-width: 0; min-height: 44px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); }
+.local-break { min-width: 0; overflow-wrap: anywhere; }
+.stats.local-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.local-records .queue-person :is(strong, span) { overflow-wrap: anywhere; }
+.local-dialog .dialog-head > div { min-width: 0; overflow-wrap: anywhere; }
+.local-dialog .details { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+.admin button:disabled { cursor: not-allowed; }
+@media (max-width: 560px) { .stats.local-stats { grid-template-columns: minmax(0, 1fr); } .local-nav { padding-inline: 16px; } .local-nav .nav-item { flex: 1; justify-content: center; padding-inline: 8px; } }
 
 .footnote { margin: 16px 0 0; font-size: .82rem; color: var(--muted); }
 

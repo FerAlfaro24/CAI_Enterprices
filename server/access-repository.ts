@@ -1,0 +1,100 @@
+import type { LocalRequest, LocalStudent, Receipt, RequestDecision, RequestStatus, Submission } from './contracts.ts'
+import { transaction, type Database } from './database.ts'
+import { ageAt, HttpError } from './validation.ts'
+
+type RequestRow = { id: number; payload: string; status: RequestStatus; created_at: string; revision: number; confirmed_at: string | null }
+const requestSelect = 'SELECT r.*, c.confirmed_at FROM requests r LEFT JOIN consent_confirmations c ON c.request_id = r.id'
+const folio = (id: number) => `CAI-${String(id).padStart(4, '0')}`
+
+function numericId(id: string) {
+  if (!/^CAI-\d{4,}$/.test(id) || !Number.isSafeInteger(Number(id.slice(4)))) throw new HttpError(404, 'No se encontró el registro.')
+  return Number(id.slice(4))
+}
+
+function toRequest(row: RequestRow): LocalRequest {
+  const p = JSON.parse(row.payload) as Submission
+  const age = ageAt(p.birthDate)
+  const minor = age < 18
+  return {
+    id: folio(row.id), name: `${p.firstName} ${p.lastName}`, program: p.program,
+    ageGroup: minor ? 'menor' : 'adulto', guardianConsent: minor ? row.confirmed_at ? 'recibida' : 'pendiente' : undefined,
+    source: 'Formulario web', submittedAt: row.created_at.slice(0, 10), message: p.message || 'Sin mensaje adicional.',
+    status: row.status, revision: row.revision,
+    applicant: { filledBy: p.filledBy, email: p.email, age, group: p.group, studentCode: p.studentCode,
+      displayName: p.displayName, avatarColor: p.avatarColor, visibility: p.visibility, guardian: p.guardian },
+  }
+}
+
+export function accessRepository(db: Database) {
+  const audit = (actor: number | null, id: number, action: string) => db.prepare('INSERT INTO audit_log(actor_id, request_id, action, created_at) VALUES (?, ?, ?, ?)').run(actor, id, action, new Date().toISOString())
+  return {
+    submit(payload: Submission, key: string): Receipt {
+      return transaction(db, () => {
+        const existing = db.prepare('SELECT id, payload, created_at FROM requests WHERE idempotency_key = ?').get(key) as { id: number; payload: string; created_at: string } | undefined
+        const encoded = JSON.stringify(payload)
+        if (existing) {
+          if (existing.payload !== encoded) throw new HttpError(409, 'Esta solicitud ya se recibió. No vuelvas a enviarla con datos distintos.')
+          return { id: folio(existing.id), submittedAt: existing.created_at.slice(0, 10), status: 'pendiente' }
+        }
+        if (db.prepare("SELECT id FROM requests WHERE email = ? AND status IN ('pendiente','aprobada')").get(payload.email)) throw new HttpError(409, 'Ya hay una solicitud en revisión o aprobada con ese correo. Consulta con CAI.')
+        const created = new Date().toISOString()
+        const result = db.prepare('INSERT INTO requests(idempotency_key, email, payload, created_at) VALUES (?, ?, ?, ?)').run(key, payload.email, encoded, created)
+        const id = Number(result.lastInsertRowid)
+        audit(null, id, 'request.submitted')
+        return { id: folio(id), submittedAt: created.slice(0, 10), status: 'pendiente' }
+      })
+    },
+    requests(): LocalRequest[] {
+      return (db.prepare(`${requestSelect} ORDER BY r.id DESC`).all() as RequestRow[]).map(toRequest)
+    },
+    decide(id: string, revision: number, decision: RequestDecision, actor: number, reference?: string) {
+      return transaction(db, () => {
+        const key = numericId(id)
+        const row = db.prepare(`${requestSelect} WHERE r.id = ?`).get(key) as RequestRow | undefined
+        if (!row) throw new HttpError(404, 'No se encontró la solicitud.')
+        if (row.revision !== revision) throw new HttpError(409, 'La solicitud cambió en otra ventana. Vuelve a cargarla antes de decidir.')
+        const request = toRequest(row)
+        if (decision === 'undo') {
+          if (row.status === 'pendiente') throw new HttpError(409, 'La solicitud ya está pendiente.')
+          if (db.prepare("SELECT id FROM requests WHERE email = (SELECT email FROM requests WHERE id = ?) AND id <> ? AND status IN ('pendiente','aprobada')").get(key, key)) throw new HttpError(409, 'Hay otra solicitud activa con ese correo.')
+          db.prepare('DELETE FROM students WHERE request_id = ?').run(key)
+          db.prepare("UPDATE requests SET status = 'pendiente', revision = revision + 1 WHERE id = ?").run(key)
+        } else {
+          if (row.status !== 'pendiente') throw new HttpError(409, 'La solicitud ya tiene una decisión. Vuelve a cargarla.')
+          if (decision === 'consent') {
+            if (request.ageGroup !== 'menor' || row.confirmed_at) throw new HttpError(409, 'No hay una autorización pendiente para registrar.')
+            if (typeof reference !== 'string' || reference.trim().length < 8 || reference.trim().length > 240) throw new HttpError(400, 'Indica una referencia de la autorización recibida (8 a 240 caracteres).')
+            db.prepare('INSERT INTO consent_confirmations VALUES (?, ?, ?, ?)').run(key, actor, reference.trim(), new Date().toISOString())
+            db.prepare('UPDATE requests SET revision = revision + 1 WHERE id = ?').run(key)
+          } else {
+            if (decision === 'approve' && request.ageGroup === 'menor' && !row.confirmed_at) throw new HttpError(409, 'Primero confirma la autorización del tutor.')
+            db.prepare('UPDATE requests SET status = ?, revision = revision + 1 WHERE id = ?').run(decision === 'approve' ? 'aprobada' : 'rechazada', key)
+            if (decision === 'approve') db.prepare('INSERT INTO students(request_id, joined_at) VALUES (?, ?)').run(key, new Date().toISOString())
+          }
+        }
+        audit(actor, key, `request.${decision}`)
+      })
+    },
+    students(): LocalStudent[] {
+      const rows = db.prepare(`${requestSelect} JOIN students s ON s.request_id = r.id ORDER BY s.joined_at DESC`).all() as RequestRow[]
+      return rows.map((row) => {
+        const request = toRequest(row)
+        const student = db.prepare('SELECT joined_at, status, revision FROM students WHERE request_id = ?').get(row.id) as { joined_at: string; status: 'activo' | 'suspendido'; revision: number }
+        return { id: request.id, name: request.name, program: request.program, group: request.applicant.group,
+          ageGroup: request.ageGroup, guardianConsent: request.guardianConsent, joinedAt: student.joined_at.slice(0, 10),
+          visibility: request.applicant.visibility, status: student.status, revision: student.revision }
+      })
+    },
+    setStudentStatus(id: string, revision: number, status: 'activo' | 'suspendido', actor: number) {
+      return transaction(db, () => {
+        const key = numericId(id)
+        const row = db.prepare('SELECT revision, status FROM students WHERE request_id = ?').get(key) as { revision: number; status: string } | undefined
+        if (!row) throw new HttpError(404, 'No se encontró el alumno.')
+        if (row.revision !== revision) throw new HttpError(409, 'El alumno cambió en otra ventana. Vuelve a cargar sus datos.')
+        if (row.status === status) throw new HttpError(409, 'El alumno ya tiene ese estado.')
+        db.prepare('UPDATE students SET status = ?, revision = revision + 1 WHERE request_id = ?').run(status, key)
+        audit(actor, key, status === 'activo' ? 'student.reactivated' : 'student.suspended')
+      })
+    },
+  }
+}

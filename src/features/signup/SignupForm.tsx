@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { useDemoStore } from '../../app/demoStore'
 import type { AccessRequest } from '../admin/data/mockData'
 import { nextRequestId } from '../admin/state'
+import { localApi } from '../local-access/api'
 import { cx } from '../landing/utils'
 import {
   ageFrom, avatarColors, communityRules, groupsFor, isEmail, isPhone, relationships,
@@ -54,7 +55,7 @@ const passwordRules = [
   { label: 'Una letra y un número', test: (value: string) => /[a-zA-Z]/.test(value) && /\d/.test(value) },
 ]
 
-export function SignupForm() {
+export function SignupForm({ local = false }: { local?: boolean }) {
   const id = useId()
   const { state, dispatch } = useDemoStore()
   const [values, setValues] = useState(initialValues)
@@ -62,6 +63,9 @@ export function SignupForm() {
   const [step, setStep] = useState(0)
   const [showPassword, setShowPassword] = useState(false)
   const [submitted, setSubmitted] = useState<AccessRequest | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
+  const submissionKey = useRef(crypto.randomUUID())
   const heading = useRef<HTMLHeadingElement>(null)
   const form = useRef<HTMLFormElement>(null)
   const focusKey = useRef('0-')
@@ -100,8 +104,10 @@ export function SignupForm() {
       else if (v.filledBy === 'alumno' && age < 13) next.filledBy = 'Para menores de 13 años, la solicitud la llena su madre, padre o tutor.'
       else if (v.filledBy === 'tutor' && age >= 18) next.filledBy = 'Los alumnos mayores de edad llenan su propia solicitud.'
       if (!isEmail(v.email.trim())) next.email = 'Escribe un correo con formato válido, por ejemplo demo@example.test.'
-      if (!passwordRules.every(({ test }) => test(v.password))) next.password = 'La contraseña debe tener al menos 8 caracteres, una letra y un número.'
-      else if (v.confirm !== v.password) next.confirm = 'Las contraseñas no coinciden.'
+      if (!local) {
+        if (!passwordRules.every(({ test }) => test(v.password))) next.password = 'La contraseña debe tener al menos 8 caracteres, una letra y un número.'
+        else if (v.confirm !== v.password) next.confirm = 'Las contraseñas no coinciden.'
+      }
       if (!v.program) next.program = 'Selecciona el programa en el que está inscrito.'
       if (v.program && groups.length > 0 && !v.group) next.group = 'Selecciona su grupo u horario.'
       if (v.studentCode && !/^[A-Za-z0-9-]{4,12}$/.test(v.studentCode.trim())) next.studentCode = 'Usa de 4 a 12 letras, números o guiones.'
@@ -144,8 +150,9 @@ export function SignupForm() {
     goTo(step + 1)
   }
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (saving) return
     if (step < steps.length - 1) { next(); return }
     const found = validate(3)
     setErrors(found)
@@ -172,8 +179,24 @@ export function SignupForm() {
         guardian: isMinor ? { name: values.guardianName.trim(), relationship: values.relationship, contact: values.guardianContact.trim() } : undefined,
       },
     }
-    dispatch({ type: 'submit', request })
-    setSubmitted(request)
+    if (local) {
+      setSaving(true); setSaveError('')
+      try {
+        const receipt = await localApi.submit({
+          firstName: values.firstName.trim(), lastName: values.lastName.trim(), birthDate: values.birthDate,
+          email: values.email.trim(), filledBy: byTutor ? 'tutor' : 'alumno', program: values.program,
+          group: values.group || 'Por asignar', studentCode: values.studentCode.trim() || undefined,
+          displayName: shownName, avatarColor: color.value, visibility: isMinor ? 'privado' : values.visibility,
+          message: values.message.trim(), guardian: request.applicant?.guardian,
+          guardianConsent: values.guardianConsent, acceptRules: values.acceptRules, acceptPrivacy: values.acceptPrivacy,
+        }, submissionKey.current)
+        setSubmitted({ ...request, ...receipt })
+      } catch (error) { setSaveError(error instanceof Error ? error.message : 'No se pudo guardar la solicitud.') }
+      finally { setSaving(false) }
+    } else {
+      dispatch({ type: 'submit', request })
+      setSubmitted(request)
+    }
   }
 
   const restart = () => {
@@ -181,9 +204,11 @@ export function SignupForm() {
     setErrors({})
     setStep(0)
     setSubmitted(null)
+    setSaveError('')
+    submissionKey.current = crypto.randomUUID()
   }
 
-  if (submitted) return <SignupSuccess ref={heading} request={submitted} onRestart={restart} />
+  if (submitted) return <SignupSuccess ref={heading} request={submitted} onRestart={restart} local={local} />
 
   const err = (name: FieldName) => errors[name]
   const describe = (name: FieldName, hint?: boolean) =>
@@ -193,7 +218,7 @@ export function SignupForm() {
   })
 
   return (
-    <form ref={form} className={s.form} noValidate onSubmit={submit} aria-labelledby={`${id}-title`}>
+    <form ref={form} className={s.form} noValidate onSubmit={(event) => { void submit(event) }} aria-labelledby={`${id}-title`} aria-busy={saving}>
       <Stepper current={step} skipTutor={values.birthDate !== '' && !isMinor} onSelect={(index) => goTo(index)} />
 
       <div className={s['step-head']}>
@@ -248,12 +273,13 @@ export function SignupForm() {
             <input {...fieldProps('studentCode', true)} type="text" autoComplete="off" maxLength={12} value={values.studentCode} onChange={onText('studentCode')} placeholder="DEMO-001" className={s.short} />
           </Field>
 
-          <div className={s.divider}><span>Datos de acceso</span></div>
+          <div className={s.divider}><span>{local ? 'Correo de contacto' : 'Datos de acceso'}</span></div>
 
           <Field label={byTutor ? 'Correo del tutor para entrar' : 'Correo electrónico'} htmlFor={`${id}-email`} hint="Usa un correo ficticio: en la demo no se envían mensajes." hintId={`${id}-email-hint`} error={err('email')} errorId={`${id}-email-error`}>
             <input {...fieldProps('email', true)} type="email" inputMode="email" autoComplete="off" maxLength={120} value={values.email} onChange={onText('email')} placeholder="demo@example.test" />
           </Field>
 
+          {!local && <>
           <div className={s.row}>
             <Field label="Contraseña" htmlFor={`${id}-password`} error={err('password')} errorId={`${id}-password-error`}>
               <div className={s['password-wrap']}>
@@ -274,6 +300,8 @@ export function SignupForm() {
             })}
             <li className={s['rule-note']}>No uses una contraseña real: la demo no la guarda.</li>
           </ul>
+          </>}
+          {local && <p className={s.hint}>Esta solicitud no crea una cuenta ni pide contraseña. Usa un correo ficticio durante las pruebas locales.</p>}
         </div>
       )}
 
@@ -412,10 +440,11 @@ export function SignupForm() {
         </div>
       )}
 
+      {saveError && <p role="alert" className={s['error-summary']}>{saveError}</p>}
       <div className={s.actions}>
-        {step > 0 && <button type="button" className={cx(s.btn, s['btn--ghost'])} onClick={() => { setErrors({}); goTo(step - 1) }}>Atrás</button>}
-        <button type="submit" className={cx(s.btn, s['btn--primary'])}>
-          {step === steps.length - 1 ? 'Enviar solicitud' : 'Continuar'}
+        {step > 0 && <button type="button" disabled={saving} className={cx(s.btn, s['btn--ghost'])} onClick={() => { setErrors({}); goTo(step - 1) }}>Atrás</button>}
+        <button type="submit" disabled={saving} className={cx(s.btn, s['btn--primary'])}>
+          {saving ? 'Guardando…' : step === steps.length - 1 ? 'Enviar solicitud' : 'Continuar'}
         </button>
       </div>
     </form>
@@ -509,19 +538,19 @@ function Check({ on }: { on: boolean }) {
   )
 }
 
-function SignupSuccess({ ref, request, onRestart }: { ref: Ref<HTMLHeadingElement>; request: AccessRequest; onRestart: () => void }) {
+function SignupSuccess({ ref, request, onRestart, local = false }: { ref: Ref<HTMLHeadingElement>; request: AccessRequest; onRestart: () => void; local?: boolean }) {
   const minor = request.ageGroup === 'menor'
   const timeline = [
     { title: 'Solicitud recibida', text: `Folio ${request.id} · Hoy`, done: true },
     ...(minor ? [{ title: 'Autorización del tutor', text: 'Recepción la confirmará con el tutor registrado.', done: false }] : []),
     { title: 'Revisión de CAI', text: 'La coordinación verifica que el alumno esté inscrito.', done: false },
-    { title: 'Acceso a la comunidad', text: 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
+    { title: 'Acceso a la comunidad', text: local ? 'La activación de cuentas y el envío de correos se conectarán en una siguiente etapa.' : 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
   ]
   return (
     <div className={s.success}>
       <span className={s['success-icon']} aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg></span>
       <h2 ref={ref} tabIndex={-1}>¡Solicitud enviada!</h2>
-      <p>La solicitud <strong>{request.id}</strong> de {request.applicant?.displayName ?? request.name} quedó pendiente de revisión. Esto es una simulación: no se creó una cuenta real.</p>
+      <p>La solicitud <strong>{request.id}</strong> de {request.applicant?.displayName ?? request.name} quedó pendiente de revisión. {local ? 'Se guardó en este equipo. Todavía no se creó una cuenta de alumno.' : 'Esto es una simulación: no se creó una cuenta real.'}</p>
       <ol className={s.timeline} aria-label="Qué sigue">
         {timeline.map(({ title, text, done }) => (
           <li key={title} className={cx(done && s['timeline--done'])}>
@@ -531,11 +560,13 @@ function SignupSuccess({ ref, request, onRestart }: { ref: Ref<HTMLHeadingElemen
         ))}
       </ol>
       <div className={s['success-actions']}>
-        <Link to="/login" className={cx(s.btn, s['btn--ghost'])}>Continuar al acceso demo</Link>
-        <Link to="/admin/solicitudes" className={cx(s.btn, s['btn--primary'])}>Ver la solicitud en el panel (demo)</Link>
+        {local ? <Link to="/" className={cx(s.btn, s['btn--primary'])}>Volver al sitio</Link> : <>
+          <Link to="/login" className={cx(s.btn, s['btn--ghost'])}>Continuar al acceso demo</Link>
+          <Link to="/admin/solicitudes" className={cx(s.btn, s['btn--primary'])}>Ver la solicitud en el panel (demo)</Link>
+        </>}
         <button type="button" className={cx(s.btn, s['btn--ghost'])} onClick={onRestart}>Llenar otra solicitud</button>
       </div>
-      <p className={s.hint}>La solicitud se conserva mientras no recargues la página.</p>
+      <p className={s.hint}>{local ? 'Conserva tu folio. La solicitud permanece guardada aunque cierres la página.' : 'La solicitud se conserva mientras no recargues la página.'}</p>
     </div>
   )
 }

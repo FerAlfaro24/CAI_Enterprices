@@ -4,11 +4,16 @@
   "version": "0.1.0",
   "type": "module",
   "engines": {
-    "node": "^22.13.0 || >=24.0.0",
+    "node": ">=24.12.0",
     "npm": ">=10"
   },
   "scripts": {
     "dev": "vite",
+    "dev:local": "node scripts/dev-local.mjs",
+    "dev:api": "node --watch server/index.ts",
+    "local:setup": "node server/setup.ts",
+    "local:backup": "node server/backup.ts",
+    "test:api": "node --test server/tests/*.test.ts",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
