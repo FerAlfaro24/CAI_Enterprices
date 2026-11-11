@@ -73,3 +73,13 @@ src/
 - Validar con el cliente textos, programas, motivos de rechazo y las reglas de autorización de tutores.
 - Decidir comentarios y reacciones (RF-09); las opciones existen solo como interruptores de demostración.
 - Conectar con la vista de Comunidad cuando exista, para que lo publicado aparezca en el feed.
+
+## Revisión guiada de solicitudes — UX-01
+
+El inicio de la fase de entrega local se detalla en [el plan de tres semanas](local-delivery-plan.md). Para facilitar el uso por coordinación, Resumen y Solicitudes muestran una sola acción principal por registro: «Revisar solicitud»; las solicitudes resueltas ofrecen «Ver decisión». La ayuda visible indica si falta confirmar la autorización de un tutor.
+
+Las decisiones se toman dentro del detalle, después de consultar los datos y una guía breve. Cerrar el detalle no modifica el estado; se conservan aprobar, rechazar, devolver a pendiente y la restricción de autorización para menores. Los escenarios, datos en memoria y avisos de demostración permanecen vigentes.
+
+Archivos: `RequestReview.tsx`, `RequestDialog.tsx`, `AdminPage.tsx`, `AdminRequestsPage.tsx` y estilos del panel. La prueba de integración existente se adapta al recorrido guiado e incluye cerrar sin decidir y el requisito visible del tutor.
+
+Validación de UX-01: lint, typecheck y build correctos; permanece el aviso conocido del bundle principal superior a 500 kB. La prueba de integración adaptada pasó 77 comprobaciones en Brave y 77 en Opera GX sobre el build local, con nueve rutas a 1440, 768, 375 y 320 px y sin errores ni advertencias de consola. Se comprobó además en Brave abrir desde Resumen con Enter, cerrar con Escape y recuperar el foco, rechazar y deshacer, y el bloqueo por autorización pendiente. Los diálogos a 375 y 320 px no desbordan horizontalmente y sus acciones son alcanzables mediante desplazamiento. Se inspeccionaron capturas de escritorio y móvil. No se probó con dispositivos físicos ni lectores de pantalla.

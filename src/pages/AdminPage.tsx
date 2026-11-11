@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import s from '../features/admin/admin.module.css'
 import { Donut, KpiCard, Legend, LineChart } from '../features/admin/components/charts'
-import { RequestActions } from '../features/admin/components/RequestActions'
+import { RequestReview } from '../features/admin/components/RequestReview'
 import { RequestDialog } from '../features/admin/components/RequestDialog'
 import { Avatar, Icon, TypeTag } from '../features/admin/components/ui'
 import { baseMetrics, sparklines, weeklyActivity } from '../features/admin/data/mockData'
@@ -116,10 +116,7 @@ export function AdminPage() {
                   </div>
                   {request.ageGroup === 'menor' && <span className={`${s.tag} ${s['tag--minor']}`}>Menor de edad</span>}
                   <div className={s['queue-actions']}>
-                    <button type="button" className={`${s.btn} ${s['btn--ghost']} ${s['btn--sm']}`} onClick={() => setSelectedId(request.id)}>
-                      <Icon name="eye" size={16} />Ver<span className={s['sr-only']}> solicitud de {request.name}</span>
-                    </button>
-                    <RequestActions request={request} />
+                    <RequestReview request={request} onReview={() => setSelectedId(request.id)} />
                   </div>
                 </li>
               ))}

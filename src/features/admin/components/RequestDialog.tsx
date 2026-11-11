@@ -39,6 +39,17 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
             </button>
           </div>
           <div className={s['dialog-body']}>
+            {request.status === 'pendiente' && (
+              <section className={s['request-guide']} aria-labelledby="request-guide-title">
+                <h3 id="request-guide-title">Antes de decidir</h3>
+                <ol>
+                  <li>Comprueba que el alumno esté inscrito en CAI y que sus datos sean correctos.</li>
+                  {request.ageGroup === 'menor' && <li>Confirma la autorización con su madre, padre o tutor antes de registrarla como recibida.</li>}
+                  <li>Aprueba para añadirlo al directorio de la demo o rechaza si la solicitud no corresponde.</li>
+                </ol>
+                <p>¿Faltan datos? Cierra este detalle: la solicitud seguirá pendiente.</p>
+              </section>
+            )}
             <dl className={s.details}>
               <dt>Estado</dt><dd><StatusBadge status={request.status} /></dd>
               <dt>Programa</dt><dd>{request.program}</dd>

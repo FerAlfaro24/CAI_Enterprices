@@ -44,6 +44,7 @@ Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: 
 Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/admin` (administración simulada). Las direcciones desconocidas muestran una pantalla 404 dentro del layout compartido. Todas las rutas son públicas durante esta demostración.
 
 ## Documentación
+- [Plan de entrega local en tres semanas](docs/local-delivery-plan.md)
 - [Visión del producto](docs/vision.md)
 - [Requisitos iniciales](docs/requirements.md)
 - [Plan de prototipo](docs/prototype-plan.md)

@@ -242,6 +242,9 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .cell-person div > span { display: block; font-size: .8rem; color: var(--muted); }
 .cell-muted { color: var(--muted); }
 .row-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.request-review { display: grid; justify-items: start; gap: 8px; max-width: 28ch; }
+.request-hint { margin: 0; color: var(--muted); font-size: .82rem; }
+.request-review .btn { min-height: 44px; }
 
 .footnote { margin: 16px 0 0; font-size: .82rem; color: var(--muted); }
 
@@ -256,6 +259,11 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .dialog-head p { margin: 2px 0 0; font-size: .85rem; color: var(--muted); }
 .dialog-head .icon-btn { margin-left: auto; flex: none; }
 .dialog-body { padding: 18px 22px; display: grid; gap: 16px; }
+.request-guide { padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--blue-50); }
+.request-guide h3 { margin: 0; font-size: .95rem; }
+.request-guide ol { margin: 8px 0; padding-left: 20px; list-style: decimal; font-size: .88rem; }
+.request-guide li + li { margin-top: 6px; }
+.request-guide p { margin: 0; font-size: .82rem; color: var(--muted); }
 .details { display: grid; grid-template-columns: auto 1fr; gap: 10px 18px; margin: 0; font-size: .9rem; }
 .details dt { color: var(--muted); }
 .details dd { margin: 0; font-weight: 600; }
@@ -375,6 +383,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
   .table td:first-child { padding-bottom: 10px; }
   .row-actions { width: 100%; justify-content: flex-start; padding-top: 8px; }
   .row-actions .btn { flex: 1 1 auto; }
+  .row-actions .request-review { width: 100%; max-width: none; justify-items: stretch; }
   .search, .toolbar-group, .select { flex: 1 1 100%; }
   .role-pill { display: none; }
 }

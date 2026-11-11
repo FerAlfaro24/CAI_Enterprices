@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import s from '../features/admin/admin.module.css'
-import { RequestActions } from '../features/admin/components/RequestActions'
+import { RequestReview } from '../features/admin/components/RequestReview'
 import { RequestDialog } from '../features/admin/components/RequestDialog'
 import { Avatar, Icon, StatusBadge } from '../features/admin/components/ui'
 import type { RequestStatus } from '../features/admin/data/mockData'
@@ -35,7 +35,7 @@ export function AdminRequestsPage() {
           <p className={s.eyebrow}>Gestión de acceso</p>
           <h1 className={s['page-title']}>Solicitudes de ingreso</h1>
           <p className={s['page-lead']}>
-            Revisa quién pide unirse a la comunidad. Los menores de edad requieren la autorización de su tutor antes de ser aprobados.
+            Abre una solicitud, comprueba sus datos y decide. Si falta información, puedes cerrarla y continuar después sin cambiar su estado.
           </p>
         </div>
       </div>
@@ -91,10 +91,7 @@ export function AdminRequestsPage() {
                 <td data-label="Estado"><StatusBadge status={request.status} /></td>
                 <td>
                   <div className={s['row-actions']}>
-                    <button type="button" className={`${s.btn} ${s['btn--ghost']} ${s['btn--sm']}`} onClick={() => setSelectedId(request.id)}>
-                      <Icon name="eye" size={16} />Detalle<span className={s['sr-only']}> de {request.name}</span>
-                    </button>
-                    <RequestActions request={request} />
+                    <RequestReview request={request} onReview={() => setSelectedId(request.id)} />
                   </div>
                 </td>
               </tr>
