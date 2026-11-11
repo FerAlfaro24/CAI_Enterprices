@@ -57,6 +57,8 @@ export function accessRepository(db: Database) {
         if (decision === 'undo') {
           if (row.status === 'pendiente') throw new HttpError(409, 'La solicitud ya está pendiente.')
           if (db.prepare("SELECT id FROM requests WHERE email = (SELECT email FROM requests WHERE id = ?) AND id <> ? AND status IN ('pendiente','aprobada')").get(key, key)) throw new HttpError(409, 'Hay otra solicitud activa con ese correo.')
+          db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
+          db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
           db.prepare('DELETE FROM students WHERE request_id = ?').run(key)
           db.prepare("UPDATE requests SET status = 'pendiente', revision = revision + 1 WHERE id = ?").run(key)
         } else {
@@ -82,7 +84,8 @@ export function accessRepository(db: Database) {
         const student = db.prepare('SELECT joined_at, status, revision FROM students WHERE request_id = ?').get(row.id) as { joined_at: string; status: 'activo' | 'suspendido'; revision: number }
         return { id: request.id, name: request.name, program: request.program, group: request.applicant.group,
           ageGroup: request.ageGroup, guardianConsent: request.guardianConsent, joinedAt: student.joined_at.slice(0, 10),
-          visibility: request.applicant.visibility, status: student.status, revision: student.revision }
+          visibility: request.applicant.visibility, status: student.status, revision: student.revision,
+          accountStatus: db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ?').get(row.id) ? 'activada' : 'pendiente' }
       })
     },
     setStudentStatus(id: string, revision: number, status: 'activo' | 'suspendido', actor: number) {
@@ -93,6 +96,10 @@ export function accessRepository(db: Database) {
         if (row.revision !== revision) throw new HttpError(409, 'El alumno cambió en otra ventana. Vuelve a cargar sus datos.')
         if (row.status === status) throw new HttpError(409, 'El alumno ya tiene ese estado.')
         db.prepare('UPDATE students SET status = ?, revision = revision + 1 WHERE request_id = ?').run(status, key)
+        if (status === 'suspendido') {
+          db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
+          db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
+        }
         audit(actor, key, status === 'activo' ? 'student.reactivated' : 'student.suspended')
       })
     },

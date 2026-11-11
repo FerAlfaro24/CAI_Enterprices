@@ -2,6 +2,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { openDatabase } from './database.ts'
 import { accessRepository } from './access-repository.ts'
 import { authRepository } from './auth.ts'
+import { studentAccounts } from './student-accounts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { RequestDecision } from './contracts.ts'
 
@@ -33,6 +34,7 @@ export function createApplication(databasePath: string) {
   const db = openDatabase(databasePath)
   const access = accessRepository(db)
   const auth = authRepository(db)
+  const studentAuth = studentAccounts(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -73,6 +75,39 @@ export function createApplication(databasePath: string) {
       response.setHeader('Set-Cookie', auth.end(request))
       return json(response, 200, { ok: true })
     }
+    if (path === '/api/local/activation' && method === 'POST') {
+      limit(`activation:${request.socket.remoteAddress}`, 20, 15 * 60_000)
+      const data = await body(request)
+      if (Object.keys(data).some((key) => !['token', 'password', 'confirm'].includes(key))) throw new HttpError(400, 'La activación contiene datos no admitidos.')
+      if (typeof data.confirm !== 'string' || data.password !== data.confirm) throw new HttpError(400, 'Las contraseñas no coinciden.')
+      await studentAuth.activate(data.token, data.password)
+      // Exigir el acceso normal después de activar, incluso si este navegador
+      // conservaba una sesión de otro alumno. No se altera la sesión administrativa.
+      response.setHeader('Set-Cookie', studentAuth.end(request))
+      return json(response, 200, { ok: true })
+    }
+    if (path === '/api/local/student/session' && method === 'GET') return json(response, 200, { user: studentAuth.session(request) })
+    if (path === '/api/local/student/login' && method === 'POST') {
+      limit(`student-login:${request.socket.remoteAddress}`, 10, 15 * 60_000)
+      const data = await body(request)
+      if (typeof data.email !== 'string' || data.email.length > 160 || typeof data.password !== 'string' || data.password.length < 1 || data.password.length > 128) throw new HttpError(400, 'Escribe el correo y la contraseña.')
+      const user = await studentAuth.login(data.email.trim(), data.password)
+      if (!user) throw new HttpError(401, 'Los datos no son correctos o el acceso aún no está disponible. Consulta con CAI.')
+      limits.delete(`student-login:${request.socket.remoteAddress}`)
+      response.setHeader('Set-Cookie', [studentAuth.end(request), studentAuth.start(user)])
+      return json(response, 200, { user })
+    }
+    if (path === '/api/local/student/logout' && method === 'POST') {
+      response.setHeader('Set-Cookie', studentAuth.end(request))
+      return json(response, 200, { ok: true })
+    }
+    if (path.startsWith('/api/local/student/')) {
+      const user = studentAuth.session(request)
+      if (!user) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible. Vuelve a entrar o consulta con CAI.')
+      if (path === '/api/local/student/me' && method === 'GET') return json(response, 200, { user })
+      if (path === '/api/local/student/group' && method === 'GET') return json(response, 200, { members: studentAuth.group(user) })
+      throw new HttpError(404, 'No se encontró esta operación.')
+    }
     if (path === '/api/local/requests' && method === 'POST') {
       limit(`submission:${request.socket.remoteAddress}`, 20, 60 * 60_000)
       const key = request.headers['idempotency-key']
@@ -83,6 +118,11 @@ export function createApplication(databasePath: string) {
     if (!user || user.role !== 'admin') throw new HttpError(401, 'Inicia sesión para abrir la administración local.')
     if (path === '/api/local/requests' && method === 'GET') return json(response, 200, { requests: access.requests() })
     if (path === '/api/local/students' && method === 'GET') return json(response, 200, { students: access.students() })
+    const invite = path.match(/^\/api\/local\/students\/(CAI-\d+)\/invitation$/)
+    if (invite && method === 'POST') {
+      const data = await body(request)
+      return json(response, 200, studentAuth.invite(invite[1]!, revisionOf(data.revision), user.id))
+    }
     const decision = path.match(/^\/api\/local\/requests\/(CAI-\d+)\/(approve|reject|undo|consent)$/)
     if (decision && method === 'POST') {
       const data = await body(request)

@@ -4,7 +4,7 @@
 
 Primer bloque del [plan de tres semanas](local-delivery-plan.md), en `feat/local-access-backend`. La revisión guiada aprobada permanece en `feat/admin-guided-requests`.
 
-Incluye acceso administrativo, guardado de solicitudes, confirmación documentada de tutor, aprobación/rechazo/devolución, directorio y estado de alumnos. Solo usar datos ficticios. Aprobar añade al directorio; todavía no activa una cuenta. Suspender cambia el registro del directorio, pero aún no restringe la demo pública. Faltan cuentas y permisos de alumnos, recuperación, correo e integración con Community.
+Incluye acceso administrativo, guardado de solicitudes, confirmación documentada de tutor, aprobación/rechazo/devolución, directorio y estado de alumnos. Solo usar datos ficticios. La siguiente rama añade [activación y permisos de alumnos](student-accounts.md): aprobar permite preparar un enlace desde Alumnos, y suspender revoca sesiones/enlaces del área protegida. Community y la demo pública siguen separadas. Faltan recuperación, correo e integración de publicaciones.
 
 La demo anterior conserva sus datos ficticios en memoria. No se mezclan con la base local. No se contrata ni publica ningún servicio.
 
@@ -28,6 +28,8 @@ La preparación crea un administrador con contraseña aleatoria, cuyos datos ini
 | `/gestion` | Acceso administrativo y resumen de pendientes. |
 | `/gestion/solicitudes` | Buscar, revisar, registrar tutor y decidir. |
 | `/gestion/alumnos` | Directorio guardado, suspensión y reactivación del registro. |
+| `/activar#token=…` | Enlace privado de un solo uso preparado por coordinación. |
+| `/alumnos` | Acceso, perfil propio y nombres visibles del mismo grupo. |
 | `/admin` | Panel de demostración anterior, sin persistencia. |
 
 La API escucha solo en `127.0.0.1:3100`. Vite reenvía `/api/local`. El origen local en el puerto 4180 está permitido para revisar la compilación. `NODE_ENV=production` impide arrancar este servidor, limitado deliberadamente a pruebas locales.
@@ -81,4 +83,4 @@ El recorrido local pasó 29 comprobaciones en Brave y 29 en Opera GX, con 16 com
 
 ## Siguiente bloque
 
-Invitación/activación de alumnos, recuperación y permisos por grupo; hacer efectiva la suspensión sobre sesiones de alumnos; conectar Community y moderación. Antes de admitir datos reales faltan contenido aprobado, privacidad, procedimiento verificable de tutor, correo y revisión productiva.
+La activación, el acceso de alumnos y su suspensión efectiva se detallan en [el bloque de cuentas](student-accounts.md). Siguen pendientes recuperación, correo, integración con Community y moderación. Antes de admitir datos reales faltan contenido aprobado, privacidad, procedimiento verificable de tutor y revisión productiva.

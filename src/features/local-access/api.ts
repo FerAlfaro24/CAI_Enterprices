@@ -1,4 +1,4 @@
-import type { LocalRequest, LocalStudent, LocalUser, Receipt, RequestDecision, Submission } from '../../../server/contracts'
+import type { ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, Receipt, RequestDecision, StudentUser, Submission } from '../../../server/contracts'
 
 export class ApiError extends Error {
   status: number
@@ -29,6 +29,16 @@ export const localApi = {
   submit: (submission: Submission, key: string) => call<Receipt>('/requests', 'POST', submission, { 'Idempotency-Key': key }),
   decide: (request: LocalRequest, decision: RequestDecision, reference?: string) => call(`/requests/${request.id}/${decision}`, 'POST', { revision: request.revision, reference }),
   studentStatus: (student: LocalStudent, status: 'activo' | 'suspendido') => call(`/students/${student.id}`, 'PATCH', { revision: student.revision, status }),
+  invite: (student: LocalStudent) => call<ActivationInvitation>(`/students/${student.id}/invitation`, 'POST', { revision: student.revision }),
 }
 
-export type { LocalRequest, LocalStudent, LocalUser, RequestDecision, Submission }
+export const studentApi = {
+  activate: (token: string, password: string, confirm: string) => call('/activation', 'POST', { token, password, confirm }),
+  session: () => call<{ user: StudentUser | null }>('/student/session'),
+  login: (email: string, password: string) => call<{ user: StudentUser }>('/student/login', 'POST', { email, password }),
+  logout: () => call('/student/logout', 'POST', {}),
+  me: () => call<{ user: StudentUser }>('/student/me'),
+  group: () => call<{ members: GroupMember[] }>('/student/group'),
+}
+
+export type { ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, RequestDecision, StudentUser, Submission }

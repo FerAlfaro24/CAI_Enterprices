@@ -65,7 +65,7 @@ test('API local: permisos, validación, decisiones y persistencia', async (t) =>
     assert.ok(!JSON.stringify(await (await call('/auth/session')).json()).includes('password'))
     const stored = app.db.prepare('SELECT password_hash FROM admin_users').get() as { password_hash: string }
     assert.notEqual(stored.password_hash, testPassword)
-    assert.match(stored.password_hash, /^scrypt:/)
+    assert.match(stored.password_hash, /^scrypt-v2:/)
   })
   await t.test('el servidor valida campos, fecha, catálogo y privacidad', async () => {
     for (const invalid of [

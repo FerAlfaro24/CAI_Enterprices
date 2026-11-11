@@ -4,8 +4,9 @@ import { ThemeSelector } from '../../components/ThemeSelector'
 import { Icon } from '../admin/components/ui'
 import { LocalLogin } from './LocalLogin'
 import { LocalRequestDialog } from './LocalRequestDialog'
+import { LocalInvitationDialog } from './LocalInvitationDialog'
 import { LocalOverview, LocalRequests, LocalStudents } from './LocalAccessViews'
-import { ApiError, localApi, type LocalRequest, type LocalStudent, type LocalUser, type RequestDecision } from './api'
+import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type RequestDecision } from './api'
 import s from '../admin/admin.module.css'
 
 export function LocalAccessApp() {
@@ -19,6 +20,7 @@ export function LocalAccessApp() {
   const [notice, setNotice] = useState('')
   const [busy, setBusy] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [invitation, setInvitation] = useState<(ActivationInvitation & { name: string }) | null>(null)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('pendiente')
   const heading = useRef<HTMLHeadingElement>(null)
@@ -27,7 +29,7 @@ export function LocalAccessApp() {
   const title = section === 'requests' ? 'Solicitudes de ingreso' : section === 'students' ? 'Alumnos' : 'Tu trabajo pendiente'
   const handleError = useCallback((error: unknown) => {
     if (error instanceof ApiError && error.status === 401) {
-      setUser(null); setLoaded(false); setSelectedId(null)
+      setUser(null); setLoaded(false); setSelectedId(null); setInvitation(null)
       setNotice('Tu sesión terminó. Vuelve a entrar para continuar.')
       return ''
     }
@@ -83,7 +85,19 @@ export function LocalAccessApp() {
     setBusy(true); setActionError(''); setNotice('')
     try {
       await localApi.studentStatus(student, student.status === 'activo' ? 'suspendido' : 'activo')
-      setNotice(student.status === 'activo' ? 'Alumno suspendido en el directorio. El acceso de alumnos todavía no está conectado.' : 'Alumno reactivado en el directorio local.')
+      setNotice(student.status === 'activo' ? 'Acceso del alumno suspendido. Sus sesiones y enlaces pendientes dejaron de funcionar.' : 'Alumno reactivado. Puede volver a iniciar sesión; si aún no activó su cuenta, prepara un nuevo enlace.')
+      try { await refresh() } catch (error) { setError(handleError(error)) }
+    } catch (error) {
+      setActionError(handleError(error))
+      if (error instanceof ApiError && error.status === 409) await reload()
+    } finally { setBusy(false) }
+  }
+  const invite = async (student: LocalStudent) => {
+    if (busy) return
+    setBusy(true); setActionError(''); setNotice('')
+    try {
+      const invitation = await localApi.invite(student)
+      setInvitation({ ...invitation, name: student.name })
       try { await refresh() } catch (error) { setError(handleError(error)) }
     } catch (error) {
       setActionError(handleError(error))
@@ -92,7 +106,7 @@ export function LocalAccessApp() {
   }
   const logout = async () => {
     setBusy(true)
-    try { await localApi.logout(); setUser(null); setLoaded(false); setRequests([]); setStudents([]); setNotice(''); setActionError('') }
+    try { await localApi.logout(); setUser(null); setLoaded(false); setRequests([]); setStudents([]); setNotice(''); setActionError(''); setInvitation(null) }
     catch (error) { setError(handleError(error)) }
     finally { setBusy(false) }
   }
@@ -106,7 +120,7 @@ export function LocalAccessApp() {
   return (
     <div className={s.admin}>
       <a className={s['skip-link']} href="#local-content">Saltar al contenido</a>
-      <aside className={s['local-notice']}>Pruebas locales · Usa datos ficticios. Se guardan solicitudes y alumnos en este equipo. Las cuentas de alumnos y la comunidad todavía no están conectadas.</aside>
+      <aside className={s['local-notice']}>Pruebas locales · Usa datos ficticios. Solicitudes, cuentas y permisos de alumnos se guardan en este equipo. Las publicaciones de Community siguen en demostración.</aside>
       <header className={s.topbar}>
         <Link to="/gestion" className={s['card-link']}>CAI · Administración</Link>
         <div className={s['topbar-end']}><ThemeSelector /><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void logout() }}>Cerrar sesión</button></div>
@@ -129,14 +143,15 @@ export function LocalAccessApp() {
             <section className={s.card} aria-label={section === 'requests' ? 'Solicitudes guardadas' : 'Alumnos guardados'}>
               {section === 'requests'
                 ? <LocalRequests requests={visibleRequests} onReview={open} />
-                : <LocalStudents students={visibleStudents} busy={busy} onStatus={(student) => { void studentStatus(student) }} />}
+                : <LocalStudents students={visibleStudents} busy={busy} onStatus={(student) => { void studentStatus(student) }} onInvite={(student) => { void invite(student) }} />}
               {(section === 'requests' ? visibleRequests : visibleStudents).length === 0 && <p className={s.empty}>{query ? 'No encontramos coincidencias.' : section === 'requests' ? 'No hay solicitudes en este estado.' : 'Los alumnos aparecerán aquí cuando apruebes sus solicitudes.'}</p>}
             </section>
           </>}
         </>}
-        <p className={s.footnote}><Link to="/registro-local">Probar solicitud de acceso</Link> · <Link to="/admin">Abrir panel de demostración</Link></p>
+        <p className={s.footnote}><Link to="/registro-local">Probar solicitud de acceso</Link> · <Link to="/alumnos">Acceso de alumnos</Link> · <Link to="/admin">Abrir panel de demostración</Link></p>
       </main>
       {selected && <LocalRequestDialog key={selected.id} request={selected} busy={busy} error={actionError} onClose={() => setSelectedId(null)} onDecide={(decision, reference) => { void decide(decision, reference) }} />}
+      {invitation && <LocalInvitationDialog invitation={invitation} name={invitation.name} onClose={() => setInvitation(null)} />}
     </div>
   )
 }

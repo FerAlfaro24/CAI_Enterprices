@@ -54,7 +54,15 @@ export interface LocalStudent {
   visibility: 'privado' | 'comunidad'
   status: 'activo' | 'suspendido'
   revision: number
+  accountStatus: 'pendiente' | 'activada'
 }
+
+export type StudentUser = {
+  id: string; role: 'student'; name: string; displayName: string
+  program: string; group: string; avatarColor: string
+}
+export type GroupMember = { displayName: string; avatarColor: string }
+export type ActivationInvitation = { path: string; expiresAt: string }
 
 export type RequestDecision = 'approve' | 'reject' | 'undo' | 'consent'
 export type LocalUser = { id: number; name: string; role: 'admin' }

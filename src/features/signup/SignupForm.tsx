@@ -544,7 +544,7 @@ function SignupSuccess({ ref, request, onRestart, local = false }: { ref: Ref<HT
     { title: 'Solicitud recibida', text: `Folio ${request.id} · Hoy`, done: true },
     ...(minor ? [{ title: 'Autorización del tutor', text: 'Recepción la confirmará con el tutor registrado.', done: false }] : []),
     { title: 'Revisión de CAI', text: 'La coordinación verifica que el alumno esté inscrito.', done: false },
-    { title: 'Acceso a la comunidad', text: local ? 'La activación de cuentas y el envío de correos se conectarán en una siguiente etapa.' : 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
+    { title: 'Acceso a la comunidad', text: local ? 'Tras la aprobación, coordinación preparará tu enlace de activación. En las pruebas locales no se envían correos.' : 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
   ]
   return (
     <div className={s.success}>

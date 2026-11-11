@@ -7,6 +7,11 @@ export function openDatabase(path: string) {
   if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true })
   const db = new DatabaseSync(path)
   db.exec('PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000; PRAGMA journal_mode = WAL;')
+  try { return migrateDatabase(db) }
+  catch (error) { db.close(); throw error }
+}
+
+export function migrateDatabase(db: DatabaseSync) {
   db.exec('CREATE TABLE IF NOT EXISTS migrations (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)')
   const applied = db.prepare('SELECT version FROM migrations WHERE version = 1').get()
   if (!applied) {
@@ -39,6 +44,23 @@ export function openDatabase(path: string) {
         action TEXT NOT NULL, created_at TEXT NOT NULL
       );
       INSERT INTO migrations(version, applied_at) VALUES (1, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 2').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE student_accounts (
+        request_id INTEGER PRIMARY KEY REFERENCES requests(id), password_hash TEXT NOT NULL, activated_at TEXT NOT NULL
+      );
+      CREATE TABLE student_invitations (
+        request_id INTEGER PRIMARY KEY REFERENCES requests(id), token_hash TEXT NOT NULL UNIQUE,
+        expires_at INTEGER NOT NULL, created_by INTEGER NOT NULL REFERENCES admin_users(id)
+      );
+      CREATE TABLE student_sessions (
+        token_hash TEXT PRIMARY KEY, request_id INTEGER NOT NULL REFERENCES requests(id), expires_at INTEGER NOT NULL
+      );
+      CREATE INDEX student_sessions_owner ON student_sessions(request_id);
+      CREATE INDEX student_sessions_expiry ON student_sessions(expires_at);
+      INSERT INTO migrations(version, applied_at) VALUES (2, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
   return db

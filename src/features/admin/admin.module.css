@@ -252,6 +252,9 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .local-consent legend { padding: 0 4px; font-weight: 600; font-size: .9rem; }
 .local-consent input[type='text'] { width: 100%; min-width: 0; min-height: 44px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); }
 .local-break { min-width: 0; overflow-wrap: anywhere; }
+.local-link-field { display: grid; gap: 8px; font-weight: 600; }
+.local-link-field textarea { width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); font: inherit; font-size: .85rem; overflow-wrap: anywhere; }
+.student-group { margin-top: 20px; }
 .stats.local-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .local-records .queue-person :is(strong, span) { overflow-wrap: anywhere; }
 .local-dialog .dialog-head > div { min-width: 0; overflow-wrap: anywhere; }

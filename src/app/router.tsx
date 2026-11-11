@@ -14,6 +14,8 @@ import { NotFoundPage } from '../pages/NotFoundPage'
 import { LoginPage } from '../pages/LoginPage'
 import { SignupPage } from '../pages/SignupPage'
 import { LocalAccessApp } from '../features/local-access/LocalAccessApp'
+import { ActivateAccountPage } from '../features/local-access/ActivateAccountPage'
+import { StudentArea } from '../features/local-access/StudentArea'
 
 export function AppRoutes() {
   return (
@@ -25,6 +27,8 @@ export function AppRoutes() {
       <Route path="registro" element={<SignupPage />} />
       <Route path="registro-local" element={<SignupPage local />} />
       <Route path="gestion/*" element={<LocalAccessApp />} />
+      <Route path="activar" element={<ActivateAccountPage />} />
+      <Route path="alumnos" element={<StudentArea />} />
       <Route element={<CommunityLayout />}>
         <Route path="community" element={<CommunityPage />} />
       </Route>

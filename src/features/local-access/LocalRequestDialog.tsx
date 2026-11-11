@@ -31,7 +31,8 @@ export function LocalRequestDialog({ request, busy, error, onDecide, onClose }: 
           {request.applicant.guardian && <><dt>Tutor</dt><dd className={s['local-break']}>{request.applicant.guardian.name}<br />{request.applicant.guardian.contact}</dd></>}
         </dl>
         <blockquote className={s.quote}>{request.message}</blockquote>
-        {request.status === 'pendiente' && <p className={s.alert}>Comprueba la inscripción y los datos antes de decidir. Aprobar añade al alumno al directorio local; su cuenta se activará en una etapa posterior.</p>}
+        {request.status === 'pendiente' && <p className={s.alert}>Comprueba la inscripción y los datos antes de decidir. Aprobar añade al alumno al directorio; después podrás preparar su acceso desde Alumnos.</p>}
+        {request.status === 'aprobada' && <p className={s.alert}>Si devuelves esta solicitud a pendientes, el acceso del alumno quedará bloqueado hasta que vuelvas a aprobarla. Sus sesiones y enlaces de activación se cancelarán.</p>}
         {needsConsent && request.status === 'pendiente' && (
           <fieldset className={s['local-consent']} disabled={busy}>
             <legend>Falta la autorización del tutor</legend>

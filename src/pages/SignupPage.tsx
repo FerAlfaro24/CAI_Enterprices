@@ -17,7 +17,7 @@ export function SignupPage({ local = false }: { local?: boolean }) {
   return (
     <div className={s.page}>
       <a className={s['skip-link']} href="#signup-content">Saltar al formulario</a>
-      {local ? <aside className={s['local-notice']}>Pruebas locales: usa datos ficticios. La solicitud se guarda en este equipo. Todavía no se crean cuentas ni se envían correos.</aside> : <PrototypeNotice />}
+      {local ? <aside className={s['local-notice']}>Pruebas locales: usa datos ficticios. La solicitud se guarda en este equipo. CAI debe aprobarla y preparar tu enlace de activación; no se envían correos.</aside> : <PrototypeNotice />}
       <div className={s.layout}>
         <aside className={s.aside} aria-label="Sobre la comunidad CAI">
           <Link to="/" className={s.brand}>
@@ -34,13 +34,13 @@ export function SignupPage({ local = false }: { local?: boolean }) {
               ))}
             </ul>
           </div>
-          <p className={s['aside-note']}>{local ? 'Prueba con guardado local. Usa datos ficticios; las cuentas de alumnos todavía no están activadas.' : 'Prototipo: usa datos ficticios. No se crean cuentas ni se guarda información.'}</p>
+          <p className={s['aside-note']}>{local ? 'Prueba con datos ficticios y guardado local. Entrarás después de la aprobación y la activación de tu cuenta.' : 'Prototipo: usa datos ficticios. No se crean cuentas ni se guarda información.'}</p>
         </aside>
 
         <main id="signup-content" tabIndex={-1} className={s.main}>
           <div className={s.topline}>
             <Link to="/" className={s.link}>← Volver al sitio</Link>
-            {local ? <Link to="/gestion" className={s.link}>Administración local</Link> : <span>¿Ya tienes acceso? <Link to="/login" className={s.link}>Entrar · Demo</Link></span>}
+            {local ? <Link to="/alumnos" className={s.link}>Entrar · Alumnos</Link> : <span>¿Ya tienes acceso? <Link to="/login" className={s.link}>Entrar · Demo</Link></span>}
           </div>
           <div className={s.card}>
             <SignupForm local={local} />

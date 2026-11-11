@@ -22,17 +22,23 @@ export function LocalRequests({ requests, onReview }: {
   )
 }
 
-export function LocalStudents({ students, busy, onStatus }: {
-  students: LocalStudent[]; busy: boolean; onStatus: (student: LocalStudent) => void
+export function LocalStudents({ students, busy, onStatus, onInvite }: {
+  students: LocalStudent[]; busy: boolean; onStatus: (student: LocalStudent) => void; onInvite: (student: LocalStudent) => void
 }) {
   return (
     <ul className={`${s.queue} ${s['local-records']}`}>
       {students.map((student) => (
         <li key={student.id}>
           <div className={s['queue-person']}>
-            <div><strong>{student.name}</strong><span>{student.id} · {student.program} · {student.group}</span></div>
+            <div><strong>{student.name}</strong><span>{student.id} · {student.program} · {student.group}</span><span>{student.accountStatus === 'activada' ? 'Cuenta activada' : 'Cuenta por activar'}</span></div>
           </div>
           <StatusBadge status={student.status} />
+          {student.accountStatus !== 'activada' && <button
+            type="button"
+            className={`${s.btn} ${s['btn--primary']}`}
+            disabled={busy || student.status !== 'activo'}
+            onClick={() => onInvite(student)}
+          >Preparar acceso<span className={s['sr-only']}> de {student.name}</span></button>}
           <button
             type="button"
             className={`${s.btn} ${s['btn--ghost']}`}

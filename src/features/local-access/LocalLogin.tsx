@@ -27,7 +27,7 @@ export function LocalLogin({ onLogin, message = '' }: { onLogin: (user: LocalUse
         <span className={s.kicker}>ADMINISTRACIÓN LOCAL</span>
         <h1>Tu panel de CAI</h1>
         <p className={s.lead}>Entra para revisar solicitudes y administrar alumnos.</p>
-        <p className={s.notice}>Pruebas con datos ficticios. Las decisiones se guardan en este equipo. Esta etapa todavía no crea cuentas para alumnos.</p>
+        <p className={s.notice}>Pruebas con datos ficticios. Las solicitudes, cuentas y decisiones se guardan en este equipo. La comunidad de publicaciones todavía está en demostración.</p>
         {message && <p role="status">{message}</p>}
         <form aria-label="Acceso a la administración local" onSubmit={(event) => { void submit(event) }} aria-busy={busy}>
           <label htmlFor="local-email">Correo electrónico</label>
