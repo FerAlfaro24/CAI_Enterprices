@@ -1,5 +1,7 @@
 # Galería privada conectada al diseño oficial
 
+> Cierre histórico del bloque 7. La consolidación de rutas se completó después en `v1-unified-navigation.md`; consultar PROJECT_STATE para la siguiente tarea vigente.
+
 Bloque 7 comprobado localmente el 12 de noviembre de 2026. Rama `feat/v1-private-gallery`, base `db45ac6` de `feat/v1-inbox-recovery-contact`. Conserva v1.0 y las integraciones acumulativas anteriores; no son ramas independientes que deban fusionarse una por una. Puntos de retorno: `a703087` (bloqueo de archivos privados), `d763e94` (servicio/almacenamiento) y `9bd1c03` (interfaz/pruebas).
 
 ## Recorrido disponible

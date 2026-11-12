@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena de mejoras llega a `feat/v1-private-gallery`: acceso, dashboard, solicitudes/alumnos, feed/moderación, grupos/ajustes mínimos, recuperación/avisos/contacto e imágenes administrativas ya están conectados a servicios persistentes locales. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena de mejoras llega a `feat/v1-unified-navigation`: acceso, dashboard, solicitudes/alumnos, feed/moderación, grupos/ajustes mínimos, recuperación/avisos/contacto e imágenes administrativas están conectados localmente y la navegación usa las pantallas oficiales. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Siguiente bloque:** consolidar navegación y rutas provisionales tras comprobar equivalencia. Después, estabilización conjunta y configuración externa. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [galería privada y comprobaciones](docs/v1-private-gallery.md).
+> **Siguiente bloque:** estabilización conjunta, herramientas de desarrollo, carga inicial y guía de administración. La configuración externa continúa al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [rutas vigentes y comprobaciones](docs/v1-unified-navigation.md).
 
 ## Objetivo inmediato
 
@@ -18,7 +18,7 @@ Conectar el diseño oficial de v1.0 con los servicios locales ya desarrollados, 
 ## Estado del repositorio
 Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Router**. La landing adapta la propuesta visual original con Figtree, logotipos CAI, secciones responsive y estilos encapsulados mediante CSS Modules. Los textos comerciales, cifras y testimonios se identifican como contenido de muestra.
 
-`/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. `/gestion/*` y `/alumnos` conservan interfaces provisionales pendientes de consolidar. El contacto institucional guarda consultas y permite seguimiento en el panel original. La lista de interés de la plataforma futura conserva su demostración.
+`/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. Los enlaces antiguos `/gestion/*`, `/registro-local`, `/alumnos` y `/alumnos/publicaciones` redirigen al destino oficial correspondiente. `/mi-inscripcion` conserva la ficha y grupo del alumno; `/admin/mensajes?bandeja=avisos` abre los avisos directamente. El contacto institucional guarda consultas y permite seguimiento en el panel original. La lista de interés de la plataforma futura conserva su demostración.
 
 La comunidad oficial consulta la cuenta autenticada, miembros del grupo, publicaciones aprobadas, avisos propios e imágenes privadas del servidor local. El diseño y los componentes de demostración se conservan como referencia; comentarios/reacciones persistentes y retos/insignias siguen pendientes de alcance, sin presentarse como guardado real. La galería conectada no mezcla fotografías de stock con los registros del grupo.
 
@@ -50,6 +50,7 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 
 ## Documentación
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
+- [Navegación unificada, compatibilidad de enlaces y pruebas](docs/v1-unified-navigation.md)
 - [Galería privada, límites y pruebas](docs/v1-private-gallery.md)
 - [Contacto, bandejas y recuperación oficiales](docs/v1-inbox-recovery-contact.md)
 - [Catálogo, asignaciones y ajustes conectados](docs/v1-groups-settings.md)
