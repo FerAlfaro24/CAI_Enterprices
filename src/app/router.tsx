@@ -4,9 +4,7 @@ import { AppLayout } from '../layouts/AppLayout'
 import { LandingLayout } from '../layouts/LandingLayout'
 import { CommunityLayout } from '../layouts/CommunityLayout'
 import { AdminPage } from '../pages/AdminPage'
-import { AdminPostsPage } from '../pages/AdminPostsPage'
 import { AdminRequestsPage } from '../pages/AdminRequestsPage'
-import { AdminSettingsPage } from '../pages/AdminSettingsPage'
 import { AdminStudentsPage } from '../pages/AdminStudentsPage'
 import { CommunityPage } from '../pages/CommunityPage'
 import { InstitutionalPage } from '../pages/InstitutionalPage'
@@ -26,7 +24,7 @@ export function AppRoutes() {
         <Route index element={<InstitutionalPage />} />
       </Route>
       <Route path="login" element={<LoginPage />} />
-      <Route path="registro" element={<SignupPage />} />
+      <Route path="registro" element={<SignupPage local />} />
       <Route path="registro-local" element={<SignupPage local />} />
       <Route path="gestion/*" element={<LocalAccessApp />} />
       <Route path="activar" element={<ActivateAccountPage />} />
@@ -41,9 +39,9 @@ export function AppRoutes() {
       <Route path="admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />
         <Route path="solicitudes" element={<AdminRequestsPage />} />
-        <Route path="publicaciones" element={<AdminPostsPage />} />
+        <Route path="publicaciones" element={<section><h1>Publicaciones</h1><p>La conexión de esta sección con Community es el siguiente bloque. Los envíos actuales siguen disponibles en la administración local.</p><a href="/gestion/publicaciones">Abrir moderación local</a></section>} />
         <Route path="alumnos" element={<AdminStudentsPage />} />
-        <Route path="configuracion" element={<AdminSettingsPage />} />
+        <Route path="configuracion" element={<section><h1>Configuración</h1><p>Los ajustes del diseño de v1.0 están pendientes de conexión. Se mantienen las reglas de privacidad del servidor.</p></section>} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
       <Route element={<AppLayout />}>

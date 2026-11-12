@@ -13,7 +13,7 @@ const filters: { value: Filter; label: string }[] = [
 ]
 
 export function AdminStudentsPage() {
-  const { state } = useAdmin()
+  const { state,connection } = useAdmin()
   const [filter, setFilter] = useState<Filter>('activo')
   const [program, setProgram] = useState('todos')
   const [query, setQuery] = useState('')
@@ -108,7 +108,7 @@ export function AdminStudentsPage() {
                   </td>
                   <td data-label="Publicaciones">{student.posts}</td>
                   <td data-label="Perfil" className={s['cell-muted']}>
-                    <span className={s['cell-icon']}><Icon name={isPrivate ? 'lock' : 'globe'} size={15} />{isPrivate ? 'Privado' : 'Comunidad'}</span>
+                    <span className={s['cell-icon']}><Icon name={connection||isPrivate ? 'lock' : 'globe'} size={15} />{connection?'Solo su grupo':isPrivate ? 'Privado' : 'Comunidad'}</span>
                   </td>
                   <td data-label="Estado"><StatusBadge status={student.status} /></td>
                   <td>
@@ -125,7 +125,7 @@ export function AdminStudentsPage() {
         </table>
         {visible.length === 0 && <p className={s.empty}>Ningún alumno coincide con los filtros.</p>}
       </section>
-      <p className={s.footnote}>Directorio ficticio. No contiene datos de alumnos reales.</p>
+      <p className={s.footnote}>Prueba local: directorio conectado al servidor. Utiliza únicamente datos ficticios.</p>
 
       <StudentDialog student={directory.find((st) => st.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />
     </>

@@ -6,7 +6,8 @@ import { Avatar, Icon, StatusBadge } from './ui'
 
 export function StudentDialog({ student, onClose }: { student: DirectoryStudent | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null)
-  const { state, dispatch, announce } = useAdmin()
+  const { state, dispatch, announce, connection } = useAdmin()
+  const account=connection?.students.find(s=>s.id===student?.id)
 
   useEffect(() => {
     const dialog = ref.current
@@ -47,27 +48,32 @@ export function StudentDialog({ student, onClose }: { student: DirectoryStudent 
                 <><dt>Autorización del tutor</dt><dd>{student.guardianConsent === 'recibida' ? 'Recibida' : 'Pendiente'}</dd></>
               )}
               <dt>Publicaciones</dt><dd>{student.posts}</dd>
-              <dt>Perfil</dt><dd>{forcedPrivate || student.visibility === 'privado' ? 'Privado' : 'Visible para la comunidad'}</dd>
+              <dt>Perfil</dt><dd>{connection?'Visible solo para su grupo':forcedPrivate || student.visibility === 'privado' ? 'Privado' : 'Visible para la comunidad'}</dd>
+              {account && <><dt>Acceso de cuenta</dt><dd>{account.accountStatus==='activada'?'Cuenta activada':'Cuenta por activar'}</dd></>}
             </dl>
             {forcedPrivate && (
               <p className={cx(s.alert, s['alert--ok'])}>
-                Perfil privado por la configuración de privacidad de menores. Solo la coordinación ve sus datos.
+                Perfil privado. Solo coordinación consulta el expediente; su grupo solo recibe el nombre visible autorizado.
               </p>
             )}
             {student.status === 'suspendido' && (
-              <p className={s.alert}>Cuenta suspendida (simulado): no puede ver la comunidad ni publicar.</p>
+              <p className={s.alert}>Cuenta suspendida: no puede acceder a su espacio ni publicar.</p>
             )}
           </div>
+          {connection?.error && <p role="alert" className={s.alert}>{connection.error}</p>}
           <div className={s['dialog-foot']}>
+            {account?.status==='activo'&&account.accountStatus==='pendiente'&&<button type="button" className={`${s.btn} ${s['btn--primary']}`} disabled={connection?.busy} onClick={()=>{void connection?.invite(account.id);onClose()}}>Preparar acceso</button>}
             {student.status === 'activo' ? (
-              <button type="button" className={cx(s.btn, s['btn--reject'])} onClick={() => {
+              <button type="button" disabled={connection?.busy} className={cx(s.btn, s['btn--reject'])} onClick={() => {
+                if(connection){void connection.mutate({type:'suspend',id:student.id}).then(ok=>{if(ok)onClose()});return}
                 dispatch({ type: 'suspend', id: student.id })
                 announce(`${student.name} suspendido.`)
               }}>
                 <Icon name="lock" size={16} />Suspender acceso
               </button>
             ) : (
-              <button type="button" className={cx(s.btn, s['btn--approve'])} onClick={() => {
+              <button type="button" disabled={connection?.busy} className={cx(s.btn, s['btn--approve'])} onClick={() => {
+                if(connection){void connection.mutate({type:'reactivate',id:student.id}).then(ok=>{if(ok)onClose()});return}
                 dispatch({ type: 'reactivate', id: student.id })
                 announce(`${student.name} reactivado.`)
               }}>

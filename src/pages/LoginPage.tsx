@@ -1,29 +1,35 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
-import { ArrowLeft, ArrowRight, Eye, EyeOff, GraduationCap, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Eye, EyeOff, ShieldCheck } from 'lucide-react'
+import { localApi, studentApi, type LocalUser } from '../features/local-access/api'
+import { GoogleSignInButton } from '../features/local-access/GoogleSignInButton'
 import emblem from '../assets/cai/logo-cai-blanco.svg'
 import s from '../features/login/login.module.css'
 import { ThemeSelector } from '../components/ThemeSelector'
 
-export function LoginPage() {
+export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void}) {
   const navigate = useNavigate()
   const form = useRef<HTMLFormElement>(null)
   const heading = useRef<HTMLHeadingElement>(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [busy,setBusy]=useState(false),[error,setError]=useState('')
 
   useEffect(() => {
-    document.title = 'Bienvenido · Acceso demo · CAI'
+    document.title = admin ? 'Acceso de administración · CAI' : 'Acceso de alumnos · CAI'
     window.scrollTo({ top: 0, behavior: 'instant' })
     heading.current?.focus({ preventScroll: true })
-  }, [])
+  }, [admin])
 
-  const enterDemo = (destination: '/community' | '/admin') => {
-    form.current?.reset()
-    navigate(destination)
-  }
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    enterDemo('/community')
+    if(busy)return
+    const data=new FormData(event.currentTarget)
+    setBusy(true);setError('')
+    try {
+      if(admin) {const {user}=await localApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();onAdminLogin?.(user)}
+      else {await studentApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();navigate('/alumnos')}
+    }catch(error){setError(error instanceof Error?error.message:'No pudimos iniciar sesión.')}
+    finally{setBusy(false)}
   }
 
   return (
@@ -45,27 +51,24 @@ export function LoginPage() {
       <main className={s.main} id="login-content" tabIndex={-1}>
         <div className={s.topline}><Link to="/" className={s.back}><ArrowLeft size={16} aria-hidden="true" /> Volver al sitio</Link><ThemeSelector /></div>
         <div className={s.card}>
-          <span className={s.kicker}>TU ESPACIO CAI</span>
+          <span className={s.kicker}>{admin?'ADMINISTRACIÓN CAI':'TU ESPACIO CAI'}</span>
           <h1 ref={heading} tabIndex={-1}>Qué gusto verte<br />de nuevo.</h1>
           <p className={s.lead}>Entra y sigue compartiendo tu camino.</p>
-          <p className={s.notice} id="login-demo-notice"><ShieldCheck size={20} aria-hidden="true" /><span><strong>Acceso simulado · Prototipo</strong>No se validan, envían ni guardan credenciales. Usa únicamente datos ficticios.</span></p>
-          <form ref={form} onSubmit={submit} autoComplete="off" aria-label="Acceso simulado" aria-describedby="login-demo-notice">
+          <p className={s.notice} id="login-demo-notice"><ShieldCheck size={20} aria-hidden="true" /><span><strong>Acceso local · Pruebas</strong>Usa cuentas ficticias activadas. La autorización se comprueba en el servidor.</span></p>
+          {!admin && <GoogleSignInButton />}
+          <form ref={form} onSubmit={(event)=>{void submit(event)}} aria-busy={busy} aria-label={admin?'Acceso de administración':'Acceso de alumnos'} aria-describedby="login-demo-notice">
             <label htmlFor="login-email">Correo electrónico</label>
             <input id="login-email" name="email" type="email" placeholder="tu.nombre@example.com" autoComplete="off" required maxLength={160} />
-            <label htmlFor="login-password">Contraseña de muestra</label>
+            <label htmlFor="login-password">Contraseña</label>
             <div className={s.password}>
               <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="off" placeholder="Usa una contraseña ficticia" required maxLength={64} />
               <button type="button" className={s.reveal} onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={showPassword} aria-controls="login-password">{showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}</button>
             </div>
-            <button type="submit" className={s.primary}>Entrar a la comunidad demo <ArrowRight size={18} aria-hidden="true" /></button>
+            {error && <p role="alert">{error}</p>}
+            <button type="submit" className={s.primary} disabled={busy}>{busy?'Entrando…':admin?'Entrar al panel':'Entrar a mi espacio'} <ArrowRight size={18} aria-hidden="true" /></button>
           </form>
-          <p className={s.signup}>¿Es tu primera visita? <Link to="/registro">Solicita tu acceso</Link></p>
-          <div className={s.divider}><span>O explora sin llenar el formulario</span></div>
-          <div className={s.demoChoices}>
-            <button type="button" onClick={() => enterDemo('/community')}><GraduationCap size={23} aria-hidden="true" /><span><strong>Demo estudiante</strong><small>Descubre la comunidad</small></span><ArrowRight size={17} aria-hidden="true" /></button>
-            <button type="button" onClick={() => enterDemo('/admin')}><ShieldCheck size={23} aria-hidden="true" /><span><strong>Demo administrador</strong><small>Explora el panel de gestión</small></span><ArrowRight size={17} aria-hidden="true" /></button>
-          </div>
-          <p className={s.footnote}>Sin cuentas reales. Ambos accesos están abiertos para esta demostración.</p>
+          {!admin && <><p className={s.signup}>¿Es tu primera visita? <Link to="/registro">Solicita tu acceso</Link></p><p className={s.footnote}><Link to="/recuperar-acceso">Olvidé mi contraseña</Link></p></>}
+          <p className={s.footnote}><Link to={admin?'/login':'/admin'}>{admin?'Acceso de alumnos':'Acceso de administración'}</Link></p>
         </div>
         <p className={s.footer}>CAI · El inglés nos conecta.</p>
       </main>

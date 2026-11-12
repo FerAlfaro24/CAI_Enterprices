@@ -2,7 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño y ya incluye dashboard administrativo completo, landing, registro/login y Community avanzada. Las ramas posteriores añaden servicios persistentes locales, todavía conectados a pantallas paralelas. La prioridad es integrarlos en la interfaz oficial. Consulta primero [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño: dashboard completo, landing, registro/login y Community avanzada. En `integration/cai-v1-connected`, registro/acceso y solicitudes/alumnos del dashboard original ya utilizan servicios persistentes locales. Falta conectar moderación, Community y ajustes. Las pantallas locales anteriores se conservan temporalmente. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+
+> **Avance posterior:** en `integration/cai-v1-connected`, registro/login y solicitudes/alumnos del dashboard original ya están conectados al servidor local. La conexión del feed avanzado y moderación es el siguiente bloque. Ver [recorrido conectado de v1.0](docs/v1-connected-access.md).
 
 ## Objetivo inmediato
 

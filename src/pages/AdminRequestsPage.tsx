@@ -16,7 +16,7 @@ const filters: { value: Filter; label: string }[] = [
 ]
 
 export function AdminRequestsPage() {
-  const { state } = useAdmin()
+  const { state,connection } = useAdmin()
   const [filter, setFilter] = useState<Filter>('pendiente')
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -91,7 +91,7 @@ export function AdminRequestsPage() {
                 <td data-label="Estado"><StatusBadge status={request.status} /></td>
                 <td>
                   <div className={s['row-actions']}>
-                    <RequestReview request={request} onReview={() => setSelectedId(request.id)} />
+                    <RequestReview request={request} local={Boolean(connection)} onReview={() => setSelectedId(request.id)} />
                   </div>
                 </td>
               </tr>
@@ -103,7 +103,7 @@ export function AdminRequestsPage() {
         )}
       </section>
       <p className={s.footnote}>
-        Datos ficticios. Las decisiones se guardan solo en esta pestaña y se pierden al recargar; no otorgan acceso real.
+        Pruebas con datos ficticios. Las decisiones se guardan en el servidor local y se conservan al recargar.
       </p>
 
       <RequestDialog request={state.requests.find((r) => r.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />

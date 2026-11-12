@@ -1,4 +1,5 @@
 import { useOutletContext } from 'react-router'
+import type { AdminConnection } from './useAdminConnection'
 import {
   accessRequests,
   initiallySuspended,
@@ -25,6 +26,7 @@ export type Settings = {
  * y no representan una autorización real.
  */
 export type AdminState = {
+  directory?: DirectoryStudent[]
   requests: AccessRequest[]
   posts: Post[]
   suspended: string[]
@@ -85,6 +87,7 @@ export function adminReducer(state: AdminState, action: AdminAction): AdminState
 }
 
 export type AdminContext = {
+  connection?: AdminConnection
   state: AdminState
   dispatch: (action: AdminAction) => void
   announce: (message: string) => void
@@ -107,6 +110,7 @@ export type DirectoryStudent = Student & { status: 'activo' | 'suspendido'; isNe
 
 /** Directorio: alumnos de muestra más las solicitudes aprobadas en la demo. */
 export function buildDirectory(state: AdminState): DirectoryStudent[] {
+  if (state.directory) return state.directory
   const fromRequests: Student[] = state.requests
     .filter((r) => r.status === 'aprobada')
     .map((r) => ({

@@ -156,6 +156,8 @@ No se reconstruyó ni se recorrió visualmente cada rama histórica por separado
 
 ## 8. Registro de continuidad
 
-Última entrega funcional revisada: `1b84fb3`. Siguiente trabajo autorizado por la planificación, pendiente de implementación: bloque 1 y después acceso/dashboard oficiales conectados. **No comenzar imágenes ni otra administración paralela.**
+Última base funcional auditada: `1b84fb3`. Después de la auditoría se completó el primer recorrido conectado en `integration/cai-v1-connected`, desde `be90193`: registro/login oficiales, protección administrativa, solicitudes y alumnos en dashboard original, activación/suspensión e indicadores con datos del servidor. Detalles, archivos y pruebas en `v1-connected-access.md`; identificar su commit con `git log -- docs/v1-connected-access.md`.
+
+Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores, con Publicaciones/Configuración explícitamente pendientes; **siguiente bloque: 4, conectar moderación y Community avanzadas**. La ficha completa de usuario, catálogo/grupos y ajustes siguen pendientes conforme al inventario. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
 
 Al cerrar cada tarea añadir: rama/base y commit; archivos de interfaz reutilizados; datos/endpoint conectado; criterio de cierre demostrado; pruebas realmente ejecutadas; pendientes. «Implementado en una rama», «integrado visualmente», «conectado al servidor», «probado localmente» y «listo para producción» son estados distintos y nunca intercambiables.

@@ -5,21 +5,18 @@ import { Donut, KpiCard, Legend, LineChart } from '../features/admin/components/
 import { RequestReview } from '../features/admin/components/RequestReview'
 import { RequestDialog } from '../features/admin/components/RequestDialog'
 import { Avatar, Icon, TypeTag } from '../features/admin/components/ui'
-import { baseMetrics, sparklines, weeklyActivity } from '../features/admin/data/mockData'
+import { connectedMetrics } from '../features/admin/connectedMetrics'
 import { buildDirectory, countByStatus, formatDate, requestStatuses, useAdmin } from '../features/admin/state'
 
-const activitySeries = [
-  { label: 'Publicaciones enviadas', color: '#1f56d6', values: weeklyActivity.submitted },
-  { label: 'Publicaciones aprobadas', color: '#29a9e2', values: weeklyActivity.approved },
-]
-
 export function AdminPage() {
-  const { state, dispatch, announce } = useAdmin()
+  const { state, dispatch, connection } = useAdmin()
+  const metrics=connectedMetrics(connection?.requests??[],connection?.students??[],connection?.posts??[])
+  const activitySeries=[{label:'Publicaciones enviadas',color:'#1f56d6',values:metrics.submitted},{label:'Aprobadas vigentes',color:'#29a9e2',values:metrics.approved}]
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const counts = countByStatus(state.requests, requestStatuses)
   const pendingRequests = state.requests.filter((r) => r.status === 'pendiente')
   const decided = counts.aprobada + counts.rechazada
-  const reviewedShare = Math.round((decided / state.requests.length) * 100)
+  const reviewedShare = state.requests.length?Math.round((decided / state.requests.length) * 100):0
   const pendingPosts = state.posts.filter((p) => p.status === 'pendiente')
   const activeStudents = buildDirectory(state).filter((st) => st.status === 'activo').length
 
@@ -28,17 +25,16 @@ export function AdminPage() {
       <div className={s['page-head']}>
         <div>
           <p className={s.eyebrow}>Panel de coordinación</p>
-          <h1 className={s['page-title']}>Hola, Coordinación</h1>
+          <h1 className={s['page-title']}>Hola, {connection?.user?.name??'Coordinación'}</h1>
           <p className={s['page-lead']}>
-            Esto es lo que necesita tu atención hoy en la comunidad de CAI. Todas las cifras y personas son ficticias.
+            Esto es lo que necesita tu atención hoy. Indicadores del servidor local; utiliza datos ficticios durante las pruebas.
           </p>
         </div>
         <div className={s['head-actions']}>
           <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => {
             dispatch({ type: 'reset' })
-            announce('Demostración reiniciada.')
           }}>
-            <Icon name="refresh" size={16} />Reiniciar demo
+            <Icon name="refresh" size={16} />Actualizar datos
           </button>
           <Link to="/admin/solicitudes" className={`${s.btn} ${s['btn--primary']}`}>
             Revisar solicitudes<Icon name="arrow" size={16} />
@@ -47,10 +43,10 @@ export function AdminPage() {
       </div>
 
       <section className={s.kpis} aria-label="Indicadores principales">
-        <KpiCard accent icon="inbox" label="Solicitudes pendientes" value={counts.pendiente} detail="por revisar" series={sparklines.pending} />
-        <KpiCard icon="file" label="Publicaciones en revisión" value={pendingPosts.length} detail="en cola" series={sparklines.posts} />
-        <KpiCard icon="users" label="Alumnos activos" value={activeStudents} detail="en la comunidad" series={sparklines.students} />
-        <KpiCard icon="trend" label="Aprobadas este mes" value={baseMetrics.approvedThisMonth + counts.aprobada} detail="solicitudes" series={sparklines.approved} />
+        <KpiCard accent icon="inbox" label="Solicitudes pendientes" value={counts.pendiente} detail="por revisar" series={metrics.pending} />
+        <KpiCard icon="file" label="Publicaciones en revisión" value={pendingPosts.length} detail="en cola" series={metrics.submitted} />
+        <KpiCard icon="users" label="Alumnos activos" value={activeStudents} detail="estado activo" series={metrics.students} />
+        <KpiCard icon="trend" label="Solicitudes aprobadas" value={counts.aprobada} detail="total actual" series={metrics.requests} />
       </section>
 
       <div className={s['grid-main']}>
@@ -62,14 +58,14 @@ export function AdminPage() {
             </div>
             <Legend items={activitySeries} />
           </div>
-          <LineChart title="Publicaciones enviadas y aprobadas por semana" labels={weeklyActivity.labels} series={activitySeries} max={32} />
+          <LineChart title="Publicaciones enviadas y aprobadas vigentes por semana" labels={metrics.labels} series={activitySeries} max={metrics.max} />
         </section>
 
         <section className={s.card} aria-labelledby="status-title">
           <div className={s['card-head']}>
             <div>
               <h2 id="status-title" className={s['card-title']}>Estado de solicitudes</h2>
-              <p className={s['card-sub']}>Octubre 2026</p>
+              <p className={s['card-sub']}>Estado actual</p>
             </div>
           </div>
           <Donut
@@ -116,7 +112,7 @@ export function AdminPage() {
                   </div>
                   {request.ageGroup === 'menor' && <span className={`${s.tag} ${s['tag--minor']}`}>Menor de edad</span>}
                   <div className={s['queue-actions']}>
-                    <RequestReview request={request} onReview={() => setSelectedId(request.id)} />
+                    <RequestReview request={request} local={Boolean(connection)} onReview={() => setSelectedId(request.id)} />
                   </div>
                 </li>
               ))}

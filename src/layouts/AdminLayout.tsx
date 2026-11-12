@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
-import { useDemoStore } from '../app/demoStore'
+import { useAdminConnection } from '../features/admin/useAdminConnection'
+import { LoginPage } from '../pages/LoginPage'
+import { LocalInvitationDialog } from '../features/local-access/LocalInvitationDialog'
 import emblem from '../assets/cai/logo-cai-emblema.svg'
-import { PrototypeNotice } from '../components/PrototypeNotice'
 import s from '../features/admin/admin.module.css'
 import { Icon, type IconName } from '../features/admin/components/ui'
 import { countByStatus, postStatuses, requestStatuses, type AdminContext } from '../features/admin/state'
@@ -23,7 +24,8 @@ const titles: Record<string, string> = Object.fromEntries(
 )
 
 export function AdminLayout() {
-  const { state, dispatch } = useDemoStore()
+  const connection = useAdminConnection()
+  const { state } = connection
   const [message, setMessage] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
@@ -34,7 +36,7 @@ export function AdminLayout() {
   const pageTitle = titles[pathname.replace(/\/$/, '')] ?? 'Administración'
 
   const announce = useCallback((text: string) => setMessage(text), [])
-  const context = useMemo<AdminContext>(() => ({ state, dispatch, announce }), [state, dispatch, announce])
+  const context = useMemo<AdminContext>(() => ({ state, dispatch: (action) => { void connection.mutate(action) }, announce, connection }), [state, announce, connection])
 
   useEffect(() => { document.title = `${pageTitle} · Administración · CAI · Prototipo` }, [pageTitle])
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
@@ -46,6 +48,8 @@ export function AdminLayout() {
     return () => window.removeEventListener('keydown', onKey)
   }, [menuOpen])
 
+  if (connection.checking) return <main className={s.admin}><p role="status" className={s.content}>Comprobando acceso…</p></main>
+  if (!connection.user) return <LoginPage admin onAdminLogin={connection.onLogin} />
   return (
     <div className={s.admin}>
       <a className={s['skip-link']} href="#admin-content">Saltar al contenido</a>
@@ -83,12 +87,12 @@ export function AdminLayout() {
               <div className={s.areas}>
                 <Link to="/"><Icon name="globe" size={18} />Sitio institucional</Link>
                 <Link to="/community"><Icon name="chat" size={18} />Comunidad</Link>
-                <Link to="/login"><Icon name="users" size={18} />Accesos demo</Link>
+                <Link to="/login"><Icon name="users" size={18} />Acceso de alumnos</Link>
               </div>
             </nav>
             <div className={s['user-card']}>
               <span className={s.avatar} aria-hidden="true">CO</span>
-              <div><strong>Coordinación</strong><span>Rol administrador simulado</span></div>
+              <div><strong>{connection.user.name}</strong><span>Administración · Sesión local</span></div>
             </div>
           </div>
         </aside>
@@ -98,7 +102,7 @@ export function AdminLayout() {
         )}
 
         <div className={s.main}>
-          <PrototypeNotice />
+          <aside className={s['local-notice']}>Pruebas locales con datos ficticios. El acceso, las solicitudes y los alumnos se comprueban y guardan en este equipo.</aside>
           <header className={s.topbar}>
             <button
               type="button"
@@ -112,17 +116,20 @@ export function AdminLayout() {
             </button>
             <p className={s['topbar-title']}>Administración / <strong>{pageTitle}</strong></p>
             <div className={s['topbar-end']}>
-              <span className={s['role-pill']}>Modo administrador · demo</span>
+              <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={connection.busy} onClick={()=>{void connection.logout()}}>Cerrar sesión</button>
               <span className={cx(s.avatar, s['avatar--sm'])} aria-hidden="true">CO</span>
             </div>
           </header>
           <main id="admin-content" tabIndex={-1} className={s.content}>
-            <p className={s.footnote}>Demo independiente: publicaciones y ajustes de este panel no modifican CAI Community. El registro sí comparte sus solicitudes con este panel.</p>
-            <Outlet context={context} />
+            <p className={s.footnote}>Pruebas locales con datos ficticios. Solicitudes y alumnos conectados al guardado. Community continúa en demostración hasta su integración.</p>
+            {connection.notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{connection.notice}</p>}
+            {connection.error && <p role="alert" className={s.alert}>{connection.error} <button type="button" className={s.btn} onClick={()=>{void connection.refresh()}}>Volver a cargar</button></p>}
+            {!connection.loaded ? <p role="status">Cargando los datos…</p> : <Outlet context={context} />}
           </main>
         </div>
       </div>
       <p className={s['sr-only']} role="status" aria-live="polite">{message}</p>
+      {connection.invitation && <LocalInvitationDialog invitation={connection.invitation} name={connection.invitation.name} onClose={()=>connection.setInvitation(null)} />}
     </div>
   )
 }

@@ -43,7 +43,7 @@ export function SignupPage({ local: localOption = false, google }: { local?: boo
         <main id="signup-content" tabIndex={-1} className={s.main}>
           <div className={s.topline}>
             <Link to="/" className={s.link}>← Volver al sitio</Link>
-            {local ? <Link to="/alumnos" className={s.link}>Entrar · Alumnos</Link> : <span>¿Ya tienes acceso? <Link to="/login" className={s.link}>Entrar · Demo</Link></span>}
+            {local ? <Link to="/login" className={s.link}>Entrar · Alumnos</Link> : <span>¿Ya tienes acceso? <Link to="/login" className={s.link}>Entrar · Demo</Link></span>}
           </div>
           <div className={s.card}>
             {local && !google && <GoogleSignInButton />}

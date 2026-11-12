@@ -5,11 +5,12 @@ import type { AccessRequest } from '../data/mockData'
 import { canApprove, formatDate, useAdmin } from '../state'
 import { RequestActions } from './RequestActions'
 import { Avatar, Icon, StatusBadge } from './ui'
+import { LocalRequestDialog } from '../../local-access/LocalRequestDialog'
 
 export function RequestDialog({ request, onClose }: { request: AccessRequest | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null)
   const applicant = request?.applicant
-  const { dispatch, announce } = useAdmin()
+  const { dispatch, announce, connection } = useAdmin()
 
   useEffect(() => {
     const dialog = ref.current
@@ -18,6 +19,13 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
     if (!request && dialog.open) dialog.close()
   }, [request])
 
+  if(connection) {
+    const current=connection.requests.find(r=>r.id===request?.id)
+    return current ? <LocalRequestDialog key={`${current.id}-${current.revision}`} request={current} busy={connection.busy} error={connection.error} onClose={onClose} onDecide={(decision,reference)=>{
+      const action=decision==='approve'?{type:'decide' as const,id:current.id,status:'aprobada' as const}:decision==='reject'?{type:'decide' as const,id:current.id,status:'rechazada' as const}:decision==='undo'?{type:'undo' as const,id:current.id}:{type:'consent' as const,id:current.id}
+      void connection.mutate(action,reference).then(ok=>{if(ok&&decision!=='consent')onClose()})
+    }} /> : null
+  }
   return (
     <dialog
       ref={ref}

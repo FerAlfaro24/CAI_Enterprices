@@ -11,7 +11,7 @@ export function KpiCard({ icon, label, value, detail, series, accent = false }: 
   series: number[]
   accent?: boolean
 }) {
-  const max = Math.max(...series)
+  const max = Math.max(1,...series)
   return (
     <article className={cx(s.card, s.kpi, accent && s['kpi--accent'])}>
       <h2 className={s['kpi-top']}>
@@ -37,6 +37,10 @@ function smoothPath(points: [number, number][]) {
     const p2 = points[i + 1] ?? [x, y]
     const c1 = [p1[0] + (x - p0[0]) / 6, p1[1] + (y - p0[1]) / 6]
     const c2 = [x - (p2[0] - p1[0]) / 6, y - (p2[1] - p1[1]) / 6]
+    // No dibujar valores negativos o picos inventados al interpolar series con ceros.
+    const low=Math.min(p1[1],y),high=Math.max(p1[1],y)
+    c1[1]=Math.max(low,Math.min(high,c1[1]!))
+    c2[1]=Math.max(low,Math.min(high,c2[1]!))
     return `${path} C${c1[0]},${c1[1]} ${c2[0]},${c2[1]} ${x},${y}`
   }, '')
 }

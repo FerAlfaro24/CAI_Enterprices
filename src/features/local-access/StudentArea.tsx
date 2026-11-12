@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router'
+import { Link, NavLink, Navigate, useLocation } from 'react-router'
 import { ThemeSelector } from '../../components/ThemeSelector'
-import { StudentLogin } from './StudentLogin'
 import { StudentPublications } from '../local-publications/StudentPublications'
 import { ApiError, studentApi, type GroupMember, type StudentUser } from './api'
 import s from '../admin/admin.module.css'
@@ -62,7 +61,7 @@ export function StudentArea() {
       <button type="button" className={`${s.btn} ${s['btn--primary']}`} onClick={() => { void refresh() }}>Volver a intentar</button>
     </div></main>
   )
-  if (!user) return <StudentLogin message={message} onLogin={() => { previouslySignedIn.current = true; void refresh() }} />
+  if (!user) return <Navigate to="/login" replace />
   return (
     <div className={s.admin}>
       <a href="#student-content" className={s['skip-link']}>Saltar a mi espacio</a>
@@ -73,6 +72,7 @@ export function StudentArea() {
       </header>
       <nav className={s['local-nav']} aria-label="Espacio del alumno">{[['/alumnos', 'Mi inscripción'], ['/alumnos/publicaciones', 'Publicaciones']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`}>{label}</NavLink>)}</nav>
       <main className={s.content} id="student-content" tabIndex={-1}>
+        {message && <p role="status">{message}</p>}
         <div className={s['page-head']}>
           <div><p className={s.eyebrow}>TU ESPACIO CAI</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>{publicationsPage ? 'Comunidad de mi grupo' : `Hola, ${user.displayName}`}</h1></div>
           {!publicationsPage && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void refresh() }}>Actualizar mi espacio</button>}
