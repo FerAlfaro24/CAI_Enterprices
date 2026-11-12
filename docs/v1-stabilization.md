@@ -39,6 +39,8 @@ Instrucciones y límites en [respaldo y recuperación local](respaldo-recuperaci
 
 ## Alertas de herramientas: pendientes explícitas
 
+Actualización posterior: la revisión específica del punto 4 volvió a comprobar versiones, árboles, requisitos y alcance el 12 de noviembre de 2026. Mantiene diez avisos de desarrollo y cero en ejecución; no hay corrección compatible publicada entre los consumidores consultados. Ver [evidencia actual y criterio de cierre](v1-tooling-audit.md). Las cifras de pruebas de esta estabilización siguen siendo históricas.
+
 `npm audit` volvió a informar diez avisos moderados que dependen del mismo aviso de minimatch 10.2.6. Las versiones compatibles consultadas —ESLint 10.14.0 y typescript-eslint 8.72.2— siguen usando la rama afectada. No se instalaron esas versiones porque no resolverían el aviso, ni se ejecutó fix --force o un override mayor fuera de sus rangos. El parche publicado está en minimatch 11.0.1 en adelante. [Aviso oficial](https://github.com/advisories/GHSA-g3hv-75wg-m249).
 
 Queda pendiente una actualización compatible de esa cadena o una migración de herramientas revisada específicamente. No se consideran corregidos los diez avisos. `npm audit --omit=dev` informó **cero** avisos al cierre; no equivale a garantía general de seguridad. No cambiaron dependencias ni lockfile en esta tanda.
