@@ -1,5 +1,7 @@
 # Revisión final local de CAI, punto 5
 
+> Decisión posterior a esta revisión: el usuario incluyó comentarios, reacciones, retos, insignias y vídeos en la entrega final; solo coordinación sube vídeos. Ver [comunidad ampliada](v1-community-expansion.md). Las exclusiones y el siguiente paso de este informe describen el alcance anterior; sus resultados de pruebas siguen siendo evidencia de ese código, no de funciones nuevas.
+
 **Revisión técnica realizada; aceptación de CAI y preparación de producción pendientes.** Rama `chore/v1-final-review`, base `9274dc9`, punto de retorno de código `940573a`. Conserva la interfaz oficial de `release/cai-demo-v1.0` (`f3ba46b`) y los avances acumulados hasta expediente `c712abb`. No se fusionaron ramas ni se publicó el sitio.
 
 La revisión usa los componentes originales y sus recorridos existentes. No demuestra funcionamiento con usuarios reales ni sustituye una sesión con quien administrará CAI. La base y las credenciales habituales no se abrieron, migraron ni modificaron durante las pruebas; los cambios de acceso se hicieron únicamente en cuentas ficticias.

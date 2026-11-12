@@ -4,7 +4,7 @@ Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presen
 
 > **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `chore/v1-final-review` conserva los avances acumulados hasta expediente (`c712abb`) y herramientas (`9274dc9`), con revisión local y mejora de lectura móvil (`940573a`). Consulta [la revisión final y sus límites](docs/v1-final-review.md) y [el registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación:** revisión técnica del punto 5 realizada: 134 resultados de servidor y matriz de 844 comprobaciones en Brave/Opera; incidencias registradas en el informe. Puntos 1–3 comprobados localmente; punto 4 conserva diez avisos moderados de desarrollo pendientes y cero en ejecución. Sigue la tanda con CAI: uso del panel, contenido/autorizaciones, cuentas Google/correo y alcance del cambio verificado de correo. Presupuesto/alojamiento después, como acordado. Las ramas son acumulativas; no fusionarlas como trabajos independientes.
+> **Continuación actual:** el usuario amplió la entrega para incluir y perfeccionar comentarios, reacciones, retos, insignias y vídeos. Vídeos solo subidos por coordinación, visibles al grupo autorizado. Ver [inventario y plan de comunidad ampliada](docs/v1-community-expansion.md); todavía sin implementación nueva. Reutilizar el diseño/reglas existentes y conectar por bloques. La revisión anterior conserva sus 134 resultados de servidor y matriz de 844 comprobaciones para su alcance, con incidencias registradas y diez alertas de desarrollo pendientes. Google/correo/validación con CAI agrupados y presupuesto/alojamiento al final. Las ramas son acumulativas; no fusionarlas como trabajos independientes.
 
 ## Objetivo inmediato
 
@@ -20,7 +20,7 @@ Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Rout
 
 `/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. Los enlaces antiguos `/gestion/*`, `/registro-local`, `/alumnos` y `/alumnos/publicaciones` redirigen al destino oficial correspondiente. `/mi-inscripcion` conserva la ficha y grupo del alumno; `/admin/mensajes?bandeja=avisos` abre los avisos directamente. El contacto institucional guarda consultas y permite seguimiento en el panel original. La lista de interés de la plataforma futura conserva su demostración.
 
-La comunidad oficial consulta la cuenta autenticada, miembros del grupo, publicaciones aprobadas, avisos propios e imágenes privadas del servidor local. El diseño y los componentes de demostración se conservan como referencia; comentarios/reacciones persistentes y retos/insignias siguen pendientes de alcance, sin presentarse como guardado real. La galería conectada no mezcla fotografías de stock con los registros del grupo.
+La comunidad oficial consulta la cuenta autenticada, miembros del grupo, publicaciones aprobadas, avisos propios e imágenes privadas del servidor local. Comentarios/reacciones, retos e insignias ya están autorizados para la entrega final, pero sus servicios persistentes todavía no se han implementado; sus componentes de demostración se reutilizarán. También se incorporarán vídeos privados de coordinación. La galería conectada actual sigue siendo de imágenes y no mezcla fotografías de stock con los registros del grupo.
 
 ## Desarrollo local
 
@@ -50,6 +50,7 @@ Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: 
 Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para alumnos autorizados y `/admin/*` para administración. Activación y recuperación conservan enlaces auxiliares. Los permisos se aplican en el servidor local, también a cada recurso de imagen. Las rutas desconocidas muestran 404; dentro de administración se vuelve a su inicio protegido.
 
 ## Documentación
+- [Ampliación de comunidad autorizada: inventario, mejoras y orden de trabajo](docs/v1-community-expansion.md)
 - [Revisión final local: resultados, incidencias y siguiente tanda con CAI](docs/v1-final-review.md)
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
 - [Herramientas y alertas: revisión actual y corrección pendiente](docs/v1-tooling-audit.md)

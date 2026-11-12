@@ -1,5 +1,6 @@
 # Requisitos iniciales — CAI
 > Requisitos y propuestas iniciales; no son una lista de funciones ya integradas. Consultar `PROJECT_STATE.md` para distinguir interfaz, demo, servicios locales y pendientes.
+> Ampliación posterior confirmada por el usuario: comentarios, reacciones, retos, insignias y vídeos deben entrar en la entrega final, mejorando diseño y uso. Vídeos solo subidos por coordinación y visibles al grupo autorizado. Ver `v1-community-expansion.md`; autorización no significa implementación comprobada ni aprobación de reglas finales por CAI.
 **Versión:** 0.1 · No aprobada por el cliente
 
 Convención: `[C]` confirmado en conversación, `[P]` propuesto para validar, `[D]` diferido.
@@ -13,12 +14,14 @@ Convención: `[C]` confirmado en conversación, `[P]` propuesto para validar, `[
 - **RF-06 [P]** Feed de publicaciones con perfiles ficticios.
 - **RF-07 [P]** Panel con solicitudes de registro y publicaciones pendientes.
 - **RF-08 [P]** Selector de roles para navegar la demostración sin credenciales reales.
-- **RF-09 [P]** Comentarios y reacciones (pendiente de decisión).
-- **RF-10 [D]** Reproducción/carga de videos reales.
-- **RF-11 [D]** Notificaciones y gamificación.
+- **RF-09 [C]** Comentarios y reacciones persistentes, identidades autenticadas, permisos por grupo y gestión administrativa. Detalles de moderación según el plan de ampliación.
+- **RF-10 [C]** Vídeos privados: coordinación sube y el grupo autorizado reproduce; límites, permisos, retirada y pruebas de archivos. Alumnos no suben vídeos inicialmente.
+- **RF-11 [C/D]** Retos e insignias incluidos; otros sistemas de notificación/gamificación no se incluyen automáticamente por este requisito.
 - **RF-12 [P]** Formulario de solicitud de acceso por pasos, con autorización de tutor para menores (ver `docs/student-signup.md`).
 - **RF-13 [C]** Acceso opcional con Google, conservando contraseña como alternativa, con datos del alumno obligatorios y aprobación administrativa antes de entrar. Preparado para pruebas locales; configuración y validación real pendientes (ver `docs/google-signin.md`).
 - **RF-14 [C]** Guardar publicaciones de texto, revisión administrativa, motivos de rechazo y retiro por el autor con permisos en servidor e historial persistente. La conexión local usa visibilidad por programa/grupo como regla inicial pendiente de validación final (ver `docs/local-publications.md`).
+- **RF-15 [C]** Retos educativos con gestión sencilla de coordinación, calendario real, intentos y progreso persistentes, validación/puntuación en servidor y experiencia móvil clara.
+- **RF-16 [C]** Insignias automáticas y revisadas por coordinación, colección/progreso/estado comprensibles y compartición voluntaria sin filtrar solicitudes privadas.
 
 ## No funcionales
 - **RNF-01 [C]** Experiencia usable en móviles y escritorio.

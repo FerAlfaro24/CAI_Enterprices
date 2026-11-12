@@ -1,6 +1,6 @@
 # Plan de entrega local — tres semanas
 
-> Orden vigente en `PROJECT_STATE.md` y [revisión final local](v1-final-review.md). Acceso, panel, Community, grupos, contacto, galería, navegación, cuentas y expediente ya están integrados localmente. Punto 5 revisado con incidencias explícitas; diez alertas de desarrollo siguen pendientes. Próxima tanda con CAI: uso del panel, responsables/material/autorizaciones y Google/correo; infraestructura se cotiza después. El calendario y las prioridades iniciales siguientes son antecedentes, no tareas para rehacer.
+> **Ampliación autorizada después de la revisión local:** comentarios, reacciones, retos, insignias y vídeos deben incluirse y mejorarse. Solo coordinación sube vídeos; su grupo los ve. Orden e inventario en [plan de comunidad ampliada](v1-community-expansion.md) y `PROJECT_STATE.md`. Primero desarrollar estos bloques localmente; cuentas/validación externa agrupadas y alojamiento al final. El calendario de tres semanas sigue siendo una referencia que requiere revisar capacidad con el nuevo alcance, no una garantía de terminación. Las prioridades iniciales siguientes son históricas.
 
 ## Acuerdos de trabajo
 
@@ -19,7 +19,7 @@ Sitio institucional con contenido aprobado; contacto persistente; solicitud de a
 
 La base de datos debe sobrevivir a recargas y reinicios. La autenticación y los permisos deben aplicarse fuera del navegador. El servicio de correo se comprobará localmente; su entrega real y los ajustes de internet requieren validación posterior en el entorno contratado.
 
-Retos, insignias, comentarios y reacciones existentes se conservan en la demo. Su integración productiva es secundaria frente al acceso, privacidad y publicaciones. No añadir pagos, chat privado, videos ni gestión escolar completa en estas tres semanas.
+Decisión posterior del usuario: conectar y perfeccionar comentarios, reacciones, retos e insignias, y añadir vídeos privados subidos únicamente por coordinación. Dejan de ser funciones excluidas de la entrega final. Reutilizar componentes/reglas de demo y conectar datos/administración reales por bloques, según `v1-community-expansion.md`. Pagos, chat privado y gestión escolar completa permanecen fuera. No asumir que el plazo anterior absorbe automáticamente esta ampliación.
 
 ## Secuencia y aceptación
 
