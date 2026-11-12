@@ -4,6 +4,8 @@
 
 ## Acuerdos de trabajo
 
+- Priorizar todo el desarrollo e integración autorizados que puedan completarse sin intervención del usuario. Agrupar para el final cuentas/verificaciones de Google y correo, contenido/decisiones del cliente, presupuestos y validación humana. Una dependencia externa no detiene tareas independientes; mantenerla registrada en `PROJECT_STATE.md` y no presentarla como comprobada.
+
 - Inicio: 11 de noviembre de 2026. Objetivo: 2 de diciembre de 2026.
 - Desarrollar y probar localmente. La contratación de alojamiento, dominio y correo de producción se presupuesta al acercarse a la entrega.
 - Conservar React, TypeScript, Vite y la identidad visual actual.

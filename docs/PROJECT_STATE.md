@@ -96,6 +96,28 @@ El objetivo es que dashboard y Community conectados consulten los mismos servici
 
 No avanzar a nuevas funciones para compensar integraciones sin terminar. Cada bloque requiere revisión de archivos existentes, un cambio acotado, pruebas y actualización de este estado.
 
+### Prioridad operativa acordada: avanzar sin intervención del usuario
+
+El usuario quiere poder dejar tandas de trabajo en marcha sin tener que responder durante su ejecución. Completar primero todo el trabajo independiente autorizado, respetando el orden técnico de integración. Una dependencia humana de una función no bloquea las otras funciones.
+
+- **Trabajo autónomo primero:** contratos y rutas, integración del diseño v1.0, sesiones por contraseña, permisos, dashboard/Community conectados, grupos/ajustes mínimos, formularios y datos locales, preparación de correo/Google, archivos privados con muestras ficticias, pruebas, correcciones, documentación y puntos de retorno en Git conforme a la autorización existente.
+- **Intervención humana al final, agrupada:** registrar/configurar cuentas de CAI y sus verificaciones (Google, correo, dominio y servicios); facilitar contenido definitivo y decisiones de negocio; revisar el uso con el administrador; aprobar presupuestos, contratación y publicación. No solicitar contraseñas ni códigos de verificación para guardarlos en el proyecto.
+- **Mientras falte una respuesta:** conservar datos de muestra identificados como tales, Google desactivado y reglas de privacidad conservadoras ya documentadas. Preparar lo que se pueda y pasar a otra tarea independiente. Una decisión pendiente se registra, no se convierte en un supuesto confirmado ni en una función añadida sin autorización.
+- **Antes de entregar o publicar:** completar las pruebas reales que dependen de esas cuentas y las validaciones humanas. Posponerlas permite avanzar localmente; no permite afirmar que Google, correo, contenido o producción quedaron verificados.
+
+Lista de dependencias humanas a mantener al cerrar tareas:
+
+| Dependencia | Preparación autónoma | Acción final del usuario/CAI |
+| --- | --- | --- |
+| Google | Integración opcional, onboarding y pruebas locales con proveedor ficticio | Cuenta/proyecto de CAI, registro y prueba real autorizada. |
+| Correo | Eventos/avisos, flujos de activación/recuperación y preparación del transporte | Proveedor y cuenta de CAI, verificaciones necesarias y prueba de entrega real. |
+| Contenido y reglas del negocio | Formularios, validaciones, opciones editables dentro del alcance y lista de decisiones | Confirmar textos, contactos, programas/grupos, visibilidad y responsables. |
+| Tutores e imágenes | Controles y pruebas exclusivamente ficticias | Confirmar proceso de autorización y permisos de material real. |
+| Infraestructura | Aplicación local integrada, requisitos de instalación, respaldo y propuesta técnica | Elegir presupuesto, contratar y autorizar despliegue. |
+| Revisión de uso | Recorridos automatizados, móvil/teclado y guía de tareas | Validación final con la persona que administrará CAI. |
+
+La siguiente tabla expresa dependencias técnicas. Sus menciones a confirmaciones del cliente no exigen detener el resto del bloque o el proyecto: separar preparación autónoma de aceptación externa y registrar ambas.
+
 | Orden | Trabajo | Reutilizar | Criterio de cierre |
 | --- | --- | --- | --- |
 | 0, esta auditoría | Fijar inventario, base, pendientes y protocolo | Historial y código existente | Documento de estado y reglas accesibles; sin fusión de aplicación. |
