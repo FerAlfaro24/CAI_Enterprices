@@ -1,5 +1,7 @@
 # Estabilización local: carga, errores y operación
 
+> Cierre histórico de esta tanda. El cambio de contraseña administrativa propia se completó después en `v1-admin-account-security.md`; consultar PROJECT_STATE para pendientes vigentes.
+
 Tanda técnica del bloque 9 comprobada localmente el 12 de noviembre de 2026. Rama `chore/v1-stabilization`, base `5405c1c` de `feat/v1-unified-navigation`. Puntos de retorno: `e648269` (carga diferida/recuperación) y `876aa56` (verificación de respaldos). Conserva v1.0 y todas las integraciones acumulativas. No es cierre de producción ni validación del cliente.
 
 ## Carga por pantallas

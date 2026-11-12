@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `chore/v1-stabilization`: conserva todas las áreas conectadas y la navegación oficial, con carga por pantallas, recuperación de errores y verificación de respaldos. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `feat/v1-admin-account-security`: conserva las áreas conectadas, navegación unificada y estabilización; añade cambio de contraseña administrativa propia y revocación de escrituras pendientes. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación:** la tanda de carga/errores/guías está comprobada; siguen pendientes las alertas de herramientas, los huecos de cuenta/perfil del inventario y la validación con CAI. La configuración externa continúa al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [estabilización y límites comprobados](docs/v1-stabilization.md).
+> **Continuación:** revisar el perfil propio del alumno con sus reglas de privacidad existentes. Siguen pendientes las alertas de herramientas, la gestión de otras cuentas/recuperación administrativa, el expediente completo y la validación con CAI. La configuración externa continúa al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [seguridad de cuenta y límites](docs/v1-admin-account-security.md).
 
 ## Objetivo inmediato
 
@@ -51,6 +51,7 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 
 ## Documentación
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
+- [Contraseña administrativa propia, entrega y pruebas](docs/v1-admin-account-security.md)
 - [Guía sencilla de administración](docs/guia-administracion.md)
 - [Respaldos y recuperación local](docs/respaldo-recuperacion-local.md)
 - [Estabilización: carga, errores, pruebas y alertas pendientes](docs/v1-stabilization.md)

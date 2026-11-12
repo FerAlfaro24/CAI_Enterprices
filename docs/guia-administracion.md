@@ -13,6 +13,7 @@
 | Compartir o retirar una imagen de un grupo | Galería privada |
 | Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
 | Mantener grupos o pausar solicitudes/envíos | Configuración |
+| Cambiar mi contraseña | Configuración → Seguridad de mi cuenta |
 
 Entrar por **Acceso de administración** con la cuenta de coordinación. La cuenta del alumno tiene su propio acceso y no abre este panel. Al terminar, usar **Cerrar sesión**.
 
@@ -67,6 +68,12 @@ La recuperación real requiere configurar correo y comprobar la entrega. Una cue
 En Configuración, mantener el catálogo de programas/grupos y los controles disponibles. Archivar un grupo impide nuevas selecciones, pero sus alumnos actuales conservan la lectura. Se puede reactivar sin borrar su historial.
 
 Pausar solicitudes de ingreso no borra solicitudes recibidas. Pausar nuevos envíos tampoco elimina publicaciones aprobadas ni impide retirarlas. Las opciones marcadas como pendientes no deben tratarse como funciones operativas.
+
+## Cambiar mi contraseña
+
+Para cambiar la contraseña propia, abrir Seguridad de mi cuenta, escribir la actual, la nueva y su confirmación. Usar una frase de 15 a 128 caracteres y guardar. Se cerrarán todas las sesiones de esa cuenta y habrá que entrar con la nueva contraseña; las cuentas de otras personas no se cierran. Esta acción no cambia el correo ni crea otro administrador.
+
+Si se pierde la conexión al guardar, el resultado puede ser incierto: volver a entrar con la nueva contraseña si el cambio se guardó, o con la anterior si el envío no llegó. No se reintenta automáticamente. Si no se conoce la contraseña actual, no se puede omitir desde el formulario; la recuperación administrativa y el procedimiento de custodia se validan para la entrega. Elegir la contraseña personalmente y no enviarla por chat ni guardarla en capturas o manuales.
 
 ## Si algo falla
 
