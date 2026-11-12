@@ -272,6 +272,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 }
 .dialog::backdrop { background: rgba(10, 31, 77, .45); }
 .dialog-head { display: flex; align-items: flex-start; gap: 14px; padding: 22px 22px 0; }
+.dialog-head > div { min-width: 0; overflow-wrap: anywhere; }
 .dialog-head h2 { margin: 0; font-weight: 700; font-size: 1.2rem; }
 .dialog-head p { margin: 2px 0 0; font-size: .85rem; color: var(--muted); }
 .dialog-head .icon-btn { margin-left: auto; flex: none; }
@@ -291,7 +292,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 
 /* ---------- Estados adicionales ---------- */
 .badge--publicada, .badge--activo { background: var(--ok-bg); color: var(--ok); }
-.badge--suspendido { background: #eef1f7; color: #5a6480; }
+.badge--suspendido, .badge--retirada { background: #eef1f7; color: #5a6480; }
 .tag--new { background: var(--blue-100); color: var(--blue-700); }
 
 /* ---------- Barra de cifras ---------- */
@@ -321,6 +322,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .post-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
 .dialog-body .post-meta { justify-content: flex-start; }
 .post-title { margin: 0; font-size: 1.05rem; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; }
+.post-title, .post-body { overflow-wrap: anywhere; }
 .post-body { margin: 0; font-size: .92rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .media {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 140px; padding: 16px;

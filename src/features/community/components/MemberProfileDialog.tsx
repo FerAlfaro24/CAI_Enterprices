@@ -9,14 +9,15 @@ import { selectBadgeGrants } from '../achievements/model'
 export function MemberProfileDialog({ memberId, onClose }: { memberId: string; onClose: () => void }) {
   const dialog = useCommunityDialog()
   const id = useId()
-  const { state } = useCommunity()
+  const { state, connection } = useCommunity()
   const [activityVisible, setActivityVisible] = useState(false)
-  const member = getMember(memberId)
+  const member = connection ? connection.resolveMember(memberId) : getMember(memberId)
   const own = member.id === 'alex'
   const earned = own ? selectBadgeGrants(state) : []
   const days = Object.keys(state.attempts).length
   const points = Object.values(state.attempts).reduce((total, attempt) => total + attempt.points, 0)
   const personalPosts = state.posts.filter((post) => post.authorId === member.id)
+  if (connection) return <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); onClose() }}><div className={s.dialogHeading}><div><span className={s.eyebrow}>{member.id === connection.user.publicId ? 'MI ESPACIO' : 'MIEMBRO DEL GRUPO'}</span><h2 id={`${id}-title`}>{member.alias}</h2></div><button className={s.iconButton} type="button" onClick={onClose} aria-label="Cerrar perfil"><CommunityIcon name="close" /></button></div><div className={s.profileIdentity}><Avatar member={member} /><span>Nombre visible en la comunidad</span></div><p id={`${id}-description`}>{member.id === connection.user.publicId ? `${connection.user.program} · ${connection.user.group}` : 'Este perfil muestra únicamente el alias del alumno.'}</p></dialog>
   return (
     <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); onClose() }}>
       <div className={s.dialogHeading}>

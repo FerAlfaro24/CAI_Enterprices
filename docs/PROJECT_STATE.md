@@ -167,22 +167,34 @@ Usar estados explícitos: **pendiente**, **en curso**, **implementado sin compro
 | Auditoría y base oficial | Comprobado | `bd3e606`; v1.0 `f3ba46b`; inventario de esta guía | Mantener fotografía histórica y registro actual diferenciados. |
 | Prioridad de trabajo autónomo | Registrada | `be90193` | Agrupar intervención humana al final; continuar tareas independientes. |
 | Registro, acceso, aprobación, activación y suspensión con diseño v1.0 | Comprobado localmente | `8e205b0`; `v1-connected-access.md`; nuevo recorrido de navegador | Google/correo reales siguen pendientes. |
-| Dashboard, solicitudes y alumnos originales conectados | Comprobado localmente en el alcance descrito | `8e205b0`; 48 resultados Node, 30 comprobaciones por navegador Brave/Opera; contraste de indicadores, vacío y autorización de menor | Grupos/perfil completo/ajustes, moderación avanzada y demás bloques no se dan por terminados. |
-| Moderación y Community avanzadas, bloque 4 | Pendiente; siguiente trabajo | Reutilizar `AdminPostsPage`, `HomeView`, Composer, tarjetas y servicios de publicaciones existentes | Completar la lista siguiente y registrar cada punto al comprobarlo. |
+| Dashboard, solicitudes y alumnos originales conectados | Comprobado localmente en el alcance descrito | `8e205b0`; 48 resultados Node, 30 comprobaciones por navegador Brave/Opera; contraste de indicadores, vacío y autorización de menor | Grupos/perfil completo/ajustes y demás bloques siguen pendientes; moderación se completó después, en la fila siguiente. |
+| Moderación y Community avanzadas, bloque 4 | Comprobado localmente en `feat/v1-community-connected`, base `cf12d8a` | `v1-connected-community.md`; 48 resultados Node, 39 comprobaciones por navegador Brave/Opera, respaldo antes de migración 6 | Configuración, grupos/perfil completo, archivos e interacciones secundarias siguen pendientes. |
 
-Lista de comprobación del bloque 4 (todavía sin implementar):
+Lista de comprobación del bloque 4:
 
-- [ ] Definir identidad/perfil público y contratos de publicaciones compartidos, sin fallback a Alex Demo.
-- [ ] Aplicar sesión y permisos a las consultas de Community conectada.
-- [ ] Conectar el editor existente con envío persistente y estado del autor.
-- [ ] Conectar la bandeja/detalle originales de moderación a las decisiones del servidor.
-- [ ] Mostrar aprobadas en el feed avanzado del programa/grupo autorizado.
-- [ ] Reflejar rechazo con motivo, retiro y suspensión sin mezclar datos de muestra.
-- [ ] Comprobar recorrido entre sesiones, recarga, errores y diseño adaptable en Brave/Opera.
-- [ ] Actualizar rutas, documentación y punto de retorno; indicar expresamente lo que siga pendiente.
+- [x] Contrato público con UUID estable compartido entre sesión, grupo y autor de publicación; migración 6 aditiva. API comprobada: 48 resultados correctos, incluida privacidad/aislamiento y persistencia al reiniciar. Adaptación visual comprobada en los recorridos del bloque.
+- [x] Aplicar sesión y permisos a las consultas de Community conectada.
+- [x] Conectar el editor existente con envío persistente y estado del autor.
+- [x] Conectar la bandeja/detalle originales de moderación a las decisiones del servidor.
+- [x] Mostrar aprobadas en el feed avanzado del programa/grupo autorizado.
+- [x] Reflejar rechazo con motivo, retiro y suspensión sin mezclar datos de muestra.
+- [x] Comprobar recorrido entre sesiones, recarga, errores y diseño adaptable en Brave/Opera.
+- [x] Actualizar rutas, documentación y punto de retorno; indicar expresamente lo que siga pendiente.
 
 Última base funcional auditada: `1b84fb3`. Después de la auditoría se completó el primer recorrido conectado en `integration/cai-v1-connected`, desde `be90193`: registro/login oficiales, protección administrativa, solicitudes y alumnos en dashboard original, activación/suspensión e indicadores con datos del servidor. Detalles, archivos y pruebas en `v1-connected-access.md`; identificar su commit con `git log -- docs/v1-connected-access.md`.
 
-Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores, con Publicaciones/Configuración explícitamente pendientes; **siguiente bloque: 4, conectar moderación y Community avanzadas**. La ficha completa de usuario, catálogo/grupos y ajustes siguen pendientes conforme al inventario. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
+Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores; 4 comprobado localmente con moderación y Community avanzadas (ver `v1-connected-community.md`); Configuración continúa pendiente. **Siguiente bloque: 5, catálogo/asignaciones, perfil y ajustes mínimos con los componentes existentes**. La ficha completa de usuario, catálogo/grupos y ajustes siguen pendientes conforme al inventario. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
 
 Al cerrar cada tarea añadir: rama/base y commit; archivos de interfaz reutilizados; datos/endpoint conectado; criterio de cierre demostrado; pruebas realmente ejecutadas; pendientes. «Implementado en una rama», «integrado visualmente», «conectado al servidor», «probado localmente» y «listo para producción» son estados distintos y nunca intercambiables.
+
+### Notas cronológicas del bloque 4 (los pendientes intermedios se resolvieron según el cierre)
+
+Avance intermedio del bloque 4: `public-profiles.ts`, migración 6 y DTO públicos comprobados con `npm run test:api` (48/48). El identificador público es opaco y no sustituye el folio privado de administración. Se añadió el proveedor protegido de Community; todavía sin conectar todas sus vistas ni comprobar en navegador.
+
+Avance intermedio de interfaz: proveedor de Community con sesión real y datos del mismo grupo; reutilizados Composer, tarjetas, historial, directorio y diálogos. Bandeja y revisión originales de administración conectadas. Retos/insignias/galería se conservan en código, pero en sesión conectada muestran pendiente; reacciones/comentarios no simulan guardado. Lint, typecheck y build correctos; advertencia conocida de bundle principal ~668 KB. Navegadores y criterio de cierre todavía pendientes.
+
+Incidencia de verificación del bloque 4: el primer recorrido necesitó corregir selectores del propio script (texto accesible repetido y filtro de alumnos suspendidos). Después se detectó desbordamiento real del encabezado de revisión con título largo a 375 px; se añadió min-width/ajuste de palabras al contenedor original. Pendiente repetir recorrido completo tras la corrección; no se cuenta un recorrido incompleto como aprobado.
+
+Verificación intermedia superada: `check-community-connected.browser.mjs`, 39 comprobaciones en Brave y 39 en Opera GX. Cuatro sesiones independientes, pérdida de respuesta y reintento sin duplicación, revisión/privacidad/rechazo/retiro/suspensión y cuatro anchuras (1440/768/375/320). Corregido y vuelto a comprobar el desbordamiento móvil. Cero errores de ejecución de JavaScript en los recorridos; las denegaciones 401 y la red interrumpida intencionalmente son escenarios de prueba. Capturas de escritorio y móvil inspeccionadas en Brave. Cierre documental y Git pendientes.
+
+Cierre del bloque 4: contrato público guardado en `4c0af54`; rama `feat/v1-community-connected`, base `cf12d8a`; alcance, archivos, pruebas y límites en `docs/v1-connected-community.md`. Punto de retorno: commit que añade ese documento (`git log -- docs/v1-connected-community.md`). No se fusiona implícitamente a `release/cai-demo-v1.0` ni a la rama de integración.

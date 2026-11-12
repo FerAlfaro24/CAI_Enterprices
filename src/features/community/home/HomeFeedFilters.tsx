@@ -7,7 +7,7 @@ export function HomeFeedFilters({ photosOnly, onChange }: {
   photosOnly: boolean
   onChange: (filter: FeedFilter, photos?: boolean) => void
 }) {
-  const { state } = useCommunity()
+  const { state, connection } = useCommunity()
   const more = useRef<HTMLDetailsElement>(null)
   const close = () => {
     if (!more.current) return
@@ -19,12 +19,12 @@ export function HomeFeedFilters({ photosOnly, onChange }: {
   return <div className={s.filters} role="group" aria-label="Filtrar publicaciones">
     <button type="button" aria-pressed={state.filter === 'recent' && !photosOnly} onClick={() => onChange('recent')}>Recientes</button>
     <button type="button" aria-pressed={state.filter === 'achievements'} onClick={() => onChange('achievements')}>Logros</button>
-    <button type="button" aria-pressed={photosOnly} onClick={() => onChange('recent', true)}>Fotos</button>
+    {!connection && <button type="button" aria-pressed={photosOnly} onClick={() => onChange('recent', true)}>Fotos</button>}
     <details ref={more} className={s.moreFilters} onKeyDown={(event) => { if (event.key === 'Escape') close() }}>
       <summary className={extra ? s.activeFilter : ''}>{state.filter === 'experiences' ? 'Experiencias' : state.filter === 'celebrated' ? 'Más celebradas' : 'Más +'}</summary>
       <div>
         <button type="button" aria-pressed={state.filter === 'experiences'} onClick={() => choose('experiences')}>Experiencias</button>
-        <button type="button" aria-pressed={state.filter === 'celebrated'} onClick={() => choose('celebrated')}>Más celebradas</button>
+        {!connection && <button type="button" aria-pressed={state.filter === 'celebrated'} onClick={() => choose('celebrated')}>Más celebradas</button>}
       </div>
     </details>
   </div>

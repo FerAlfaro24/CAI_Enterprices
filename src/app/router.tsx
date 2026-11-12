@@ -6,6 +6,8 @@ import { CommunityLayout } from '../layouts/CommunityLayout'
 import { AdminPage } from '../pages/AdminPage'
 import { AdminRequestsPage } from '../pages/AdminRequestsPage'
 import { AdminStudentsPage } from '../pages/AdminStudentsPage'
+import { AdminPostsPage } from '../pages/AdminPostsPage'
+import { ConnectedCommunity } from '../features/community/ConnectedCommunity'
 import { CommunityPage } from '../pages/CommunityPage'
 import { InstitutionalPage } from '../pages/InstitutionalPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
@@ -33,13 +35,13 @@ export function AppRoutes() {
       <Route path="alumnos" element={<StudentArea />} />
       <Route path="alumnos/publicaciones" element={<StudentArea />} />
       <Route path="solicitud-google" element={<GoogleOnboardingPage />} />
-      <Route element={<CommunityLayout />}>
+      <Route element={<ConnectedCommunity><CommunityLayout /></ConnectedCommunity>}>
         <Route path="community" element={<CommunityPage />} />
       </Route>
       <Route path="admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />
         <Route path="solicitudes" element={<AdminRequestsPage />} />
-        <Route path="publicaciones" element={<section><h1>Publicaciones</h1><p>La conexión de esta sección con Community es el siguiente bloque. Los envíos actuales siguen disponibles en la administración local.</p><a href="/gestion/publicaciones">Abrir moderación local</a></section>} />
+        <Route path="publicaciones" element={<AdminPostsPage />} />
         <Route path="alumnos" element={<AdminStudentsPage />} />
         <Route path="configuracion" element={<section><h1>Configuración</h1><p>Los ajustes del diseño de v1.0 están pendientes de conexión. Se mantienen las reglas de privacidad del servidor.</p></section>} />
         <Route path="*" element={<Navigate to="/admin" replace />} />

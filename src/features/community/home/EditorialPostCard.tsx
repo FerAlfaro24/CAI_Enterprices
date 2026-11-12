@@ -12,13 +12,13 @@ import { MotionButton, MotionCard, MotionFeedback } from '../components/Communit
 import s from './home.module.css'
 
 export function EditorialPostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
-  const { dispatch } = useCommunity()
+  const { dispatch, connection } = useCommunity()
   const { setDetail } = useCommunityDialogs()
   const [reactionsOpen, setReactionsOpen] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
   const panel = useRef<HTMLDivElement>(null)
   const id = useId()
-  const author = getMember(post.authorId)
+  const author = connection ? connection.resolveMember(post.authorId) : getMember(post.authorId)
   const chosen = reactionOptions.find((option) => option.id === post.myReaction)
   const open = (comments = false) => setDetail({ postId: post.id, comments })
   const cover = !featured && (post.photos.length > 0 || post.milestone || post.id === 'dani-song')
@@ -35,12 +35,12 @@ export function EditorialPostCard({ post, featured = false }: { post: Post; feat
       {featured && post.photos.length > 0 && <button className={s.featuredPhoto} type="button" onClick={() => open()} aria-label={`Ver imágenes de ${post.title}`}><StockImage photo={post.photos[0]!} /><span>{post.photos.length > 1 ? `${post.photos.length} fotos · Abrir galería` : 'Fotografía ilustrativa · Abrir'}</span></button>}
       {post.event && <div className={s.eventTeaser}><span><strong>{post.event.day}</strong>{post.event.month}</span><p>{post.event.detail}</p></div>}
       <div className={s.cardFooter}>
-        <span className={s.celebrationCount}><span aria-hidden="true">💙 👏</span> <MotionFeedback key={celebrationCount(post)}>{celebrationCount(post)}</MotionFeedback><span className={s.srOnly}> celebraciones</span></span>
+        {connection ? <button type="button" className={s.commentCount} onClick={() => open()}>Leer historia <CommunityIcon name="arrow" size={15} /></button> : <><span className={s.celebrationCount}><span aria-hidden="true">💙 👏</span> <MotionFeedback key={celebrationCount(post)}>{celebrationCount(post)}</MotionFeedback><span className={s.srOnly}> celebraciones</span></span>
         <button type="button" className={s.commentCount} onClick={() => open(true)} aria-label={`Ver ${post.comments.length} comentarios de ${post.title}`}><CommunityIcon name="comment" size={15} />{post.comments.length}</button>
         <div className={s.reactionPicker} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setReactionsOpen(false) }} onKeyDown={(event) => { if (event.key === 'Escape' && reactionsOpen) { event.preventDefault(); event.stopPropagation(); setReactionsOpen(false); trigger.current?.focus() } }}>
           <MotionButton ref={trigger} type="button" className={s.reactButton} aria-expanded={reactionsOpen} aria-controls={`${id}-reactions`} onClick={() => { setReactionsOpen(!reactionsOpen); if (!reactionsOpen) requestAnimationFrame(() => panel.current?.querySelector('button')?.focus()) }}>{chosen ? <>{chosen.emoji} {chosen.label}</> : <>Reaccionar <span aria-hidden="true">＋</span></>}</MotionButton>
           {reactionsOpen && <div className={s.reactionPanel} ref={panel} id={`${id}-reactions`} role="group" aria-label={`Reacciones a ${post.title}`}>{reactionOptions.map((option) => <button key={option.id} type="button" aria-label={`${option.label}: ${post.reactions[option.id]}`} aria-pressed={post.myReaction === option.id} onClick={() => { dispatch({ type: 'react', postId: post.id, reaction: option.id }); setReactionsOpen(false); trigger.current?.focus() }}><span aria-hidden="true">{option.emoji}</span><span>{option.label}</span><small>{post.reactions[option.id]}</small></button>)}</div>}
-        </div>
+        </div></>}
       </div>
     </div>
   </MotionCard>

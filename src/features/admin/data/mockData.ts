@@ -92,7 +92,7 @@ export const students: Student[] = [
 export const initiallySuspended = ['AL-011']
 
 export type PostType = 'logro' | 'experiencia' | 'reseña' | 'evento'
-export type PostStatus = 'pendiente' | 'publicada' | 'rechazada'
+export type PostStatus = 'pendiente' | 'publicada' | 'rechazada' | 'retirada'
 
 export type Post = {
   id: string

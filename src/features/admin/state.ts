@@ -104,7 +104,7 @@ export function countByStatus<S extends string>(items: { status: S }[], statuses
 }
 
 export const requestStatuses = ['pendiente', 'aprobada', 'rechazada'] as const
-export const postStatuses = ['pendiente', 'publicada', 'rechazada'] as const
+export const postStatuses = ['pendiente', 'publicada', 'rechazada', 'retirada'] as const
 
 export type DirectoryStudent = Student & { status: 'activo' | 'suspendido'; isNew: boolean }
 

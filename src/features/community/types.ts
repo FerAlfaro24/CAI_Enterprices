@@ -8,6 +8,7 @@ export type Reaction = 'love' | 'wellDone' | 'congrats' | 'amazing' | 'funny'
 export type ReactionCounts = Record<Reaction, number>
 
 export interface Member {
+  avatarColor?: string
   id: string
   alias: string
   initials: string

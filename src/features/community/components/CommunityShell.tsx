@@ -14,7 +14,8 @@ import { ChallengeDemoSelector } from '../challenges/ChallengeDemoSelector'
 import { CommunityMotion, MotionButton } from './CommunityMotion'
 
 export function CommunityShell({ children }: { children: ReactNode }) {
-  const { state, dispatch } = useCommunity()
+  const { state, dispatch, connection } = useCommunity()
+  const connected = Boolean(connection)
   const { theme, setTheme } = useCommunityTheme()
   const { profileId, setProfileId, detail, setDetail } = useCommunityDialogs()
   useEffect(() => {
@@ -22,10 +23,10 @@ export function CommunityShell({ children }: { children: ReactNode }) {
     return () => cancelAnimationFrame(frame)
   }, [state.resetKey, setProfileId, setDetail])
   useEffect(() => {
-    document.title = 'CAI Community · Comunidad de alumnos · Demo'
+    document.title = connected ? 'CAI Community · Mi grupo' : 'CAI Community · Comunidad de alumnos · Demo'
     window.scrollTo({ top: 0, behavior: 'instant' })
     return () => window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [])
+  }, [connected])
   return (
     <CommunityMotion><div className={`${themeStyles.theme} ${s.community}`}>
       <a className={s.skipLink} href="#community-content">Saltar al contenido de comunidad</a>
@@ -38,12 +39,12 @@ export function CommunityShell({ children }: { children: ReactNode }) {
               <MotionButton type="button" aria-label="Modo claro" aria-pressed={theme === 'light'} onClick={() => setTheme('light')} title="Modo claro"><CommunityIcon name="sun" size={19} /></MotionButton>
               <MotionButton type="button" aria-label="Modo oscuro" aria-pressed={theme === 'dark'} onClick={() => setTheme('dark')} title="Modo oscuro"><CommunityIcon name="moon" size={18} /></MotionButton>
             </div>
-            <MotionButton type="button" className={s.currentMember} aria-label="Abrir perfil ficticio de Alex Demo" aria-haspopup="dialog" onClick={() => setProfileId('alex')}><Avatar member={demoMember} /><span>Alex Demo<small>Mi espacio</small></span></MotionButton>
+            <MotionButton type="button" className={s.currentMember} aria-label={connection ? `Abrir mi perfil: ${connection.user.displayName}` : "Abrir perfil ficticio de Alex Demo"} aria-haspopup="dialog" onClick={() => setProfileId(connection?.user.publicId ?? 'alex')}><Avatar member={connection ? connection.resolveMember(connection.user.publicId) : demoMember} /><span>{connection?.user.displayName ?? 'Alex Demo'}<small>Mi espacio</small></span></MotionButton>
           </div>
         </div>
       </header>
       <div className={s.demoToolbar}>
-        <div className={s.demoNoticeRow}>
+        {connection ? <div className={s.demoNoticeRow}><aside className={s.prototypeNotice}><CommunityIcon name="shield" size={16} /><p><strong>{connection.user.program}</strong> · {connection.user.group} · Prueba local con datos ficticios.</p></aside><div className={s.demoTools}><button type="button" disabled={connection.busy} onClick={() => { void connection.refresh() }}>Actualizar comunidad</button><Link to="/alumnos">Mi inscripción</Link><button type="button" disabled={connection.busy} onClick={() => { void connection.logout() }}>Cerrar sesión</button></div></div> : <div className={s.demoNoticeRow}>
         <aside className={s.prototypeNotice} aria-label="Aviso de prototipo"><CommunityIcon name="spark" size={16} /><p><strong>Prototipo CAI.</strong> Perfiles e interacciones ficticios. Sin autenticación ni envíos reales.</p></aside>
         <details className={s.demoControls} id="community-demo-controls">
           <summary>Opciones de demostración</summary>
@@ -55,11 +56,12 @@ export function CommunityShell({ children }: { children: ReactNode }) {
             <p className={s.demoExplanation}>Los cambios de contenido duran durante esta visita. Solo se conserva la preferencia de tema. Celebra sin comparar y comenta con respeto; usa únicamente contenido ficticio.</p>
           </div>
         </details>
-        </div>
+        </div>}
+        {connection?.error && <p role="alert" className={s.demoStatus}>{connection.error}</p>}
         <p className={s.demoStatus} role="status" aria-live="polite" aria-atomic="true">{state.notice}</p>
       </div>
       <main id="community-content" tabIndex={-1} className={s.workspace}>{children}</main>
-      <footer className={s.communityFooter}><span>CAI Community · Un prototipo para imaginar lo que podemos construir juntos.</span><span>Sin cuentas reales ni datos de alumnos. <Link to="/">Sitio institucional ↗</Link></span></footer>
+      <footer className={s.communityFooter}>{connection ? <><span>CAI Community · Historias de tu grupo, revisadas por CAI.</span><span>Prueba local · <Link to="/">Sitio institucional ↗</Link></span></> : <><span>CAI Community · Un prototipo para imaginar lo que podemos construir juntos.</span><span>Sin cuentas reales ni datos de alumnos. <Link to="/">Sitio institucional ↗</Link></span></>}</footer>
       {detail && <PostDetailDialog key={`${detail.postId}-${state.resetKey}`} />}
       {profileId && <MemberProfileDialog key={profileId} memberId={profileId} onClose={() => setProfileId(null)} />}
     </div></CommunityMotion>

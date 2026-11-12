@@ -65,12 +65,12 @@ export function StudentArea() {
   return (
     <div className={s.admin}>
       <a href="#student-content" className={s['skip-link']}>Saltar a mi espacio</a>
-      <aside className={s['local-notice']}>Prueba local · Usa datos ficticios. Tu acceso, grupo y publicaciones de texto se guardan en este equipo. Community conserva su demostración visual.</aside>
+      <aside className={s['local-notice']}>Prueba local · Usa datos ficticios. Tu acceso, grupo y publicaciones de texto se guardan en este equipo. Entra en Community para compartir historias con tu grupo.</aside>
       <header className={s.topbar}>
         <Link to="/" className={s['card-link']}>CAI · Mi espacio</Link>
         <div className={s['topbar-end']}><ThemeSelector /><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void logout() }}>Cerrar sesión</button></div>
       </header>
-      <nav className={s['local-nav']} aria-label="Espacio del alumno">{[['/alumnos', 'Mi inscripción'], ['/alumnos/publicaciones', 'Publicaciones']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`}>{label}</NavLink>)}</nav>
+      <nav className={s['local-nav']} aria-label="Espacio del alumno">{[['/alumnos', 'Mi inscripción'], ['/community', 'Comunidad']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`}>{label}</NavLink>)}</nav>
       <main className={s.content} id="student-content" tabIndex={-1}>
         {message && <p role="status">{message}</p>}
         <div className={s['page-head']}>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import s from '../features/admin/admin.module.css'
+import { Icon } from '../features/admin/components/ui'
 import { PostCard, PostDialog } from '../features/admin/components/posts'
 import { postTypes, type PostStatus, type PostType } from '../features/admin/data/mockData'
 import { countByStatus, postStatuses, useAdmin } from '../features/admin/state'
@@ -8,16 +9,17 @@ const statusFilters: { value: PostStatus; label: string }[] = [
   { value: 'pendiente', label: 'En revisión' },
   { value: 'publicada', label: 'Publicadas' },
   { value: 'rechazada', label: 'Rechazadas' },
+  { value: 'retirada', label: 'Retiradas' },
 ]
 
 export function AdminPostsPage() {
-  const { state } = useAdmin()
+  const { state, connection } = useAdmin()
   const [status, setStatus] = useState<PostStatus>('pendiente')
   const [type, setType] = useState<PostType | 'todas'>('todas')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const counts = countByStatus(state.posts, postStatuses)
   const visible = state.posts.filter((p) => p.status === status && (type === 'todas' || p.type === type))
-  const flagged = state.posts.filter((p) => p.status === 'pendiente' && p.checks).length
+  const flagged = state.posts.filter((p) => p.status === 'pendiente' && (connection || p.checks)).length
 
   return (
     <>
@@ -26,9 +28,10 @@ export function AdminPostsPage() {
           <p className={s.eyebrow}>Moderación</p>
           <h1 className={s['page-title']}>Publicaciones</h1>
           <p className={s['page-lead']}>
-            Ninguna publicación llega al feed sin revisión. Las que muestran a otras personas o incluyen enlaces piden una verificación adicional.
+            Revisa el texto y la privacidad antes de publicar. Solo los alumnos del mismo programa y grupo podrán ver cada historia aprobada.
           </p>
         </div>
+        {connection && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={connection.busy} onClick={() => { void connection.refresh() }}><Icon name="refresh" size={16} />Actualizar publicaciones</button>}
       </div>
 
       <section className={s.stats} aria-label="Resumen de moderación">
@@ -48,7 +51,7 @@ export function AdminPostsPage() {
         </div>
         <div className={s.chips} role="group" aria-label="Filtrar por tipo">
           <button type="button" className={s.chip} aria-pressed={type === 'todas'} onClick={() => setType('todas')}>Todos los tipos</button>
-          {(Object.keys(postTypes) as PostType[]).map((key) => (
+          {(Object.keys(postTypes) as PostType[]).filter(key => !connection || ['logro', 'experiencia'].includes(key)).map((key) => (
             <button key={key} type="button" className={s.chip} aria-pressed={type === key} onClick={() => setType(key)}>
               {postTypes[key].label}
             </button>
@@ -64,7 +67,7 @@ export function AdminPostsPage() {
         </div>
       )}
       <p className={s.footnote}>
-        Publicaciones e imágenes ficticias. Las decisiones solo existen en esta pestaña y no publican nada.
+        {connection ? 'Revisión guardada en este equipo. Retirar es definitivo; devolver a revisión oculta la historia del feed hasta una nueva aprobación.' : 'Publicaciones e imágenes ficticias. Las decisiones solo existen en esta pestaña y no publican nada.'}
       </p>
 
       <PostDialog post={state.posts.find((p) => p.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />

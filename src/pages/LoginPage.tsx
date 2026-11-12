@@ -27,7 +27,7 @@ export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminL
     setBusy(true);setError('')
     try {
       if(admin) {const {user}=await localApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();onAdminLogin?.(user)}
-      else {await studentApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();navigate('/alumnos')}
+      else {await studentApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();navigate('/community')}
     }catch(error){setError(error instanceof Error?error.message:'No pudimos iniciar sesión.')}
     finally{setBusy(false)}
   }

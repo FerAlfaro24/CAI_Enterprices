@@ -20,7 +20,7 @@ const headings: Record<Section, { eyebrow: string; title: string; description: s
 }
 
 export function CommunityWorkspace() {
-  const { state } = useCommunity()
+  const { state, connection } = useCommunity()
   const heading = headings[state.section]
 
   useEffect(() => {
@@ -35,6 +35,7 @@ export function CommunityWorkspace() {
   }, [state.focusedPostId, state.focusRequest, state.section])
 
   if (state.section === 'home') return <HomeView key={state.resetKey} />
+  if (connection && state.section !== 'members') return <CommunitySectionLayout><header className={s.welcomeHeader}><h1 id="community-title" tabIndex={-1}>{state.section === 'gallery' ? 'Galería' : state.section === 'challenges' ? 'Retos' : 'Insignias'}</h1><p>Esta sección está pendiente de conexión. Puedes compartir logros y experiencias desde Inicio.</p></header></CommunitySectionLayout>
   if (state.section === 'challenges') return <ChallengesView />
   if (state.section === 'gallery') return <GalleryView key={state.resetKey} />
   if (state.section === 'achievements') return <AchievementsView key={state.resetKey} />
@@ -42,7 +43,7 @@ export function CommunityWorkspace() {
   return (
     <CommunitySectionLayout>
       <header className={s.welcomeHeader}>
-        <div><span className={s.eyebrow}>{heading.eyebrow}</span><h1 id="community-title" tabIndex={-1}>{heading.title}</h1><p>{heading.description}</p><div className={s.communityNumbers}><span><i aria-hidden="true" />{members.filter((member) => !member.institution).length} alumnos ficticios</span><span>{state.posts.filter((post) => post.status === 'approved').length} historias compartidas</span></div></div>
+        <div><span className={s.eyebrow}>{heading.eyebrow}</span><h1 id="community-title" tabIndex={-1}>{heading.title}</h1><p>{connection ? 'Alias de alumnos activos de tu programa y grupo.' : heading.description}</p><div className={s.communityNumbers}><span><i aria-hidden="true" />{(connection?.members ?? members).filter((member) => !member.institution).length} {connection ? 'alumnos de tu grupo' : 'alumnos ficticios'}</span><span>{state.posts.filter((post) => post.status === 'approved').length} historias compartidas</span></div></div>
       </header>
       <ModerationPanel />
       <MySubmissions />

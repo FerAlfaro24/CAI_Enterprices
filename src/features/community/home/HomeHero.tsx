@@ -15,7 +15,7 @@ const subscribeReducedMotion = (notify: () => void) => {
 }
 
 export function HomeHero() {
-  const { dispatch } = useCommunity()
+  const { dispatch, connection } = useCommunity()
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const [hovered, setHovered] = useState(false)
@@ -55,7 +55,7 @@ export function HomeHero() {
       <span className={s.heroEyebrow}><span aria-hidden="true">✦</span> TU COMUNIDAD, TU MOMENTO</span>
       <h1 id="community-title" tabIndex={-1}>Aquí pasan cosas<br />que vale la pena<br /><em>contar.</em></h1>
       <p>El inglés nos conecta. Comparte un pequeño avance, encuentra inspiración y celebra el camino en comunidad.</p>
-      <div className={s.heroActions}><MotionButton type="button" className={s.yellowButton} onClick={explore}>Explorar el feed <CommunityIcon name="arrow" size={18} /></MotionButton><MotionButton type="button" className={s.heroSecondary} onClick={() => dispatch({ type: 'section', section: 'challenges' })}>Jugar reto de hoy <CommunityIcon name="spark" size={16} /></MotionButton></div>
+      <div className={s.heroActions}><MotionButton type="button" className={s.yellowButton} onClick={explore}>Explorar el feed <CommunityIcon name="arrow" size={18} /></MotionButton><MotionButton type="button" className={s.heroSecondary} onClick={() => dispatch({ type: 'section', section: 'challenges' })}>{connection ? 'Retos · Próximamente' : 'Jugar reto de hoy'} <CommunityIcon name="spark" size={16} /></MotionButton></div>
       <div className={s.heroNote}><span aria-hidden="true">EN</span><span>Aprender. Compartir. Volver a intentarlo.</span></div>
     </m.div>
     <div className={s.carousel} role="region" aria-roledescription="carrusel" aria-label="Historias ilustrativas de CAI" data-slide={slide.id}>

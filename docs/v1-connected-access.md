@@ -1,3 +1,5 @@
+> Fotografía del primer bloque (`8e205b0`). Community y Publicaciones se conectaron después: consultar `v1-connected-community.md` y el registro vigente de `PROJECT_STATE.md`. Las limitaciones descritas aquí corresponden al momento de esa entrega.
+
 # v1.0 conectada: primer recorrido de ingreso
 
 Rama `integration/cai-v1-connected`, desde `be90193` (auditoría y prioridades, con el avance funcional `1b84fb3` ya incluido). La referencia visual oficial `f3ba46b` se conserva como antecesor; no se fusionaron otra vez las ramas acumulativas ni se modificó la rama release. Se creó un respaldo local antes de los cambios.

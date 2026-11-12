@@ -121,7 +121,7 @@ export function AdminLayout() {
             </div>
           </header>
           <main id="admin-content" tabIndex={-1} className={s.content}>
-            <p className={s.footnote}>Pruebas locales con datos ficticios. Solicitudes y alumnos conectados al guardado. Community continúa en demostración hasta su integración.</p>
+            <p className={s.footnote}>Pruebas locales con datos ficticios. Solicitudes, alumnos y moderación conectados al guardado.</p>
             {connection.notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{connection.notice}</p>}
             {connection.error && <p role="alert" className={s.alert}>{connection.error} <button type="button" className={s.btn} onClick={()=>{void connection.refresh()}}>Volver a cargar</button></p>}
             {!connection.loaded ? <p role="status">Cargando los datos…</p> : <Outlet context={context} />}

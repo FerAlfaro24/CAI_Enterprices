@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type ReviewPost } from '../local-access/api'
+import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type ReviewPost, type PublicationDecision } from '../local-access/api'
 import { defaultSettings, type AdminAction, type AdminState } from './state'
 
 export function useAdminConnection() {
@@ -45,6 +45,15 @@ export function useAdminConnection() {
     } catch(error) {failure(error);if(error instanceof ApiError&&error.status===409){await refresh();setError(error.message)}return false}
     finally {writing.current=false;setBusy(false)}
   }
+  const moderate=async(id:string,decision:PublicationDecision,reason?:string,confirmed?:boolean)=>{
+    if(writing.current)return false
+    const post=posts.find(p=>p.id===id)
+    if(!post){setError('Actualiza la publicación antes de decidir.');return false}
+    writing.current=true;setBusy(true);setError('');setNotice('')
+    try {await localApi.moderate(post,decision,reason,confirmed);setNotice('Revisión guardada. Community mostrará el cambio al actualizarse.');await refresh();return true}
+    catch(error){failure(error);if(error instanceof ApiError&&error.status===409){await refresh();setError(error.message)}return false}
+    finally{writing.current=false;setBusy(false)}
+  }
   const invite=async(id:string)=>{
     const student=students.find(s=>s.id===id)
     if(!student||writing.current)return
@@ -57,7 +66,7 @@ export function useAdminConnection() {
     try {await localApi.logout();generation.current++;setUser(null);setLoaded(false);setRequests([]);setStudents([]);setPosts([]);setInvitation(null);setError('') }catch(error){failure(error)}finally{setBusy(false)}
   }
   const directory=students.map(s=>({...s,posts:posts.filter(p=>p.studentId===s.id&&p.status==='publicada').length,isNew:s.joinedAt.startsWith(new Date().toISOString().slice(0,7))}))
-  const state:AdminState={requests,posts:posts.filter(p=>p.status!=='retirada').map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status==='retirada'?'rechazada':p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:defaultSettings,directory}
-  return {user,checking,loaded,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setUser(user)}}
+  const state:AdminState={requests,posts:posts.map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:defaultSettings,directory}
+  return {user,checking,loaded,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setUser(user)}}
 }
 export type AdminConnection=ReturnType<typeof useAdminConnection>

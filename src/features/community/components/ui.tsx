@@ -14,7 +14,7 @@ export function CommunityIcon({ name, size = 20 }: { name: IconName; size?: numb
 
 export function Avatar({ member, small = false }: { member: Member; small?: boolean }) {
   return (
-    <span className={[s.avatar, s[member.color], small ? s.avatarSmall : '', member.institution ? s.institutionAvatar : ''].join(' ')} aria-hidden="true">
+    <span className={[s.avatar, s[member.color], small ? s.avatarSmall : '', member.institution ? s.institutionAvatar : ''].join(' ')} style={member.avatarColor ? { background: member.avatarColor, color: '#fff' } : undefined} aria-hidden="true">
       {member.institution ? <img src={emblem} alt="" width="32" height="30" /> : member.initials}
     </span>
   )

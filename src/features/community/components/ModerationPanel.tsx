@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useCommunity } from '../context'
 import { categoryLabels } from '../data/fixtures'
 import { getMember } from '../data/members'
@@ -5,8 +6,8 @@ import s from '../community.module.css'
 import { Avatar, CommunityIcon } from './ui'
 
 export function ModerationPanel() {
-  const { state, dispatch } = useCommunity()
-  if (state.mode !== 'moderator') return null
+  const { state, dispatch, connection } = useCommunity()
+  if (connection || state.mode !== 'moderator') return null
   const pending = state.posts.filter((post) => post.status === 'pending')
   return (
     <section className={s.moderationPanel} aria-label="Revisión de publicaciones demo">
@@ -21,8 +22,10 @@ export function ModerationPanel() {
 }
 
 export function MySubmissions() {
-  const { state } = useCommunity()
+  const { state, connection } = useCommunity()
+  const [confirmId, setConfirmId] = useState<string | null>(null)
   const posts = state.posts.filter((post) => post.authorId === 'alex')
+  if (connection) return <section className={s.submissions} aria-label="Mis publicaciones"><h2>Mis publicaciones</h2>{!connection.mine.length && <p>Aquí podrás consultar tus envíos y su revisión.</p>}{connection.mine.map(post => <div key={post.id} data-publication-id={post.id}><span><strong>{post.title}</strong><small>{({ pendiente: 'Pendiente de revisión', publicada: 'Publicada', rechazada: 'Rechazada', retirada: 'Retirada' })[post.status]}</small>{post.reason && <small>Motivo: {post.reason}</small>}</span>{post.status !== 'retirada' && <span>{confirmId === post.id ? <><small>¿Retirar esta publicación? Dejará de ser visible.</small><button type="button" disabled={connection.busy} className={s.secondaryButton} onClick={() => setConfirmId(null)}>Cancelar</button><button type="button" disabled={connection.busy} className={s.secondaryButton} onClick={() => { void connection.withdraw(post).then(ok => { if (ok) setConfirmId(null) }) }}>Confirmar retiro</button></> : <button type="button" className={s.secondaryButton} aria-label={`Retirar ${post.title}`} disabled={connection.busy} onClick={() => setConfirmId(post.id)}>Retirar</button>}</span>}</div>)}</section>
   if (!posts.length) return null
   const labels = { pending: 'Pendiente de revisión', approved: 'Aprobada · Visible en el feed', rejected: 'Rechazada · No aparece en el feed' }
   return (

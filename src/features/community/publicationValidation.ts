@@ -20,9 +20,9 @@ export function validatePublication(draft: PublicationDraft): PublicationErrors 
   const errors: PublicationErrors = {}
   const titleLength = draft.title.trim().length
   const bodyLength = draft.body.trim().length
-  if (titleLength < publicationLimits.titleMin) errors.title = 'Escribe un título ficticio de al menos 4 caracteres.'
+  if (titleLength < publicationLimits.titleMin) errors.title = 'Escribe un título de al menos 4 caracteres.'
   else if (titleLength > publicationLimits.titleMax) errors.title = 'El título admite un máximo de 100 caracteres.'
-  if (bodyLength < publicationLimits.bodyMin) errors.body = 'Cuenta una experiencia de muestra de al menos 10 caracteres.'
+  if (bodyLength < publicationLimits.bodyMin) errors.body = 'Cuenta una experiencia de al menos 10 caracteres.'
   else if (bodyLength > publicationLimits.bodyMax) errors.body = 'La historia admite un máximo de 1200 caracteres.'
   if (draft.category === 'gallery' && !draft.photoIds.length) errors.photos = 'Selecciona al menos una imagen ilustrativa para la galería.'
   return errors

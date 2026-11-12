@@ -16,7 +16,7 @@ function MediaPlaceholder({ caption }: { caption: string }) {
 }
 
 export function PostCard({ post, onReview }: { post: Post; onReview: () => void }) {
-  const { dispatch, announce } = useAdmin()
+  const { dispatch, announce, connection } = useAdmin()
   return (
     <article className={cx(s.card, s.post)}>
       <div className={s['post-meta']}>
@@ -44,7 +44,7 @@ export function PostCard({ post, onReview }: { post: Post; onReview: () => void 
         <button type="button" className={cx(s.btn, s['btn--ghost'], s['btn--sm'])} onClick={onReview}>
           <Icon name="eye" size={16} />Revisar<span className={s['sr-only']}> «{post.title}»</span>
         </button>
-        {post.status === 'pendiente' && !post.checks && (
+        {!connection && post.status === 'pendiente' && !post.checks && (
           <button type="button" className={cx(s.btn, s['btn--approve'], s['btn--sm'])} onClick={() => {
             dispatch({ type: 'moderate', id: post.id, status: 'publicada' })
             announce(`Publicación «${post.title}» publicada.`)
@@ -59,7 +59,7 @@ export function PostCard({ post, onReview }: { post: Post; onReview: () => void 
 
 export function PostDialog({ post, onClose }: { post: Post | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null)
-  const { dispatch, announce } = useAdmin()
+  const { dispatch, announce, connection } = useAdmin()
   const [reason, setReason] = useState('')
   const [checked, setChecked] = useState(false)
   const [error, setError] = useState(false)
@@ -73,21 +73,28 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
   }, [post])
 
   const close = () => {
+    if (connection?.busy) return
     setReason('')
     setChecked(false)
     setError(false)
     onClose()
   }
 
-  const moderate = (status: 'publicada' | 'rechazada') => {
+  const moderate = async (status: 'publicada' | 'rechazada') => {
     if (!post) return
     if (status === 'rechazada' && !reason) { setError(true); return }
+    if (connection) {
+      if (await connection.moderate(post.id, status === 'publicada' ? 'approve' : 'reject', status === 'rechazada' ? reason : undefined, checked)) close()
+      return
+    }
     dispatch({ type: 'moderate', id: post.id, status, reason: status === 'rechazada' ? reason : undefined })
     announce(`Publicación «${post.title}» ${status}.`)
     close()
   }
 
-  const needsCheck = Boolean(post?.checks) && !checked
+  const raw = connection?.posts.find(item => item.id === post?.id)
+  const needsCheck = Boolean(connection || post?.checks) && !checked
+  const cannotPublish = Boolean(connection && !raw?.authorActive)
 
   return (
     <dialog
@@ -95,6 +102,7 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
       className={cx(s.dialog, s['dialog--wide'])}
       aria-labelledby="post-dialog-title"
       onClose={close}
+      onCancel={(event) => { event.preventDefault(); close() }}
       onClick={(event) => { if (event.target === event.currentTarget) close() }}
     >
       {post && (
@@ -115,12 +123,15 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
               <StatusBadge status={post.status} />
               {post.authorIsMinor && <span className={cx(s.tag, s['tag--minor'])}>Autor menor de edad</span>}
             </div>
-            <p style={{ margin: 0 }}>{post.body}</p>
+            {raw && <p>Grupo: {raw.group}</p>}
+            <p style={{ margin: 0, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{post.body}</p>
+            {cannotPublish && <p className={s.alert}>El autor debe tener acceso activo y conservar el programa y grupo del envío para publicarlo.</p>}
+            {connection?.error && <p className={s.alert} role="alert">{connection.error}</p>}
             {post.media && <MediaPlaceholder caption={post.media.caption} />}
 
-            {post.status === 'pendiente' && post.checks && (
+            {post.status === 'pendiente' && (connection || post.checks) && (
               <div className={s.alert}>
-                <ul className={s['check-list']}>{post.checks.map((check) => <li key={check}>{check}</li>)}</ul>
+                <ul className={s['check-list']}>{post.checks?.map((check) => <li key={check}>{check}</li>)}</ul>
                 <label className={s.confirm}>
                   <input type="checkbox" checked={checked} onChange={(event) => setChecked(event.target.checked)} />
                   Lo verifiqué y se puede publicar
@@ -142,30 +153,31 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
             )}
 
             {post.status === 'rechazada' && post.rejectReason && (
-              <p className={s.alert}>Rechazada por: {post.rejectReason}. El alumno vería este motivo en su perfil (simulado).</p>
+              <p className={s.alert}>Rechazada por: {post.rejectReason}. {connection ? 'El alumno puede consultar este motivo en Mis publicaciones.' : 'El alumno vería este motivo en su perfil (simulado).'}</p>
             )}
             {post.status === 'publicada' && (
-              <p className={cx(s.alert, s['alert--ok'])}>Publicada en la demo de este panel. No se envía al feed de CAI Community.</p>
+              <p className={cx(s.alert, s['alert--ok'])}>{connection ? 'Publicada para el grupo autorizado en CAI Community, mientras el autor conserve su acceso y asignación.' : 'Publicada en la demo de este panel. No se envía al feed de CAI Community.'}</p>
             )}
           </div>
           <div className={s['dialog-foot']}>
             {post.status === 'pendiente' ? (
               <>
-                <button type="button" className={cx(s.btn, s['btn--reject'])} onClick={() => moderate('rechazada')}>
+                <button type="button" className={cx(s.btn, s['btn--reject'])} disabled={connection?.busy} onClick={() => { void moderate('rechazada') }}>
                   <Icon name="x" size={16} />Rechazar
                 </button>
                 <button
                   type="button"
                   className={cx(s.btn, s['btn--approve'])}
-                  onClick={() => moderate('publicada')}
-                  disabled={needsCheck}
+                  onClick={() => { void moderate('publicada') }}
+                  disabled={needsCheck || cannotPublish || connection?.busy}
                   style={needsCheck ? { opacity: .45, cursor: 'not-allowed' } : undefined}
                 >
                   <Icon name="check" size={16} />Publicar
                 </button>
               </>
-            ) : (
-              <button type="button" className={cx(s.btn, s['btn--ghost'])} onClick={() => {
+            ) : post.status === 'retirada' ? <p>El autor retiró esta publicación. No se puede volver a publicar.</p> : (
+              <button type="button" className={cx(s.btn, s['btn--ghost'])} disabled={connection?.busy} onClick={() => {
+                if (connection) { void connection.moderate(post.id, 'undo').then(ok => { if (ok) close() }); return }
                 dispatch({ type: 'unmoderate', id: post.id })
                 announce(`Publicación «${post.title}» devuelta a revisión.`)
                 close()
