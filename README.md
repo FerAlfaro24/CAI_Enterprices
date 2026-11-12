@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `feat/v1-admin-recovery`: conserva las áreas conectadas, navegación, estabilización y perfil propio; añade recuperación administrativa con enlace privado de un uso, comprobada con entrega ficticia. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `feat/v1-admin-team`: conserva las integraciones anteriores y añade gestión de cuentas administrativas en Configuración, con activación, desactivación/reactivación y protección de último acceso. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación:** gestión de otras cuentas administrativas, con permisos y protección de la última cuenta, usando Configuración existente. Recuperación local comprobada; su entrega de correo real y verificación del responsable continúan al final. Siguen pendientes herramientas, expediente completo y revisión final con CAI. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [recuperación administrativa y límites](docs/v1-admin-recovery.md).
+> **Continuación:** punto 3, correcciones del expediente sobre la ficha existente; después herramientas y revisión final. Equipo y recuperación comprobados localmente con datos ficticios; correo real y verificación de responsables continúan al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [equipo administrativo y límites](docs/v1-admin-team.md).
 
 ## Objetivo inmediato
 
@@ -51,6 +51,7 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 
 ## Documentación
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
+- [Equipo administrador, invitaciones, estados y pruebas](docs/v1-admin-team.md)
 - [Recuperación administrativa: enlace privado, pruebas y correo pendiente](docs/v1-admin-recovery.md)
 - [Perfil visible propio del alumno, privacidad y pruebas](docs/v1-student-profile.md)
 - [Contraseña administrativa propia, entrega y pruebas](docs/v1-admin-account-security.md)

@@ -15,6 +15,7 @@
 | Mantener grupos o pausar solicitudes/envíos | Configuración |
 | Cambiar mi contraseña | Configuración → Seguridad de mi cuenta |
 | Recuperar acceso si olvidé mi contraseña | Acceso de administración → Olvidé mi contraseña |
+| Agregar, desactivar o reactivar un administrador | Configuración → Equipo administrador |
 
 Entrar por **Acceso de administración** con la cuenta de coordinación. La cuenta del alumno tiene su propio acceso y no abre este panel. Al terminar, usar **Cerrar sesión**.
 
@@ -39,7 +40,7 @@ En Alumnos, abrir la ficha de la persona correcta. Desde allí se prepara su enl
 
 Suspender cierra el acceso de esa cuenta; reactivarla exige entrar de nuevo. No borra su historial. Para cambiar programa o grupo, elegir una opción vigente y leer la confirmación: se cierran las sesiones anteriores y las historias no pasan automáticamente a otro grupo ni se republican al volver.
 
-La edición completa del expediente y la gestión de otras cuentas administrativas todavía no están disponibles. Si se necesita una corrección fuera de las acciones visibles, anotarla para la revisión de entrega.
+La edición completa del expediente todavía no está disponible. Si se necesita una corrección fuera de las acciones visibles, anotarla para la revisión de entrega. El equipo administrador se gestiona desde Configuración, según la sección siguiente.
 
 El alumno puede cambiar por sí mismo su **nombre visible y color del avatar** desde Community → Mi espacio → Editar mi perfil. Esto también actualiza el alias que muestra en historias anteriores; no cambia su nombre legal ni grupo. Los menores eligen únicamente entre las dos abreviaturas permitidas. Si coordinación tiene abierta una ficha antigua y recibe un aviso de cambio, debe actualizarla antes de actuar. La [guía de perfil](v1-student-profile.md) describe errores y límites.
 
@@ -71,6 +72,16 @@ La recuperación real requiere configurar correo y comprobar la entrega. Una cue
 En Configuración, mantener el catálogo de programas/grupos y los controles disponibles. Archivar un grupo impide nuevas selecciones, pero sus alumnos actuales conservan la lectura. Se puede reactivar sin borrar su historial.
 
 Pausar solicitudes de ingreso no borra solicitudes recibidas. Pausar nuevos envíos tampoco elimina publicaciones aprobadas ni impide retirarlas. Las opciones marcadas como pendientes no deben tratarse como funciones operativas.
+
+## Gestionar el equipo administrador
+
+En Configuración → Equipo administrador, **Agregar administrador** permite crear una cuenta pendiente con nombre/correo. Confirmar con la contraseña propia y la casilla de alcance. Cada administrador tiene acceso completo al panel y puede gestionar el equipo; no existe un rol de moderador limitado.
+
+Después, **Preparar invitación** genera un enlace privado de prueba de un uso y 24 horas para que la persona elija su contraseña. Otro enlace invalida el anterior. No se envía correo; verificar al responsable y el canal antes de una entrega real. No compartir contraseñas ni enlaces en chats o capturas. Una cuenta pendiente no puede entrar ni recuperarse como si ya estuviera activada.
+
+**Desactivar** cierra sus sesiones e invalida invitaciones/recuperación, conservando cuenta e historial. **Reactivar** exige entrar de nuevo y, si sigue pendiente, preparar otra invitación. No puedes desactivar tu propia cuenta ni dejar el sistema sin una cuenta activa que ya pueda entrar. Para relevar a un responsable, primero activar y comprobar el acceso del siguiente.
+
+Si la información cambió o la respuesta se perdió, actualizar el equipo antes de repetir. El alta evita duplicados al reintentar el mismo envío; una invitación perdida necesita prepararse de nuevo, no se recupera su token guardado. Detalles en [la guía del equipo](v1-admin-team.md).
 
 ## Cambiar mi contraseña
 
