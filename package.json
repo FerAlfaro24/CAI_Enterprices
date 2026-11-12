@@ -13,6 +13,7 @@
     "dev:api": "node --watch server/index.ts",
     "local:setup": "node server/setup.ts",
     "local:backup": "node server/backup.ts",
+    "local:verify-backup": "node server/verify-backup.ts",
     "google:setup": "node server/google-setup.ts",
     "test:api": "node --test server/tests/*.test.ts",
     "build": "npm run typecheck && vite build",

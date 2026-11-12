@@ -13,6 +13,8 @@ import { backupLocalDatabase } from '../backup.ts'
 import { openDatabase } from '../database.ts'
 import { galleryLimits, type GalleryItem, type GalleryReview, type GalleryUpload } from '../contracts.ts'
 import { galleryRepository } from '../gallery.ts'
+import { verifyLocalBackup } from '../verify-backup.ts'
+import { readFile } from 'node:fs/promises'
 
 test('Galería privada: decodificación, permisos por recurso y respaldo completo', async t => {
   const root=resolve('.local/tests');await mkdir(root,{recursive:true})
@@ -100,5 +102,31 @@ test('Galería privada: decodificación, permisos por recurso y respaldo complet
     assert.deepEqual(await list('bob'),[]);assert.equal((await images())[0]!.status,'retirada')
     assert.equal(app.db.prepare('SELECT count(*) AS n FROM gallery_images').get()!.n,1)
     assert.equal(app.db.prepare('SELECT count(*) AS n FROM migrations WHERE version=9').get()!.n,1)
+  })
+  await t.test('verificar copia sin escribir, ensayar acceso aislado y detectar imagen corrupta',async()=>{
+    const copy=await backupLocalDatabase(path,join(directory,'verification')),before=await readFile(copy)
+    assert.deepEqual(await verifyLocalBackup(copy),{schema:9,requests:3,students:3,accounts:3,posts:0,images:1})
+    assert.deepEqual(await readFile(copy),before)
+    const rehearsal=createApplication(copy)
+    rehearsal.server.listen(0,'127.0.0.1');await once(rehearsal.server,'listening')
+    const address=rehearsal.server.address();assert.ok(address&&typeof address==='object')
+    const restoredBase=`http://127.0.0.1:${address.port}`
+    try{
+      const login=await fetch(restoredBase+'/api/local/student/login',{method:'POST',headers:{Origin:restoredBase,'Content-Type':'application/json'},body:JSON.stringify({email:'bob@example.test',password})})
+      assert.equal(login.status,200)
+      const cookie=login.headers.getSetCookie().at(-1)!.split(';')[0]!
+      const own=await fetch(restoredBase+'/api/local/student/me',{headers:{Cookie:cookie}})
+      assert.equal(own.status,200);assert.equal((await own.json() as {user:{program:string}}).user.program,profile.program)
+      assert.equal((await fetch(restoredBase+'/api/local/requests',{headers:{Cookie:cookie}})).status,401)
+      assert.equal((await fetch(restoredBase+item.imagePath,{headers:{Cookie:cookie}})).status,404)
+    }finally{await new Promise<void>((resolve,reject)=>rehearsal.server.close(error=>error?reject(error):resolve()))}
+    const damaged=openDatabase(copy)
+    try{damaged.prepare('UPDATE gallery_images SET bytes=?,byte_size=4').run(Buffer.from('fake'))}finally{damaged.close()}
+    await assert.rejects(verifyLocalBackup(copy))
+    assert.deepEqual(galleryRepository(app.db).list().map(image=>image.status),['retirada'])
+    assert.deepEqual(app.db.prepare('SELECT bytes FROM gallery_images WHERE id=?').get(item.id)!.bytes,firstBytes)
+    const absent=join(directory,'missing.sqlite')
+    await assert.rejects(verifyLocalBackup(absent))
+    await assert.rejects(readFile(absent))
   })
 })
