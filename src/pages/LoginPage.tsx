@@ -50,6 +50,7 @@ export function LoginPage({ admin=false,onAdminLogin,message }: {admin?:boolean;
             <button type="submit" className={s.primary} disabled={busy}>{busy?'Entrando…':admin?'Entrar al panel':'Entrar a mi espacio'} <ArrowRight size={18} aria-hidden="true" /></button>
           </form>
           {!admin && <><p className={s.signup}>¿Es tu primera visita? <Link to="/registro">Solicita tu acceso</Link></p><p className={s.footnote}><Link to="/recuperar-acceso">Olvidé mi contraseña</Link></p></>}
+          {admin&&<p className={s.footnote}><Link to="/recuperar-acceso-administrativo">Olvidé mi contraseña</Link></p>}
           <p className={s.footnote}><Link to={admin?'/login':'/admin'}>{admin?'Acceso de alumnos':'Acceso de administración'}</Link></p>
   </AccessFrame>
 }

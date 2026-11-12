@@ -5,6 +5,11 @@ export class ApiError extends Error {
   constructor(status: number, message: string) { super(message); this.status = status }
 }
 
+export const adminRecoveryApi = {
+  request: (email: string) => call<{message:string}>('/admin-recovery/request','POST',{email}),
+  reset: (token: string,password: string,confirm: string) => call('/admin-recovery/reset','POST',{token,password,confirm}),
+}
+
 export type { StudentProfile, StudentProfileDraft } from '../../../server/contracts'
 
 async function call<T>(path: string, method = 'GET', body?: unknown, headers?: Record<string, string>): Promise<T> {

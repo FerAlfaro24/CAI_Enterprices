@@ -42,6 +42,8 @@ export function AppRoutes() {
       <Route path="activar" element={<ActivateAccountPage />} />
       <Route path="recuperar" element={<ActivateAccountPage recovery />} />
       <Route path="recuperar-acceso" element={<RecoveryPage />} />
+      <Route path="recuperar-acceso-administrativo" element={<RecoveryPage admin />} />
+      <Route path="recuperar-administracion" element={<ActivateAccountPage recovery admin />} />
       <Route path="mi-inscripcion" element={<StudentArea />} />
       <Route path="alumnos" element={<Navigate to="/mi-inscripcion" replace />} />
       <Route path="alumnos/publicaciones" element={<Navigate to="/community" replace />} />
