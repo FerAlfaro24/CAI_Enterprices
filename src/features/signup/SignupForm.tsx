@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { useDemoStore } from '../../app/demoStore'
 import type { AccessRequest } from '../admin/data/mockData'
 import { nextRequestId } from '../admin/state'
+import { usePublicCatalog } from '../local-access/usePublicCatalog'
 import { googleApi, localApi } from '../local-access/api'
 import { cx } from '../landing/utils'
 import {
@@ -75,7 +76,9 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
   const age = values.birthDate ? ageFrom(values.birthDate) : null
   const isMinor = age !== null && age < 18
   const byTutor = values.filledBy === 'tutor'
-  const groups = groupsFor(values.program)
+  const { catalog, error: catalogError, refresh: refreshCatalog } = usePublicCatalog(local)
+  const programs = local ? [...new Set(catalog?.groups.map(group => group.program) ?? [])] : signupPrograms
+  const groups = local ? catalog?.groups.filter(group => group.program === values.program).map(group => group.name) ?? [] : groupsFor(values.program)
   const color = avatarColors.find(({ id: colorId }) => colorId === values.avatarColor) ?? avatarColors[0]!
   const shownName = visibleName(values.firstName, values.lastName, values.nameStyle) || 'Tu nombre'
 
@@ -211,6 +214,8 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
     submissionKey.current = crypto.randomUUID()
   }
 
+  if (local && !submitted && (!catalog || catalogError)) return <div className={s.form}><p role={catalogError ? 'alert' : 'status'}>{catalogError || 'Cargando programas y grupos…'}</p>{catalogError && <button type="button" onClick={() => { void refreshCatalog() }}>Volver a cargar grupos</button>}</div>
+  if (local && !submitted && catalog && (!catalog.settings.registrationOpen || !catalog.groups.length)) return <div className={s.form}><h2>Solicitudes en pausa</h2><p role="status">CAI no recibe nuevas solicitudes en este momento. Intenta más tarde o consulta con coordinación.</p><button type="button" onClick={() => { void refreshCatalog() }}>Actualizar disponibilidad</button></div>
   if (submitted) return <SignupSuccess ref={heading} request={submitted} onRestart={restart} local={local} google={Boolean(google)} />
 
   const err = (name: FieldName) => errors[name]
@@ -261,7 +266,7 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
             <Field label="Programa" htmlFor={`${id}-program`} error={err('program')} errorId={`${id}-program-error`}>
               <select {...fieldProps('program')} value={values.program} onChange={(event) => { set('program', event.target.value); set('group', '') }}>
                 <option value="" disabled>Selecciona un programa</option>
-                {signupPrograms.map((program) => <option key={program}>{program}</option>)}
+                {programs.map((program) => <option key={program}>{program}</option>)}
               </select>
             </Field>
             <Field label="Grupo u horario" htmlFor={`${id}-group`} error={err('group')} errorId={`${id}-group-error`}>

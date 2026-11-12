@@ -5,6 +5,7 @@ export interface CommunityConnection {
   user: StudentUser
   members: Member[]
   mine: OwnPost[]
+  submissionsOpen: boolean
   busy: boolean
   error: string
   notice: string

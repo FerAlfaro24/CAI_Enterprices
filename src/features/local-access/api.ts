@@ -1,4 +1,4 @@
-import type { ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, Receipt, RequestDecision, ReviewPost, StudentUser, Submission } from '../../../server/contracts'
+import type { CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, Receipt, RequestDecision, ReviewPost, StudentUser, Submission } from '../../../server/contracts'
 
 export class ApiError extends Error {
   status: number
@@ -20,7 +20,14 @@ async function call<T>(path: string, method = 'GET', body?: unknown, headers?: R
   return data as T
 }
 
+export const catalogApi = { get: () => call<PublicCatalog>('/catalog') }
+
 export const localApi = {
+  configuration: () => call<{ groups: CatalogGroup[]; settings: CommunityControls }>('/configuration'),
+  saveControls: (settings: CommunityControls) => call('/configuration', 'PATCH', settings),
+  createGroup: (program: string, name: string) => call('/groups', 'POST', { program, name }),
+  groupStatus: (group: CatalogGroup, active: boolean) => call(`/groups/${group.id}`, 'PATCH', { revision: group.revision, active }),
+  assignStudent: (student: LocalStudent, program: string, group: string, confirmed: boolean) => call(`/students/${student.id}/assignment`, 'PATCH', { revision: student.revision, program, group, confirmed }),
   session: () => call<{ user: LocalUser | null }>('/auth/session'),
   login: (email: string, password: string) => call<{ user: LocalUser }>('/auth/login', 'POST', { email, password }),
   logout: () => call('/auth/logout', 'POST', {}),
@@ -65,4 +72,4 @@ export const googleApi = {
   logout: () => call('/google/logout', 'POST', {}),
 }
 
-export type { ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }
+export type { CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }

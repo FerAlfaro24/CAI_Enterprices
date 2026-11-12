@@ -1,3 +1,5 @@
+> Fotografía del bloque 4. Grupos y Configuración se conectaron después: consultar `v1-groups-settings.md` y el registro vigente de `PROJECT_STATE.md`.
+
 # Community y moderación v1.0 conectadas
 
 Rama: `feat/v1-community-connected`, desde `cf12d8a` de `integration/cai-v1-connected`. Interfaz oficial preservada: `release/cai-demo-v1.0` (`f3ba46b`). Este documento describe integración local con datos ficticios, no una entrega de producción. Puntos de retorno: `4c0af54` (contrato público) y `f9e60bc` (interfaz, integración y pruebas). Los commits de este bloque se consultan con `git log -- docs/v1-connected-community.md`.

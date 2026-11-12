@@ -1,5 +1,6 @@
 import s from '../features/admin/admin.module.css'
 import { Avatar, Icon, Switch } from '../features/admin/components/ui'
+import { CatalogSettings } from '../features/admin/components/CatalogSettings'
 import { adminTeam } from '../features/admin/data/mockData'
 import { displayName, useAdmin, type Settings } from '../features/admin/state'
 
@@ -30,7 +31,7 @@ const groups: { title: string; description: string; icon: 'shield' | 'chat'; ite
 ]
 
 export function AdminSettingsPage() {
-  const { state, dispatch, announce } = useAdmin()
+  const { state, dispatch, announce, connection } = useAdmin()
   const { settings } = state
 
   return (
@@ -40,12 +41,13 @@ export function AdminSettingsPage() {
           <p className={s.eyebrow}>Ajustes de la comunidad</p>
           <h1 className={s['page-title']}>Configuración</h1>
           <p className={s['page-lead']}>
-            Reglas de privacidad y participación. Los cambios son de demostración y solo duran mientras la pestaña esté abierta.
+            {connection ? 'Grupos y controles guardados en este equipo. Las reglas protegidas y las funciones pendientes se identifican abajo.' : 'Reglas de privacidad y participación. Los cambios son de demostración y solo duran mientras la pestaña esté abierta.'}
           </p>
         </div>
       </div>
 
       <div className={s['settings-grid']}>
+        {connection?.configuration && <section className={s.card} aria-labelledby="settings-activity"><div className={s['card-head']}><div><h2 id="settings-activity" className={s['card-title']}>Solicitudes y publicaciones</h2><p className={s['card-sub']}>Las pausas se aplican a los nuevos envíos. Conservan las cuentas, historias, lectura y moderación existentes.</p></div></div>{([{key:'registrationOpen',label:'Recibir nuevas solicitudes',description:'Permite enviar solicitudes desde el registro; pausar no cancela las ya recibidas.'},{key:'submissionsOpen',label:'Recibir nuevas publicaciones',description:'Permite que alumnos envíen historias a revisión; siguen pudiendo leer y retirar las existentes.'}] as const).map(item => <Switch key={item.key} label={item.label} description={item.description} checked={connection.configuration!.settings[item.key]} disabled={connection.busy} onChange={value => { void connection.saveControls({...connection.configuration!.settings,[item.key]:value}) }} />)}</section>}
         {groups.map((group) => (
           <section key={group.title} className={s.card} aria-labelledby={`settings-${group.icon}`}>
             <div className={s['card-head']}>
@@ -60,9 +62,10 @@ export function AdminSettingsPage() {
             {group.items.map((item) => (
               <Switch
                 key={item.key}
-                label={item.label}
-                description={item.description}
-                locked={item.locked}
+                label={connection && item.key === 'hideLastNames' ? 'Usar el nombre visible aprobado' : connection && item.key === 'minorsPrivateByDefault' ? 'Expedientes de menores privados' : item.label}
+                description={connection && item.key === 'hideLastNames' ? 'Se usa el alias del registro. Los menores solo pueden usar nombre abreviado o iniciales.' : connection && item.key === 'minorsPrivateByDefault' ? 'Solo coordinación consulta el expediente. Su grupo recibe únicamente alias, avatar e historias revisadas.' : connection && ['allowPhotos','allowReactions','allowComments'].includes(item.key) ? 'Esta función está pendiente de integración; permanece desactivada.' : item.description}
+                locked={connection ? true : item.locked}
+                lockedLabel={connection && ['allowPhotos','allowReactions','allowComments'].includes(item.key) ? 'Pendiente' : 'Protegido'}
                 checked={settings[item.key]}
                 onChange={(value) => {
                   dispatch({ type: 'setting', key: item.key, value })
@@ -73,11 +76,12 @@ export function AdminSettingsPage() {
           </section>
         ))}
 
+        <CatalogSettings />
         <section className={s.card} aria-labelledby="preview-title">
           <div className={s['card-head']}>
             <div>
               <h2 id="preview-title" className={s['card-title']}>Vista previa en la comunidad</h2>
-              <p className={s['card-sub']}>Cómo vería otro alumno una publicación con estos ajustes.</p>
+              <p className={s['card-sub']}>Ejemplo ficticio de presentación; no corresponde a una publicación ni a una alumna real.</p>
             </div>
           </div>
           <div className={s.preview}>
@@ -104,11 +108,11 @@ export function AdminSettingsPage() {
           <div className={s['card-head']}>
             <div>
               <h2 id="team-title" className={s['card-title']}>Equipo administrador</h2>
-              <p className={s['card-sub']}>Cuentas ficticias con acceso al panel.</p>
+              <p className={s['card-sub']}>{connection ? 'Cuenta de esta sesión. La gestión de otros administradores sigue pendiente.' : 'Cuentas ficticias con acceso al panel.'}</p>
             </div>
           </div>
           <ul className={s.queue}>
-            {adminTeam.map((member) => (
+            {(connection ? [{name:connection.user?.name ?? 'Administración',role:'Administrador',scope:'Sesión local'}] : adminTeam).map((member) => (
               <li key={member.name}>
                 <div className={s['queue-person']}>
                   <Avatar name={member.name} />
@@ -120,7 +124,7 @@ export function AdminSettingsPage() {
               </li>
             ))}
           </ul>
-          <p className={s.footnote}>La gestión real de cuentas y permisos requiere un servidor y se definirá en la fase de producto.</p>
+          <p className={s.footnote}>La creación de otros administradores no está habilitada en esta sección.</p>
         </section>
       </div>
     </>

@@ -6,6 +6,7 @@ import { CommunityLayout } from '../layouts/CommunityLayout'
 import { AdminPage } from '../pages/AdminPage'
 import { AdminRequestsPage } from '../pages/AdminRequestsPage'
 import { AdminStudentsPage } from '../pages/AdminStudentsPage'
+import { AdminSettingsPage } from '../pages/AdminSettingsPage'
 import { AdminPostsPage } from '../pages/AdminPostsPage'
 import { ConnectedCommunity } from '../features/community/ConnectedCommunity'
 import { CommunityPage } from '../pages/CommunityPage'
@@ -43,7 +44,7 @@ export function AppRoutes() {
         <Route path="solicitudes" element={<AdminRequestsPage />} />
         <Route path="publicaciones" element={<AdminPostsPage />} />
         <Route path="alumnos" element={<AdminStudentsPage />} />
-        <Route path="configuracion" element={<section><h1>Configuración</h1><p>Los ajustes del diseño de v1.0 están pendientes de conexión. Se mantienen las reglas de privacidad del servidor.</p></section>} />
+        <Route path="configuracion" element={<AdminSettingsPage />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
       <Route element={<AppLayout />}>

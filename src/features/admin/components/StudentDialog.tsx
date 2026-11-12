@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { cx } from '../../landing/utils'
 import s from '../admin.module.css'
 import { formatDate, useAdmin, type DirectoryStudent } from '../state'
+import { StudentAssignment } from './StudentAssignment'
 import { Avatar, Icon, StatusBadge } from './ui'
 
 export function StudentDialog({ student, onClose }: { student: DirectoryStudent | null; onClose: () => void }) {
@@ -24,7 +25,8 @@ export function StudentDialog({ student, onClose }: { student: DirectoryStudent 
       className={s.dialog}
       aria-labelledby="student-dialog-title"
       onClose={onClose}
-      onClick={(event) => { if (event.target === event.currentTarget) onClose() }}
+      onCancel={event => { event.preventDefault(); if (!connection?.busy) onClose() }}
+      onClick={(event) => { if (event.target === event.currentTarget && !connection?.busy) onClose() }}
     >
       {student && (
         <>
@@ -34,7 +36,7 @@ export function StudentDialog({ student, onClose }: { student: DirectoryStudent 
               <h2 id="student-dialog-title">{student.name}</h2>
               <p>{student.id} · Alumno desde {formatDate(student.joinedAt)}</p>
             </div>
-            <button type="button" className={s['icon-btn']} onClick={onClose} aria-label="Cerrar ficha">
+            <button type="button" className={s['icon-btn']} disabled={connection?.busy} onClick={onClose} aria-label="Cerrar ficha">
               <Icon name="close" />
             </button>
           </div>
@@ -51,6 +53,7 @@ export function StudentDialog({ student, onClose }: { student: DirectoryStudent 
               <dt>Perfil</dt><dd>{connection?'Visible solo para su grupo':forcedPrivate || student.visibility === 'privado' ? 'Privado' : 'Visible para la comunidad'}</dd>
               {account && <><dt>Acceso de cuenta</dt><dd>{account.accountStatus==='activada'?'Cuenta activada':'Cuenta por activar'}</dd></>}
             </dl>
+            {account && <StudentAssignment key={`${account.id}-${account.revision}`} student={account} onSaved={onClose} />}
             {forcedPrivate && (
               <p className={cx(s.alert, s['alert--ok'])}>
                 Perfil privado. Solo coordinación consulta el expediente; su grupo solo recibe el nombre visible autorizado.

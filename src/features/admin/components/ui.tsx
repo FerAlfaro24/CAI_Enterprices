@@ -70,17 +70,19 @@ export function TypeTag({ type }: { type: PostType }) {
 }
 
 /** Interruptor accesible (role="switch"). */
-export function Switch({ checked, onChange, label, description, locked = false }: {
+export function Switch({ checked, onChange, label, description, locked = false, lockedLabel = 'Obligatorio', disabled = false }: {
   checked: boolean
   onChange: (value: boolean) => void
   label: string
   description: string
   locked?: boolean
+  lockedLabel?: string
+  disabled?: boolean
 }) {
   return (
     <div className={s.setting}>
       <div>
-        <p className={s['setting-label']}>{label}{locked && <span className={s['soon-chip']}>Obligatorio</span>}</p>
+        <p className={s['setting-label']}>{label}{locked && <span className={s['soon-chip']}>{lockedLabel}</span>}</p>
         <p className={s['setting-desc']}>{description}</p>
       </div>
       <button
@@ -88,9 +90,9 @@ export function Switch({ checked, onChange, label, description, locked = false }
         role="switch"
         aria-checked={checked}
         aria-label={label}
-        aria-disabled={locked}
+        aria-disabled={locked || disabled}
         className={s.switch}
-        onClick={() => { if (!locked) onChange(!checked) }}
+        onClick={() => { if (!locked && !disabled) onChange(!checked) }}
       >
         <span />
       </button>

@@ -169,6 +169,7 @@ Usar estados explícitos: **pendiente**, **en curso**, **implementado sin compro
 | Registro, acceso, aprobación, activación y suspensión con diseño v1.0 | Comprobado localmente | `8e205b0`; `v1-connected-access.md`; nuevo recorrido de navegador | Google/correo reales siguen pendientes. |
 | Dashboard, solicitudes y alumnos originales conectados | Comprobado localmente en el alcance descrito | `8e205b0`; 48 resultados Node, 30 comprobaciones por navegador Brave/Opera; contraste de indicadores, vacío y autorización de menor | Grupos/perfil completo/ajustes y demás bloques siguen pendientes; moderación se completó después, en la fila siguiente. |
 | Moderación y Community avanzadas, bloque 4 | Comprobado localmente en `feat/v1-community-connected`, base `cf12d8a` | `f9e60bc` (interfaz) y `4c0af54` (contratos); `v1-connected-community.md`; 48 resultados Node, 39 comprobaciones por navegador Brave/Opera, respaldo antes de migración 6 | Configuración, grupos/perfil completo, archivos e interacciones secundarias siguen pendientes. |
+| Grupos, asignaciones y ajustes mínimos, bloque 5 | Comprobado localmente en `feat/v1-groups-settings`, base `9a5ef81` | `v1-groups-settings.md`; 56 resultados Node, 27 comprobaciones por navegador Brave/Opera; migración 7 respaldada | Catálogo final de CAI, edición completa de expediente/perfil y otras cuentas administrativas no incluidos. Siguiente: avisos/recuperación/contacto oficiales. |
 
 Lista de comprobación del bloque 4:
 
@@ -183,7 +184,7 @@ Lista de comprobación del bloque 4:
 
 Última base funcional auditada: `1b84fb3`. Después de la auditoría se completó el primer recorrido conectado en `integration/cai-v1-connected`, desde `be90193`: registro/login oficiales, protección administrativa, solicitudes y alumnos en dashboard original, activación/suspensión e indicadores con datos del servidor. Detalles, archivos y pruebas en `v1-connected-access.md`; identificar su commit con `git log -- docs/v1-connected-access.md`.
 
-Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores; 4 comprobado localmente con moderación y Community avanzadas (ver `v1-connected-community.md`); Configuración continúa pendiente. **Siguiente bloque: 5, catálogo/asignaciones, perfil y ajustes mínimos con los componentes existentes**. La ficha completa de usuario, catálogo/grupos y ajustes siguen pendientes conforme al inventario. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
+Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores; 4 comprobado localmente con moderación y Community avanzadas (ver `v1-connected-community.md`); 5 comprobado en catálogo/asignaciones y ajustes mínimos (ver `v1-groups-settings.md`). **Siguiente bloque: 6, recuperación, avisos y contacto en la experiencia oficial**. La edición completa de expediente/perfil y otras cuentas administrativas siguen pendientes; el catálogo/asignaciones y ajustes mínimos del bloque 5 sí están conectados. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
 
 Al cerrar cada tarea añadir: rama/base y commit; archivos de interfaz reutilizados; datos/endpoint conectado; criterio de cierre demostrado; pruebas realmente ejecutadas; pendientes. «Implementado en una rama», «integrado visualmente», «conectado al servidor», «probado localmente» y «listo para producción» son estados distintos y nunca intercambiables.
 
@@ -198,3 +199,34 @@ Incidencia de verificación del bloque 4: el primer recorrido necesitó corregir
 Verificación intermedia superada: `check-community-connected.browser.mjs`, 39 comprobaciones en Brave y 39 en Opera GX. Cuatro sesiones independientes, pérdida de respuesta y reintento sin duplicación, revisión/privacidad/rechazo/retiro/suspensión y cuatro anchuras (1440/768/375/320). Corregido y vuelto a comprobar el desbordamiento móvil. Cero errores de ejecución de JavaScript en los recorridos; las denegaciones 401 y la red interrumpida intencionalmente son escenarios de prueba. Capturas de escritorio y móvil inspeccionadas en Brave. Cierre documental y Git pendientes.
 
 Cierre del bloque 4: contrato público guardado en `4c0af54`; rama `feat/v1-community-connected`, base `cf12d8a`; alcance, archivos, pruebas y límites en `docs/v1-connected-community.md`. Puntos de retorno: `4c0af54` (identidad pública) y `f9e60bc` (Community/moderación comprobadas). Lint, typecheck, build y API volvieron a pasar al cierre; actualización manual de bandeja comprobada en ambos navegadores. No se fusiona implícitamente a `release/cai-demo-v1.0` ni a la rama de integración.
+
+
+### Notas cronológicas del bloque 5 (los pendientes intermedios se resuelven en el cierre)
+
+Rama `feat/v1-groups-settings`, base `9a5ef81`. Respaldo previo a migración 7 realizado. Reutilizar Configuración y ficha del alumno de v1.0; no abrir un panel paralelo. Alcance: catálogo persistente con alta/archivo/reactivación, asignaciones administrativas y controles reales para pausar solicitudes/envíos. Archivo de grupos impide nuevas selecciones, sin expulsar alumnos actuales; las reglas de privacidad siguen protegidas. Cambiar asignación exigirá confirmación en la interfaz, cerrará sesiones e impedirá que publicaciones antiguas migren de audiencia o se republicuen al volver de grupo.
+
+- En curso: migración 7 y servicios. El primer intento de pruebas detectó una importación de frontend sin extensión compatible con Node; corregida para reutilizar directamente la semilla histórica. No se declara comprobado hasta repetir pruebas.
+- Pendiente: prueba de permisos/concurrencia/aislamiento al reasignar; conectar formulario de registro al catálogo; adaptar Configuración y ficha originales; pruebas de navegador y cierre documental/Git.
+- Perfil completo: en este bloque se consolida la inscripción y su asignación. Edición de nombre legal/edad/consentimiento y gestión de otros administradores no se añade automáticamente al alcance.
+
+Avance del bloque 5: migración 7, catálogo, controles y reasignación comprobados con 56 resultados de servidor y typecheck. La migración conserva incluso registros históricos no interpretables sin modificarlos; se corrigió el supuesto de JSON válido detectado por la prueba de versión 1. Alta/archivo/reactivación, pausas, revisiones obsoletas, permisos, audiencia de historias al cambiar/volver de grupo y reinicio comprobados. Interfaz todavía pendiente.
+
+Avance de interfaz del bloque 5 (todavía sin comprobar en navegador): Configuración original adapta controles reales, reglas protegidas, funciones pendientes y sesión administrativa sin equipo ficticio; alta/archivo/reactivación de grupos; ficha original con reasignación confirmada. Registro y Community consultan catálogo/pausas del servidor. No se afirma cierre hasta comprobar recorridos y móvil.
+
+Verificación de interfaz del bloque 5: el primer recorrido comprobó catálogo dinámico, pausas y archivo/reactivación, pero detectó que las etiquetas de los selectores de asignación incluían las opciones en su nombre accesible. Se separaron etiquetas y selectores para que sean identificables correctamente. Pendiente repetir el recorrido completo y cerrar el bloque.
+
+El segundo recorrido del bloque 5 completó reasignación, revocación, aislamiento entre grupos y vuelta sin republicar, pero encontró desbordamiento móvil por el nombre largo del programa en la ficha. Se limitaron las columnas de la ficha existente y el ajuste de texto; se repetirá el recorrido después de verificar la corrección. No se dan por superados recorridos incompletos.
+
+Verificación del bloque 5 superada: 27 comprobaciones en Brave y 27 en Opera GX, cada recorrido con administrador y tres alumnos en contextos independientes. Alta de catálogo desde Configuración y solicitud desde registro originales, pausas/reapertura, archivo sin expulsar miembros, reasignación con confirmación, nuevo login, audiencia conservada y vuelta sin republicación. Configuración/ficha a 1440/768/375/320 px. Corregidas las etiquetas accesibles y el desbordamiento con programa largo; se repitieron ambos recorridos completos. Cierre documental/Git pendiente.
+
+Cierre del bloque 5: comprobados catálogo persistente, Configuración original, asignación confirmada desde ficha, registro dinámico, pausas y aislamiento al reasignar. Servidor guardado en `45900a2`; el punto de retorno de interfaz se identifica con el commit que incorpora `docs/v1-groups-settings.md`. Faltan los bloques 6 en adelante y los límites de perfil/equipo indicados en ese documento. No se da por terminado el producto ni se publica el sitio.
+
+Lista de comprobación del bloque 5:
+- [x] Respaldo, migración aditiva y catálogo compartido por registro/asignación.
+- [x] Alta/archivo/reactivación de grupos y controles aplicados en servidor.
+- [x] Ficha original con confirmación, revisiones y nueva entrada del alumno.
+- [x] Historial/audiencia conservados al cambiar y volver de grupo.
+- [x] Configuración coherente con funciones realmente disponibles, sin equipo ficticio.
+- [x] Pruebas de servidor, ambos navegadores, errores, móvil, lint/typecheck/build y documentación.
+
+Siguiente tarea autónoma: reutilizar `notices.ts`, recuperación existente y componentes oficiales para conectar avisos y recuperación en un solo recorrido. Verificar primero lo ya hecho; Google/correo/cuentas/presupuesto siguen para el final. No comenzar otra administración ni reconstruir el contacto sin revisar el formulario existente.
