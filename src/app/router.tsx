@@ -1,25 +1,26 @@
+import { lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
-import { AdminLayout } from '../layouts/AdminLayout'
-import { AppLayout } from '../layouts/AppLayout'
-import { LandingLayout } from '../layouts/LandingLayout'
-import { CommunityLayout } from '../layouts/CommunityLayout'
-import { AdminPage } from '../pages/AdminPage'
-import { AdminRequestsPage } from '../pages/AdminRequestsPage'
-import { AdminStudentsPage } from '../pages/AdminStudentsPage'
-import { AdminGalleryPage } from '../pages/AdminGalleryPage'
-import { AdminInboxPage } from '../pages/AdminInboxPage'
-import { AdminSettingsPage } from '../pages/AdminSettingsPage'
-import { AdminPostsPage } from '../pages/AdminPostsPage'
-import { ConnectedCommunity } from '../features/community/ConnectedCommunity'
-import { CommunityPage } from '../pages/CommunityPage'
-import { InstitutionalPage } from '../pages/InstitutionalPage'
-import { NotFoundPage } from '../pages/NotFoundPage'
-import { LoginPage } from '../pages/LoginPage'
-import { SignupPage } from '../pages/SignupPage'
-import { ActivateAccountPage } from '../features/local-access/ActivateAccountPage'
-import { StudentArea } from '../features/local-access/StudentArea'
-import { GoogleOnboardingPage } from '../features/local-access/GoogleOnboardingPage'
-import { RecoveryPage } from '../features/local-access/RecoveryPage'
+const AdminLayout = lazy(() => import('../layouts/AdminLayout').then(module => ({ default: module.AdminLayout })))
+const AppLayout = lazy(() => import('../layouts/AppLayout').then(module => ({ default: module.AppLayout })))
+const LandingLayout = lazy(() => import('../layouts/LandingLayout').then(module => ({ default: module.LandingLayout })))
+const CommunityLayout = lazy(() => import('../layouts/CommunityLayout').then(module => ({ default: module.CommunityLayout })))
+const AdminPage = lazy(() => import('../pages/AdminPage').then(module => ({ default: module.AdminPage })))
+const AdminRequestsPage = lazy(() => import('../pages/AdminRequestsPage').then(module => ({ default: module.AdminRequestsPage })))
+const AdminStudentsPage = lazy(() => import('../pages/AdminStudentsPage').then(module => ({ default: module.AdminStudentsPage })))
+const AdminGalleryPage = lazy(() => import('../pages/AdminGalleryPage').then(module => ({ default: module.AdminGalleryPage })))
+const AdminInboxPage = lazy(() => import('../pages/AdminInboxPage').then(module => ({ default: module.AdminInboxPage })))
+const AdminSettingsPage = lazy(() => import('../pages/AdminSettingsPage').then(module => ({ default: module.AdminSettingsPage })))
+const AdminPostsPage = lazy(() => import('../pages/AdminPostsPage').then(module => ({ default: module.AdminPostsPage })))
+const ConnectedCommunity = lazy(() => import('../features/community/ConnectedCommunity').then(module => ({ default: module.ConnectedCommunity })))
+const CommunityPage = lazy(() => import('../pages/CommunityPage').then(module => ({ default: module.CommunityPage })))
+const InstitutionalPage = lazy(() => import('../pages/InstitutionalPage').then(module => ({ default: module.InstitutionalPage })))
+const NotFoundPage = lazy(() => import('../pages/NotFoundPage').then(module => ({ default: module.NotFoundPage })))
+const LoginPage = lazy(() => import('../pages/LoginPage').then(module => ({ default: module.LoginPage })))
+const SignupPage = lazy(() => import('../pages/SignupPage').then(module => ({ default: module.SignupPage })))
+const ActivateAccountPage = lazy(() => import('../features/local-access/ActivateAccountPage').then(module => ({ default: module.ActivateAccountPage })))
+const StudentArea = lazy(() => import('../features/local-access/StudentArea').then(module => ({ default: module.StudentArea })))
+const GoogleOnboardingPage = lazy(() => import('../features/local-access/GoogleOnboardingPage').then(module => ({ default: module.GoogleOnboardingPage })))
+const RecoveryPage = lazy(() => import('../features/local-access/RecoveryPage').then(module => ({ default: module.RecoveryPage })))
 
 export function AppRoutes() {
   return (

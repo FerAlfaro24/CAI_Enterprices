@@ -5,6 +5,7 @@ import { defaultSettings, type AdminAction, type AdminState } from './state'
 export function useAdminConnection() {
   const [user, setUser] = useState<LocalUser | null>(null)
   const [checking, setChecking] = useState(true), [loaded, setLoaded] = useState(false)
+  const [sessionError, setSessionError] = useState('')
   const [requests, setRequests] = useState<LocalRequest[]>([]), [students, setStudents] = useState<LocalStudent[]>([]), [posts, setPosts] = useState<ReviewPost[]>([])
   const [configuration, setConfiguration] = useState<{groups: CatalogGroup[];settings:CommunityControls} | null>(null)
   const [error, setError] = useState(''), [busy, setBusy] = useState(false), [notice, setNotice] = useState('')
@@ -24,7 +25,7 @@ export function useAdminConnection() {
   useEffect(() => {
     let active=true
     const sequence=generation
-    void localApi.session().then(({user})=>{if(active)setUser(user)}).catch((error:unknown)=>{if(active)failure(error)}).finally(()=>{if(active)setChecking(false)})
+    void localApi.session().then(({user})=>{if(active)setUser(user)}).catch((error:unknown)=>{if(active){setSessionError(error instanceof Error?error.message:'No pudimos comprobar tu acceso.');failure(error)}}).finally(()=>{if(active)setChecking(false)})
     return ()=>{active=false;sequence.current++}
   }, [failure])
   useEffect(()=>{if(user)void refresh()},[user,refresh])
@@ -83,6 +84,6 @@ export function useAdminConnection() {
   }
   const directory=students.map(s=>({...s,posts:posts.filter(p=>p.studentId===s.id&&p.status==='publicada').length,isNew:s.joinedAt.startsWith(new Date().toISOString().slice(0,7))}))
   const state:AdminState={requests,posts:posts.map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:{...defaultSettings,allowPhotos:false,allowReactions:false,allowComments:false},directory}
-  return {user,checking,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setUser(user)}}
+  return {user,checking,sessionError,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setUser(user)}}
 }
 export type AdminConnection=ReturnType<typeof useAdminConnection>

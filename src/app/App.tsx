@@ -1,18 +1,15 @@
 import { BrowserRouter } from 'react-router'
-import { DemoStoreProvider } from './DemoStoreProvider'
-import { CommunityProvider } from '../features/community/CommunityProvider'
 import { AppRoutes } from './router'
 import { ThemeProvider } from './ThemeProvider'
+import { RouteContent } from './RouteContent'
 
 export function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
-        <DemoStoreProvider>
-          <CommunityProvider>
-            <AppRoutes />
-          </CommunityProvider>
-        </DemoStoreProvider>
+        <RouteContent>
+          <AppRoutes />
+        </RouteContent>
       </ThemeProvider>
     </BrowserRouter>
   )

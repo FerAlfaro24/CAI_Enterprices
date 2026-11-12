@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { useAdminConnection } from '../features/admin/useAdminConnection'
 import { LoginPage } from '../pages/LoginPage'
+import { AccessFrame } from '../features/login/AccessFrame'
+import accessStyles from '../features/login/login.module.css'
 import { LocalInvitationDialog } from '../features/local-access/LocalInvitationDialog'
 import emblem from '../assets/cai/logo-cai-emblema.svg'
 import s from '../features/admin/admin.module.css'
@@ -51,6 +53,7 @@ export function AdminLayout() {
   }, [menuOpen])
 
   if (connection.checking) return <main className={s.admin}><p role="status" className={s.content}>Comprobando acceso…</p></main>
+  if (connection.sessionError) return <AccessFrame><h1>No pudimos comprobar tu acceso</h1><p role="alert">{connection.sessionError}</p><button type="button" className={accessStyles.primary} onClick={()=>window.location.reload()}>Volver a intentar</button></AccessFrame>
   if (!connection.user) return <LoginPage admin onAdminLogin={connection.onLogin} />
   return (
     <div className={s.admin}>

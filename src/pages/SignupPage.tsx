@@ -1,3 +1,4 @@
+import { DemoStoreProvider } from '../app/DemoStoreProvider'
 import { useEffect } from 'react'
 import { Link } from 'react-router'
 import emblem from '../assets/cai/logo-cai-blanco.svg'
@@ -18,6 +19,7 @@ export function SignupPage({ local: localOption = false, google }: { local?: boo
   useEffect(() => { document.title = 'Solicitar acceso · Comunidad CAI · Prototipo' }, [])
 
   return (
+    <DemoStoreProvider>
     <div className={s.page}>
       <a className={s['skip-link']} href="#signup-content">Saltar al formulario</a>
       {local ? <aside className={s['local-notice']}>{google ? 'Integración local de prueba. Completa los datos del alumno y espera la aprobación de CAI. No se envían correos.' : 'Pruebas locales: usa datos ficticios. La solicitud se guarda en este equipo. CAI debe aprobarla y preparar tu enlace de activación; no se envían correos.'}</aside> : <PrototypeNotice />}
@@ -53,5 +55,6 @@ export function SignupPage({ local: localOption = false, google }: { local?: boo
         </main>
       </div>
     </div>
+    </DemoStoreProvider>
   )
 }
