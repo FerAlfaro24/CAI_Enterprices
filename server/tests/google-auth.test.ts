@@ -101,8 +101,10 @@ test('Google: datos obligatorios, aprobación, sesión y protección de cuentas'
     const me = await (await call('/student/me')).json() as { user: { id: string; role: string } }
     assert.equal(me.user.id, id); assert.equal(me.user.role, 'student')
     assert.equal((await call('/requests')).status, 401)
-    const members = await (await call('/student/group')).json()
-    assert.deepEqual(members, { members: [{ displayName: fixture.displayName, avatarColor: fixture.avatarColor }] })
+    const members = await (await call('/student/group')).json() as { members: { id: string; displayName: string; avatarColor: string }[] }
+    assert.equal(members.members.length, 1)
+    assert.deepEqual({ ...members.members[0], id: undefined }, { id: undefined, displayName: fixture.displayName, avatarColor: fixture.avatarColor })
+    assert.match(members.members[0]!.id, /^[a-f0-9-]{36}$/)
     assert.equal((await call('/student/login', 'POST', { email: fixture.email, password: 'Una frase ficticia larga 2026' })).status, 401)
   })
   await t.test('suspender o devolver a revisión revoca las sesiones, incluso con Google confirmado', async () => {

@@ -4,6 +4,7 @@ import type { ActivationInvitation, GroupMember, StudentUser, Submission } from 
 import { hashPassword, tokenFrom, verifyPassword } from './auth.ts'
 import { transaction, type Database } from './database.ts'
 import { HttpError } from './validation.ts'
+import { publicProfileId } from './public-profiles.ts'
 
 const cookieName = 'cai_student_session'
 const sessionSeconds = 8 * 60 * 60
@@ -16,9 +17,9 @@ const accountQuery = `SELECT r.id, r.payload, a.password_hash FROM requests r
   AND (a.request_id IS NOT NULL OR EXISTS (SELECT 1 FROM google_identities g WHERE g.request_id = r.id))`
 type AccountRow = { id: number; payload: string; password_hash: string | null }
 
-function userFrom(row: AccountRow): StudentUser {
+function userFrom(db: Database, row: AccountRow): StudentUser {
   const p = JSON.parse(row.payload) as Submission
-  return { id: `CAI-${String(row.id).padStart(4, '0')}`, role: 'student', name: `${p.firstName} ${p.lastName}`,
+  return { id: `CAI-${String(row.id).padStart(4, '0')}`, publicId: publicProfileId(db, row.id), role: 'student', name: `${p.firstName} ${p.lastName}`,
     displayName: p.displayName, program: p.program, group: p.group, avatarColor: p.avatarColor }
 }
 
@@ -80,11 +81,11 @@ export function studentAccounts(db: Database) {
       const valid = await verifyPassword(password, row?.password_hash ?? fallback)
       if (!valid || !row?.password_hash) return null
       const current = db.prepare(`${accountQuery} AND r.id = ?`).get(row.id) as AccountRow | undefined
-      return current ? userFrom(current) : null
+      return current ? userFrom(db, current) : null
     },
     forGoogle(subject: string): StudentUser | null {
       const row = db.prepare(`${accountQuery} AND r.id = (SELECT request_id FROM google_identities WHERE subject = ?)`).get(subject) as AccountRow | undefined
-      return row ? userFrom(row) : null
+      return row ? userFrom(db, row) : null
     },
     start(user: StudentUser) {
       const id = idOf(user.id)
@@ -98,7 +99,7 @@ export function studentAccounts(db: Database) {
       const token = tokenFrom(request, cookieName)
       if (!token) return null
       const row = db.prepare(`${accountQuery} AND r.id = (SELECT request_id FROM student_sessions WHERE token_hash = ? AND expires_at > ?)`).get(hashToken(token), Date.now()) as AccountRow | undefined
-      return row ? userFrom(row) : null
+      return row ? userFrom(db, row) : null
     },
     end(request: IncomingMessage) {
       const token = tokenFrom(request, cookieName)
@@ -113,7 +114,7 @@ export function studentAccounts(db: Database) {
       const rows = db.prepare(`${accountQuery} ORDER BY r.id`).all() as AccountRow[]
       return rows.flatMap((row) => {
         const p = JSON.parse(row.payload) as Submission
-        return p.program === profile.program && p.group === profile.group ? [{ displayName: p.displayName, avatarColor: p.avatarColor }] : []
+        return p.program === profile.program && p.group === profile.group ? [{ id: publicProfileId(db, row.id), displayName: p.displayName, avatarColor: p.avatarColor }] : []
       })
     },
   }

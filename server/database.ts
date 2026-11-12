@@ -112,6 +112,14 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (5, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 6').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE public_profiles (
+        request_id INTEGER PRIMARY KEY REFERENCES requests(id), public_id TEXT NOT NULL UNIQUE
+      );
+      INSERT INTO migrations VALUES (6, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

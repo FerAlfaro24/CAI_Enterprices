@@ -110,7 +110,7 @@ test('Cuentas de alumnos: activación, permisos, grupos y revocación', async (t
     assert.equal(response.status, 200)
     const { members } = await response.json() as { members: GroupMember[] }
     assert.deepEqual(members.map((m) => m.displayName), ['Alumna P.', 'Compañero P.'])
-    assert.ok(members.every((member) => Object.keys(member).sort().join(',') === 'avatarColor,displayName'))
+    assert.ok(members.every((member) => Object.keys(member).sort().join(',') === 'avatarColor,displayName,id'))
     assert.ok(!JSON.stringify(members).includes('@'))
   })
   await t.test('activar otra cuenta cierra la sesión previa de alumno sin cerrar coordinación', async () => {

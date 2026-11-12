@@ -59,10 +59,10 @@ export interface LocalStudent {
 }
 
 export type StudentUser = {
-  id: string; role: 'student'; name: string; displayName: string
+  id: string; publicId: string; role: 'student'; name: string; displayName: string
   program: string; group: string; avatarColor: string
 }
-export type GroupMember = { displayName: string; avatarColor: string }
+export type GroupMember = { id: string; displayName: string; avatarColor: string }
 export type ActivationInvitation = { path: string; expiresAt: string }
 
 export type RequestDecision = 'approve' | 'reject' | 'undo' | 'consent'
@@ -80,7 +80,7 @@ export type PublicationDraft = { title: string; body: string; category: keyof ty
 export type PublicationStatus = 'pendiente' | 'publicada' | 'rechazada' | 'retirada'
 export type PublicationDecision = 'approve' | 'reject' | 'undo'
 export type PublishedPost = PublicationDraft & {
-  id: string; author: { displayName: string; avatarColor: string }; createdAt: string; publishedAt: string | null
+  id: string; author: GroupMember; createdAt: string; publishedAt: string | null
 }
 export type OwnPost = PublishedPost & { status: PublicationStatus; revision: number; reason: string | null }
 export type ReviewPost = OwnPost & { studentId: string; studentName: string; program: string; group: string; authorActive: boolean; authorIsMinor: boolean }

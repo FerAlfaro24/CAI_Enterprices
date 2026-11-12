@@ -1,6 +1,7 @@
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError, record } from './validation.ts'
 import { queueNotice } from './notices.ts'
+import { publicProfileId } from './public-profiles.ts'
 import { publicationCategories, publicationLimits, type OwnPost, type PublicationDecision, type PublicationDraft, type PublicationStatus, type PublishedPost, type ReviewPost, type StudentUser, type Submission } from './contracts.ts'
 
 type Row = {
@@ -26,14 +27,14 @@ export function validatePublication(value: unknown): PublicationDraft {
   return { title: field(data.title, 'el título', publicationLimits.titleMin, publicationLimits.titleMax),
     body: field(data.body, 'el texto', publicationLimits.bodyMin, publicationLimits.bodyMax), category: data.category as PublicationDraft['category'] }
 }
-function publicPost(row: Row): PublishedPost {
+function publicPost(db: Database, row: Row): PublishedPost {
   const profile = JSON.parse(row.payload) as Submission
   return { id: folio(row.id), title: row.title, body: row.body, category: row.category,
-    author: { displayName: profile.displayName, avatarColor: profile.avatarColor }, createdAt: row.created_at, publishedAt: row.published_at }
+    author: { id: publicProfileId(db, row.author_id), displayName: profile.displayName, avatarColor: profile.avatarColor }, createdAt: row.created_at, publishedAt: row.published_at }
 }
-const ownPost = (row: Row): OwnPost => ({ ...publicPost(row), status: row.status, revision: row.revision, reason: row.reason })
 
 export function publications(db: Database) {
+  const ownPost = (row: Row): OwnPost => ({ ...publicPost(db, row), status: row.status, revision: row.revision, reason: row.reason })
   const audit = (id: number, action: string, admin: number | null, student: number | null) => db.prepare('INSERT INTO publication_audit(publication_id,admin_id,student_id,action,created_at) VALUES (?,?,?,?,?)').run(id, admin, student, action, new Date().toISOString())
   const activeProfile = (user: StudentUser) => {
     const row = db.prepare("SELECT r.payload FROM requests r JOIN students s ON s.request_id = r.id WHERE r.id = ? AND r.status = 'aprobada' AND s.status = 'activo'").get(idOf(user.id, 'CAI')) as { payload: string } | undefined
@@ -64,7 +65,7 @@ export function publications(db: Database) {
     feed(user: StudentUser): PublishedPost[] {
       const profile = activeProfile(user)
       if (profile.group === 'Por asignar') return []
-      return (db.prepare(`${select} WHERE p.status = 'publicada' AND p.program = ? AND p.group_name = ? ORDER BY p.published_at DESC, p.id DESC`).all(profile.program, profile.group) as Row[]).filter(available).map(publicPost)
+      return (db.prepare(`${select} WHERE p.status = 'publicada' AND p.program = ? AND p.group_name = ? ORDER BY p.published_at DESC, p.id DESC`).all(profile.program, profile.group) as Row[]).filter(available).map(row => publicPost(db, row))
     },
     mine(user: StudentUser): OwnPost[] {
       activeProfile(user)
