@@ -2,6 +2,7 @@ import s from '../features/admin/admin.module.css'
 import { Avatar, Icon, Switch } from '../features/admin/components/ui'
 import { CatalogSettings } from '../features/admin/components/CatalogSettings'
 import { AdminPasswordForm } from '../features/admin/components/AdminPasswordForm'
+import { AdminTeamSettings } from '../features/admin/components/AdminTeamSettings'
 import { adminTeam } from '../features/admin/data/mockData'
 import { displayName, useAdmin, type Settings } from '../features/admin/state'
 
@@ -106,15 +107,15 @@ export function AdminSettingsPage() {
           </div>
         </section>
 
-        <section className={s.card} aria-labelledby="team-title">
+        {connection ? <AdminTeamSettings/> : <section className={s.card} aria-labelledby="team-title">
           <div className={s['card-head']}>
             <div>
               <h2 id="team-title" className={s['card-title']}>Equipo administrador</h2>
-              <p className={s['card-sub']}>{connection ? 'Cuenta de esta sesión. La gestión de otros administradores sigue pendiente.' : 'Cuentas ficticias con acceso al panel.'}</p>
+              <p className={s['card-sub']}>Cuentas ficticias con acceso al panel.</p>
             </div>
           </div>
           <ul className={s.queue}>
-            {(connection ? [{name:connection.user?.name ?? 'Administración',role:'Administrador',scope:'Sesión local'}] : adminTeam).map((member) => (
+            {adminTeam.map((member) => (
               <li key={member.name}>
                 <div className={s['queue-person']}>
                   <Avatar name={member.name} />
@@ -127,7 +128,7 @@ export function AdminSettingsPage() {
             ))}
           </ul>
           <p className={s.footnote}>La creación de otros administradores no está habilitada en esta sección.</p>
-        </section>
+        </section>}
       </div>
     </>
   )

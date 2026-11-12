@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type ReviewPost, type PublicationDecision, type CatalogGroup, type CommunityControls } from '../local-access/api'
 import { defaultSettings, type AdminAction, type AdminState } from './state'
+import { adminTeamApi,type AdminAccount } from '../local-access/api'
 
 export function useAdminConnection() {
   const [user, setUser] = useState<LocalUser | null>(null)
@@ -11,16 +12,17 @@ export function useAdminConnection() {
   const [configuration, setConfiguration] = useState<{groups: CatalogGroup[];settings:CommunityControls} | null>(null)
   const [error, setError] = useState(''), [busy, setBusy] = useState(false), [notice, setNotice] = useState('')
   const [invitation, setInvitation] = useState<(ActivationInvitation & {name:string}) | null>(null)
+  const [team,setTeam]=useState<AdminAccount[]>([])
   const generation = useRef(0), writing = useRef(false)
   const failure = useCallback((error: unknown) => {
-    if (error instanceof ApiError && error.status === 401) { generation.current++; setUser(null); setLoaded(false); setRequests([]); setStudents([]); setPosts([]); setInvitation(null); setConfiguration(null) }
+    if (error instanceof ApiError && error.status === 401) { generation.current++; setUser(null); setLoaded(false); setRequests([]); setStudents([]); setPosts([]); setInvitation(null); setConfiguration(null);setTeam([]) }
     setError(error instanceof Error ? error.message : 'No pudimos completar la operación.')
   }, [])
   const refresh = useCallback(() => {
     const current = ++generation.current
-    return Promise.all([localApi.requests(),localApi.students(),localApi.posts(),localApi.configuration()]).then(([r,s,p,c])=>{
+    return Promise.all([localApi.requests(),localApi.students(),localApi.posts(),localApi.configuration(),adminTeamApi.list()]).then(([r,s,p,c,t])=>{
       if (current !== generation.current) return
-      setRequests(r.requests);setStudents(s.students);setPosts(p.posts);setConfiguration(c);setLoaded(true);setError('')
+      setRequests(r.requests);setStudents(s.students);setPosts(p.posts);setConfiguration(c);setTeam(t.accounts);setLoaded(true);setError('')
     }).catch((error:unknown)=>{if(current===generation.current)failure(error)})
   }, [failure])
   useEffect(() => {
@@ -65,6 +67,10 @@ export function useAdminConnection() {
     finally{writing.current=false;setBusy(false)}
   }
   const saveControls=(settings:CommunityControls)=>configure(()=>localApi.saveControls(settings),'Configuración guardada.')
+  const manageTeam=(operation:()=>Promise<unknown>,message:string)=>configure(async()=>{
+    try{return await operation()}
+    catch(error){if(error instanceof ApiError&&(error.status===0||error.status>=500||(error.status>=200&&error.status<300)))throw new ApiError(error.status,'No pudimos confirmar el resultado. No se reintentó automáticamente. Actualiza el equipo antes de repetir; si era una invitación, prepara otro enlace.');throw error}
+  },message)
   const createGroup=(program:string,name:string)=>configure(()=>localApi.createGroup(program,name),'Grupo creado. Ya está disponible en el registro y en las fichas.')
   const toggleGroup=(group:CatalogGroup)=>configure(()=>localApi.groupStatus(group,!group.active),group.active?'Grupo archivado para nuevas selecciones. Sus alumnos conservan el acceso.':'Grupo reactivado.')
   const assign=(id:string,program:string,group:string,confirmed:boolean)=>{
@@ -81,13 +87,13 @@ export function useAdminConnection() {
   const logout=async()=>{
     if(writing.current)return
     setBusy(true)
-    try {await localApi.logout();generation.current++;setUser(null);setLoaded(false);setRequests([]);setStudents([]);setPosts([]);setInvitation(null);setError('') }catch(error){failure(error)}finally{setBusy(false)}
+    try {await localApi.logout();generation.current++;setUser(null);setLoaded(false);setRequests([]);setStudents([]);setPosts([]);setInvitation(null);setTeam([]);setError('') }catch(error){failure(error)}finally{setBusy(false)}
   }
   const requireLogin=(message:string)=>{
-    generation.current++;setUser(null);setLoaded(false);setRequests([]);setStudents([]);setPosts([]);setInvitation(null);setConfiguration(null);setError('');setSessionError('');setNotice('');setAccessMessage(message)
+    generation.current++;setUser(null);setLoaded(false);setRequests([]);setStudents([]);setPosts([]);setInvitation(null);setTeam([]);setConfiguration(null);setError('');setSessionError('');setNotice('');setAccessMessage(message)
   }
   const directory=students.map(s=>({...s,posts:posts.filter(p=>p.studentId===s.id&&p.status==='publicada').length,isNew:s.joinedAt.startsWith(new Date().toISOString().slice(0,7))}))
   const state:AdminState={requests,posts:posts.map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:{...defaultSettings,allowPhotos:false,allowReactions:false,allowComments:false},directory}
-  return {user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
+  return {team,manageTeam,user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
 }
 export type AdminConnection=ReturnType<typeof useAdminConnection>

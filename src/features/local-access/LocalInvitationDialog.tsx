@@ -3,8 +3,8 @@ import { Icon } from '../admin/components/ui'
 import type { ActivationInvitation } from './api'
 import s from '../admin/admin.module.css'
 
-export function LocalInvitationDialog({ invitation, name, onClose, recovery = false }: {
-  invitation: ActivationInvitation; name: string; onClose: () => void; recovery?: boolean
+export function LocalInvitationDialog({ invitation, name, onClose, recovery = false, admin=false }: {
+  invitation: ActivationInvitation; name: string; onClose: () => void; recovery?: boolean; admin?:boolean
 }) {
   const ref = useRef<HTMLDialogElement>(null)
   const [message, setMessage] = useState('')
@@ -22,7 +22,7 @@ export function LocalInvitationDialog({ invitation, name, onClose, recovery = fa
         <button type="button" className={s['icon-btn']} onClick={onClose} aria-label={recovery ? "Cerrar enlace de recuperación" : "Cerrar enlace de activación"}><Icon name="close" /></button>
       </div>
       <div className={s['dialog-body']}>
-        <p>{recovery ? `Enlace de prueba para ${name}. No comprueba la identidad del destinatario ni demuestra entrega por correo. Usa solo cuentas ficticias para comprobar este recorrido.` : 'Entrega este enlace al alumno o a su tutor después de verificar su identidad. Le permitirá elegir su contraseña una sola vez.'}</p>
+        <p>{admin ? 'Invitación administrativa de prueba: permite elegir una contraseña y obtener acceso completo al panel. Verifica al responsable y el correo antes de entregarla; no demuestra entrega por correo ni identidad.' : recovery ? `Enlace de prueba para ${name}. No comprueba la identidad del destinatario ni demuestra entrega por correo. Usa solo cuentas ficticias para comprobar este recorrido.` : 'Entrega este enlace al alumno o a su tutor después de verificar su identidad. Le permitirá elegir su contraseña una sola vez.'}</p>
         <div className={s['local-link-field']}>
           <label htmlFor="activation-link">{recovery ? 'Enlace de recuperación' : 'Enlace de activación'}</label>
           <textarea id="activation-link" readOnly value={url} rows={4} onFocus={(event) => event.currentTarget.select()} />

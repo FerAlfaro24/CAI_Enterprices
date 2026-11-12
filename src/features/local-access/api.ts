@@ -11,6 +11,14 @@ export const adminRecoveryApi = {
 }
 
 export type { StudentProfile, StudentProfileDraft } from '../../../server/contracts'
+export type { AdminAccount } from '../../../server/contracts'
+export const adminTeamApi={
+  list:()=>call<{accounts:import('../../../server/contracts').AdminAccount[]}>('/admin-team'),
+  create:(name:string,email:string,currentPassword:string,key:string)=>call('/admin-team','POST',{name,email,currentPassword,confirmed:true},{'Idempotency-Key':key}),
+  invite:(account:import('../../../server/contracts').AdminAccount,currentPassword:string)=>call<ActivationInvitation>(`/admin-team/${account.id}/invitation`,'POST',{revision:account.revision,currentPassword,confirmed:true}),
+  status:(account:import('../../../server/contracts').AdminAccount,active:boolean,currentPassword:string)=>call(`/admin-team/${account.id}`,'PATCH',{revision:account.revision,active,currentPassword,confirmed:true}),
+  activate:(token:string,password:string,confirm:string)=>call('/admin-activation','POST',{token,password,confirm}),
+}
 
 async function call<T>(path: string, method = 'GET', body?: unknown, headers?: Record<string, string>): Promise<T> {
   let response: Response
