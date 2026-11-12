@@ -201,6 +201,18 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (11, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 12').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE student_record_changes (
+        id INTEGER PRIMARY KEY, request_id INTEGER NOT NULL REFERENCES requests(id),
+        actor_id INTEGER NOT NULL REFERENCES admin_users(id), request_key TEXT NOT NULL UNIQUE,
+        fingerprint TEXT NOT NULL, reason TEXT NOT NULL, fields TEXT NOT NULL,
+        before_json TEXT NOT NULL, after_json TEXT NOT NULL, created_at TEXT NOT NULL
+      );
+      CREATE INDEX student_record_history ON student_record_changes(request_id,id DESC);
+      INSERT INTO migrations VALUES (12, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

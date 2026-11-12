@@ -10,12 +10,12 @@ const cookieName = 'cai_student_session'
 const sessionSeconds = 8 * 60 * 60
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
 const cookie = (token: string, age: number) => `${cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/api/local; Max-Age=${age}`
-const accountQuery = `SELECT r.id, r.payload, a.password_hash FROM requests r
+const accountQuery = `SELECT r.id, r.payload, r.revision AS record_revision, a.password_hash FROM requests r
   JOIN students s ON s.request_id = r.id
   LEFT JOIN student_accounts a ON a.request_id = r.id
   WHERE r.status = 'aprobada' AND s.status = 'activo'
   AND (a.request_id IS NOT NULL OR EXISTS (SELECT 1 FROM google_identities g WHERE g.request_id = r.id))`
-type AccountRow = { id: number; payload: string; password_hash: string | null }
+type AccountRow = { id: number; payload: string; password_hash: string | null; record_revision:number }
 
 function userFrom(db: Database, row: AccountRow): StudentUser {
   const p = JSON.parse(row.payload) as Submission
@@ -81,7 +81,7 @@ export function studentAccounts(db: Database) {
       const valid = await verifyPassword(password, row?.password_hash ?? fallback)
       if (!valid || !row?.password_hash) return null
       const current = db.prepare(`${accountQuery} AND r.id = ?`).get(row.id) as AccountRow | undefined
-      return current ? userFrom(db, current) : null
+      return current && current.password_hash===row.password_hash && current.record_revision===row.record_revision ? userFrom(db, current) : null
     },
     forGoogle(subject: string): StudentUser | null {
       const row = db.prepare(`${accountQuery} AND r.id = (SELECT request_id FROM google_identities WHERE subject = ?)`).get(subject) as AccountRow | undefined

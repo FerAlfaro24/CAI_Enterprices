@@ -12,6 +12,7 @@ import { galleryRepository } from './gallery.ts'
 import { studentProfiles } from './public-profiles.ts'
 import { adminRecovery, adminRecoveryMessage, type AdminRecoveryDelivery } from './admin-recovery.ts'
 import { adminTeam } from './admin-team.ts'
+import { studentRecords } from './student-records.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
@@ -54,6 +55,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const profiles = studentProfiles(db)
   const recovery = adminRecovery(db, options.adminRecoveryDelivery)
   const team=adminTeam(db)
+  const records=studentRecords(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -321,6 +323,15 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       return json(response, 200, { ok: true })
     }
     const assignment = path.match(/^\/api\/local\/students\/(CAI-\d+)\/assignment$/)
+    const studentRecord=path.match(/^\/api\/local\/students\/(CAI-\d+)\/record$/)
+    if(studentRecord&&method==='GET')return json(response,200,{record:records.get(studentRecord[1]!)})
+    if(studentRecord&&method==='PATCH'){
+      limit(`student-record:${user.id}`,30,15*60_000)
+      const key=request.headers['idempotency-key']
+      if(typeof key!=='string')throw new HttpError(400,'Falta el identificador de la corrección.')
+      await records.correct(request,studentRecord[1]!,await protectedBody(),key)
+      return json(response,200,{ok:true})
+    }
     if (assignment && method === 'PATCH') {
       const data = await protectedBody()
       if (Object.keys(data).some(key => !['revision', 'program', 'group', 'confirmed'].includes(key))) throw new HttpError(400, 'La asignación contiene datos no admitidos.')

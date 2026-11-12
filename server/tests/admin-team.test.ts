@@ -135,7 +135,7 @@ test('Equipo administrativo: invitación, estado y conservación del último acc
     await login('owner');await login('peer')
   })
   await t.test('estado y auditoría se conservan en copia/reinicio sin cambiar otras cuentas',async()=>{
-    const before=await list(),copy=await backupLocalDatabase(path,join(directory,'backups'));assert.equal((await verifyLocalBackup(copy)).schema,11)
+    const before=await list(),copy=await backupLocalDatabase(path,join(directory,'backups'));assert.equal((await verifyLocalBackup(copy)).schema,12)
     const restored=openDatabase(copy);try{assert.deepEqual(adminTeam(restored).list(),before)}finally{restored.close()}
     await close();app=createApplication(path);base=await listen();assert.deepEqual(await list(),before)
     assert.ok(!JSON.stringify(app.db.prepare('SELECT * FROM administration_audit').all()).includes(initial));assert.ok(!JSON.stringify(await list()).includes('password_hash'))
@@ -151,7 +151,7 @@ test('migración 11 conserva cuentas y sesiones de esquema 10',async()=>{
   const root=resolve('.local/tests');await mkdir(root,{recursive:true});const directory=await mkdtemp(join(root,'admin-team-migration-')),path=join(directory,'legacy.sqlite')
   try{
     const db=openDatabase(path);db.prepare("INSERT INTO admin_users(email,name,password_hash,role) VALUES ('legacy@example.test','Prueba','hash-ficticio','admin')").run();db.prepare('INSERT INTO sessions VALUES (?,?,?)').run('token-ficticio',1,Date.now()+60000)
-    db.exec('DROP TABLE admin_invitations; DROP INDEX admin_create_key; ALTER TABLE admin_users DROP COLUMN create_key; ALTER TABLE admin_users DROP COLUMN revision; ALTER TABLE admin_users DROP COLUMN activated; ALTER TABLE admin_users DROP COLUMN active; DELETE FROM migrations WHERE version=11');db.close()
+    db.exec('DROP TABLE student_record_changes; DELETE FROM migrations WHERE version=12; DROP TABLE admin_invitations; DROP INDEX admin_create_key; ALTER TABLE admin_users DROP COLUMN create_key; ALTER TABLE admin_users DROP COLUMN revision; ALTER TABLE admin_users DROP COLUMN activated; ALTER TABLE admin_users DROP COLUMN active; DELETE FROM migrations WHERE version=11');db.close()
     assert.equal((await verifyLocalBackup(path)).schema,10)
     const migrated=openDatabase(path)
     try{assert.deepEqual(adminTeam(migrated).list(),[{id:1,name:'Prueba',email:'legacy@example.test',active:true,activated:true,revision:1}]);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM sessions').get()!.n,1)}finally{migrated.close()}

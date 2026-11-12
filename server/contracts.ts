@@ -83,6 +83,15 @@ export type StudentProfile = {
 export type StudentProfileDraft = Pick<StudentProfile, 'displayName' | 'avatarColor' | 'revision'>
 export type ActivationInvitation = { path: string; expiresAt: string }
 export type AdminAccount = { id:number; name:string; email:string; active:boolean; activated:boolean; revision:number }
+export type StudentRecordValues = {
+  firstName:string; lastName:string; birthDate:string; studentCode:string; guardian:Submission['guardian']|null
+}
+export type StudentRecordSnapshot = StudentRecordValues & {displayName:string;visibility:Submission['visibility'];consentReference:string|null}
+export type StudentRecord = StudentRecordSnapshot & {
+  id:string;revision:number;email:string;
+  history:{id:number;actor:string;createdAt:string;reason:string;fields:string[];before:StudentRecordSnapshot;after:StudentRecordSnapshot}[]
+}
+export type StudentRecordDraft = StudentRecordValues & {revision:number;reason:string;consentReference:string;currentPassword:string;confirmed:boolean}
 
 export type RequestDecision = 'approve' | 'reject' | 'undo' | 'consent'
 export type LocalUser = { id: number; name: string; role: 'admin' }

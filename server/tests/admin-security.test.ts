@@ -108,7 +108,7 @@ test('Cuenta administrativa: contraseña propia, revocación y pruebas concurren
     await login('owner',current);assert.equal((await call('/requests')).status,200)
     assert.equal((await call('/requests','GET',undefined,'other')).status,200)
     assert.equal((await call('/student/me','GET',undefined,'student')).status,200)
-    assert.equal(audit().length,2);assert.equal(app.db.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,11)
+    assert.equal(audit().length,2);assert.equal(app.db.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,12)
   })
   await t.test('revocar sesiones cancela una escritura cuyo cuerpo todavía estaba llegando',async()=>{
     app.db.prepare("INSERT INTO admin_users(email,name,password_hash,role) VALUES ('stream@example.test','stream',?,'admin')").run(encoded)
