@@ -24,7 +24,7 @@ Usar la ruta exacta mostrada al crearla; este nombre es solo un ejemplo que debe
 npm.cmd run local:verify-backup -- ".local/backups/NOMBRE-DE-LA-COPIA.sqlite"
 ```
 
-`local:verify-backup` abre la copia en **modo de solo lectura**. Comprueba integridad de SQLite, relaciones, versión compatible 9, 10 u 11, registros principales y decodificación de las imágenes. El esquema 10 añade recuperación administrativa y el 11 incorpora estados de cuentas e invitaciones; conservan hashes de enlaces, no el enlace en texto. Devuelve únicamente totales; no imprime expedientes, credenciales o enlaces. Incluye las imágenes retiradas porque se conserva su historial.
+`local:verify-backup` abre la copia en **modo de solo lectura**. Comprueba integridad de SQLite, relaciones, versión compatible 9–12, registros principales y decodificación de imágenes. El esquema 10 añade recuperación administrativa, el 11 estados/invitaciones y el 12 historial privado de correcciones del expediente con datos antes/después y referencias. Los enlaces se conservan como hashes, no en texto. Devuelve únicamente totales; no imprime expedientes, credenciales o enlaces. Incluye imágenes retiradas e historial personal: proteger también todas las copias.
 
 No restaura, migra, repara ni modifica la copia. El comando rechaza como entrada la ruta habitual de la base activa. Una ruta inexistente no crea una base nueva. Si falla, conservar el archivo original y revisar la ruta, versión e integridad; no intentar resolverlo reemplazando la base en uso.
 

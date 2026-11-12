@@ -66,6 +66,6 @@ npm.cmd run preview -- --host ::1 --port 4180 --strictPort
 
 La fixture abre una SQLite nueva en `.local/tests/admin-team-browser-*`, con cuentas ficticias diferentes por navegador; no abre la base habitual. `checkAdminTeam` recibe identidades de `browser.json` y usa la frase ficticia del fixture, nunca credenciales reales. Crear otra fixture para repetir desde cero, sin borrar ni reiniciar datos habituales. Se detuvieron las consolas aisladas al terminar.
 
-Siguiente punto: **3, correcciones del expediente**. Revisar ficha/validación existentes y distinguir datos legales, contacto e identidad de acceso, protegiendo los casos de tutor/menores antes de implementar. Después siguen 4 herramientas y 5 revisión final. Correo/Google reales, cuentas definitivas, contenidos/autorizaciones y alojamiento al final.
+El punto posterior de correcciones de expediente ya se completó en su alcance local: [ficha e historial privado](v1-student-record.md). No cambia correo o vínculos de acceso. Siguen 4 herramientas y 5 revisión final; correo/Google reales, cuentas definitivas, contenidos/autorizaciones y alojamiento al final.
 
 Criterios técnicos contrastados: [reautenticación para acciones sensibles](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#require-re-authentication-for-sensitive-features) y [permisos en cada operación](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html#validate-the-permissions-on-every-request), de OWASP. El alcance comprobado es el descrito, no una auditoría exhaustiva de producción.

@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `feat/v1-admin-team`: conserva las integraciones anteriores y añade gestión de cuentas administrativas en Configuración, con activación, desactivación/reactivación y protección de último acceso. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `feat/v1-student-record`: conserva las integraciones anteriores y añade correcciones privadas del expediente en la ficha existente, con historial, reautenticación y autorización renovada para menores cuando corresponde. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación:** punto 3, correcciones del expediente sobre la ficha existente; después herramientas y revisión final. Equipo y recuperación comprobados localmente con datos ficticios; correo real y verificación de responsables continúan al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [equipo administrativo y límites](docs/v1-admin-team.md).
+> **Continuación:** punto 4, herramientas/alertas con cambios compatibles; después revisión final. Puntos 1–3 comprobados localmente en sus alcances. Correo/Google reales, corrección verificada de correo de acceso y validaciones de CAI continúan al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [expediente, historial y límites](docs/v1-student-record.md).
 
 ## Objetivo inmediato
 
@@ -51,6 +51,7 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 
 ## Documentación
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
+- [Correcciones del expediente, historial y protección de menores](docs/v1-student-record.md)
 - [Equipo administrador, invitaciones, estados y pruebas](docs/v1-admin-team.md)
 - [Recuperación administrativa: enlace privado, pruebas y correo pendiente](docs/v1-admin-recovery.md)
 - [Perfil visible propio del alumno, privacidad y pruebas](docs/v1-student-profile.md)

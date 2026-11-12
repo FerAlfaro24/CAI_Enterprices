@@ -9,6 +9,7 @@
 | Ver qué requiere atención | Resumen |
 | Revisar una solicitud nueva | Solicitudes de ingreso |
 | Preparar acceso, revisar una ficha o suspender un alumno | Alumnos |
+| Corregir nombre, nacimiento, matrícula o tutor | Alumnos → Ficha → Corregir expediente |
 | Aprobar o rechazar una historia | Publicaciones |
 | Compartir o retirar una imagen de un grupo | Galería privada |
 | Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
@@ -40,9 +41,19 @@ En Alumnos, abrir la ficha de la persona correcta. Desde allí se prepara su enl
 
 Suspender cierra el acceso de esa cuenta; reactivarla exige entrar de nuevo. No borra su historial. Para cambiar programa o grupo, elegir una opción vigente y leer la confirmación: se cierran las sesiones anteriores y las historias no pasan automáticamente a otro grupo ni se republican al volver.
 
-La edición completa del expediente todavía no está disponible. Si se necesita una corrección fuera de las acciones visibles, anotarla para la revisión de entrega. El equipo administrador se gestiona desde Configuración, según la sección siguiente.
+La ficha permite corregir nombre, nacimiento, matrícula y tutor según el recorrido siguiente. Correo de acceso, contraseña y vínculo Google se gestionan aparte y no se cambian desde este formulario. El equipo administrador se gestiona desde Configuración.
 
 El alumno puede cambiar por sí mismo su **nombre visible y color del avatar** desde Community → Mi espacio → Editar mi perfil. Esto también actualiza el alias que muestra en historias anteriores; no cambia su nombre legal ni grupo. Los menores eligen únicamente entre las dos abreviaturas permitidas. Si coordinación tiene abierta una ficha antigua y recibe un aviso de cambio, debe actualizarla antes de actuar. La [guía de perfil](v1-student-profile.md) describe errores y límites.
+
+## Corregir el expediente de un alumno
+
+En Alumnos, abrir la **Ficha** de la persona correcta y pulsar **Corregir expediente**. Modificar los datos necesarios, indicar el motivo y confirmar con la contraseña propia y la casilla de verificación. Cancelar no guarda. El historial privado muestra quién corrigió, cuándo, por qué y los valores anteriores/nuevos.
+
+Si la corrección afecta nombre, nacimiento o tutor de un menor, registrar una nueva referencia de autorización comprobada, distinta de la anterior. Un adulto corregido a menor también necesita tutor y autorización. Se ajusta el alias a una abreviatura privada y sus historias publicadas vuelven a revisión. Corregir solo matrícula no exige esa renovación. Revisar también imágenes donde aparezca: la galería no identifica automáticamente personas dentro de una foto.
+
+Al guardar se cierran las sesiones del alumno y se invalidan sus enlaces anteriores; conserva cuenta, correo y grupo. Un alumno suspendido sigue suspendido. Corregir edad a adulto no abre su privacidad ni cambia su alias automáticamente. La referencia o casilla no sustituye comprobar y custodiar la autorización real.
+
+Si la información cambió en otra ventana, el borrador se conserva hasta elegir **Cargar expediente y descartar borrador**. Si la respuesta se perdió, puede reintentarse el mismo envío sin duplicar historial; la contraseña se limpia y no hay reintentos automáticos. Detalles en [la guía del expediente](v1-student-record.md).
 
 ## Revisar publicaciones
 
