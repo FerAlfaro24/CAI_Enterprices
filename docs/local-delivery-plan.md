@@ -1,6 +1,6 @@
 # Plan de entrega local — tres semanas
 
-> Orden vigente en `PROJECT_STATE.md`, tras auditar v1.0 y todas las ramas. Primero conectar acceso, dashboard y Community oficiales a los servicios existentes. Las imágenes dejan de ser la siguiente tarea inmediata. Las entregas siguientes son antecedentes, no prueba de una aplicación unificada.
+> Orden vigente en `PROJECT_STATE.md` y [revisión final local](v1-final-review.md). Acceso, panel, Community, grupos, contacto, galería, navegación, cuentas y expediente ya están integrados localmente. Punto 5 revisado con incidencias explícitas; diez alertas de desarrollo siguen pendientes. Próxima tanda con CAI: uso del panel, responsables/material/autorizaciones y Google/correo; infraestructura se cotiza después. El calendario y las prioridades iniciales siguientes son antecedentes, no tareas para rehacer.
 
 ## Acuerdos de trabajo
 

@@ -120,6 +120,14 @@ Si persiste un problema, anotar la tarea, hora y texto del error. Evitar incluir
 
 ## Antes de entregar al administrador real
 
-Pendiente una sesión de uso con la persona que administrará CAI: revisar una solicitud de prueba, preparar acceso, moderar una historia, atender una consulta y retirar una imagen. Confirmar también los programas, permisos, responsables y procedimiento de respaldo. La contratación de servidor y los servicios externos se resuelven en la tanda final acordada.
+La [revisión técnica local](v1-final-review.md) ya se realizó. Sigue pendiente una sesión de uso con la persona que administrará CAI, usando cuentas ficticias y esta guía:
+
+1. Encontrar una solicitud pendiente, revisarla y explicar qué faltaría para aprobarla.
+2. Preparar el acceso del alumno correcto y distinguir aprobación de activación.
+3. Aprobar o rechazar una historia y explicar quién puede verla.
+4. Guardar el seguimiento de una consulta sin confundirlo con enviar una respuesta.
+5. Encontrar y retirar una imagen del grupo correcto, y cerrar sesión.
+
+Registrar por tarea si pudo terminar sin ayuda, dónde se detuvo y qué texto/acción no entendió. No marcar esta validación como completada por haber pasado pruebas automáticas. Confirmar también programas, permisos, responsables y procedimiento de respaldo. La contratación de servidor se resuelve después, como se acordó; las cuentas y servicios externos se agrupan con esta revisión final.
 
 Para las operaciones técnicas de copia y recuperación, consultar [respaldos y recuperación local](respaldo-recuperacion-local.md). El administrador no necesita ejecutar restauraciones durante su rutina diaria.

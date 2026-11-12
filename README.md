@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. El código acumulado llega a `feat/v1-student-record` (`c712abb`); `chore/v1-tooling-audit` añade la revisión documental de herramientas sin cambiar paquetes o aplicación. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `chore/v1-final-review` conserva los avances acumulados hasta expediente (`c712abb`) y herramientas (`9274dc9`), con revisión local y mejora de lectura móvil (`940573a`). Consulta [la revisión final y sus límites](docs/v1-final-review.md) y [el registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación:** punto 5, revisión final. Puntos 1–3 comprobados localmente en sus alcances; punto 4 revisado, con diez avisos moderados de desarrollo pendientes de corrección compatible y cero avisos en la auditoría de ejecución. Correo/Google reales, cambio verificado de correo y validaciones de CAI al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [revisión de herramientas y límites](docs/v1-tooling-audit.md).
+> **Continuación:** revisión técnica del punto 5 realizada: 134 resultados de servidor y matriz de 844 comprobaciones en Brave/Opera; incidencias registradas en el informe. Puntos 1–3 comprobados localmente; punto 4 conserva diez avisos moderados de desarrollo pendientes y cero en ejecución. Sigue la tanda con CAI: uso del panel, contenido/autorizaciones, cuentas Google/correo y alcance del cambio verificado de correo. Presupuesto/alojamiento después, como acordado. Las ramas son acumulativas; no fusionarlas como trabajos independientes.
 
 ## Objetivo inmediato
 
@@ -50,6 +50,7 @@ Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: 
 Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para alumnos autorizados y `/admin/*` para administración. Activación y recuperación conservan enlaces auxiliares. Los permisos se aplican en el servidor local, también a cada recurso de imagen. Las rutas desconocidas muestran 404; dentro de administración se vuelve a su inicio protegido.
 
 ## Documentación
+- [Revisión final local: resultados, incidencias y siguiente tanda con CAI](docs/v1-final-review.md)
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
 - [Herramientas y alertas: revisión actual y corrección pendiente](docs/v1-tooling-audit.md)
 - [Correcciones del expediente, historial y protección de menores](docs/v1-student-record.md)
@@ -90,4 +91,4 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 La copia local de la propuesta anterior se conserva en `reference/cai-original/`, ignorada por Git. Se adaptó su diseño sin modificarla ni importarla desde la aplicación. Únicamente se copiaron los dos SVG necesarios a `src/assets/cai/`. La procedencia de las fotografías de stock, las diferencias y los contenidos por validar se detallan en la guía de implementación.
 
 ## Privacidad
-Utilizar exclusivamente **datos ficticios**. Ya existen autenticación, permisos, moderación persistente y almacenamiento privado locales comprobados en el alcance documentado. Esto no constituye producción: faltan configuración externa, entrega real de correo/Google, consentimiento y contenido validados, infraestructura y revisión final con CAI. No publicar ni admitir alumnos reales como parte de las pruebas locales.
+Utilizar exclusivamente **datos ficticios**. Ya existen autenticación, permisos, moderación persistente y almacenamiento privado locales comprobados en el alcance documentado. La revisión técnica local está realizada; permanecen las incidencias y límites del informe, configuración externa, entrega real de correo/Google, consentimiento/contenido, infraestructura y aceptación humana de CAI. No publicar ni admitir alumnos reales como parte de las pruebas locales.
