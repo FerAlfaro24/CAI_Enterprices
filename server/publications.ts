@@ -2,6 +2,7 @@ import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError, record } from './validation.ts'
 import { queueNotice } from './notices.ts'
 import { publicProfileId } from './public-profiles.ts'
+import { administration } from './administration.ts'
 import { publicationCategories, publicationLimits, type OwnPost, type PublicationDecision, type PublicationDraft, type PublicationStatus, type PublishedPost, type ReviewPost, type StudentUser, type Submission } from './contracts.ts'
 
 type Row = {
@@ -56,6 +57,7 @@ export function publications(db: Database) {
           if (existing.title !== draft.title || existing.body !== draft.body || existing.category !== draft.category) throw new HttpError(409, 'Este envío ya se recibió con otros datos. Actualiza tus publicaciones antes de continuar.')
           return ownPost(existing)
         }
+        if (!administration(db).settings().submissionsOpen) throw new HttpError(409, 'CAI pausó los nuevos envíos. Puedes consultar tus historias y retirar publicaciones existentes.')
         const result = db.prepare('INSERT INTO publications(author_id,idempotency_key,title,body,category,program,group_name,created_at) VALUES (?,?,?,?,?,?,?,?)').run(author, key, draft.title, draft.body, draft.category, profile.program, profile.group, new Date().toISOString())
         const id = Number(result.lastInsertRowid)
         audit(id, 'publication.submitted', null, author)

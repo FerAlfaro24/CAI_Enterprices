@@ -1,6 +1,7 @@
 import { DatabaseSync } from 'node:sqlite'
 import { mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
+import { accessRequests, students } from '../src/features/admin/data/mockData.ts'
 
 /** Migraciones locales versionadas. Nunca borrar/recrear una base existente para actualizarla. */
 export function openDatabase(path: string) {
@@ -119,6 +120,37 @@ export function migrateDatabase(db: DatabaseSync) {
       );
       INSERT INTO migrations VALUES (6, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
+  }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 7').get()) {
+    transaction(db, () => {
+      db.exec(`CREATE TABLE course_groups (
+        id INTEGER PRIMARY KEY, program TEXT NOT NULL, name TEXT NOT NULL,
+        active INTEGER NOT NULL DEFAULT 1 CHECK(active IN (0,1)), revision INTEGER NOT NULL DEFAULT 1,
+        UNIQUE(program, name)
+      );
+      CREATE TABLE community_controls (
+        id INTEGER PRIMARY KEY CHECK(id = 1), registration_open INTEGER NOT NULL CHECK(registration_open IN (0,1)),
+        submissions_open INTEGER NOT NULL CHECK(submissions_open IN (0,1)), revision INTEGER NOT NULL DEFAULT 1
+      );
+      INSERT INTO community_controls VALUES (1,1,1,1);
+      CREATE TABLE administration_audit (
+        id INTEGER PRIMARY KEY, actor_id INTEGER NOT NULL REFERENCES admin_users(id), kind TEXT NOT NULL,
+        details TEXT NOT NULL, created_at TEXT NOT NULL
+      );`)
+      const insert = db.prepare('INSERT OR IGNORE INTO course_groups(program,name) VALUES (?,?)')
+      const programs = [...new Set([...students, ...accessRequests].map(item => item.program))]
+      for (const program of programs) {
+        const groups = [...new Set(students.filter(student => student.program === program).map(student => student.group))]
+        for (const name of groups.length ? groups : ['Por asignar']) insert.run(program, name)
+      }
+      // Conservar también las asignaciones guardadas antes de disponer de catálogo editable.
+      for (const row of db.prepare('SELECT payload FROM requests').all()) {
+        let profile: unknown
+        try { profile = JSON.parse(String(row.payload)) } catch { continue }
+        if (profile && typeof profile === 'object' && 'program' in profile && 'group' in profile && typeof profile.program === 'string' && typeof profile.group === 'string') insert.run(profile.program, profile.group)
+      }
+      db.prepare("INSERT INTO migrations VALUES (7, strftime('%Y-%m-%dT%H:%M:%fZ','now'))").run()
+    })
   }
   return db
 }

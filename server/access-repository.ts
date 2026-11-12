@@ -2,6 +2,7 @@ import type { LocalRequest, LocalStudent, Receipt, RequestDecision, RequestStatu
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError } from './validation.ts'
 import { queueNotice } from './notices.ts'
+import { administration, administrationAudit } from './administration.ts'
 
 type RequestRow = { id: number; payload: string; status: RequestStatus; created_at: string; revision: number; confirmed_at: string | null; google_subject: string | null }
 const requestSelect = 'SELECT r.*, c.confirmed_at, g.subject AS google_subject FROM requests r LEFT JOIN consent_confirmations c ON c.request_id = r.id LEFT JOIN google_identities g ON g.request_id = r.id'
@@ -42,6 +43,8 @@ export function accessRepository(db: Database) {
           if (existing.payload !== encoded) throw new HttpError(409, 'Esta solicitud ya se recibió. No vuelvas a enviarla con datos distintos.')
           return { id: folio(existing.id), submittedAt: existing.created_at.slice(0, 10), status: 'pendiente' }
         }
+        if (!administration(db).settings().registrationOpen) throw new HttpError(409, 'CAI pausó las nuevas solicitudes. Intenta más tarde o consulta con coordinación.')
+        if (!administration(db).groups().some(group => group.active && group.program === payload.program && group.name === payload.group)) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
         if (identity?.request_id !== null && identity?.request_id !== undefined) throw new HttpError(409, 'Tu cuenta de Google ya tiene una solicitud. Consulta su estado o contacta con CAI.')
         if (db.prepare("SELECT id FROM requests WHERE email = ? AND status IN ('pendiente','aprobada')").get(payload.email)) throw new HttpError(409, 'Ya hay una solicitud en revisión o aprobada con ese correo. Consulta con CAI.')
         const created = new Date().toISOString()
@@ -112,6 +115,31 @@ export function accessRepository(db: Database) {
           db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
         }
         audit(actor, key, status === 'activo' ? 'student.reactivated' : 'student.suspended')
+      })
+    },
+    assignStudent(id: string, revision: number, program: unknown, group: unknown, confirmed: unknown, actor: number) {
+      transaction(db, () => {
+        const key = numericId(id)
+        const student = db.prepare('SELECT revision FROM students WHERE request_id = ?').get(key)
+        const row = db.prepare('SELECT payload FROM requests WHERE id = ?').get(key)
+        if (!student || !row) throw new HttpError(404, 'No se encontró el alumno aprobado.')
+        if (student.revision !== revision) throw new HttpError(409, 'La ficha cambió en otra ventana. Actualiza antes de guardar.')
+        if (confirmed !== true) throw new HttpError(400, 'Confirma el cambio de grupo y sus efectos antes de guardar.')
+        const catalog = administration(db).groups().filter(item => item.active)
+        if (!catalog.some(item => item.program === program && (item.name === group || group === 'Por asignar'))) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
+        const profile = JSON.parse(String(row.payload)) as Submission
+        if (profile.program === program && profile.group === group) throw new HttpError(409, 'El alumno ya tiene esa asignación.')
+        const before = { program: profile.program, group: profile.group }
+        profile.program = String(program); profile.group = String(group)
+        db.prepare('UPDATE requests SET payload = ?, revision = revision + 1 WHERE id = ?').run(JSON.stringify(profile), key)
+        db.prepare('UPDATE students SET revision = revision + 1 WHERE request_id = ?').run(key)
+        db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
+        db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
+        // Mantener la audiencia original de cada envío. Volver a un grupo no republica historias automáticamente.
+        db.prepare("UPDATE publications SET status = CASE WHEN status = 'publicada' THEN 'pendiente' ELSE status END, published_at = NULL, revision = revision + 1 WHERE author_id = ? AND status <> 'retirada'").run(key)
+        audit(actor, key, 'student.assigned')
+        administrationAudit(db, actor, 'student.assigned', { id, before, after: { program, group } })
+        queueNotice(db, key, 'Cambio de grupo', 'CAI actualizó tu inscripción. Vuelve a entrar para consultar tu programa y grupo. Tus historias conservan su grupo de origen; las publicadas necesitan una nueva revisión.')
       })
     },
   }

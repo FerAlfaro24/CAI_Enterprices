@@ -1,4 +1,4 @@
-import type { Submission } from './contracts.ts'
+import type { PublicCatalog, Submission } from './contracts.ts'
 import { accessRequests, students } from '../src/features/admin/data/mockData.ts'
 
 export class HttpError extends Error {
@@ -31,7 +31,7 @@ export function ageAt(birthDate: string, today = new Date()) {
   return age
 }
 
-export function validateSubmission(value: unknown, now = new Date()): Submission {
+export function validateSubmission(value: unknown, now = new Date(), catalog?: PublicCatalog['groups']): Submission {
   const v = record(value)
   const allowed = ['firstName', 'lastName', 'birthDate', 'email', 'filledBy', 'program', 'group', 'studentCode', 'displayName', 'avatarColor', 'visibility', 'message', 'guardian', 'guardianConsent', 'acceptRules', 'acceptPrivacy']
   if (Object.keys(v).some((key) => !allowed.includes(key))) throw new HttpError(400, 'La solicitud contiene datos no admitidos.')
@@ -48,7 +48,7 @@ export function validateSubmission(value: unknown, now = new Date()): Submission
   const group = text(v.group, 'el grupo', 2, 100)
   const programs = new Set([...students, ...accessRequests].map((item) => item.program))
   const groups = students.filter((student) => student.program === program).map((student) => student.group)
-  if (!programs.has(program) || (groups.length ? !groups.includes(group) : group !== 'Por asignar')) throw new HttpError(400, 'Elige un programa y grupo del catálogo de prueba.')
+  if (catalog ? !catalog.some(item => item.program === program && item.name === group) : !programs.has(program) || (groups.length ? !groups.includes(group) : group !== 'Por asignar')) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
   const firstName = text(v.firstName, 'el nombre', 2, 60)
   const lastName = text(v.lastName, 'los apellidos', 2, 80)
   const displayName = text(v.displayName, 'el nombre visible', 1, 141)

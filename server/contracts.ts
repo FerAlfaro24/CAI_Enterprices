@@ -1,5 +1,9 @@
 export type RequestStatus = 'pendiente' | 'aprobada' | 'rechazada'
 
+export type CatalogGroup = { id: number; program: string; name: string; active: boolean; revision: number }
+export type CommunityControls = { registrationOpen: boolean; submissionsOpen: boolean; revision: number }
+export type PublicCatalog = { groups: Pick<CatalogGroup, 'id' | 'program' | 'name'>[]; settings: Omit<CommunityControls, 'revision'> }
+
 export interface Submission {
   firstName: string
   lastName: string

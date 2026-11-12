@@ -6,6 +6,7 @@ import { studentAccounts } from './student-accounts.ts'
 import { googleAccounts, type GoogleOptions } from './google-auth.ts'
 import { publications, validatePublication } from './publications.ts'
 import { notices } from './notices.ts'
+import { administration } from './administration.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
 
@@ -41,6 +42,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const google = googleAccounts(db, googleOptions)
   const posts = publications(db)
   const mail = notices(db)
+  const config = administration(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -66,6 +68,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     limit(`all:${request.socket.remoteAddress}`, 600, 60_000)
     if (path === '/api/local/health' && method === 'GET') return json(response, 200, { status: 'ok', mode: 'local-test' })
+    if (path === '/api/local/catalog' && method === 'GET') return json(response, 200, config.publicCatalog())
     if (path === '/api/local/recovery/request' && method === 'POST') {
       limit(`recovery:${request.socket.remoteAddress}`, 10, 15 * 60_000)
       const data = await body(request)
@@ -110,7 +113,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       if (typeof data.email !== 'string' || data.email.toLowerCase() !== identity.email.toLowerCase()) throw new HttpError(400, 'Usa el correo confirmado por Google.')
       const key = request.headers['idempotency-key']
       if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador de la solicitud.')
-      return json(response, 201, access.submit(validateSubmission(data), key, identity.subject))
+      return json(response, 201, access.submit(validateSubmission(data, new Date(), config.groups()), key, identity.subject))
     }
     if (path === '/api/local/google/continue' && method === 'POST') {
       const identity = google.requireIdentity(request)
@@ -185,10 +188,30 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       limit(`submission:${request.socket.remoteAddress}`, 20, 60 * 60_000)
       const key = request.headers['idempotency-key']
       if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador de la solicitud.')
-      return json(response, 201, access.submit(validateSubmission(await body(request)), key))
+      return json(response, 201, access.submit(validateSubmission(await body(request), new Date(), config.groups()), key))
     }
     const user = auth.session(request)
     if (!user || user.role !== 'admin') throw new HttpError(401, 'Inicia sesión para abrir la administración local.')
+    if (path === '/api/local/configuration' && method === 'GET') return json(response, 200, { groups: config.groups(), settings: config.settings() })
+    if (path === '/api/local/configuration' && method === 'PATCH') {
+      config.updateSettings(await body(request), user.id)
+      return json(response, 200, { ok: true })
+    }
+    if (path === '/api/local/groups' && method === 'POST') return json(response, 201, { id: config.createGroup(await body(request), user.id) })
+    const catalogGroup = path.match(/^\/api\/local\/groups\/(\d+)$/)
+    if (catalogGroup && method === 'PATCH') {
+      const id = Number(catalogGroup[1])
+      if (!Number.isSafeInteger(id) || id < 1) throw new HttpError(400, 'Grupo no válido.')
+      config.updateGroup(id, await body(request), user.id)
+      return json(response, 200, { ok: true })
+    }
+    const assignment = path.match(/^\/api\/local\/students\/(CAI-\d+)\/assignment$/)
+    if (assignment && method === 'PATCH') {
+      const data = await body(request)
+      if (Object.keys(data).some(key => !['revision', 'program', 'group', 'confirmed'].includes(key))) throw new HttpError(400, 'La asignación contiene datos no admitidos.')
+      access.assignStudent(assignment[1]!, revisionOf(data.revision), data.program, data.group, data.confirmed, user.id)
+      return json(response, 200, { ok: true })
+    }
     if (path === '/api/local/requests' && method === 'GET') return json(response, 200, { requests: access.requests() })
     if (path === '/api/local/students' && method === 'GET') return json(response, 200, { students: access.students() })
     if (path === '/api/local/notices' && method === 'GET') return json(response, 200, { notices: mail.list() })
