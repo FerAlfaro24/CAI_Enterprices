@@ -465,6 +465,8 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
   .card { padding: 18px; }
   .queue-actions { width: 100%; flex-wrap: wrap; }
   .queue-actions .btn { flex: 1; }
+  .dialog .details { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .dialog .details dd { margin-bottom: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

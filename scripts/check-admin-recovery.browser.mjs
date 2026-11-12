@@ -1,9 +1,9 @@
 /** Exclusivamente admin-recovery-browser-server y su buzón ficticio autenticado. */
 export async function checkAdminRecovery(page,{accounts,mailKey,mailPort=3102,baseURL='http://localhost:4180',browserLabel='Prueba'}={}){
-  const details=[],errors=[],contexts=[],releases=[],urls=[]
+  const details=[],errors=[],contexts=[],releases=[],urls=[],responses=[]
   const initial='Frase ficticia inicial de recuperación navegador 2026',first='Nueva frase ficticia de recuperación 2026 '+'x'.repeat(65),second='Segunda frase ficticia de recuperación 2026',third='Tercera frase ficticia que nunca se guardará 2026'
   const check=(ok,label)=>{if(!ok)throw Error(label);details.push(label)}
-  const open=async()=>{const context=await page.context().browser().newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});contexts.push(context);const target=await context.newPage();target.setDefaultTimeout(10000);target.on('pageerror',error=>errors.push(String(error)));target.on('request',request=>urls.push(request.url()));return target}
+  const open=async()=>{const context=await page.context().browser().newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});contexts.push(context);const target=await context.newPage();target.setDefaultTimeout(10000);target.on('pageerror',error=>errors.push(String(error)));target.on('request',request=>urls.push(request.url()));target.on('response',response=>{const path=new URL(response.url()).pathname;if(path.startsWith('/api/local/'))responses.push({method:response.request().method(),path,status:response.status()})});return target}
   const call=(target,path)=>target.evaluate(async path=>{const response=await fetch('/api/local'+path);return {status:response.status,data:await response.json()}},path)
   const fillLogin=async(target,account,password)=>{await target.bringToFront();await target.getByRole('form',{name:'Acceso de administración',exact:true}).waitFor();await target.locator('#login-email').fill(account.email);await target.locator('#login-password').fill(password);await target.getByRole('button',{name:'Entrar al panel',exact:true}).click()}
   const login=async(target,account)=>{await target.goto(baseURL+'/admin');await fillLogin(target,account,initial);await target.getByRole('heading',{name:`Hola, ${account.name}`,exact:true}).waitFor();check((await call(target,'/auth/session')).data.user?.name===account.name,'Cuenta ficticia administrativa esperada')}
@@ -61,6 +61,6 @@ export async function checkAdminRecovery(page,{accounts,mailKey,mailPort=3102,ba
     check(tokens.every(token=>urls.every(url=>!url.includes(token))&&!stored.includes(token))&&[initial,first,second,third].every(value=>!stored.includes(value)),'No conserva tokens o contraseñas en storage ni envía el token en URLs HTTP')
     check(errors.length===0,'Sin errores de ejecución JavaScript')
     return {browserLabel,checks:details.length,details,errors}
-  }catch(error){throw Error(`${error.message}\nCompletadas: ${details.length}\n${details.join('\n')}`)}
+  }catch(error){const pages=await Promise.all(contexts.flatMap(context=>context.pages()).map(async target=>({path:new URL(target.url()).pathname,headings:await target.getByRole('heading',{level:1}).allTextContents(),alerts:await target.getByRole('alert').allTextContents(),logout:await target.getByRole('button',{name:'Cerrar sesión',exact:true}).count()})));throw Error(`${error.message}\nCompletadas: ${details.length}\n${JSON.stringify({pages,responses:responses.slice(-30)})}\n${details.join('\n')}`)}
   finally{for(const release of releases)release();for(const context of contexts)await context.close()}
 }

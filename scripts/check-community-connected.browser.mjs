@@ -1,8 +1,8 @@
 /** Integración v1.0 con cuentas ficticias en contextos de navegador separados. */
 export async function checkCommunityConnected(page, { email, password, browserLabel = 'Prueba', baseURL = 'http://127.0.0.1:5173' } = {}) {
-  const details = [], errors = [], matrix = [], contexts = [], listeners = []
+  const details = [], errors = [], matrix = [], contexts = [], listeners = [], failedResponses = [], responseListeners = []
   const check = (ok, label) => { if (!ok) throw new Error(label); details.push(label) }
-  const watch = target => { target.setDefaultTimeout(10_000); const listener = error => errors.push(String(error)); target.on('pageerror', listener); listeners.push([target, listener]) }
+  const watch = target => { target.setDefaultTimeout(10_000); const listener = error => errors.push(String(error)); target.on('pageerror', listener); listeners.push([target, listener]); const responseListener=response=>{if(response.status()>=400)failedResponses.push({path:new URL(response.url()).pathname,status:response.status()})};target.on('response',responseListener);responseListeners.push([target,responseListener]) }
   const call = async (target, route, method = 'GET', data, key) => target.evaluate(async ({ route, method, data, key }) => {
     const response = await fetch('/api/local' + route, { method, headers: { ...(data === undefined ? {} : { 'Content-Type': 'application/json' }), ...(key ? { 'Idempotency-Key': key } : {}) }, body: data === undefined ? undefined : JSON.stringify(data) })
     const body = await response.json()
@@ -164,7 +164,7 @@ export async function checkCommunityConnected(page, { email, password, browserLa
     await login(page, author.address); await page.setViewportSize({ width: 1440, height: 1000 })
     return { browserLabel, checks: details.length, details, matrix, errors }
   } catch (error) {
-    const diagnostic = await Promise.all(contexts.flatMap(context => context.pages()).map(async target => ({path: new URL(target.url()).pathname, alerts: await target.getByRole('alert').allTextContents()})))
-    throw new Error(`${error.message}\nComprobaciones completadas: ${details.length}\n${JSON.stringify(diagnostic)}`)
-  } finally { for (const [target, listener] of listeners) target.off('pageerror', listener); for (const context of contexts) await context.close() }
+    const diagnostic = await Promise.all([page,...contexts.flatMap(context => context.pages())].map(async target => ({path: new URL(target.url()).pathname, alerts: await target.getByRole('alert').allTextContents()})))
+    throw new Error(`${error.message}\nComprobaciones completadas: ${details.length}\n${JSON.stringify({pages:diagnostic,responses:failedResponses.slice(-20)})}`)
+  } finally { for (const [target, listener] of listeners) target.off('pageerror', listener);for(const[target,listener]of responseListeners)target.off('response',listener); for (const context of contexts) await context.close() }
 }
