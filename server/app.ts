@@ -186,12 +186,17 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     if (path.startsWith('/api/local/student/')) {
       const user = studentAuth.session(request)
       if (!user) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible. Vuelve a entrar o consulta con CAI.')
+      const protectedBody = async () => {
+        const data = await body(request)
+        if (studentAuth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
+        return data
+      }
       if (path === '/api/local/student/me' && method === 'GET') return json(response, 200, { user })
       if (path === '/api/local/student/gallery' && method === 'GET') return json(response, 200, { images: gallery.forStudent(user) })
       if (path === '/api/local/student/notices' && method === 'GET') return json(response, 200, { notices: mail.forStudent(user) })
       const seen = path.match(/^\/api\/local\/student\/notices\/(\d+)\/seen$/)
       if (seen && method === 'POST') {
-        const id = Number(seen[1]), data = await body(request)
+        const id = Number(seen[1]), data = await protectedBody()
         if (!Number.isSafeInteger(id) || id < 1 || Object.keys(data).length) throw new HttpError(400, 'Aviso no válido.')
         mail.studentSeen(user, id)
         return json(response, 200, { ok: true })
@@ -202,11 +207,11 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
         limit(`post:${user.id}`, 20, 60 * 60_000)
         const key = request.headers['idempotency-key']
         if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador del envío.')
-        return json(response, 201, { post: posts.create(user, validatePublication(await body(request)), key) })
+        return json(response, 201, { post: posts.create(user, validatePublication(await protectedBody()), key) })
       }
       const withdrawal = path.match(/^\/api\/local\/student\/posts\/(PUB-\d+)\/withdraw$/)
       if (withdrawal && method === 'POST') {
-        const data = await body(request)
+        const data = await protectedBody()
         if (Object.keys(data).some((key) => key !== 'revision')) throw new HttpError(400, 'El retiro contiene datos no admitidos.')
         posts.withdraw(user, withdrawal[1]!, revisionOf(data.revision))
         return json(response, 200, { ok: true })
@@ -221,41 +226,52 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     const user = auth.session(request)
     if (!user || user.role !== 'admin') throw new HttpError(401, 'Inicia sesión para abrir la administración local.')
+    const protectedBody = async (maximum?: number) => {
+      const data = await body(request, maximum)
+      if (auth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
+      return data
+    }
+    if (path === '/api/local/auth/password' && method === 'POST') {
+      limit(`admin-password:${user.id}`, 5, 15 * 60_000)
+      await auth.changePassword(request, await protectedBody())
+      response.setHeader('Set-Cookie', auth.end(request))
+      return json(response, 200, { ok: true })
+    }
     if (path === '/api/local/gallery' && method === 'GET') return json(response, 200, { images: gallery.list() })
     if (path === '/api/local/gallery' && method === 'POST') {
       limit(`gallery:${user.id}`, 30, 60 * 60_000)
       const key = request.headers['idempotency-key']
       if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador de envío.')
-      const data = await body(request, Math.ceil(galleryLimits.uploadBytes / 3) * 4 + 16_384)
+      const data = await protectedBody( Math.ceil(galleryLimits.uploadBytes / 3) * 4 + 16_384)
       return json(response, 201, { image: await gallery.create(data,key,()=>auth.session(request)?.id??null) })
     }
     const withdrawalImage = path.match(/^\/api\/local\/gallery\/([a-f0-9-]{36})\/withdraw$/)
     if (withdrawalImage && method === 'POST') {
-      gallery.withdraw(withdrawalImage[1]!,await body(request),user.id)
+      gallery.withdraw(withdrawalImage[1]!,await protectedBody(),user.id)
       return json(response, 200, { ok:true })
     }
     if (path === '/api/local/contacts' && method === 'GET') return json(response, 200, { contacts: contacts.list() })
     const contact = path.match(/^\/api\/local\/contacts\/(CON-\d+)$/)
     if (contact && method === 'PATCH') {
-      contacts.update(contact[1]!, await body(request), user.id)
+      contacts.update(contact[1]!, await protectedBody(), user.id)
       return json(response, 200, { ok: true })
     }
     if (path === '/api/local/configuration' && method === 'GET') return json(response, 200, { groups: config.groups(), settings: config.settings() })
     if (path === '/api/local/configuration' && method === 'PATCH') {
-      config.updateSettings(await body(request), user.id)
+      config.updateSettings(await protectedBody(), user.id)
       return json(response, 200, { ok: true })
     }
-    if (path === '/api/local/groups' && method === 'POST') return json(response, 201, { id: config.createGroup(await body(request), user.id) })
+    if (path === '/api/local/groups' && method === 'POST') return json(response, 201, { id: config.createGroup(await protectedBody(), user.id) })
     const catalogGroup = path.match(/^\/api\/local\/groups\/(\d+)$/)
     if (catalogGroup && method === 'PATCH') {
       const id = Number(catalogGroup[1])
       if (!Number.isSafeInteger(id) || id < 1) throw new HttpError(400, 'Grupo no válido.')
-      config.updateGroup(id, await body(request), user.id)
+      config.updateGroup(id, await protectedBody(), user.id)
       return json(response, 200, { ok: true })
     }
     const assignment = path.match(/^\/api\/local\/students\/(CAI-\d+)\/assignment$/)
     if (assignment && method === 'PATCH') {
-      const data = await body(request)
+      const data = await protectedBody()
       if (Object.keys(data).some(key => !['revision', 'program', 'group', 'confirmed'].includes(key))) throw new HttpError(400, 'La asignación contiene datos no admitidos.')
       access.assignStudent(assignment[1]!, revisionOf(data.revision), data.program, data.group, data.confirmed, user.id)
       return json(response, 200, { ok: true })
@@ -274,25 +290,25 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     if (path === '/api/local/posts' && method === 'GET') return json(response, 200, { posts: posts.review() })
     const review = path.match(/^\/api\/local\/posts\/(PUB-\d+)\/(approve|reject|undo)$/)
     if (review && method === 'POST') {
-      const data = await body(request)
+      const data = await protectedBody()
       if (Object.keys(data).some((key) => !['revision', 'reason', 'confirmed'].includes(key))) throw new HttpError(400, 'La revisión contiene datos no admitidos.')
       posts.decide(review[1]!, revisionOf(data.revision), review[2] as PublicationDecision, user.id, data.reason, data.confirmed)
       return json(response, 200, { ok: true })
     }
     const invite = path.match(/^\/api\/local\/students\/(CAI-\d+)\/invitation$/)
     if (invite && method === 'POST') {
-      const data = await body(request)
+      const data = await protectedBody()
       return json(response, 200, studentAuth.invite(invite[1]!, revisionOf(data.revision), user.id))
     }
     const decision = path.match(/^\/api\/local\/requests\/(CAI-\d+)\/(approve|reject|undo|consent)$/)
     if (decision && method === 'POST') {
-      const data = await body(request)
+      const data = await protectedBody()
       access.decide(decision[1]!, revisionOf(data.revision), decision[2] as RequestDecision, user.id, typeof data.reference === 'string' ? data.reference : undefined)
       return json(response, 200, { ok: true })
     }
     const student = path.match(/^\/api\/local\/students\/(CAI-\d+)$/)
     if (student && method === 'PATCH') {
-      const data = await body(request)
+      const data = await protectedBody()
       if (data.status !== 'activo' && data.status !== 'suspendido') throw new HttpError(400, 'Estado del alumno no válido.')
       access.setStudentStatus(student[1]!, revisionOf(data.revision), data.status, user.id)
       return json(response, 200, { ok: true })
