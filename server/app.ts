@@ -11,6 +11,7 @@ import { contactRepository, validateContact } from './contact.ts'
 import { galleryRepository } from './gallery.ts'
 import { studentProfiles } from './public-profiles.ts'
 import { adminRecovery, adminRecoveryMessage, type AdminRecoveryDelivery } from './admin-recovery.ts'
+import { adminTeam } from './admin-team.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
@@ -52,6 +53,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const gallery = galleryRepository(db)
   const profiles = studentProfiles(db)
   const recovery = adminRecovery(db, options.adminRecoveryDelivery)
+  const team=adminTeam(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -95,6 +97,14 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       const currentUser=auth.session(request)
       const recoveredId=await recovery.changePassword(data.token,data.password)
       if (!currentUser || currentUser.id===recoveredId) response.setHeader('Set-Cookie',auth.end(request))
+      return json(response,200,{ok:true})
+    }
+    if(path==='/api/local/admin-activation'&&method==='POST'){
+      limit(`admin-activation:${request.socket.remoteAddress}`,20,15*60_000)
+      const data=await body(request)
+      if(Object.keys(data).some(key=>!['token','password','confirm'].includes(key))||data.confirm!==data.password)throw new HttpError(400,'Revisa la confirmación de contraseña.')
+      const current=auth.session(request),id=await team.activate(data.token,data.password)
+      if(!current||current.id===id)response.setHeader('Set-Cookie',auth.end(request))
       return json(response,200,{ok:true})
     }
     if (path === '/api/local/contact' && method === 'POST') {
@@ -264,6 +274,19 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       await auth.changePassword(request, await protectedBody())
       response.setHeader('Set-Cookie', auth.end(request))
       return json(response, 200, { ok: true })
+    }
+    if(path==='/api/local/admin-team'&&method==='GET')return json(response,200,{accounts:team.list()})
+    if(path==='/api/local/admin-team'&&method==='POST'){
+      limit(`admin-team:${user.id}`,30,15*60_000)
+      const key=request.headers['idempotency-key']
+      if(typeof key!=='string')throw new HttpError(400,'Falta el identificador del alta.')
+      return json(response,201,{account:await team.create(request,await protectedBody(),key)})
+    }
+    const teamAccount=path.match(/^\/api\/local\/admin-team\/(\d+)(\/invitation)?$/)
+    if(teamAccount&&((method==='PATCH'&&!teamAccount[2])||(method==='POST'&&teamAccount[2]))){
+      limit(`admin-team:${user.id}`,30,15*60_000)
+      const data=await protectedBody(),id=Number(teamAccount[1])
+      return teamAccount[2]?json(response,200,await team.invite(request,id,data)):json(response,200,{account:await team.setActive(request,id,data)})
     }
     if (path === '/api/local/gallery' && method === 'GET') return json(response, 200, { images: gallery.list() })
     if (path === '/api/local/gallery' && method === 'POST') {

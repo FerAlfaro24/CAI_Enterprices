@@ -18,14 +18,14 @@ export function adminRecovery(db: Database, deliver?: AdminRecoveryDelivery) {
   const reset = (token: unknown) => {
     if (typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) throw invalid()
     const row = db.prepare(`SELECT u.id FROM admin_password_resets p JOIN admin_users u ON u.id=p.user_id
-      WHERE p.token_hash=? AND p.state='delivered' AND p.expires_at>? AND p.password_version=u.password_hash AND p.email_version=u.email AND u.role='admin'`).get(digest(token), Date.now()) as {id:number} | undefined
+      WHERE p.token_hash=? AND p.state='delivered' AND p.expires_at>? AND p.password_version=u.password_hash AND p.email_version=u.email AND u.role='admin' AND u.active=1 AND u.activated=1`).get(digest(token), Date.now()) as {id:number} | undefined
     if (!row) throw invalid()
     return row
   }
   const service = {
     stop() { stopped = true },
     request(email: string) {
-      const user = db.prepare("SELECT id,email,password_hash FROM admin_users WHERE email=? AND role='admin'").get(email.toLowerCase()) as {id:number;email:string;password_hash:string} | undefined
+      const user = db.prepare("SELECT id,email,password_hash FROM admin_users WHERE email=? AND role='admin' AND active=1 AND activated=1").get(email.toLowerCase()) as {id:number;email:string;password_hash:string} | undefined
       if (!user) return
       db.prepare(`INSERT INTO admin_password_resets(user_id,requested_at,password_version,email_version,state) VALUES (?,?,?,?,'pending')
         ON CONFLICT(user_id) DO UPDATE SET requested_at=excluded.requested_at,password_version=excluded.password_version,email_version=excluded.email_version,state='pending',token_hash=NULL,expires_at=NULL
@@ -37,10 +37,10 @@ export function adminRecovery(db: Database, deliver?: AdminRecoveryDelivery) {
       working = true
       try {
         const rows = db.prepare(`SELECT p.user_id,p.requested_at,p.password_version,p.email_version AS email FROM admin_password_resets p
-          JOIN admin_users u ON u.id=p.user_id WHERE p.state='pending' AND u.role='admin'`).all() as {user_id:number;requested_at:number;password_version:string;email:string}[]
+          JOIN admin_users u ON u.id=p.user_id WHERE p.state='pending' AND u.role='admin' AND u.active=1 AND u.activated=1`).all() as {user_id:number;requested_at:number;password_version:string;email:string}[]
         for (const row of rows) {
           if (stopped) return
-          const current = db.prepare("SELECT password_hash,email FROM admin_users WHERE id=? AND role='admin'").get(row.user_id)
+          const current = db.prepare("SELECT password_hash,email FROM admin_users WHERE id=? AND role='admin' AND active=1 AND activated=1").get(row.user_id)
           if (current?.password_hash !== row.password_version || current?.email !== row.email || row.requested_at < Date.now()-15*60_000) {
             db.prepare("UPDATE admin_password_resets SET state='cancelled' WHERE user_id=? AND requested_at=?").run(row.user_id,row.requested_at); continue
           }
@@ -51,7 +51,7 @@ export function adminRecovery(db: Database, deliver?: AdminRecoveryDelivery) {
             await deliver({to:row.email,path:`/recuperar-administracion#token=${token}`,expiresAt:new Date(expiresAt).toISOString()})
             if (stopped) return
             transaction(db,()=>{
-              const credential=db.prepare("SELECT password_hash,email FROM admin_users WHERE id=? AND role='admin'").get(row.user_id)
+              const credential=db.prepare("SELECT password_hash,email FROM admin_users WHERE id=? AND role='admin' AND active=1 AND activated=1").get(row.user_id)
               if (credential?.password_hash !== row.password_version || credential?.email !== row.email || Date.now() >= expiresAt) {
                 db.prepare("UPDATE admin_password_resets SET state='cancelled',token_hash=NULL,expires_at=NULL WHERE user_id=? AND token_hash=?").run(row.user_id,tokenHash); return
               }

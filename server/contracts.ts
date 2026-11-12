@@ -82,6 +82,7 @@ export type StudentProfile = {
 }
 export type StudentProfileDraft = Pick<StudentProfile, 'displayName' | 'avatarColor' | 'revision'>
 export type ActivationInvitation = { path: string; expiresAt: string }
+export type AdminAccount = { id:number; name:string; email:string; active:boolean; activated:boolean; revision:number }
 
 export type RequestDecision = 'approve' | 'reject' | 'undo' | 'consent'
 export type LocalUser = { id: number; name: string; role: 'admin' }

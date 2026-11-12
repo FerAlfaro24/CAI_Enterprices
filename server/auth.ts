@@ -32,19 +32,19 @@ export function authRepository(db: Database) {
   const session = (request: IncomingMessage): LocalUser | null => {
     const token = tokenFrom(request)
     if (!token) return null
-    const row = db.prepare("SELECT u.id, u.name, u.role FROM sessions s JOIN admin_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ? AND u.role = 'admin'").get(digest(token), Date.now())
+    const row = db.prepare("SELECT u.id, u.name, u.role FROM sessions s JOIN admin_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ? AND u.role = 'admin' AND u.active=1 AND u.activated=1").get(digest(token), Date.now())
     return row ? row as unknown as LocalUser : null
   }
-  const account = (id: number) => db.prepare("SELECT password_hash FROM admin_users WHERE id = ? AND role = 'admin'").get(id) as { password_hash: string } | undefined
+  const account = (id: number) => db.prepare("SELECT password_hash,revision FROM admin_users WHERE id = ? AND role = 'admin' AND active=1 AND activated=1").get(id) as { password_hash: string; revision:number } | undefined
   return {
     session,
     async login(email: string, password: string) {
-      const user = db.prepare("SELECT * FROM admin_users WHERE email = ? AND role = 'admin'").get(email.toLowerCase()) as { id: number; name: string; role: 'admin'; password_hash: string } | undefined
+      const user = db.prepare("SELECT * FROM admin_users WHERE email = ? AND role = 'admin' AND active=1 AND activated=1").get(email.toLowerCase()) as { id: number; name: string; role: 'admin'; password_hash: string; revision:number } | undefined
       // Usar scrypt también cuando la cuenta no existe evita una respuesta inmediata distinta.
       const fallback = `scrypt-v2:00000000000000000000000000000000:${'0'.repeat(128)}`
       const valid = await verifyPassword(password, user?.password_hash ?? fallback)
       const current = user ? account(user.id) : undefined
-      return valid && user && current?.password_hash === user.password_hash ? { id: user.id, name: user.name, role: user.role } : null
+      return valid && user && current?.password_hash === user.password_hash && current.revision===user.revision ? { id: user.id, name: user.name, role: user.role } : null
     },
     async changePassword(request: IncomingMessage, value: unknown) {
       const user = session(request)
@@ -68,6 +68,7 @@ export function authRepository(db: Database) {
       })
     },
     start(user: LocalUser) {
+      if (!account(user.id)) throw new HttpError(401,'El acceso administrativo ya no está disponible.')
       const token = randomBytes(32).toString('hex')
       db.prepare('DELETE FROM sessions WHERE expires_at <= ?').run(Date.now())
       db.prepare('INSERT INTO sessions VALUES (?, ?, ?)').run(digest(token), user.id, Date.now() + duration * 1000)

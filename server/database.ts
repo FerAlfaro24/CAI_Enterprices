@@ -187,6 +187,20 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (10, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 11').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      ALTER TABLE admin_users ADD COLUMN active INTEGER NOT NULL DEFAULT 1 CHECK(active IN (0,1));
+      ALTER TABLE admin_users ADD COLUMN activated INTEGER NOT NULL DEFAULT 1 CHECK(activated IN (0,1));
+      ALTER TABLE admin_users ADD COLUMN revision INTEGER NOT NULL DEFAULT 1;
+      ALTER TABLE admin_users ADD COLUMN create_key TEXT;
+      CREATE UNIQUE INDEX admin_create_key ON admin_users(create_key) WHERE create_key IS NOT NULL;
+      CREATE TABLE admin_invitations (
+        user_id INTEGER PRIMARY KEY REFERENCES admin_users(id), token_hash TEXT NOT NULL UNIQUE,
+        expires_at INTEGER NOT NULL, created_by INTEGER NOT NULL REFERENCES admin_users(id)
+      );
+      INSERT INTO migrations VALUES (11, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 
