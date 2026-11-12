@@ -163,6 +163,20 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (8, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 9').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE gallery_images (
+        id TEXT PRIMARY KEY, idempotency_key TEXT NOT NULL UNIQUE, fingerprint TEXT NOT NULL,
+        title TEXT NOT NULL, description TEXT NOT NULL, category TEXT NOT NULL CHECK(category IN ('activities','achievements','events','backstage')),
+        alt TEXT NOT NULL, program TEXT NOT NULL, group_name TEXT NOT NULL, authorization_reference TEXT NOT NULL,
+        created_by INTEGER NOT NULL REFERENCES admin_users(id), created_at TEXT NOT NULL,
+        bytes BLOB NOT NULL, width INTEGER NOT NULL, height INTEGER NOT NULL, byte_size INTEGER NOT NULL,
+        withdrawn_at TEXT, revision INTEGER NOT NULL DEFAULT 1
+      );
+      CREATE INDEX gallery_audience ON gallery_images(program,group_name,withdrawn_at,created_at);
+      INSERT INTO migrations VALUES (9, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

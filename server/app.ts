@@ -8,21 +8,23 @@ import { publications, validatePublication } from './publications.ts'
 import { notices } from './notices.ts'
 import { administration } from './administration.ts'
 import { contactRepository, validateContact } from './contact.ts'
+import { galleryRepository } from './gallery.ts'
+import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
 
 const frontendOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173', 'http://127.0.0.1:4180', 'http://localhost:4180']
 
-async function body(request: IncomingMessage) {
+async function body(request: IncomingMessage, maximum = 16_384) {
   if (request.headers['content-type']?.split(';')[0]?.trim() !== 'application/json') throw new HttpError(415, 'Envía los datos como JSON.')
   const chunks: Buffer[] = []
   let size = 0
   for await (const part of request) {
     const chunk = Buffer.from(part)
     size += chunk.length
-    if (size <= 16_384) chunks.push(chunk)
+    if (size <= maximum) chunks.push(chunk)
   }
-  if (size > 16_384) throw new HttpError(413, 'La solicitud es demasiado grande.')
+  if (size > maximum) throw new HttpError(413, 'La solicitud es demasiado grande.')
   try { return record(JSON.parse(Buffer.concat(chunks).toString('utf8'))) }
   catch (error) {
     if (error instanceof HttpError) throw error
@@ -45,6 +47,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const mail = notices(db)
   const config = administration(db)
   const contacts = contactRepository(db)
+  const gallery = galleryRepository(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -171,10 +174,20 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       response.setHeader('Set-Cookie', [...google.end(request), studentAuth.end(request)])
       return json(response, 200, { ok: true })
     }
+    const image = path.match(/^\/api\/local\/gallery\/([a-f0-9-]{36})\/image$/)
+    if (image && method === 'GET') {
+      const admin = auth.session(request), student = studentAuth.session(request)
+      if (!admin && !student) throw new HttpError(401, 'Inicia sesión para ver imágenes privadas.')
+      const bytes = gallery.image(image[1]!, student, Boolean(admin))
+      response.writeHead(200, { 'Content-Type':'image/webp', 'Content-Length':bytes.length, 'Cache-Control':'private, no-store, max-age=0', 'X-Content-Type-Options':'nosniff', 'Cross-Origin-Resource-Policy':'same-origin', 'Referrer-Policy':'no-referrer', 'Content-Disposition':'inline; filename="cai-image.webp"', 'Content-Security-Policy':"default-src 'none'; sandbox" })
+      response.end(bytes)
+      return
+    }
     if (path.startsWith('/api/local/student/')) {
       const user = studentAuth.session(request)
       if (!user) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible. Vuelve a entrar o consulta con CAI.')
       if (path === '/api/local/student/me' && method === 'GET') return json(response, 200, { user })
+      if (path === '/api/local/student/gallery' && method === 'GET') return json(response, 200, { images: gallery.forStudent(user) })
       if (path === '/api/local/student/notices' && method === 'GET') return json(response, 200, { notices: mail.forStudent(user) })
       const seen = path.match(/^\/api\/local\/student\/notices\/(\d+)\/seen$/)
       if (seen && method === 'POST') {
@@ -208,6 +221,19 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     const user = auth.session(request)
     if (!user || user.role !== 'admin') throw new HttpError(401, 'Inicia sesión para abrir la administración local.')
+    if (path === '/api/local/gallery' && method === 'GET') return json(response, 200, { images: gallery.list() })
+    if (path === '/api/local/gallery' && method === 'POST') {
+      limit(`gallery:${user.id}`, 30, 60 * 60_000)
+      const key = request.headers['idempotency-key']
+      if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador de envío.')
+      const data = await body(request, Math.ceil(galleryLimits.uploadBytes / 3) * 4 + 16_384)
+      return json(response, 201, { image: await gallery.create(data,key,()=>auth.session(request)?.id??null) })
+    }
+    const withdrawalImage = path.match(/^\/api\/local\/gallery\/([a-f0-9-]{36})\/withdraw$/)
+    if (withdrawalImage && method === 'POST') {
+      gallery.withdraw(withdrawalImage[1]!,await body(request),user.id)
+      return json(response, 200, { ok:true })
+    }
     if (path === '/api/local/contacts' && method === 'GET') return json(response, 200, { contacts: contacts.list() })
     const contact = path.match(/^\/api\/local\/contacts\/(CON-\d+)$/)
     if (contact && method === 'PATCH') {

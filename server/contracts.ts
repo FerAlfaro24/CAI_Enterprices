@@ -8,6 +8,11 @@ export type ContactStatus = 'nueva' | 'seguimiento' | 'atendida'
 export type ContactInquiry = ContactSubmission & { id: string; status: ContactStatus; note: string; revision: number; createdAt: string; updatedAt: string }
 export type ContactReceipt = { id: string; createdAt: string }
 export type StudentNotice = { id: number; subject: string; message: string; kind: string; createdAt: string; read: boolean }
+export const galleryCategories = { activities: 'Actividades', achievements: 'Logros', events: 'Eventos', backstage: 'Detrás de cámaras' } as const
+export const galleryLimits = { uploadBytes: 3 * 1024 * 1024, inputPixels: 12_000_000, outputSide: 1600, totalBytes: 128 * 1024 * 1024 } as const
+export type GalleryItem = { id: string; title: string; description: string; category: keyof typeof galleryCategories; alt: string; width: number; height: number; byteSize: number; createdAt: string; imagePath: string }
+export type GalleryReview = GalleryItem & { program: string; group: string; authorizationReference: string; revision: number; status: 'publicada' | 'retirada' }
+export type GalleryUpload = { title: string; description: string; category: keyof typeof galleryCategories; alt: string; program: string; group: string; authorizationReference: string; confirmed: boolean; imageBase64: string }
 
 export interface Submission {
   firstName: string
