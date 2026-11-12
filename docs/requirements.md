@@ -1,4 +1,5 @@
 # Requisitos iniciales — CAI
+> Requisitos y propuestas iniciales; no son una lista de funciones ya integradas. Consultar `PROJECT_STATE.md` para distinguir interfaz, demo, servicios locales y pendientes.
 **Versión:** 0.1 · No aprobada por el cliente
 
 Convención: `[C]` confirmado en conversación, `[P]` propuesto para validar, `[D]` diferido.

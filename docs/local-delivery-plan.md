@@ -1,5 +1,7 @@
 # Plan de entrega local — tres semanas
 
+> Orden vigente en `PROJECT_STATE.md`, tras auditar v1.0 y todas las ramas. Primero conectar acceso, dashboard y Community oficiales a los servicios existentes. Las imágenes dejan de ser la siguiente tarea inmediata. Las entregas siguientes son antecedentes, no prueba de una aplicación unificada.
+
 ## Acuerdos de trabajo
 
 - Inicio: 11 de noviembre de 2026. Objetivo: 2 de diciembre de 2026.
@@ -55,7 +57,7 @@ Esta primera tarea se limitó a la demostración. Las entregas locales posterior
 - Integración opcional de Google preparada. Se acordó esperar a contar con la cuenta de CAI para registrar y probar el acceso real; el entorno definitivo debe quedar bajo control del cliente.
 - Publicaciones de texto y moderación conectadas: envío, revisión, aprobación por grupo, rechazo con motivo, retiro e historial. Ver `docs/local-publications.md`.
 - Recuperación por enlace temporal y bandeja de avisos preparadas para pruebas locales. Falta configurar y comprobar la entrega real por correo; los enlaces administrativos de prueba no verifican al destinatario.
-- Próximas prioridades: archivos privados y conexión del diseño avanzado con datos reales; administración de grupos, contenido institucional y revisión completa antes de cotizar el despliegue.
+- Próximas prioridades: contratos/rutas comunes; conectar acceso, dashboard y Community oficiales; catálogo/grupos y ajustes mínimos; avisos/contacto; después archivos privados y revisión completa antes de cotizar el despliegue. Criterios de cierre en `PROJECT_STATE.md`.
 
 ## Dependencias del cliente
 

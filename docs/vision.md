@@ -1,4 +1,5 @@
 # Visión del producto — CAI
+> Antecedente de producto. Leer `PROJECT_STATE.md` para inventario real, base oficial y secuencia vigente. El calendario posterior acordado es de tres semanas; las estimaciones iniciales de este documento son históricas.
 **Estado:** Borrador v0.1 · pendiente de validación con el cliente
 
 ## Contexto

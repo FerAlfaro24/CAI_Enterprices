@@ -1,5 +1,7 @@
 # CAI — Integración para demostración
 
+> Antecedente previo al commit de v1.0. Esta integración SÍ quedó confirmada en `release/cai-demo-v1.0`, `f3ba46b`. Las referencias siguientes a worktree, integración sin commit y aprobación pendiente describen aquel momento. Para el estado actual leer `PROJECT_STATE.md`.
+
 ## Estado y ejecución
 
 Prototipo integrado, pendiente de revisión del usuario. No es una aplicación de producción.

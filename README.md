@@ -2,11 +2,11 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado:** landing institucional y comunidad interactiva de demostración implementadas. Administración mantiene su pantalla provisional. No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño y ya incluye dashboard administrativo completo, landing, registro/login y Community avanzada. Las ramas posteriores añaden servicios persistentes locales, todavía conectados a pantallas paralelas. La prioridad es integrarlos en la interfaz oficial. Consulta primero [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
 ## Objetivo inmediato
 
-Crear en pocos días una demostración visual navegable para revisar con el cliente qué funcionalidades necesita.
+Conectar el diseño oficial de v1.0 con los servicios locales ya desarrollados, sin reconstruir sus pantallas. La demostración visual existente se conserva como referencia. El orden y los criterios de cierre están en `docs/PROJECT_STATE.md`.
 
 ### Módulos previstos
 1. **Web pública:** presentación, programas, información comercial y contacto.
@@ -16,9 +16,9 @@ Crear en pocos días una demostración visual navegable para revisar con el clie
 ## Estado del repositorio
 Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Router**. La landing adapta la propuesta visual original con Figtree, logotipos CAI, secciones responsive y estilos encapsulados mediante CSS Modules. Los textos comerciales, cifras y testimonios se identifican como contenido de muestra.
 
-`/` utiliza `LandingLayout`; `/community` tiene su propio `CommunityLayout`; `/admin` y la página 404 conservan `AppLayout`. Los formularios institucionales no envían solicitudes ni reservan clases.
+`/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. `/gestion/*` y `/alumnos` son las interfaces locales provisionales que deben integrarse en el diseño oficial. Los formularios de contacto institucional siguen siendo demostraciones sin guardado.
 
-La comunidad incluye 15 publicaciones ficticias, reacciones, comentarios, galerías, filtros, perfiles y retos compartidos. La vista «Moderador» permite demostrar aprobación/rechazo y fijación de avisos dentro de `/community`, sin modificar el futuro panel administrativo. Todo usa estado React en memoria: al salir de la ruta, recargar o pulsar «Reiniciar demo» se restaura el escenario. No hay cuentas, permisos reales, envíos ni almacenamiento de datos de alumnos.
+La comunidad avanzada conserva publicaciones ficticias, reacciones, comentarios, galerías, filtros, perfiles, retos y logros. Su estado en memoria es independiente del panel demo y de SQLite; recargar o reiniciar la demo lo restaura. Los proveedores elevados conservan estado al cambiar de ruta. Las cuentas, permisos y publicaciones persistentes locales todavía no alimentan estas vistas oficiales.
 
 ## Desarrollo local
 
@@ -44,6 +44,7 @@ Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: 
 Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/admin` (administración simulada). Las direcciones desconocidas muestran una pantalla 404 dentro del layout compartido. Todas las rutas son públicas durante esta demostración.
 
 ## Documentación
+- [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
 - [Recuperación y avisos locales](docs/local-recovery.md)
 - [Publicaciones de texto y moderación local](docs/local-publications.md)
 - [Acceso con Google: configuración y revisión obligatoria](docs/google-signin.md)
