@@ -169,7 +169,7 @@ Usar estados explícitos: **pendiente**, **en curso**, **implementado sin compro
 | Registro, acceso, aprobación, activación y suspensión con diseño v1.0 | Comprobado localmente | `8e205b0`; `v1-connected-access.md`; nuevo recorrido de navegador | Google/correo reales siguen pendientes. |
 | Dashboard, solicitudes y alumnos originales conectados | Comprobado localmente en el alcance descrito | `8e205b0`; 48 resultados Node, 30 comprobaciones por navegador Brave/Opera; contraste de indicadores, vacío y autorización de menor | Grupos/perfil completo/ajustes y demás bloques siguen pendientes; moderación se completó después, en la fila siguiente. |
 | Moderación y Community avanzadas, bloque 4 | Comprobado localmente en `feat/v1-community-connected`, base `cf12d8a` | `f9e60bc` (interfaz) y `4c0af54` (contratos); `v1-connected-community.md`; 48 resultados Node, 39 comprobaciones por navegador Brave/Opera, respaldo antes de migración 6 | Configuración, grupos/perfil completo, archivos e interacciones secundarias siguen pendientes. |
-| Grupos, asignaciones y ajustes mínimos, bloque 5 | Comprobado localmente en `feat/v1-groups-settings`, base `9a5ef81` | `v1-groups-settings.md`; 56 resultados Node, 27 comprobaciones por navegador Brave/Opera; migración 7 respaldada | Catálogo final de CAI, edición completa de expediente/perfil y otras cuentas administrativas no incluidos. Siguiente: avisos/recuperación/contacto oficiales. |
+| Grupos, asignaciones y ajustes mínimos, bloque 5 | Comprobado localmente en `feat/v1-groups-settings`, base `9a5ef81` | `45900a2` y `08ce05d`; `v1-groups-settings.md`; 56 resultados Node, 27 comprobaciones por navegador Brave/Opera; migración 7 respaldada | Catálogo final de CAI, edición completa de expediente/perfil y otras cuentas administrativas no incluidos. Siguiente: avisos/recuperación/contacto oficiales. |
 
 Lista de comprobación del bloque 4:
 
@@ -219,7 +219,7 @@ El segundo recorrido del bloque 5 completó reasignación, revocación, aislamie
 
 Verificación del bloque 5 superada: 27 comprobaciones en Brave y 27 en Opera GX, cada recorrido con administrador y tres alumnos en contextos independientes. Alta de catálogo desde Configuración y solicitud desde registro originales, pausas/reapertura, archivo sin expulsar miembros, reasignación con confirmación, nuevo login, audiencia conservada y vuelta sin republicación. Configuración/ficha a 1440/768/375/320 px. Corregidas las etiquetas accesibles y el desbordamiento con programa largo; se repitieron ambos recorridos completos. Cierre documental/Git pendiente.
 
-Cierre del bloque 5: comprobados catálogo persistente, Configuración original, asignación confirmada desde ficha, registro dinámico, pausas y aislamiento al reasignar. Servidor guardado en `45900a2`; el punto de retorno de interfaz se identifica con el commit que incorpora `docs/v1-groups-settings.md`. Faltan los bloques 6 en adelante y los límites de perfil/equipo indicados en ese documento. No se da por terminado el producto ni se publica el sitio.
+Cierre del bloque 5: comprobados catálogo persistente, Configuración original, asignación confirmada desde ficha, registro dinámico, pausas y aislamiento al reasignar. Puntos de retorno guardados: `45900a2` (servidor) y `08ce05d` (interfaz/pruebas). Faltan los bloques 6 en adelante y los límites de perfil/equipo indicados en ese documento. No se da por terminado el producto ni se publica el sitio.
 
 Lista de comprobación del bloque 5:
 - [x] Respaldo, migración aditiva y catálogo compartido por registro/asignación.

@@ -1,6 +1,6 @@
 # Grupos, asignaciones y ajustes mínimos conectados
 
-Rama `feat/v1-groups-settings`, desde `9a5ef81` de `feat/v1-community-connected`. Conserva la interfaz oficial de `release/cai-demo-v1.0`. Punto de retorno del servidor: `45900a2`. Los commits de este bloque se identifican con `git log -- docs/v1-groups-settings.md`. Desarrollo local con datos ficticios; no es un despliegue de producción.
+Rama `feat/v1-groups-settings`, desde `9a5ef81` de `feat/v1-community-connected`. Conserva la interfaz oficial de `release/cai-demo-v1.0`. Puntos de retorno: `45900a2` (servidor) y `08ce05d` (interfaz y pruebas). Los commits de este bloque se identifican con `git log -- docs/v1-groups-settings.md`. Desarrollo local con datos ficticios; no es un despliegue de producción.
 
 ## Qué puede hacer el administrador
 
