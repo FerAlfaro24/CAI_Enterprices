@@ -62,6 +62,7 @@ export function authRepository(db: Database) {
         if (session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó durante el cambio. Vuelve a entrar.')
         if (account(user.id)?.password_hash !== original.password_hash) throw new HttpError(409, 'La contraseña cambió en otra sesión. Vuelve a entrar con la contraseña vigente.')
         db.prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?').run(encoded, user.id)
+        db.prepare('DELETE FROM admin_password_resets WHERE user_id = ?').run(user.id)
         const revoked = Number(db.prepare('DELETE FROM sessions WHERE user_id = ?').run(user.id).changes)
         administrationAudit(db, user.id, 'account.password_changed', { sessionsRevoked: revoked })
       })

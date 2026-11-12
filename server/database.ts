@@ -177,6 +177,16 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (9, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 10').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE admin_password_resets (
+        user_id INTEGER PRIMARY KEY REFERENCES admin_users(id), requested_at INTEGER NOT NULL,
+        password_version TEXT NOT NULL, email_version TEXT NOT NULL, state TEXT NOT NULL CHECK(state IN ('pending','sending','delivered','failed','cancelled')),
+        token_hash TEXT UNIQUE, expires_at INTEGER
+      );
+      INSERT INTO migrations VALUES (10, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

@@ -10,6 +10,7 @@ import { administration } from './administration.ts'
 import { contactRepository, validateContact } from './contact.ts'
 import { galleryRepository } from './gallery.ts'
 import { studentProfiles } from './public-profiles.ts'
+import { adminRecovery, adminRecoveryMessage, type AdminRecoveryDelivery } from './admin-recovery.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
@@ -38,7 +39,7 @@ function json(response: ServerResponse, status: number, data: unknown) {
   response.end(JSON.stringify(data))
 }
 
-export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}) {
+export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery} = {}) {
   const db = openDatabase(databasePath)
   const access = accessRepository(db)
   const auth = authRepository(db)
@@ -50,6 +51,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const contacts = contactRepository(db)
   const gallery = galleryRepository(db)
   const profiles = studentProfiles(db)
+  const recovery = adminRecovery(db, options.adminRecoveryDelivery)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -76,6 +78,25 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     limit(`all:${request.socket.remoteAddress}`, 600, 60_000)
     if (path === '/api/local/health' && method === 'GET') return json(response, 200, { status: 'ok', mode: 'local-test' })
     if (path === '/api/local/catalog' && method === 'GET') return json(response, 200, config.publicCatalog())
+    if (path === '/api/local/admin-recovery/request' && method === 'POST') {
+      limit(`admin-recovery:${request.socket.remoteAddress}`,10,15*60_000)
+      const data=await body(request)
+      if (Object.keys(data).some(key=>key!=='email') || typeof data.email!=='string' || data.email.length>160 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) throw new HttpError(400,'Escribe un correo válido.')
+      recovery.request(data.email.trim())
+      json(response,202,{message:adminRecoveryMessage})
+      // La entrega ocurre fuera de la respuesta pública; ninguna URL privada vuelve al solicitante.
+      setImmediate(()=>{void recovery.deliverPending().catch(()=>console.error('No se pudo procesar la entrega administrativa.'))})
+      return
+    }
+    if (path === '/api/local/admin-recovery/reset' && method === 'POST') {
+      limit(`admin-reset:${request.socket.remoteAddress}`,20,15*60_000)
+      const data=await body(request)
+      if (Object.keys(data).some(key=>!['token','password','confirm'].includes(key)) || data.confirm!==data.password) throw new HttpError(400,'Revisa la confirmación de contraseña.')
+      const currentUser=auth.session(request)
+      const recoveredId=await recovery.changePassword(data.token,data.password)
+      if (!currentUser || currentUser.id===recoveredId) response.setHeader('Set-Cookie',auth.end(request))
+      return json(response,200,{ok:true})
+    }
     if (path === '/api/local/contact' && method === 'POST') {
       limit(`contact:${request.socket.remoteAddress}`, 20, 60 * 60_000)
       const key = request.headers['idempotency-key']
@@ -333,6 +354,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   })
   server.requestTimeout = 15_000
   server.headersTimeout = 10_000
-  server.on('close', () => db.close())
+  server.on('listening',()=>{void recovery.deliverPending().catch(()=>console.error('No se pudo procesar la entrega administrativa.'))})
+  server.on('close', () => { recovery.stop(); db.close() })
   return { server, db }
 }
