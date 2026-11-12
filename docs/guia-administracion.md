@@ -14,6 +14,7 @@
 | Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
 | Mantener grupos o pausar solicitudes/envíos | Configuración |
 | Cambiar mi contraseña | Configuración → Seguridad de mi cuenta |
+| Recuperar acceso si olvidé mi contraseña | Acceso de administración → Olvidé mi contraseña |
 
 Entrar por **Acceso de administración** con la cuenta de coordinación. La cuenta del alumno tiene su propio acceso y no abre este panel. Al terminar, usar **Cerrar sesión**.
 
@@ -76,6 +77,14 @@ Pausar solicitudes de ingreso no borra solicitudes recibidas. Pausar nuevos env�
 Para cambiar la contraseña propia, abrir Seguridad de mi cuenta, escribir la actual, la nueva y su confirmación. Usar una frase de 15 a 128 caracteres y guardar. Se cerrarán todas las sesiones de esa cuenta y habrá que entrar con la nueva contraseña; las cuentas de otras personas no se cierran. Esta acción no cambia el correo ni crea otro administrador.
 
 Si se pierde la conexión al guardar, el resultado puede ser incierto: volver a entrar con la nueva contraseña si el cambio se guardó, o con la anterior si el envío no llegó. No se reintenta automáticamente. Si no se conoce la contraseña actual, no se puede omitir desde el formulario; la recuperación administrativa y el procedimiento de custodia se validan para la entrega. Elegir la contraseña personalmente y no enviarla por chat ni guardarla en capturas o manuales.
+
+## Si olvidé mi contraseña administrativa
+
+Desde el acceso administrativo, elegir **Olvidé mi contraseña** y escribir el correo de la cuenta. La respuesta no confirma si esa cuenta existe ni muestra un enlace. **El entorno local habitual todavía no envía correos**: el recorrido se comprobó con un buzón ficticio aislado. La entrega real se habilitará después de verificar al responsable y configurar correo con CAI.
+
+Con la entrega configurada, abrir el enlace recibido y escribir dos veces la nueva contraseña. Dura 15 minutos y sirve una sola vez; un cambio correcto cierra las sesiones de esa cuenta y exige entrar normalmente. Pedirlo no cambia la contraseña ni cierra sesiones. Las solicitudes repetidas tienen un intervalo de 15 minutos; no hace falta enviarlas continuamente.
+
+Si el resultado aparece como incierto, intentar el acceso con la contraseña nueva. Si no funciona, solicitar otro enlace y respetar el plazo indicado; no compartir el enlace por chat ni en capturas. Ante pérdida del correo o sospecha de acceso ajeno, verificar la identidad y el canal con el responsable antes de recuperar. Esta función no crea otro administrador ni cambia el correo. Detalles y límites en [la guía de recuperación](v1-admin-recovery.md).
 
 ## Si algo falla
 

@@ -59,4 +59,4 @@ Ejecutar `checkStudentProfile` del script con las identidades de `browser.json` 
 
 ## Pendientes siguientes
 
-Revisar recuperación administrativa y gestión de otras cuentas aprovechando acceso/sesiones/Configuración existentes, sin inventar una recuperación anónima ni omitir verificación del responsable. Expediente completo, políticas de nombres/contenido y alcance de funciones secundarias requieren definición adicional. Google/correo reales, cuentas finales, contenido/autorizaciones, validación con CAI, presupuesto y alojamiento continúan agrupados al final.
+La recuperación administrativa posterior ya está comprobada con entrega ficticia: [alcance y correo real pendiente](v1-admin-recovery.md). Sigue gestión de otras cuentas en Configuración. Expediente completo, políticas de nombres/contenido y alcance de funciones secundarias requieren definición adicional. Google/correo reales, cuentas finales, contenido/autorizaciones, validación con CAI, presupuesto y alojamiento continúan agrupados al final.
