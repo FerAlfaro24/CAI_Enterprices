@@ -47,7 +47,7 @@ export function SignupPage({ local: localOption = false, google }: { local?: boo
           </div>
           <div className={s.card}>
             {local && !google && <GoogleSignInButton />}
-            {google && <p className={s.hint} style={{ overflowWrap: 'anywhere' }}>Continuaste con {google.email}. <button type="button" className={s.link} onClick={() => { void googleApi.logout().then(() => window.location.assign('/alumnos')).catch(() => window.location.assign('/solicitud-google')) }}>Usar otra cuenta</button></p>}
+            {google && <p className={s.hint} style={{ overflowWrap: 'anywhere' }}>Continuaste con {google.email}. <button type="button" className={s.link} onClick={() => { void googleApi.logout().then(() => window.location.assign('/login')).catch(() => window.location.assign('/solicitud-google')) }}>Usar otra cuenta</button></p>}
             <SignupForm local={local} google={google} />
           </div>
         </main>

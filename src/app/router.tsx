@@ -16,7 +16,6 @@ import { InstitutionalPage } from '../pages/InstitutionalPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { LoginPage } from '../pages/LoginPage'
 import { SignupPage } from '../pages/SignupPage'
-import { LocalAccessApp } from '../features/local-access/LocalAccessApp'
 import { ActivateAccountPage } from '../features/local-access/ActivateAccountPage'
 import { StudentArea } from '../features/local-access/StudentArea'
 import { GoogleOnboardingPage } from '../features/local-access/GoogleOnboardingPage'
@@ -30,13 +29,21 @@ export function AppRoutes() {
       </Route>
       <Route path="login" element={<LoginPage />} />
       <Route path="registro" element={<SignupPage local />} />
-      <Route path="registro-local" element={<SignupPage local />} />
-      <Route path="gestion/*" element={<LocalAccessApp />} />
+      <Route path="registro-local" element={<Navigate to="/registro" replace />} />
+      <Route path="gestion">
+        <Route index element={<Navigate to="/admin" replace />} />
+        <Route path="solicitudes" element={<Navigate to="/admin/solicitudes" replace />} />
+        <Route path="alumnos" element={<Navigate to="/admin/alumnos" replace />} />
+        <Route path="publicaciones" element={<Navigate to="/admin/publicaciones" replace />} />
+        <Route path="avisos" element={<Navigate to="/admin/mensajes?bandeja=avisos" replace />} />
+        <Route path="*" element={<Navigate to="/admin" replace />} />
+      </Route>
       <Route path="activar" element={<ActivateAccountPage />} />
       <Route path="recuperar" element={<ActivateAccountPage recovery />} />
       <Route path="recuperar-acceso" element={<RecoveryPage />} />
-      <Route path="alumnos" element={<StudentArea />} />
-      <Route path="alumnos/publicaciones" element={<StudentArea />} />
+      <Route path="mi-inscripcion" element={<StudentArea />} />
+      <Route path="alumnos" element={<Navigate to="/mi-inscripcion" replace />} />
+      <Route path="alumnos/publicaciones" element={<Navigate to="/community" replace />} />
       <Route path="solicitud-google" element={<GoogleOnboardingPage />} />
       <Route element={<ConnectedCommunity><CommunityLayout /></ConnectedCommunity>}>
         <Route path="community" element={<CommunityPage />} />

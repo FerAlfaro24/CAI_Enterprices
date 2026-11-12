@@ -1,13 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link, NavLink, Navigate, useLocation } from 'react-router'
+import { Link, NavLink, Navigate } from 'react-router'
 import { ThemeSelector } from '../../components/ThemeSelector'
-import { StudentPublications } from '../local-publications/StudentPublications'
 import { ApiError, studentApi, type GroupMember, type StudentUser } from './api'
 import s from '../admin/admin.module.css'
 
 export function StudentArea() {
-  const { pathname } = useLocation()
-  const publicationsPage = pathname === '/alumnos/publicaciones'
   const [user, setUser] = useState<StudentUser | null>(null)
   const [members, setMembers] = useState<GroupMember[]>([])
   const [checking, setChecking] = useState(true)
@@ -43,9 +40,9 @@ export function StudentArea() {
   }, [refresh])
   const signedInId = user?.id
   useEffect(() => {
-    document.title = signedInId ? `${publicationsPage ? 'Publicaciones' : 'Mi espacio'} · Alumnos CAI · Prueba local` : 'Acceso de alumnos · CAI · Prueba local'
+    document.title = signedInId ? 'Mi inscripción · Alumnos CAI · Prueba local' : 'Acceso de alumnos · CAI · Prueba local'
     if (signedInId) heading.current?.focus()
-  }, [signedInId, publicationsPage])
+  }, [signedInId])
   const logout = async () => {
     setBusy(true)
     try {
@@ -70,15 +67,15 @@ export function StudentArea() {
         <Link to="/" className={s['card-link']}>CAI · Mi espacio</Link>
         <div className={s['topbar-end']}><ThemeSelector /><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void logout() }}>Cerrar sesión</button></div>
       </header>
-      <nav className={s['local-nav']} aria-label="Espacio del alumno">{[['/alumnos', 'Mi inscripción'], ['/community', 'Comunidad']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`}>{label}</NavLink>)}</nav>
+      <nav className={s['local-nav']} aria-label="Espacio del alumno">{[['/mi-inscripcion', 'Mi inscripción'], ['/community', 'Comunidad']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`}>{label}</NavLink>)}</nav>
       <main className={s.content} id="student-content" tabIndex={-1}>
         {message && <p role="status">{message}</p>}
         <div className={s['page-head']}>
-          <div><p className={s.eyebrow}>TU ESPACIO CAI</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>{publicationsPage ? 'Comunidad de mi grupo' : `Hola, ${user.displayName}`}</h1></div>
-          {!publicationsPage && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void refresh() }}>Actualizar mi espacio</button>}
+          <div><p className={s.eyebrow}>TU ESPACIO CAI</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>Mi inscripción</h1></div>
+          <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void refresh() }}>Actualizar mi espacio</button>
         </div>
-        {publicationsPage ? <StudentPublications key={user.id} user={user} onAccessLost={refresh} /> : <><section className={s.card} aria-labelledby="student-profile-title">
-          <h2 id="student-profile-title" className={s['card-title']}>Mi inscripción</h2>
+        <section className={s.card} aria-labelledby="student-profile-title">
+          <h2 id="student-profile-title" className={s['card-title']}>Datos de mi inscripción</h2>
           <dl className={s.details}>
             <dt>Nombre visible</dt><dd>{user.displayName}</dd>
             <dt>Programa</dt><dd>{user.program}</dd>
@@ -92,7 +89,6 @@ export function StudentArea() {
             {members.map((member, index) => <li key={`${member.displayName}-${index}`}><span className={s.avatar} style={{ background: member.avatarColor }} aria-hidden="true">{member.displayName[0]}</span><strong>{member.displayName}</strong></li>)}
           </ul> : <p className={s.empty}>Tu grupo aparecerá cuando CAI confirme su asignación.</p>}
         </section>
-        </>}
       </main>
     </div>
   )

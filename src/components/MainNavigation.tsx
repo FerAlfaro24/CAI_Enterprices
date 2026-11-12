@@ -2,7 +2,7 @@ import { NavLink } from 'react-router'
 
 const navigationItems = [
   { to: '/', label: 'Institucional' },
-  { to: '/login', label: 'Acceso demo' },
+  { to: '/login', label: 'Acceso de alumnos' },
   { to: '/community', label: 'Comunidad' },
   { to: '/admin', label: 'Administración' },
 ]

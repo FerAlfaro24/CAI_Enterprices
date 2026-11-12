@@ -109,7 +109,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       const result = await google.signIn(request, data.credential)
       const user = studentAuth.forGoogle(result.subject)
       response.setHeader('Set-Cookie', [...result.cookies, studentAuth.end(request), ...(user ? [studentAuth.start(user)] : [])])
-      return json(response, 200, { destination: user ? '/alumnos' : '/solicitud-google' })
+      return json(response, 200, { destination: user ? '/community' : '/solicitud-google' })
     }
     if (path === '/api/local/google/session' && method === 'GET') return json(response, 200, google.state(request))
     if (path === '/api/local/google/logout' && method === 'POST') {
@@ -131,7 +131,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       const user = studentAuth.forGoogle(identity.subject)
       if (!user) throw new HttpError(403, 'CAI debe aprobar tu solicitud y mantener el acceso activo para que puedas entrar.')
       response.setHeader('Set-Cookie', [studentAuth.end(request), studentAuth.start(user)])
-      return json(response, 200, { destination: '/alumnos' })
+      return json(response, 200, { destination: '/community' })
     }
     if (path === '/api/local/auth/session' && method === 'GET') return json(response, 200, { user: auth.session(request) })
     if (path === '/api/local/auth/login' && method === 'POST') {
