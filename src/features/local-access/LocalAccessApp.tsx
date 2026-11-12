@@ -5,6 +5,7 @@ import { Icon } from '../admin/components/ui'
 import { LocalLogin } from './LocalLogin'
 import { LocalRequestDialog } from './LocalRequestDialog'
 import { LocalInvitationDialog } from './LocalInvitationDialog'
+import { LocalNotices } from './LocalNotices'
 import { LocalOverview, LocalRequests, LocalStudents } from './LocalAccessViews'
 import { LocalPublications } from '../local-publications/LocalPublications'
 import { PublicationReviewDialog } from '../local-publications/PublicationReviewDialog'
@@ -29,8 +30,8 @@ export function LocalAccessApp() {
   const [filter, setFilter] = useState('pendiente')
   const heading = useRef<HTMLHeadingElement>(null)
   const { pathname } = useLocation()
-  const section = pathname === '/gestion/solicitudes' ? 'requests' : pathname === '/gestion/alumnos' ? 'students' : pathname === '/gestion/publicaciones' ? 'posts' : 'home'
-  const title = section === 'requests' ? 'Solicitudes de ingreso' : section === 'students' ? 'Alumnos' : section === 'posts' ? 'Publicaciones' : 'Tu trabajo pendiente'
+  const section = pathname === '/gestion/solicitudes' ? 'requests' : pathname === '/gestion/alumnos' ? 'students' : pathname === '/gestion/publicaciones' ? 'posts' : pathname === '/gestion/avisos' ? 'notices' : 'home'
+  const title = section === 'requests' ? 'Solicitudes de ingreso' : section === 'students' ? 'Alumnos' : section === 'posts' ? 'Publicaciones' : section === 'notices' ? 'Avisos locales' : 'Tu trabajo pendiente'
   const handleError = useCallback((error: unknown) => {
     if (error instanceof ApiError && error.status === 401) {
       setUser(null); setLoaded(false); setSelectedId(null); setSelectedPostId(null); setPosts([]); setInvitation(null)
@@ -145,16 +146,16 @@ export function LocalAccessApp() {
         <div className={s['topbar-end']}><ThemeSelector /><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void logout() }}>Cerrar sesión</button></div>
       </header>
       <nav className={s['local-nav']} aria-label="Administración local">
-        {[['/gestion', 'Inicio'], ['/gestion/solicitudes', 'Solicitudes'], ['/gestion/alumnos', 'Alumnos'], ['/gestion/publicaciones', 'Publicaciones']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`} onClick={() => { setQuery(''); setActionError('') }}>{label}</NavLink>)}
+        {[['/gestion', 'Inicio'], ['/gestion/solicitudes', 'Solicitudes'], ['/gestion/alumnos', 'Alumnos'], ['/gestion/publicaciones', 'Publicaciones'], ['/gestion/avisos', 'Avisos']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`} onClick={() => { setQuery(''); setActionError('') }}>{label}</NavLink>)}
       </nav>
       <main className={s.content} id="local-content" tabIndex={-1}>
-        <div className={s['page-head']}><div><p className={s.eyebrow}>Hola, {user.name}</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>{title}</h1></div><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void reload() }}><Icon name="refresh" size={16} />Actualizar</button></div>
+        <div className={s['page-head']}><div><p className={s.eyebrow}>Hola, {user.name}</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>{title}</h1></div>{section !== 'notices' && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void reload() }}><Icon name="refresh" size={16} />Actualizar</button>}</div>
         {notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{notice}</p>}
         {error && <div role="alert" className={s.alert}><p>{error}</p><button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void reload() }}>Volver a cargar los datos</button></div>}
         {actionError && !selected && !selectedPost && <p role="alert" className={s.alert}>{actionError}</p>}
         {!loaded && !error && <p role="status">Cargando solicitudes y alumnos…</p>}
         {loaded && !error && <>
-          {section === 'home' ? <LocalOverview requests={requests} students={students} pendingPosts={posts.filter((post) => post.status === 'pendiente').length} onReview={open} /> : section === 'posts' ? <LocalPublications posts={posts} onReview={(post) => { setActionError(''); setSelectedPostId(post.id) }} /> : <>
+          {section === 'notices' ? <LocalNotices /> : section === 'home' ? <LocalOverview requests={requests} students={students} pendingPosts={posts.filter((post) => post.status === 'pendiente').length} onReview={open} /> : section === 'posts' ? <LocalPublications posts={posts} onReview={(post) => { setActionError(''); setSelectedPostId(post.id) }} /> : <>
             <div className={s.toolbar}>
               {section === 'requests' && <div className={s.tabs} role="group" aria-label="Estado de solicitudes">{[['pendiente', 'Pendientes'], ['aprobada', 'Aprobadas'], ['rechazada', 'Rechazadas'], ['todas', 'Todas']].map(([value, label]) => <button type="button" key={value} className={s.tab} aria-pressed={filter === value} onClick={() => setFilter(value!)}>{label}</button>)}</div>}
               <div className={s.search}><Icon name="search" size={16} /><label htmlFor="local-search" className={s['sr-only']}>Buscar {section === 'requests' ? 'solicitud' : 'alumno'}</label><input id="local-search" type="search" placeholder="Buscar por nombre o folio" value={query} onChange={(event) => setQuery(event.target.value)} /></div>

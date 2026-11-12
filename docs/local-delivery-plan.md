@@ -54,7 +54,8 @@ Esta primera tarea se limitó a la demostración. Las entregas locales posterior
 - Solicitudes y revisión guiada; autorización de tutor registrada por coordinación; alumnos, suspensión, activación y sesiones por contraseña conectados a SQLite.
 - Integración opcional de Google preparada. Se acordó esperar a contar con la cuenta de CAI para registrar y probar el acceso real; el entorno definitivo debe quedar bajo control del cliente.
 - Publicaciones de texto y moderación conectadas: envío, revisión, aprobación por grupo, rechazo con motivo, retiro e historial. Ver `docs/local-publications.md`.
-- Próximas prioridades: recuperación de acceso y avisos locales; archivos privados y conexión del diseño avanzado con datos reales; administración de grupos, contenido institucional y revisión completa antes de cotizar el despliegue.
+- Recuperación por enlace temporal y bandeja de avisos preparadas para pruebas locales. Falta configurar y comprobar la entrega real por correo; los enlaces administrativos de prueba no verifican al destinatario.
+- Próximas prioridades: archivos privados y conexión del diseño avanzado con datos reales; administración de grupos, contenido institucional y revisión completa antes de cotizar el despliegue.
 
 ## Dependencias del cliente
 

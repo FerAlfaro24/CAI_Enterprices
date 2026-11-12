@@ -1,6 +1,7 @@
 import type { LocalRequest, LocalStudent, Receipt, RequestDecision, RequestStatus, Submission } from './contracts.ts'
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError } from './validation.ts'
+import { queueNotice } from './notices.ts'
 
 type RequestRow = { id: number; payload: string; status: RequestStatus; created_at: string; revision: number; confirmed_at: string | null; google_subject: string | null }
 const requestSelect = 'SELECT r.*, c.confirmed_at, g.subject AS google_subject FROM requests r LEFT JOIN consent_confirmations c ON c.request_id = r.id LEFT JOIN google_identities g ON g.request_id = r.id'
@@ -65,6 +66,7 @@ export function accessRepository(db: Database) {
           if (row.status === 'pendiente') throw new HttpError(409, 'La solicitud ya está pendiente.')
           if (db.prepare("SELECT id FROM requests WHERE email = (SELECT email FROM requests WHERE id = ?) AND id <> ? AND status IN ('pendiente','aprobada')").get(key, key)) throw new HttpError(409, 'Hay otra solicitud activa con ese correo.')
           db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
+          db.prepare('DELETE FROM password_resets WHERE request_id = ?').run(key)
           db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
           db.prepare('DELETE FROM students WHERE request_id = ?').run(key)
           db.prepare("UPDATE requests SET status = 'pendiente', revision = revision + 1 WHERE id = ?").run(key)
@@ -82,6 +84,7 @@ export function accessRepository(db: Database) {
           }
         }
         audit(actor, key, `request.${decision}`)
+        if (decision === 'approve' || decision === 'reject') queueNotice(db, key, 'Revisión de tu solicitud', decision === 'approve' ? 'CAI aprobó tu solicitud. Usa tu cuenta de Google o consulta con coordinación para activar tu acceso por contraseña.' : 'CAI revisó tu solicitud. Consulta con coordinación e indica tu folio para conocer el siguiente paso.')
       })
     },
     students(): LocalStudent[] {
@@ -104,6 +107,7 @@ export function accessRepository(db: Database) {
         if (row.status === status) throw new HttpError(409, 'El alumno ya tiene ese estado.')
         db.prepare('UPDATE students SET status = ?, revision = revision + 1 WHERE request_id = ?').run(status, key)
         if (status === 'suspendido') {
+          db.prepare('DELETE FROM password_resets WHERE request_id = ?').run(key)
           db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
           db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
         }

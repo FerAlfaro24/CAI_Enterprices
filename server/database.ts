@@ -98,6 +98,20 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations(version, applied_at) VALUES (4, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 5').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE local_notices (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, request_id INTEGER NOT NULL REFERENCES requests(id),
+        subject TEXT NOT NULL, message TEXT NOT NULL, kind TEXT NOT NULL, created_at TEXT NOT NULL,
+        acknowledged INTEGER NOT NULL DEFAULT 0
+      );
+      CREATE TABLE password_resets (
+        request_id INTEGER PRIMARY KEY REFERENCES student_accounts(request_id), token_hash TEXT NOT NULL UNIQUE,
+        expires_at INTEGER NOT NULL, password_version TEXT NOT NULL
+      );
+      INSERT INTO migrations VALUES (5, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

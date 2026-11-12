@@ -17,6 +17,7 @@ import { LocalAccessApp } from '../features/local-access/LocalAccessApp'
 import { ActivateAccountPage } from '../features/local-access/ActivateAccountPage'
 import { StudentArea } from '../features/local-access/StudentArea'
 import { GoogleOnboardingPage } from '../features/local-access/GoogleOnboardingPage'
+import { RecoveryPage } from '../features/local-access/RecoveryPage'
 
 export function AppRoutes() {
   return (
@@ -29,6 +30,8 @@ export function AppRoutes() {
       <Route path="registro-local" element={<SignupPage local />} />
       <Route path="gestion/*" element={<LocalAccessApp />} />
       <Route path="activar" element={<ActivateAccountPage />} />
+      <Route path="recuperar" element={<ActivateAccountPage recovery />} />
+      <Route path="recuperar-acceso" element={<RecoveryPage />} />
       <Route path="alumnos" element={<StudentArea />} />
       <Route path="alumnos/publicaciones" element={<StudentArea />} />
       <Route path="solicitud-google" element={<GoogleOnboardingPage />} />

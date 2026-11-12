@@ -38,6 +38,7 @@ export function StudentLogin({ onLogin, message }: { onLogin: (user: StudentUser
           {error && <p role="alert">{error}</p>}
           <button type="submit" className={s.primary} disabled={busy}>{busy ? 'Entrando…' : 'Entrar a mi espacio'}</button>
         </form>
+        <p className={s.footnote}><Link to="/recuperar-acceso">Olvidé mi contraseña</Link></p>
         <p className={s.footnote}>¿Es tu primera vez? Abre el enlace que te entregó CAI. Si no puedes entrar, consulta con coordinación.</p>
         <p className={s.footnote}><Link to="/registro-local">Solicitar acceso</Link></p>
       </div>

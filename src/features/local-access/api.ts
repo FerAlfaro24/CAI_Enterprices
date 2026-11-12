@@ -35,6 +35,8 @@ export const localApi = {
 }
 
 export const studentApi = {
+  requestRecovery: (email: string) => call<{message: string}>('/recovery/request', 'POST', { email }),
+  resetPassword: (token: string, password: string, confirm: string) => call('/recovery/reset', 'POST', { token, password, confirm }),
   activate: (token: string, password: string, confirm: string) => call('/activation', 'POST', { token, password, confirm }),
   session: () => call<{ user: StudentUser | null }>('/student/session'),
   login: (email: string, password: string) => call<{ user: StudentUser }>('/student/login', 'POST', { email, password }),
@@ -44,6 +46,13 @@ export const studentApi = {
   posts: () => call<{ posts: PublishedPost[]; mine: OwnPost[] }>('/student/posts'),
   createPost: (draft: PublicationDraft, key: string) => call<{ post: OwnPost }>('/student/posts', 'POST', draft, { 'Idempotency-Key': key }),
   withdrawPost: (post: OwnPost) => call(`/student/posts/${post.id}/withdraw`, 'POST', { revision: post.revision }),
+}
+
+export type LocalNotice = { id: number; subject: string; message: string; kind: string; recipient: string; createdAt: string; acknowledged: number }
+export const noticeApi = {
+  list: () => call<{notices: LocalNotice[]}>('/notices'),
+  acknowledge: (id: number) => call(`/notices/${id}/acknowledge`, 'POST', {}),
+  preview: (id: number) => call<ActivationInvitation>(`/notices/${id}/preview`, 'POST', {}),
 }
 
 export const googleApi = {

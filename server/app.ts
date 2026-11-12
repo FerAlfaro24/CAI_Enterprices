@@ -5,6 +5,7 @@ import { authRepository } from './auth.ts'
 import { studentAccounts } from './student-accounts.ts'
 import { googleAccounts, type GoogleOptions } from './google-auth.ts'
 import { publications, validatePublication } from './publications.ts'
+import { notices } from './notices.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
 
@@ -39,6 +40,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const studentAuth = studentAccounts(db)
   const google = googleAccounts(db, googleOptions)
   const posts = publications(db)
+  const mail = notices(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -64,6 +66,21 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     limit(`all:${request.socket.remoteAddress}`, 600, 60_000)
     if (path === '/api/local/health' && method === 'GET') return json(response, 200, { status: 'ok', mode: 'local-test' })
+    if (path === '/api/local/recovery/request' && method === 'POST') {
+      limit(`recovery:${request.socket.remoteAddress}`, 10, 15 * 60_000)
+      const data = await body(request)
+      if (Object.keys(data).some((key) => key !== 'email') || typeof data.email !== 'string' || data.email.length > 160 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) throw new HttpError(400, 'Escribe un correo válido.')
+      mail.requestRecovery(data.email.trim())
+      return json(response, 202, { message: 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. En estas pruebas locales no se envían correos; consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' })
+    }
+    if (path === '/api/local/recovery/reset' && method === 'POST') {
+      limit(`reset:${request.socket.remoteAddress}`, 20, 15 * 60_000)
+      const data = await body(request)
+      if (Object.keys(data).some((key) => !['token','password','confirm'].includes(key)) || data.confirm !== data.password) throw new HttpError(400, 'Revisa la confirmación de contraseña.')
+      await mail.changePassword(data.token, data.password)
+      response.setHeader('Set-Cookie', [...google.end(request), studentAuth.end(request)])
+      return json(response, 200, { ok: true })
+    }
     if (path === '/api/local/google/config' && method === 'GET') return json(response, 200, google.config())
     if (path === '/api/local/google/challenge' && method === 'POST') {
       limit(`google-challenge:${request.socket.remoteAddress}`, 30, 15 * 60_000)
@@ -174,6 +191,15 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     if (!user || user.role !== 'admin') throw new HttpError(401, 'Inicia sesión para abrir la administración local.')
     if (path === '/api/local/requests' && method === 'GET') return json(response, 200, { requests: access.requests() })
     if (path === '/api/local/students' && method === 'GET') return json(response, 200, { students: access.students() })
+    if (path === '/api/local/notices' && method === 'GET') return json(response, 200, { notices: mail.list() })
+    const notice = path.match(/^\/api\/local\/notices\/(\d+)\/(preview|acknowledge)$/)
+    if (notice && method === 'POST') {
+      const id = Number(notice[1])
+      if (!Number.isSafeInteger(id) || id < 1) throw new HttpError(400, 'Aviso no válido.')
+      if (notice[2] === 'preview') return json(response, 200, mail.previewRecovery(id, user.id))
+      mail.acknowledge(id)
+      return json(response, 200, { ok: true })
+    }
     if (path === '/api/local/posts' && method === 'GET') return json(response, 200, { posts: posts.review() })
     const review = path.match(/^\/api\/local\/posts\/(PUB-\d+)\/(approve|reject|undo)$/)
     if (review && method === 'POST') {

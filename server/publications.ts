@@ -1,5 +1,6 @@
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError, record } from './validation.ts'
+import { queueNotice } from './notices.ts'
 import { publicationCategories, publicationLimits, type OwnPost, type PublicationDecision, type PublicationDraft, type PublicationStatus, type PublishedPost, type ReviewPost, type StudentUser, type Submission } from './contracts.ts'
 
 type Row = {
@@ -101,6 +102,7 @@ export function publications(db: Database) {
         const explanation = decision === 'reject' ? field(reason, 'el motivo del rechazo', 5, 240) : null
         db.prepare('UPDATE publications SET status = ?, reason = ?, published_at = ?, revision = revision + 1 WHERE id = ?').run(decision === 'approve' ? 'publicada' : decision === 'reject' ? 'rechazada' : 'pendiente', explanation, decision === 'approve' ? new Date().toISOString() : null, row.id)
         audit(row.id, `publication.${decision}`, admin, null)
+        queueNotice(db, row.author_id, 'Revisión de tu publicación', 'CAI actualizó la revisión de una publicación. Entra en Mis publicaciones para consultar su estado y las indicaciones.')
       })
     },
   }
