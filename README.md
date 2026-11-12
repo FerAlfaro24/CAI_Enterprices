@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño: dashboard completo, landing, registro/login y Community avanzada. En `integration/cai-v1-connected`, registro/acceso y solicitudes/alumnos del dashboard original ya utilizan servicios persistentes locales. Falta conectar moderación, Community y ajustes. Las pantallas locales anteriores se conservan temporalmente. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena de mejoras llega a `feat/v1-private-gallery`: acceso, dashboard, solicitudes/alumnos, feed/moderación, grupos/ajustes mínimos, recuperación/avisos/contacto e imágenes administrativas ya están conectados a servicios persistentes locales. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Avance posterior:** en `integration/cai-v1-connected`, registro/login y solicitudes/alumnos del dashboard original ya están conectados al servidor local. La conexión del feed avanzado y moderación es el siguiente bloque. Ver [recorrido conectado de v1.0](docs/v1-connected-access.md).
+> **Siguiente bloque:** consolidar navegación y rutas provisionales tras comprobar equivalencia. Después, estabilización conjunta y configuración externa. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [galería privada y comprobaciones](docs/v1-private-gallery.md).
 
 ## Objetivo inmediato
 
@@ -18,24 +18,27 @@ Conectar el diseño oficial de v1.0 con los servicios locales ya desarrollados, 
 ## Estado del repositorio
 Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Router**. La landing adapta la propuesta visual original con Figtree, logotipos CAI, secciones responsive y estilos encapsulados mediante CSS Modules. Los textos comerciales, cifras y testimonios se identifican como contenido de muestra.
 
-`/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. `/gestion/*` y `/alumnos` son las interfaces locales provisionales que deben integrarse en el diseño oficial. Los formularios de contacto institucional siguen siendo demostraciones sin guardado.
+`/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. `/gestion/*` y `/alumnos` conservan interfaces provisionales pendientes de consolidar. El contacto institucional guarda consultas y permite seguimiento en el panel original. La lista de interés de la plataforma futura conserva su demostración.
 
-La comunidad avanzada conserva publicaciones ficticias, reacciones, comentarios, galerías, filtros, perfiles, retos y logros. Su estado en memoria es independiente del panel demo y de SQLite; recargar o reiniciar la demo lo restaura. Los proveedores elevados conservan estado al cambiar de ruta. Las cuentas, permisos y publicaciones persistentes locales todavía no alimentan estas vistas oficiales.
+La comunidad oficial consulta la cuenta autenticada, miembros del grupo, publicaciones aprobadas, avisos propios e imágenes privadas del servidor local. El diseño y los componentes de demostración se conservan como referencia; comentarios/reacciones persistentes y retos/insignias siguen pendientes de alcance, sin presentarse como guardado real. La galería conectada no mezcla fotografías de stock con los registros del grupo.
 
 ## Desarrollo local
 
-Requisitos: **Node.js 24.12 o posterior** y **npm 10 o superior**. La rama de trabajo incorpora un backend local de solicitudes, cuentas y alumnos, separado de la demo: consulta [cómo iniciar el guardado local](docs/local-backend.md) y [cómo activar cuentas y probar permisos](docs/student-accounts.md). Las publicaciones de Community siguen en demostración.
+Requisitos: **Node.js 24.12 o posterior** y **npm 10 o superior**. Consulta [cómo preparar el servicio y la cuenta local](docs/local-backend.md) y [cómo activar cuentas y probar permisos](docs/student-accounts.md). Preparar `local:setup` únicamente al configurar un entorno nuevo según esa guía; no reemplazar la base ni las credenciales de un entorno existente.
 
 ```sh
 npm ci
-npm run dev
+npm run dev:local
 ```
 
-Abrir la dirección que indique Vite (normalmente `http://localhost:5173`). Si PowerShell bloquea `npm.ps1`, utilizar `npm.cmd` en lugar de `npm` sin modificar la política de ejecución.
+Abrir `http://127.0.0.1:5173`. `dev:local` inicia interfaz y API en este equipo. Si PowerShell bloquea `npm.ps1`, utilizar `npm.cmd` en lugar de `npm` sin modificar la política de ejecución.
 
 | Comando | Función |
 | --- | --- |
-| `npm run dev` | Servidor local con recarga durante el desarrollo. |
+| `npm run dev:local` | Interfaz y API local conectadas, con datos ficticios. |
+| `npm run dev` | Solo Vite; las funciones conectadas requieren iniciar la API aparte. |
+| `npm run test:api` | Regresiones de servidor, permisos, persistencia y respaldos. |
+| `npm run local:backup` | Respaldo consistente de SQLite, incluidas imágenes procesadas. |
 | `npm run typecheck` | Comprobar tipos de la aplicación y la configuración de Vite. |
 | `npm run lint` | Ejecutar ESLint; las advertencias también hacen fallar el control. |
 | `npm run build` | Comprobar tipos y generar los archivos estáticos en `dist/`. |
@@ -43,10 +46,15 @@ Abrir la dirección que indique Vite (normalmente `http://localhost:5173`). Si P
 
 Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: `node scripts/check-community-model.mjs`.
 
-Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/admin` (administración simulada). Las direcciones desconocidas muestran una pantalla 404 dentro del layout compartido. Todas las rutas son públicas durante esta demostración.
+Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para alumnos autorizados y `/admin/*` para administración. Activación y recuperación conservan enlaces auxiliares. Los permisos se aplican en el servidor local, también a cada recurso de imagen. Las rutas desconocidas muestran 404; dentro de administración se vuelve a su inicio protegido.
 
 ## Documentación
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
+- [Galería privada, límites y pruebas](docs/v1-private-gallery.md)
+- [Contacto, bandejas y recuperación oficiales](docs/v1-inbox-recovery-contact.md)
+- [Catálogo, asignaciones y ajustes conectados](docs/v1-groups-settings.md)
+- [Community y moderación oficiales conectadas](docs/v1-connected-community.md)
+- [Acceso y dashboard originales conectados](docs/v1-connected-access.md)
 - [Recuperación y avisos locales](docs/local-recovery.md)
 - [Publicaciones de texto y moderación local](docs/local-publications.md)
 - [Acceso con Google: configuración y revisión obligatoria](docs/google-signin.md)
@@ -71,4 +79,4 @@ Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/ad
 La copia local de la propuesta anterior se conserva en `reference/cai-original/`, ignorada por Git. Se adaptó su diseño sin modificarla ni importarla desde la aplicación. Únicamente se copiaron los dos SVG necesarios a `src/assets/cai/`. La procedencia de las fotografías de stock, las diferencias y los contenidos por validar se detallan en la guía de implementación.
 
 ## Privacidad
-El prototipo usará exclusivamente **datos ficticios**. Los controles de acceso y la moderación simulados no ofrecen garantías de seguridad. El uso real con estudiantes requiere una implementación posterior de autenticación, autorización, almacenamiento privado y consentimiento pertinente.
+Utilizar exclusivamente **datos ficticios**. Ya existen autenticación, permisos, moderación persistente y almacenamiento privado locales comprobados en el alcance documentado. Esto no constituye producción: faltan configuración externa, entrega real de correo/Google, consentimiento y contenido validados, infraestructura y revisión final con CAI. No publicar ni admitir alumnos reales como parte de las pruebas locales.

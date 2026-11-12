@@ -1,5 +1,7 @@
 # Mensajes, avisos y recuperación en la experiencia oficial
 
+> Cierre histórico del bloque 6. El bloque 7 posterior ya conectó la galería privada; consultar `v1-private-gallery.md` y el estado vigente de PROJECT_STATE antes de planificar.
+
 Rama `feat/v1-inbox-recovery-contact`, desde `e083c8f` de `feat/v1-groups-settings`; conserva la interfaz oficial v1.0 y todos los recorridos conectados anteriores. Puntos de retorno: `4a84a05` (servidor) y `8b81f90` (interfaz y pruebas). Los puntos de retorno se consultan con `git log -- docs/v1-inbox-recovery-contact.md`. Pruebas locales con datos ficticios; no es entrega de correo ni despliegue público.
 
 ## Recorrido disponible
