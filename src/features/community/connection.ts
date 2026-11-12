@@ -1,8 +1,11 @@
 import type { GroupMember, GalleryItem, StudentNotice, OwnPost, PublicationDraft, StudentUser } from '../local-access/api'
 import type { Member, Post } from './types'
+import type { StudentProfile, StudentProfileDraft } from '../local-access/api'
 
 export interface CommunityConnection {
   user: StudentUser
+  profile: StudentProfile
+  saveProfile: (draft: StudentProfileDraft) => Promise<boolean>
   members: Member[]
   gallery: GalleryItem[]
   notices: StudentNotice[]

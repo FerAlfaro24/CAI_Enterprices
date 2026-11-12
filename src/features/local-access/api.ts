@@ -5,6 +5,8 @@ export class ApiError extends Error {
   constructor(status: number, message: string) { super(message); this.status = status }
 }
 
+export type { StudentProfile, StudentProfileDraft } from '../../../server/contracts'
+
 async function call<T>(path: string, method = 'GET', body?: unknown, headers?: Record<string, string>): Promise<T> {
   let response: Response
   try {
@@ -55,6 +57,8 @@ export const contactApi = {
 }
 
 export const studentApi = {
+  profile: () => call<{ profile: import('../../../server/contracts').StudentProfile }>('/student/profile'),
+  updateProfile: (draft: import('../../../server/contracts').StudentProfileDraft) => call<{ profile: import('../../../server/contracts').StudentProfile }>('/student/profile', 'PATCH', draft),
   gallery: () => call<{images: GalleryItem[]}>('/student/gallery'),
   notices: () => call<{ notices: StudentNotice[] }>('/student/notices'),
   seen: (id: number) => call(`/student/notices/${id}/seen`, 'POST', {}),

@@ -9,13 +9,7 @@ export function groupsFor(program: string) {
 
 export const relationships = ['Madre', 'Padre', 'Tutor o tutora legal', 'Otro familiar responsable']
 
-export const avatarColors = [
-  { id: 'azul', label: 'Azul', value: '#1f56d6' },
-  { id: 'cielo', label: 'Cielo', value: '#1b87bd' },
-  { id: 'verde', label: 'Verde', value: '#0b6d48' },
-  { id: 'morado', label: 'Morado', value: '#5b3aa8' },
-  { id: 'coral', label: 'Coral', value: '#c2502a' },
-]
+export { avatarColors } from './profile-options'
 
 export const communityRules = [
   'Publica solo logros, experiencias y contenido relacionado con tus clases.',

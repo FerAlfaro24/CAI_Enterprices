@@ -6,9 +6,10 @@ import { CommunityDialogContext, type PostDetail } from './dialogContext'
 import { feedPost, publicMember, type CommunityConnection } from './connection'
 import type { CommunityAction, CommunityState } from './types'
 import s from './community.module.css'
+import type { StudentProfile } from '../local-access/api'
 
 const emptyState: CommunityState = { posts: [], mode: 'student', section: 'home', filter: 'recent', challengeId: '', attempts: {}, badgeRequests: [], notice: '', sequence: 0, resetKey: 0, focusedPostId: null, focusRequest: 0 }
-type Snapshot = { gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean }
+type Snapshot = { profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean }
 
 /** Usa las vistas de v1.0 con una instantánea autorizada, sin inicializar fixtures. */
 export function ConnectedCommunity({ children }: { children: ReactNode }) {
@@ -27,9 +28,9 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const refresh = useCallback(() => {
     const version = ++generation.current
     return studentApi.me().then(async ({ user }) => {
-      const [group, feed, catalog, notices, gallery] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get(), studentApi.notices(), studentApi.gallery()])
+      const [group, feed, catalog, notices, gallery, profile] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get(), studentApi.notices(), studentApi.gallery(), studentApi.profile()])
       if (version !== generation.current) return
-      setSnapshot({ gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen }); setAnonymous(false); setError('')
+      setSnapshot({ profile: profile.profile, gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen }); setAnonymous(false); setError('')
     }).catch((error: unknown) => { if (version === generation.current) failure(error) })
       .finally(() => { if (version === generation.current) setChecking(false) })
   }, [failure])
@@ -57,8 +58,18 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const { user } = snapshot
   const own = publicMember({ id: user.publicId, displayName: user.displayName, avatarColor: user.avatarColor })
   const members = snapshot.members.map(publicMember)
-  const publicMembers = [...members, own, ...snapshot.posts.map(post => publicMember(post.author))]
+  const publicMembers = [own, ...members, ...snapshot.posts.map(post => publicMember(post.author))]
   const connection: CommunityConnection = {
+    profile: snapshot.profile,
+    saveProfile: draft => write(async () => {
+      try {
+        const { profile } = await studentApi.updateProfile(draft)
+        setSnapshot(current => current ? { ...current, profile, user: { ...current.user, displayName: profile.displayName, avatarColor: profile.avatarColor } } : null)
+      } catch (error) {
+        if (error instanceof ApiError && (error.status === 0 || error.status >= 500)) throw new ApiError(error.status, 'No pudimos confirmar si se guardó tu perfil. Conservamos tu borrador; puedes volver a intentar o cargar el perfil actual.')
+        throw error
+      }
+    }, 'Perfil actualizado.'),
     user, members, gallery: snapshot.gallery, notices: snapshot.notices, seen: id => write(() => studentApi.seen(id), 'Aviso marcado como leído.'), mine: snapshot.mine, submissionsOpen: snapshot.submissionsOpen, busy, error, notice, refresh,
     resolveMember: id => publicMembers.find(member => member.id === id) ?? publicMember({ id, displayName: 'Miembro no disponible', avatarColor: '#1f56d6' }),
     submit: (draft, key) => write(() => studentApi.createPost(draft, key), 'Tu publicación se guardó y está pendiente de revisión.'),

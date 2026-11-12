@@ -4,6 +4,7 @@ import { getMember } from '../data/members'
 import { useCommunityDialog } from '../useCommunityDialog'
 import s from '../community.module.css'
 import { StudentNotices } from './StudentNotices'
+import { OwnProfileForm } from './OwnProfileForm'
 import { Avatar, CommunityIcon } from './ui'
 import { selectBadgeGrants } from '../achievements/model'
 
@@ -18,7 +19,12 @@ export function MemberProfileDialog({ memberId, onClose }: { memberId: string; o
   const days = Object.keys(state.attempts).length
   const points = Object.values(state.attempts).reduce((total, attempt) => total + attempt.points, 0)
   const personalPosts = state.posts.filter((post) => post.authorId === member.id)
-  if (connection) return <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); onClose() }}><div className={s.dialogHeading}><div><span className={s.eyebrow}>{member.id === connection.user.publicId ? 'MI ESPACIO' : 'MIEMBRO DEL GRUPO'}</span><h2 id={`${id}-title`}>{member.alias}</h2></div><button className={s.iconButton} type="button" onClick={onClose} aria-label="Cerrar perfil"><CommunityIcon name="close" /></button></div><div className={s.profileIdentity}><Avatar member={member} /><span>Nombre visible en la comunidad</span></div><p id={`${id}-description`}>{member.id === connection.user.publicId ? `${connection.user.program} · ${connection.user.group}` : 'Este perfil muestra únicamente el alias del alumno.'}</p>{member.id===connection.user.publicId&&<StudentNotices/>}</dialog>
+  if (connection) return <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); if (!connection.busy) onClose() }}>
+    <div className={s.dialogHeading}><div><span className={s.eyebrow}>{member.id === connection.user.publicId ? 'MI ESPACIO' : 'MIEMBRO DEL GRUPO'}</span><h2 id={`${id}-title`}>{member.alias}</h2></div><button className={s.iconButton} disabled={connection.busy} type="button" onClick={onClose} aria-label="Cerrar perfil"><CommunityIcon name="close" /></button></div>
+    <div className={s.profileIdentity}><Avatar member={member} /><span>Nombre visible en la comunidad</span></div>
+    <p id={`${id}-description`}>{member.id === connection.user.publicId ? `${connection.user.program} · ${connection.user.group}` : 'Este perfil muestra únicamente el alias del alumno.'}</p>
+    {member.id === connection.user.publicId && <>{connection.notice && <p role="status">{connection.notice}</p>}<OwnProfileForm connection={connection} /><StudentNotices /></>}
+  </dialog>
   return (
     <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); onClose() }}>
       <div className={s.dialogHeading}>

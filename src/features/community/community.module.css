@@ -312,6 +312,15 @@
 .formField input, .formField select, .formField textarea { width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 11px 13px; background: var(--paper); color: var(--text-secondary); font-size: 13px; min-height: 44px; }
 .formField textarea { resize: vertical; max-height: 300px; }
 .formField small { color: var(--muted); font-size: 11px; }
+.profileEditor { font-size: 13px; line-height: 1.6; }
+.profileEditor fieldset { border: 0; padding: 0; min-width: 0; display: grid; gap: 16px; }
+.profileEditor select { max-width: 100%; }
+.profileActions { display: flex; flex-wrap: wrap; gap: 10px; }
+.profileActions button, .profileActivity > button { height: auto; min-height: 44px; width: auto; white-space: normal; padding: 10px 12px; }
+.profileActions button:last-child { font-size: 12px; text-align: left; }
+.profilePreview { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.profilePreview span { border-radius: 50%; width: 42px; height: 42px; flex: none; display: grid; place-items: center; color: #fff; }
+.profilePreview b, .profileDialog h2 { min-width: 0; overflow-wrap: anywhere; }
 .photoChoices { border: 0; padding: 0; min-width: 0; }
 .photoChoices legend { color: var(--text-secondary); font-size: 12px; font-weight: 650; }
 .photoChoices p { color: var(--muted); font-size: 11px; margin-top: 4px; }
