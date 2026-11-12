@@ -223,7 +223,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .tab[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 4px rgba(10, 31, 77, .1); }
 .tab span { font-size: .75rem; padding: 0 7px; border-radius: 999px; background: rgba(31, 86, 214, .1); color: var(--blue-700); }
 
-.search { position: relative; flex: 0 1 300px; }
+.search { position: relative; flex: 0 1 300px; min-width: 0; max-width: 100%; }
 .search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #7a85a3; pointer-events: none; }
 .search input {
   width: 100%; min-height: 40px; padding: 0 12px 0 38px; border: 1px solid var(--line); border-radius: 10px;
@@ -231,7 +231,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 }
 .search input:focus-visible { outline-offset: 0; }
 
-.table-card { min-width: 0; max-width: 100%; padding: 0; overflow-x: auto; }
+.table-card { position: relative; min-width: 0; max-width: 100%; padding: 0; overflow-x: auto; }
 .table { width: 100%; border-collapse: collapse; font-size: .9rem; }
 .table th { padding: 14px 18px; text-align: left; font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #7a85a3; background: #f8faff; border-bottom: 1px solid var(--line); }
 .table td { padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: middle; }
@@ -256,6 +256,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .local-link-field { display: grid; gap: 8px; font-weight: 600; }
 .local-link-field textarea { width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); font: inherit; font-size: .85rem; overflow-wrap: anywhere; }
 .student-group { margin-top: 20px; }
+.student-group .queue li > strong { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .stats.local-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .local-records .queue-person :is(strong, span) { overflow-wrap: anywhere; }
 .local-dialog .dialog-head > div { min-width: 0; overflow-wrap: anywhere; }
@@ -301,9 +302,9 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .stats p { margin: 0; display: flex; align-items: baseline; gap: 8px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); font-size: .88rem; color: var(--muted); }
 .stats strong { font-size: 1.5rem; color: var(--ink); letter-spacing: -.02em; }
 
-.toolbar-group { display: flex; flex-wrap: wrap; gap: 10px; flex: 0 1 520px; justify-content: flex-end; }
+.toolbar-group { display: flex; flex-wrap: wrap; gap: 10px; flex: 0 1 520px; justify-content: flex-end; min-width: 0; max-width: 100%; }
 .select {
-  min-height: 40px; padding: 0 36px 0 12px; border: 1px solid var(--line); border-radius: 10px;
+  min-width: 0; max-width: 100%; min-height: 40px; padding: 0 36px 0 12px; border: 1px solid var(--line); border-radius: 10px;
   font: inherit; font-size: .9rem; color: var(--ink); appearance: none; background-color: var(--surface);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%237a85a3' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 12px center;
@@ -333,7 +334,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .post-flag { margin: 0; display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; padding: 4px 10px; border-radius: 8px; font-size: .8rem; font-weight: 700; background: var(--warn-bg); color: var(--warn); }
 .post-reason { margin: 0; font-size: .85rem; color: var(--bad); }
 .post-author { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); }
-.post-author > div { flex: 1; min-width: 0; }
+.post-author > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .post-author div > strong { display: block; font-size: .9rem; }
 .post-author div > span { display: block; font-size: .78rem; color: var(--muted); }
 .post-actions { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -349,7 +350,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .field-error { margin: 0; font-size: .85rem; font-weight: 600; color: var(--bad); }
 
 /* ---------- Alumnos ---------- */
-.cell-stack { display: block; }
+.cell-stack { display: block; min-width: 0; overflow-wrap: anywhere; }
 .cell-stack span { display: block; font-size: .8rem; color: var(--muted); }
 .cell-icon { display: inline-flex; align-items: center; gap: 6px; }
 

@@ -1,8 +1,8 @@
 /** Integración v1.0 con cuentas ficticias en contextos de navegador separados. */
 export async function checkCommunityConnected(page, { email, password, browserLabel = 'Prueba', baseURL = 'http://127.0.0.1:5173' } = {}) {
-  const details = [], errors = [], matrix = [], contexts = []
+  const details = [], errors = [], matrix = [], contexts = [], listeners = []
   const check = (ok, label) => { if (!ok) throw new Error(label); details.push(label) }
-  const watch = target => { target.setDefaultTimeout(10_000); return target.on('pageerror', error => errors.push(String(error))) }
+  const watch = target => { target.setDefaultTimeout(10_000); const listener = error => errors.push(String(error)); target.on('pageerror', listener); listeners.push([target, listener]) }
   const call = async (target, route, method = 'GET', data, key) => target.evaluate(async ({ route, method, data, key }) => {
     const response = await fetch('/api/local' + route, { method, headers: { ...(data === undefined ? {} : { 'Content-Type': 'application/json' }), ...(key ? { 'Idempotency-Key': key } : {}) }, body: data === undefined ? undefined : JSON.stringify(data) })
     const body = await response.json()
@@ -13,12 +13,14 @@ export async function checkCommunityConnected(page, { email, password, browserLa
   const studentPassword = 'Frase ficticia de comunidad 2026'
   const adminNav = () => page.getByRole('navigation', { name: 'Secciones de administración', exact: true })
   const login = async (target, address) => {
+    await target.bringToFront()
     await target.goto(baseURL + '/login')
     await target.locator('#login-email').fill(address); await target.locator('#login-password').fill(studentPassword)
     await target.getByRole('button', { name: 'Entrar a mi espacio', exact: true }).click()
     await target.getByRole('button', { name: 'Actualizar comunidad', exact: true }).waitFor()
   }
   const refresh = async target => {
+    await target.bringToFront()
     const response = target.waitForResponse(response => response.url().endsWith('/api/local/student/posts') && response.request().method() === 'GET')
     await target.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click(); await response
     await target.getByRole('button', { name: 'Actualizar comunidad', exact: true }).waitFor()
@@ -26,6 +28,7 @@ export async function checkCommunityConnected(page, { email, password, browserLa
     await target.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
   }
   const compose = async (target, heading, retryTest = false) => {
+    await target.bringToFront()
     await target.getByRole('button', { name: 'Compartir algo', exact: true }).first().click()
     const dialog = target.getByRole('dialog')
     await dialog.getByLabel('Título', { exact: true }).fill(heading)
@@ -54,12 +57,14 @@ export async function checkCommunityConnected(page, { email, password, browserLa
     }
   }
   const review = async heading => {
+    await page.bringToFront()
     await page.goto(baseURL + '/admin/publicaciones')
     await page.getByRole('button', { name: `Revisar «${heading}»`, exact: true }).click()
     return page.getByRole('dialog')
   }
   watch(page)
   try {
+    await page.bringToFront()
     await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto(baseURL + '/admin')
     await page.getByRole('heading', { level: 1 }).waitFor()
     if (await page.locator('#login-email').isVisible()) {
@@ -112,7 +117,7 @@ export async function checkCommunityConnected(page, { email, password, browserLa
     await refresh(author.target)
     check((await own.innerText()).includes(reason), 'El autor consulta el rechazo y su motivo en Mis publicaciones')
     check(!JSON.stringify(await call(peer.target, '/student/posts')).includes(reason), 'El motivo privado no se entrega al compañero')
-    await page.reload(); await page.getByRole('button', { name: /^Rechazadas/ }).click()
+    await page.bringToFront(); await page.reload(); await page.getByRole('button', { name: /^Rechazadas/ }).click()
     await page.getByRole('button', { name: `Revisar «${rejectedTitle}»`, exact: true }).click()
     dialog = page.getByRole('dialog'); await dialog.getByRole('button', { name: 'Devolver a revisión', exact: true }).click(); await dialog.waitFor({ state: 'hidden' })
     dialog = await review(rejectedTitle); await dialog.getByRole('checkbox').check(); await dialog.getByRole('button', { name: 'Publicar', exact: true }).click(); await dialog.waitFor({ state: 'hidden' })
@@ -124,11 +129,11 @@ export async function checkCommunityConnected(page, { email, password, browserLa
     await own.getByText('Retirada', { exact: true }).waitFor()
     await refresh(peer.target)
     check(await peer.target.getByRole('heading', { name: title, exact: true }).count() === 0, 'Retirar desde el historial oculta la publicación al compañero')
-    await page.goto(baseURL + '/admin/publicaciones'); await page.getByRole('button', { name: /^Retiradas/ }).click()
+    await page.bringToFront(); await page.goto(baseURL + '/admin/publicaciones'); await page.getByRole('button', { name: /^Retiradas/ }).click()
     await page.getByRole('button', { name: `Revisar «${title}»`, exact: true }).click(); dialog = page.getByRole('dialog')
     check(await dialog.getByRole('button', { name: 'Devolver a revisión', exact: true }).count() === 0, 'La bandeja conserva los retiros y no permite republicarlos')
     await dialog.getByRole('button', { name: 'Cerrar revisión', exact: true }).click()
-    await page.goto(baseURL + '/admin/alumnos')
+    await page.bringToFront(); await page.goto(baseURL + '/admin/alumnos')
     const row = page.getByRole('row').filter({ hasText: `Prueba ${unique} 0` })
     await row.getByRole('button', { name: /^Ficha de / }).click()
     await page.getByRole('dialog').getByRole('button', { name: 'Suspender acceso', exact: true }).click(); await page.getByRole('dialog').waitFor({ state: 'hidden' })
@@ -136,18 +141,18 @@ export async function checkCommunityConnected(page, { email, password, browserLa
     check(await peer.target.getByRole('heading', { name: rejectedTitle, exact: true }).count() === 0, 'Suspender al autor oculta sus historias al grupo')
     await author.target.reload(); await author.target.getByRole('form', { name: 'Acceso de alumnos', exact: true }).waitFor()
     check(true, 'La suspensión revoca la sesión de Community')
-    await page.getByRole('button', { name: /^Suspendidos/ }).click()
+    await page.bringToFront(); await page.getByRole('button', { name: /^Suspendidos/ }).click()
     await row.getByRole('button', { name: /^Ficha de / }).click()
     await page.getByRole('dialog').getByRole('button', { name: 'Reactivar acceso', exact: true }).click(); await page.getByRole('dialog').waitFor({ state: 'hidden' })
     await login(author.target, author.address)
     check(true, 'Reactivar requiere entrar de nuevo y recupera el historial autorizado')
     for (const width of [1440, 768, 375, 320]) {
-      await author.target.setViewportSize({ width, height: 1000 }); await author.target.goto(baseURL + '/community')
+      await author.target.bringToFront(); await author.target.setViewportSize({ width, height: 1000 }); await author.target.goto(baseURL + '/community')
       await author.target.getByRole('button', { name: 'Actualizar comunidad', exact: true }).waitFor()
       check(await author.target.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Community a ${width}px sin desbordamiento`)
       await compose(author.target, `Móvil ${width} ${unique}`)
       check(true, `Editor utilizable a ${width}px`)
-      await page.setViewportSize({ width, height: 1000 }); await page.goto(baseURL + '/admin/publicaciones')
+      await page.bringToFront(); await page.setViewportSize({ width, height: 1000 }); await page.goto(baseURL + '/admin/publicaciones')
       await page.getByRole('button', { name: `Revisar «Móvil ${width} ${unique}»`, exact: true }).click()
       check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Moderación a ${width}px sin desbordamiento`)
       check(await page.getByRole('dialog').evaluate(dialog => dialog.scrollWidth <= dialog.clientWidth), `Diálogo de revisión a ${width}px sin desbordamiento`)
@@ -158,5 +163,8 @@ export async function checkCommunityConnected(page, { email, password, browserLa
     // Leave the primary test page on Community for visual inspection; no personal sessions are used.
     await login(page, author.address); await page.setViewportSize({ width: 1440, height: 1000 })
     return { browserLabel, checks: details.length, details, matrix, errors }
-  } finally { for (const context of contexts) await context.close() }
+  } catch (error) {
+    const diagnostic = await Promise.all(contexts.flatMap(context => context.pages()).map(async target => ({path: new URL(target.url()).pathname, alerts: await target.getByRole('alert').allTextContents()})))
+    throw new Error(`${error.message}\nComprobaciones completadas: ${details.length}\n${JSON.stringify(diagnostic)}`)
+  } finally { for (const [target, listener] of listeners) target.off('pageerror', listener); for (const context of contexts) await context.close() }
 }
