@@ -44,6 +44,7 @@ Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: 
 Rutas disponibles: `/` (institucional), `/community` (comunidad simulada) y `/admin` (administración simulada). Las direcciones desconocidas muestran una pantalla 404 dentro del layout compartido. Todas las rutas son públicas durante esta demostración.
 
 ## Documentación
+- [Acceso con Google: configuración y revisión obligatoria](docs/google-signin.md)
 - [Activación de alumnos y permisos locales](docs/student-accounts.md)
 - [Backend local: acceso, solicitudes, alumnos y respaldos](docs/local-backend.md)
 - [Plan de entrega local en tres semanas](docs/local-delivery-plan.md)

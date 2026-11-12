@@ -1,4 +1,4 @@
-import type { ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, Receipt, RequestDecision, StudentUser, Submission } from '../../../server/contracts'
+import type { ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, Receipt, RequestDecision, StudentUser, Submission } from '../../../server/contracts'
 
 export class ApiError extends Error {
   status: number
@@ -39,6 +39,16 @@ export const studentApi = {
   logout: () => call('/student/logout', 'POST', {}),
   me: () => call<{ user: StudentUser }>('/student/me'),
   group: () => call<{ members: GroupMember[] }>('/student/group'),
+}
+
+export const googleApi = {
+  config: () => call<{ enabled: boolean; clientId: string | null }>('/google/config'),
+  challenge: () => call<{ clientId: string; nonce: string }>('/google/challenge', 'POST', {}),
+  signIn: (credential: string) => call<{ destination: string }>('/google/signin', 'POST', { credential }),
+  session: () => call<GoogleState>('/google/session'),
+  submit: (submission: Submission, key: string) => call<Receipt>('/google/profile', 'POST', submission, { 'Idempotency-Key': key }),
+  enter: () => call<{ destination: string }>('/google/continue', 'POST', {}),
+  logout: () => call('/google/logout', 'POST', {}),
 }
 
 export type { ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, RequestDecision, StudentUser, Submission }

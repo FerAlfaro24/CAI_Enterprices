@@ -26,6 +26,7 @@ export interface LocalRequest {
   ageGroup: 'menor' | 'adulto'
   guardianConsent?: 'pendiente' | 'recibida'
   source: 'Formulario web'
+  signInMethod: 'google' | 'password'
   submittedAt: string
   message: string
   status: RequestStatus
@@ -67,3 +68,8 @@ export type ActivationInvitation = { path: string; expiresAt: string }
 export type RequestDecision = 'approve' | 'reject' | 'undo' | 'consent'
 export type LocalUser = { id: number; name: string; role: 'admin' }
 export type Receipt = { id: string; submittedAt: string; status: 'pendiente' }
+
+export type GoogleState =
+  | { status: 'anonymous' }
+  | { status: 'profile'; email: string }
+  | { status: 'pending' | 'approved' | 'rejected' | 'suspended'; requestId: string }

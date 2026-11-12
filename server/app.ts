@@ -3,6 +3,7 @@ import { openDatabase } from './database.ts'
 import { accessRepository } from './access-repository.ts'
 import { authRepository } from './auth.ts'
 import { studentAccounts } from './student-accounts.ts'
+import { googleAccounts, type GoogleOptions } from './google-auth.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { RequestDecision } from './contracts.ts'
 
@@ -30,11 +31,12 @@ function json(response: ServerResponse, status: number, data: unknown) {
   response.end(JSON.stringify(data))
 }
 
-export function createApplication(databasePath: string) {
+export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}) {
   const db = openDatabase(databasePath)
   const access = accessRepository(db)
   const auth = authRepository(db)
   const studentAuth = studentAccounts(db)
+  const google = googleAccounts(db, googleOptions)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -60,6 +62,44 @@ export function createApplication(databasePath: string) {
     }
     limit(`all:${request.socket.remoteAddress}`, 600, 60_000)
     if (path === '/api/local/health' && method === 'GET') return json(response, 200, { status: 'ok', mode: 'local-test' })
+    if (path === '/api/local/google/config' && method === 'GET') return json(response, 200, google.config())
+    if (path === '/api/local/google/challenge' && method === 'POST') {
+      limit(`google-challenge:${request.socket.remoteAddress}`, 30, 15 * 60_000)
+      const challenge = google.challenge(request)
+      response.setHeader('Set-Cookie', challenge.cookie)
+      return json(response, 200, { nonce: challenge.nonce, clientId: challenge.clientId })
+    }
+    if (path === '/api/local/google/signin' && method === 'POST') {
+      limit(`google-signin:${request.socket.remoteAddress}`, 30, 15 * 60_000)
+      const data = await body(request)
+      if (Object.keys(data).some((key) => key !== 'credential')) throw new HttpError(400, 'El acceso contiene datos no admitidos.')
+      const result = await google.signIn(request, data.credential)
+      const user = studentAuth.forGoogle(result.subject)
+      response.setHeader('Set-Cookie', [...result.cookies, studentAuth.end(request), ...(user ? [studentAuth.start(user)] : [])])
+      return json(response, 200, { destination: user ? '/alumnos' : '/solicitud-google' })
+    }
+    if (path === '/api/local/google/session' && method === 'GET') return json(response, 200, google.state(request))
+    if (path === '/api/local/google/logout' && method === 'POST') {
+      response.setHeader('Set-Cookie', [...google.end(request), studentAuth.end(request)])
+      return json(response, 200, { ok: true })
+    }
+    if (path === '/api/local/google/profile' && method === 'POST') {
+      limit(`google-profile:${request.socket.remoteAddress}`, 20, 60 * 60_000)
+      const identity = google.requireIdentity(request)
+      const data = await body(request)
+      // Rechazar, en lugar de aceptar silenciosamente, el cambio del correo verificado.
+      if (typeof data.email !== 'string' || data.email.toLowerCase() !== identity.email.toLowerCase()) throw new HttpError(400, 'Usa el correo confirmado por Google.')
+      const key = request.headers['idempotency-key']
+      if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador de la solicitud.')
+      return json(response, 201, access.submit(validateSubmission(data), key, identity.subject))
+    }
+    if (path === '/api/local/google/continue' && method === 'POST') {
+      const identity = google.requireIdentity(request)
+      const user = studentAuth.forGoogle(identity.subject)
+      if (!user) throw new HttpError(403, 'CAI debe aprobar tu solicitud y mantener el acceso activo para que puedas entrar.')
+      response.setHeader('Set-Cookie', [studentAuth.end(request), studentAuth.start(user)])
+      return json(response, 200, { destination: '/alumnos' })
+    }
     if (path === '/api/local/auth/session' && method === 'GET') return json(response, 200, { user: auth.session(request) })
     if (path === '/api/local/auth/login' && method === 'POST') {
       limit(`login:${request.socket.remoteAddress}`, 10, 15 * 60_000)
@@ -83,7 +123,7 @@ export function createApplication(databasePath: string) {
       await studentAuth.activate(data.token, data.password)
       // Exigir el acceso normal después de activar, incluso si este navegador
       // conservaba una sesión de otro alumno. No se altera la sesión administrativa.
-      response.setHeader('Set-Cookie', studentAuth.end(request))
+      response.setHeader('Set-Cookie', [...google.end(request), studentAuth.end(request)])
       return json(response, 200, { ok: true })
     }
     if (path === '/api/local/student/session' && method === 'GET') return json(response, 200, { user: studentAuth.session(request) })
@@ -94,11 +134,11 @@ export function createApplication(databasePath: string) {
       const user = await studentAuth.login(data.email.trim(), data.password)
       if (!user) throw new HttpError(401, 'Los datos no son correctos o el acceso aún no está disponible. Consulta con CAI.')
       limits.delete(`student-login:${request.socket.remoteAddress}`)
-      response.setHeader('Set-Cookie', [studentAuth.end(request), studentAuth.start(user)])
+      response.setHeader('Set-Cookie', [...google.end(request), studentAuth.end(request), studentAuth.start(user)])
       return json(response, 200, { user })
     }
     if (path === '/api/local/student/logout' && method === 'POST') {
-      response.setHeader('Set-Cookie', studentAuth.end(request))
+      response.setHeader('Set-Cookie', [...google.end(request), studentAuth.end(request)])
       return json(response, 200, { ok: true })
     }
     if (path.startsWith('/api/local/student/')) {

@@ -11,9 +11,10 @@ const hashToken = (token: string) => createHash('sha256').update(token).digest('
 const cookie = (token: string, age: number) => `${cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/api/local; Max-Age=${age}`
 const accountQuery = `SELECT r.id, r.payload, a.password_hash FROM requests r
   JOIN students s ON s.request_id = r.id
-  JOIN student_accounts a ON a.request_id = r.id
-  WHERE r.status = 'aprobada' AND s.status = 'activo'`
-type AccountRow = { id: number; payload: string; password_hash: string }
+  LEFT JOIN student_accounts a ON a.request_id = r.id
+  WHERE r.status = 'aprobada' AND s.status = 'activo'
+  AND (a.request_id IS NOT NULL OR EXISTS (SELECT 1 FROM google_identities g WHERE g.request_id = r.id))`
+type AccountRow = { id: number; payload: string; password_hash: string | null }
 
 function userFrom(row: AccountRow): StudentUser {
   const p = JSON.parse(row.payload) as Submission
@@ -33,12 +34,13 @@ function validPassword(password: unknown): asserts password is string {
 }
 
 export function studentAccounts(db: Database) {
+  const activated = (id: number) => db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ? UNION ALL SELECT request_id FROM google_identities WHERE request_id = ?').get(id, id)
   const available = (id: number) => db.prepare("SELECT r.id FROM requests r JOIN students s ON s.request_id = r.id WHERE r.id = ? AND r.status = 'aprobada' AND s.status = 'activo'").get(id)
   const audit = (id: number, action: string, actor: number | null = null) => db.prepare('INSERT INTO audit_log(actor_id, request_id, action, created_at) VALUES (?, ?, ?, ?)').run(actor, id, action, new Date().toISOString())
   const invitation = (token: unknown) => {
     if (typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) throw new HttpError(400, 'El enlace no es válido, ya se utilizó o caducó. Pide otro a CAI.')
     const row = db.prepare('SELECT request_id FROM student_invitations WHERE token_hash = ? AND expires_at > ?').get(hashToken(token), Date.now()) as { request_id: number } | undefined
-    if (!row || !available(row.request_id) || db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ?').get(row.request_id)) throw new HttpError(400, 'El enlace no es válido, ya se utilizó o caducó. Pide otro a CAI.')
+    if (!row || !available(row.request_id) || activated(row.request_id)) throw new HttpError(400, 'El enlace no es válido, ya se utilizó o caducó. Pide otro a CAI.')
     return row.request_id
   }
   return {
@@ -48,7 +50,7 @@ export function studentAccounts(db: Database) {
         const student = db.prepare('SELECT revision FROM students WHERE request_id = ?').get(key) as { revision: number } | undefined
         if (!student || !available(key)) throw new HttpError(409, 'Solo puedes preparar acceso para un alumno aprobado y activo.')
         if (student.revision !== revision) throw new HttpError(409, 'El alumno cambió en otra ventana. Vuelve a cargar sus datos.')
-        if (db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ?').get(key)) throw new HttpError(409, 'El alumno ya activó su cuenta.')
+        if (activated(key)) throw new HttpError(409, 'El alumno ya tiene acceso configurado, con Google o contraseña.')
         const token = randomBytes(32).toString('hex')
         const expiresAt = Date.now() + 24 * 60 * 60_000
         db.prepare('INSERT INTO student_invitations VALUES (?, ?, ?, ?) ON CONFLICT(request_id) DO UPDATE SET token_hash = excluded.token_hash, expires_at = excluded.expires_at, created_by = excluded.created_by').run(key, hashToken(token), expiresAt, actor)
@@ -76,9 +78,13 @@ export function studentAccounts(db: Database) {
       const row = db.prepare(`${accountQuery} AND r.email = ?`).get(email.toLowerCase()) as AccountRow | undefined
       const fallback = `scrypt-v2:00000000000000000000000000000000:${'0'.repeat(128)}`
       const valid = await verifyPassword(password, row?.password_hash ?? fallback)
-      if (!valid || !row) return null
+      if (!valid || !row?.password_hash) return null
       const current = db.prepare(`${accountQuery} AND r.id = ?`).get(row.id) as AccountRow | undefined
       return current ? userFrom(current) : null
+    },
+    forGoogle(subject: string): StudentUser | null {
+      const row = db.prepare(`${accountQuery} AND r.id = (SELECT request_id FROM google_identities WHERE subject = ?)`).get(subject) as AccountRow | undefined
+      return row ? userFrom(row) : null
     },
     start(user: StudentUser) {
       const id = idOf(user.id)

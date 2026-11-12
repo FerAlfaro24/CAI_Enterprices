@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { useDemoStore } from '../../app/demoStore'
 import type { AccessRequest } from '../admin/data/mockData'
 import { nextRequestId } from '../admin/state'
-import { localApi } from '../local-access/api'
+import { googleApi, localApi } from '../local-access/api'
 import { cx } from '../landing/utils'
 import {
   ageFrom, avatarColors, communityRules, groupsFor, isEmail, isPhone, relationships,
@@ -55,10 +55,12 @@ const passwordRules = [
   { label: 'Una letra y un número', test: (value: string) => /[a-zA-Z]/.test(value) && /\d/.test(value) },
 ]
 
-export function SignupForm({ local = false }: { local?: boolean }) {
+export type GoogleSignup = { email: string; onSubmitted: () => void }
+
+export function SignupForm({ local = false, google }: { local?: boolean; google?: GoogleSignup }) {
   const id = useId()
   const { state, dispatch } = useDemoStore()
-  const [values, setValues] = useState(initialValues)
+  const [values, setValues] = useState(() => ({ ...initialValues, email: google?.email ?? '' }))
   const [errors, setErrors] = useState<Errors>({})
   const [step, setStep] = useState(0)
   const [showPassword, setShowPassword] = useState(false)
@@ -182,7 +184,7 @@ export function SignupForm({ local = false }: { local?: boolean }) {
     if (local) {
       setSaving(true); setSaveError('')
       try {
-        const receipt = await localApi.submit({
+        const receipt = await (google ? googleApi : localApi).submit({
           firstName: values.firstName.trim(), lastName: values.lastName.trim(), birthDate: values.birthDate,
           email: values.email.trim(), filledBy: byTutor ? 'tutor' : 'alumno', program: values.program,
           group: values.group || 'Por asignar', studentCode: values.studentCode.trim() || undefined,
@@ -191,6 +193,7 @@ export function SignupForm({ local = false }: { local?: boolean }) {
           guardianConsent: values.guardianConsent, acceptRules: values.acceptRules, acceptPrivacy: values.acceptPrivacy,
         }, submissionKey.current)
         setSubmitted({ ...request, ...receipt })
+        google?.onSubmitted()
       } catch (error) { setSaveError(error instanceof Error ? error.message : 'No se pudo guardar la solicitud.') }
       finally { setSaving(false) }
     } else {
@@ -208,7 +211,7 @@ export function SignupForm({ local = false }: { local?: boolean }) {
     submissionKey.current = crypto.randomUUID()
   }
 
-  if (submitted) return <SignupSuccess ref={heading} request={submitted} onRestart={restart} local={local} />
+  if (submitted) return <SignupSuccess ref={heading} request={submitted} onRestart={restart} local={local} google={Boolean(google)} />
 
   const err = (name: FieldName) => errors[name]
   const describe = (name: FieldName, hint?: boolean) =>
@@ -275,8 +278,8 @@ export function SignupForm({ local = false }: { local?: boolean }) {
 
           <div className={s.divider}><span>{local ? 'Correo de contacto' : 'Datos de acceso'}</span></div>
 
-          <Field label={byTutor ? 'Correo del tutor para entrar' : 'Correo electrónico'} htmlFor={`${id}-email`} hint="Usa un correo ficticio: en la demo no se envían mensajes." hintId={`${id}-email-hint`} error={err('email')} errorId={`${id}-email-error`}>
-            <input {...fieldProps('email', true)} type="email" inputMode="email" autoComplete="off" maxLength={120} value={values.email} onChange={onText('email')} placeholder="demo@example.test" />
+          <Field label={byTutor ? 'Correo del tutor para entrar' : 'Correo electrónico'} htmlFor={`${id}-email`} hint={google ? 'Cuenta confirmada por Google. Completa los datos del alumno; CAI revisará su inscripción.' : 'Usa un correo ficticio: en la demo no se envían mensajes.'} hintId={`${id}-email-hint`} error={err('email')} errorId={`${id}-email-error`}>
+            <input {...fieldProps('email', true)} type="email" inputMode="email" autoComplete="off" maxLength={120} value={values.email} readOnly={Boolean(google)} onChange={onText('email')} placeholder="demo@example.test" />
           </Field>
 
           {!local && <>
@@ -301,7 +304,7 @@ export function SignupForm({ local = false }: { local?: boolean }) {
             <li className={s['rule-note']}>No uses una contraseña real: la demo no la guarda.</li>
           </ul>
           </>}
-          {local && <p className={s.hint}>Esta solicitud no crea una cuenta ni pide contraseña. Usa un correo ficticio durante las pruebas locales.</p>}
+          {local && <p className={s.hint}>{google ? 'No necesitas crear otra contraseña. Continuar con Google no sustituye la aprobación de CAI ni la autorización del tutor.' : 'Esta solicitud no crea una cuenta ni pide contraseña. Usa un correo ficticio durante las pruebas locales.'}</p>}
         </div>
       )}
 
@@ -538,19 +541,19 @@ function Check({ on }: { on: boolean }) {
   )
 }
 
-function SignupSuccess({ ref, request, onRestart, local = false }: { ref: Ref<HTMLHeadingElement>; request: AccessRequest; onRestart: () => void; local?: boolean }) {
+function SignupSuccess({ ref, request, onRestart, local = false, google = false }: { ref: Ref<HTMLHeadingElement>; request: AccessRequest; onRestart: () => void; local?: boolean; google?: boolean }) {
   const minor = request.ageGroup === 'menor'
   const timeline = [
     { title: 'Solicitud recibida', text: `Folio ${request.id} · Hoy`, done: true },
     ...(minor ? [{ title: 'Autorización del tutor', text: 'Recepción la confirmará con el tutor registrado.', done: false }] : []),
     { title: 'Revisión de CAI', text: 'La coordinación verifica que el alumno esté inscrito.', done: false },
-    { title: 'Acceso a la comunidad', text: local ? 'Tras la aprobación, coordinación preparará tu enlace de activación. En las pruebas locales no se envían correos.' : 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
+    { title: 'Acceso a la comunidad', text: google ? 'Tras la aprobación, vuelve a entrar con la misma cuenta de Google.' : local ? 'Tras la aprobación, coordinación preparará tu enlace de activación. En las pruebas locales no se envían correos.' : 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
   ]
   return (
     <div className={s.success}>
       <span className={s['success-icon']} aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg></span>
       <h2 ref={ref} tabIndex={-1}>¡Solicitud enviada!</h2>
-      <p>La solicitud <strong>{request.id}</strong> de {request.applicant?.displayName ?? request.name} quedó pendiente de revisión. {local ? 'Se guardó en este equipo. Todavía no se creó una cuenta de alumno.' : 'Esto es una simulación: no se creó una cuenta real.'}</p>
+      <p>La solicitud <strong>{request.id}</strong> de {request.applicant?.displayName ?? request.name} quedó pendiente de revisión. {google ? 'Tu cuenta de Google quedó asociada a esta solicitud; todavía no tienes acceso de alumno.' : local ? 'Se guardó en este equipo. Todavía no se creó una cuenta de alumno.' : 'Esto es una simulación: no se creó una cuenta real.'}</p>
       <ol className={s.timeline} aria-label="Qué sigue">
         {timeline.map(({ title, text, done }) => (
           <li key={title} className={cx(done && s['timeline--done'])}>
@@ -564,7 +567,7 @@ function SignupSuccess({ ref, request, onRestart, local = false }: { ref: Ref<HT
           <Link to="/login" className={cx(s.btn, s['btn--ghost'])}>Continuar al acceso demo</Link>
           <Link to="/admin/solicitudes" className={cx(s.btn, s['btn--primary'])}>Ver la solicitud en el panel (demo)</Link>
         </>}
-        <button type="button" className={cx(s.btn, s['btn--ghost'])} onClick={onRestart}>Llenar otra solicitud</button>
+        {google ? <Link to="/solicitud-google" className={cx(s.btn, s['btn--ghost'])}>Consultar mi solicitud</Link> : <button type="button" className={cx(s.btn, s['btn--ghost'])} onClick={onRestart}>Llenar otra solicitud</button>}
       </div>
       <p className={s.hint}>{local ? 'Conserva tu folio. La solicitud permanece guardada aunque cierres la página.' : 'La solicitud se conserva mientras no recargues la página.'}</p>
     </div>

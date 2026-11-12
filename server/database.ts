@@ -63,6 +63,20 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations(version, applied_at) VALUES (2, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 3').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE google_identities (
+        subject TEXT PRIMARY KEY, email TEXT NOT NULL,
+        request_id INTEGER UNIQUE REFERENCES requests(id), created_at TEXT NOT NULL
+      );
+      CREATE TABLE google_sessions (
+        token_hash TEXT PRIMARY KEY, subject TEXT NOT NULL REFERENCES google_identities(subject), expires_at INTEGER NOT NULL
+      );
+      CREATE TABLE google_challenges (token_hash TEXT PRIMARY KEY, expires_at INTEGER NOT NULL);
+      CREATE INDEX google_sessions_expiry ON google_sessions(expires_at);
+      INSERT INTO migrations(version, applied_at) VALUES (3, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

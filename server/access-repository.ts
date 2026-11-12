@@ -2,8 +2,8 @@ import type { LocalRequest, LocalStudent, Receipt, RequestDecision, RequestStatu
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError } from './validation.ts'
 
-type RequestRow = { id: number; payload: string; status: RequestStatus; created_at: string; revision: number; confirmed_at: string | null }
-const requestSelect = 'SELECT r.*, c.confirmed_at FROM requests r LEFT JOIN consent_confirmations c ON c.request_id = r.id'
+type RequestRow = { id: number; payload: string; status: RequestStatus; created_at: string; revision: number; confirmed_at: string | null; google_subject: string | null }
+const requestSelect = 'SELECT r.*, c.confirmed_at, g.subject AS google_subject FROM requests r LEFT JOIN consent_confirmations c ON c.request_id = r.id LEFT JOIN google_identities g ON g.request_id = r.id'
 const folio = (id: number) => `CAI-${String(id).padStart(4, '0')}`
 
 function numericId(id: string) {
@@ -18,7 +18,7 @@ function toRequest(row: RequestRow): LocalRequest {
   return {
     id: folio(row.id), name: `${p.firstName} ${p.lastName}`, program: p.program,
     ageGroup: minor ? 'menor' : 'adulto', guardianConsent: minor ? row.confirmed_at ? 'recibida' : 'pendiente' : undefined,
-    source: 'Formulario web', submittedAt: row.created_at.slice(0, 10), message: p.message || 'Sin mensaje adicional.',
+    source: 'Formulario web', signInMethod: row.google_subject ? 'google' : 'password', submittedAt: row.created_at.slice(0, 10), message: p.message || 'Sin mensaje adicional.',
     status: row.status, revision: row.revision,
     applicant: { filledBy: p.filledBy, email: p.email, age, group: p.group, studentCode: p.studentCode,
       displayName: p.displayName, avatarColor: p.avatarColor, visibility: p.visibility, guardian: p.guardian },
@@ -28,18 +28,25 @@ function toRequest(row: RequestRow): LocalRequest {
 export function accessRepository(db: Database) {
   const audit = (actor: number | null, id: number, action: string) => db.prepare('INSERT INTO audit_log(actor_id, request_id, action, created_at) VALUES (?, ?, ?, ?)').run(actor, id, action, new Date().toISOString())
   return {
-    submit(payload: Submission, key: string): Receipt {
+    submit(payload: Submission, key: string, googleSubject?: string): Receipt {
       return transaction(db, () => {
+        const identity = googleSubject ? db.prepare('SELECT email, request_id FROM google_identities WHERE subject = ?').get(googleSubject) as { email: string; request_id: number | null } | undefined : undefined
+        if (googleSubject && (!identity || identity.email.toLowerCase() !== payload.email.toLowerCase())) throw new HttpError(401, 'Vuelve a continuar con Google antes de enviar la solicitud.')
         const existing = db.prepare('SELECT id, payload, created_at FROM requests WHERE idempotency_key = ?').get(key) as { id: number; payload: string; created_at: string } | undefined
         const encoded = JSON.stringify(payload)
         if (existing) {
+          // Un identificador de envío nunca permite vincular una solicitud ajena.
+          const owner = db.prepare('SELECT subject FROM google_identities WHERE request_id = ?').get(existing.id)
+          if (googleSubject ? owner?.subject !== googleSubject : Boolean(owner)) throw new HttpError(409, 'Este envío corresponde a otra solicitud.')
           if (existing.payload !== encoded) throw new HttpError(409, 'Esta solicitud ya se recibió. No vuelvas a enviarla con datos distintos.')
           return { id: folio(existing.id), submittedAt: existing.created_at.slice(0, 10), status: 'pendiente' }
         }
+        if (identity?.request_id !== null && identity?.request_id !== undefined) throw new HttpError(409, 'Tu cuenta de Google ya tiene una solicitud. Consulta su estado o contacta con CAI.')
         if (db.prepare("SELECT id FROM requests WHERE email = ? AND status IN ('pendiente','aprobada')").get(payload.email)) throw new HttpError(409, 'Ya hay una solicitud en revisión o aprobada con ese correo. Consulta con CAI.')
         const created = new Date().toISOString()
         const result = db.prepare('INSERT INTO requests(idempotency_key, email, payload, created_at) VALUES (?, ?, ?, ?)').run(key, payload.email, encoded, created)
         const id = Number(result.lastInsertRowid)
+        if (googleSubject) db.prepare('UPDATE google_identities SET request_id = ? WHERE subject = ? AND request_id IS NULL').run(id, googleSubject)
         audit(null, id, 'request.submitted')
         return { id: folio(id), submittedAt: created.slice(0, 10), status: 'pendiente' }
       })
@@ -85,7 +92,7 @@ export function accessRepository(db: Database) {
         return { id: request.id, name: request.name, program: request.program, group: request.applicant.group,
           ageGroup: request.ageGroup, guardianConsent: request.guardianConsent, joinedAt: student.joined_at.slice(0, 10),
           visibility: request.applicant.visibility, status: student.status, revision: student.revision,
-          accountStatus: db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ?').get(row.id) ? 'activada' : 'pendiente' }
+          accountStatus: row.google_subject || db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ?').get(row.id) ? 'activada' : 'pendiente' }
       })
     },
     setStudentStatus(id: string, revision: number, status: 'activo' | 'suspendido', actor: number) {

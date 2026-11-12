@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 import { ThemeSelector } from '../../components/ThemeSelector'
 import { studentApi, type StudentUser } from './api'
+import { GoogleSignInButton } from './GoogleSignInButton'
 import s from '../login/login.module.css'
 
 export function StudentLogin({ onLogin, message }: { onLogin: (user: StudentUser) => void; message: string }) {
@@ -28,6 +29,7 @@ export function StudentLogin({ onLogin, message }: { onLogin: (user: StudentUser
         <p className={s.lead}>Usa el correo de tu solicitud y la contraseña que elegiste al activar tu cuenta.</p>
         <p className={s.notice}>Prueba local con datos ficticios. La comunidad de publicaciones todavía está en demostración.</p>
         {message && <p role="status">{message}</p>}
+        <GoogleSignInButton />
         <form aria-label="Acceso de alumnos" onSubmit={(event) => { void submit(event) }} aria-busy={busy}>
           <label htmlFor="student-email">Correo electrónico</label>
           <input id="student-email" name="email" type="email" autoComplete="username" required maxLength={160} />

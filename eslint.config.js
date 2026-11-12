@@ -30,4 +30,9 @@ export default tseslint.config(
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },
+  {
+    files: ['*.ts', 'server/**/*.ts'],
+    // Las firmas de tipos se revisan con la regla TypeScript, no con la de JavaScript.
+    rules: { 'no-unused-vars': 'off' },
+  },
 )

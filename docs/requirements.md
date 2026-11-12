@@ -16,6 +16,7 @@ Convención: `[C]` confirmado en conversación, `[P]` propuesto para validar, `[
 - **RF-10 [D]** Reproducción/carga de videos reales.
 - **RF-11 [D]** Notificaciones y gamificación.
 - **RF-12 [P]** Formulario de solicitud de acceso por pasos, con autorización de tutor para menores (ver `docs/student-signup.md`).
+- **RF-13 [C]** Acceso opcional con Google, conservando contraseña como alternativa, con datos del alumno obligatorios y aprobación administrativa antes de entrar. Preparado para pruebas locales; configuración y validación real pendientes (ver `docs/google-signin.md`).
 
 ## No funcionales
 - **RNF-01 [C]** Experiencia usable en móviles y escritorio.
