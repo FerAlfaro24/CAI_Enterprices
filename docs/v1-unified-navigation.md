@@ -1,5 +1,7 @@
 # Navegación oficial y compatibilidad de enlaces anteriores
 
+> Cierre histórico del bloque 8. La tanda técnica posterior de carga, errores y operación está documentada en `v1-stabilization.md`; consultar PROJECT_STATE para pendientes vigentes.
+
 Bloque 8 comprobado localmente el 12 de noviembre de 2026. Rama `feat/v1-unified-navigation`, base `361e23a` de `feat/v1-private-gallery`; incluye las mejoras acumulativas anteriores y conserva la base visual v1.0. Puntos de retorno: `5f8bd57` (ajustes responsive y ejecución del recorrido de comunidad) y `ded8804` (rutas, enlaces, selección de bandeja y pruebas).
 
 ## Mapa de rutas

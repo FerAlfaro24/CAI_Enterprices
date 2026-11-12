@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena de mejoras llega a `feat/v1-unified-navigation`: acceso, dashboard, solicitudes/alumnos, feed/moderación, grupos/ajustes mínimos, recuperación/avisos/contacto e imágenes administrativas están conectados localmente y la navegación usa las pantallas oficiales. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `chore/v1-stabilization`: conserva todas las áreas conectadas y la navegación oficial, con carga por pantallas, recuperación de errores y verificación de respaldos. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Siguiente bloque:** estabilización conjunta, herramientas de desarrollo, carga inicial y guía de administración. La configuración externa continúa al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [rutas vigentes y comprobaciones](docs/v1-unified-navigation.md).
+> **Continuación:** la tanda de carga/errores/guías está comprobada; siguen pendientes las alertas de herramientas, los huecos de cuenta/perfil del inventario y la validación con CAI. La configuración externa continúa al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [estabilización y límites comprobados](docs/v1-stabilization.md).
 
 ## Objetivo inmediato
 
@@ -39,6 +39,7 @@ Abrir `http://127.0.0.1:5173`. `dev:local` inicia interfaz y API en este equipo.
 | `npm run dev` | Solo Vite; las funciones conectadas requieren iniciar la API aparte. |
 | `npm run test:api` | Regresiones de servidor, permisos, persistencia y respaldos. |
 | `npm run local:backup` | Respaldo consistente de SQLite, incluidas imágenes procesadas. |
+| `npm run local:verify-backup -- "RUTA.sqlite"` | Comprobar una copia en solo lectura, sin restaurar ni modificar la base activa. |
 | `npm run typecheck` | Comprobar tipos de la aplicación y la configuración de Vite. |
 | `npm run lint` | Ejecutar ESLint; las advertencias también hacen fallar el control. |
 | `npm run build` | Comprobar tipos y generar los archivos estáticos en `dist/`. |
@@ -50,6 +51,9 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 
 ## Documentación
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
+- [Guía sencilla de administración](docs/guia-administracion.md)
+- [Respaldos y recuperación local](docs/respaldo-recuperacion-local.md)
+- [Estabilización: carga, errores, pruebas y alertas pendientes](docs/v1-stabilization.md)
 - [Navegación unificada, compatibilidad de enlaces y pruebas](docs/v1-unified-navigation.md)
 - [Galería privada, límites y pruebas](docs/v1-private-gallery.md)
 - [Contacto, bandejas y recuperación oficiales](docs/v1-inbox-recovery-contact.md)
