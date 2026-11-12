@@ -67,6 +67,6 @@ Siguen pendientes alta/gestión de otros administradores, recuperación administ
 
 La API continúa limitada a pruebas locales. HTTPS, entrega de correo/Google reales, contenido y permisos, validación humana y alojamiento permanecen para la tanda final. Los diez avisos moderados de herramientas de desarrollo ya registrados no se resuelven ni cambian en esta entrega.
 
-Siguiente revisión autónoma: perfil propio del alumno usando MemberProfileDialog, public-profiles y las reglas de nombre/privacidad existentes. Mantener separados los datos visibles del expediente legal y no ampliar la edición de fecha de nacimiento, tutores, correo o roles implícitamente.
+La revisión posterior del perfil visible del alumno ya se completó en `feat/v1-student-profile`; ver [alcance y pruebas](v1-student-profile.md). Mantiene separados los datos visibles del expediente legal, sin edición de nacimiento, tutores, correo o roles.
 
 Referencias primarias consultadas: [cambio de contraseña y reautenticación de OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#change-password-feature) y [scrypt de Node.js](https://nodejs.org/api/crypto.html#cryptoscryptpassword-salt-keylen-options-callback). Las garantías concretas anteriores corresponden al alcance probado localmente, no a una auditoría de producción.

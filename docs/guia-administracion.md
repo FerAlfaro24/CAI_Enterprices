@@ -40,6 +40,8 @@ Suspender cierra el acceso de esa cuenta; reactivarla exige entrar de nuevo. No 
 
 La edición completa del expediente y la gestión de otras cuentas administrativas todavía no están disponibles. Si se necesita una corrección fuera de las acciones visibles, anotarla para la revisión de entrega.
 
+El alumno puede cambiar por sí mismo su **nombre visible y color del avatar** desde Community → Mi espacio → Editar mi perfil. Esto también actualiza el alias que muestra en historias anteriores; no cambia su nombre legal ni grupo. Los menores eligen únicamente entre las dos abreviaturas permitidas. Si coordinación tiene abierta una ficha antigua y recibe un aviso de cambio, debe actualizarla antes de actuar. La [guía de perfil](v1-student-profile.md) describe errores y límites.
+
 ## Revisar publicaciones
 
 En Publicaciones, abrir **Revisar** sobre la historia correspondiente. Leer el contenido y comprobar su privacidad. Para publicar, confirmar la revisión. Para rechazar, elegir un motivo; lo verá su autor, no todo el grupo.

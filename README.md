@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `feat/v1-admin-account-security`: conserva las áreas conectadas, navegación unificada y estabilización; añade cambio de contraseña administrativa propia y revocación de escrituras pendientes. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. La cadena llega a `feat/v1-student-profile`: conserva las áreas conectadas, navegación, estabilización y seguridad de cuenta administrativa; añade edición propia de nombre visible/avatar en el diálogo original de Community. Consulta [Estado oficial y orden de integración](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación:** revisar el perfil propio del alumno con sus reglas de privacidad existentes. Siguen pendientes las alertas de herramientas, la gestión de otras cuentas/recuperación administrativa, el expediente completo y la validación con CAI. La configuración externa continúa al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [seguridad de cuenta y límites](docs/v1-admin-account-security.md).
+> **Continuación:** revisar recuperación administrativa/otras cuentas usando los servicios existentes y sin omitir la verificación del responsable. Siguen pendientes las alertas de herramientas, el expediente completo y la validación con CAI. La configuración externa continúa al final. Las mejoras son acumulativas; no fusionarlas como trabajos independientes. Ver [perfil visible y límites](docs/v1-student-profile.md).
 
 ## Objetivo inmediato
 
@@ -51,6 +51,7 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 
 ## Documentación
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
+- [Perfil visible propio del alumno, privacidad y pruebas](docs/v1-student-profile.md)
 - [Contraseña administrativa propia, entrega y pruebas](docs/v1-admin-account-security.md)
 - [Guía sencilla de administración](docs/guia-administracion.md)
 - [Respaldos y recuperación local](docs/respaldo-recuperacion-local.md)
