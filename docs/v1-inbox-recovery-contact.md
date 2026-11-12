@@ -1,6 +1,6 @@
 # Mensajes, avisos y recuperación en la experiencia oficial
 
-Rama `feat/v1-inbox-recovery-contact`, desde `e083c8f` de `feat/v1-groups-settings`; conserva la interfaz oficial v1.0 y todos los recorridos conectados anteriores. Punto de retorno del servidor: `4a84a05`. Los puntos de retorno se consultan con `git log -- docs/v1-inbox-recovery-contact.md`. Pruebas locales con datos ficticios; no es entrega de correo ni despliegue público.
+Rama `feat/v1-inbox-recovery-contact`, desde `e083c8f` de `feat/v1-groups-settings`; conserva la interfaz oficial v1.0 y todos los recorridos conectados anteriores. Puntos de retorno: `4a84a05` (servidor) y `8b81f90` (interfaz y pruebas). Los puntos de retorno se consultan con `git log -- docs/v1-inbox-recovery-contact.md`. Pruebas locales con datos ficticios; no es entrega de correo ni despliegue público.
 
 ## Recorrido disponible
 
