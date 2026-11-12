@@ -54,8 +54,8 @@ export function LocalStudents({ students, busy, onStatus, onInvite }: {
   )
 }
 
-export function LocalOverview({ requests, students, onReview }: {
-  requests: LocalRequest[]; students: LocalStudent[]; onReview: (request: LocalRequest) => void
+export function LocalOverview({ requests, students, pendingPosts, onReview }: {
+  requests: LocalRequest[]; students: LocalStudent[]; pendingPosts: number; onReview: (request: LocalRequest) => void
 }) {
   const pending = requests.filter((request) => request.status === 'pendiente')
   const missingConsent = pending.filter((request) => request.ageGroup === 'menor' && request.guardianConsent !== 'recibida').length
@@ -78,6 +78,9 @@ export function LocalOverview({ requests, students, onReview }: {
         {pending.length
           ? <LocalRequests requests={pending.slice(0, 5)} onReview={onReview} />
           : <p className={s.empty}>Todo al día. No hay solicitudes pendientes.</p>}
+      </section>
+      <section className={s.card} style={{ marginTop: 20 }}>
+        <div className={s['card-head']}><div><h2 className={s['card-title']}>Publicaciones por revisar</h2><p className={s['card-sub']}>{pendingPosts ? `${pendingPosts} pendientes. Revisa el contenido antes de compartirlo con su grupo.` : 'Todo al día. No hay publicaciones pendientes.'}</p></div><Link to="/gestion/publicaciones" className={s['card-link']}>Revisar publicaciones</Link></div>
       </section>
     </>
   )

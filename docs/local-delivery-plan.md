@@ -47,7 +47,14 @@ Rama: `feat/admin-guided-requests`. Cambio limitado a la revisión de solicitude
 - Cerrar sin decidir conserva el estado. Se mantienen filtros, búsqueda y avisos de simulación.
 - Comprobar el recorrido de registro y aprobación, el bloqueo de menores sin autorización y el diseño a 1440, 768, 375 y 320 px en Brave y Opera GX.
 
-Este cambio todavía no incorpora backend, cuentas, persistencia ni verificación real de tutores. La siguiente tarea es fijar la solución local de backend y el modelo común de solicitudes, alumnos y permisos antes de conectar las pantallas.
+Esta primera tarea se limitó a la demostración. Las entregas locales posteriores de backend, cuentas y publicaciones se describen en el avance siguiente; la comprobación de tutores sigue requiriendo revisión de coordinación.
+
+## Avance local al 11 de noviembre de 2026
+
+- Solicitudes y revisión guiada; autorización de tutor registrada por coordinación; alumnos, suspensión, activación y sesiones por contraseña conectados a SQLite.
+- Integración opcional de Google preparada. Se acordó esperar a contar con la cuenta de CAI para registrar y probar el acceso real; el entorno definitivo debe quedar bajo control del cliente.
+- Publicaciones de texto y moderación conectadas: envío, revisión, aprobación por grupo, rechazo con motivo, retiro e historial. Ver `docs/local-publications.md`.
+- Próximas prioridades: recuperación de acceso y avisos locales; archivos privados y conexión del diseño avanzado con datos reales; administración de grupos, contenido institucional y revisión completa antes de cotizar el despliegue.
 
 ## Dependencias del cliente
 

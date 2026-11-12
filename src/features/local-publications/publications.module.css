@@ -1,0 +1,23 @@
+.stack { display: grid; gap: 20px; min-width: 0; }
+.form { display: grid; gap: 14px; padding: 0 22px 22px; }
+.field { display: grid; gap: 6px; min-width: 0; font-weight: 600; font-size: .9rem; }
+.field :is(input, textarea, select), .reason { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; }
+.field textarea { resize: vertical; line-height: 1.6; }
+.hint { margin: 0; font-size: .82rem; font-weight: 400; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.body { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; margin: 0; }
+.post { min-width: 0; padding: 22px; display: grid; gap: 14px; }
+.post h3, .post p { overflow-wrap: anywhere; }
+.author { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.author div { min-width: 0; overflow-wrap: anywhere; }
+.author small { display: block; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.pill { border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: .78rem; font-weight: 600; background: var(--surface); color: var(--ink); }
+.mine { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.own { padding: 18px 22px; border-top: 1px solid var(--line); min-width: 0; display: grid; gap: 12px; }
+.own summary { cursor: pointer; min-height: 44px; padding-block: 10px; font-weight: 600; overflow-wrap: anywhere; }
+.own details p { padding-top: 12px; }
+.reasonLabel { display: grid; gap: 8px; font-weight: 600; }
+.instructions { padding: 0 22px 20px; margin: 0; color: var(--muted); line-height: 1.6; }
+.post :focus-visible, .form :focus-visible, .own :focus-visible { outline: 3px solid var(--app-focus); outline-offset: 3px; }
+@media (max-width: 560px) { .post, .own { padding: 16px; } .form { padding: 0 16px 16px; } .instructions { padding-inline: 16px; } .actions > button { flex: 1; } }

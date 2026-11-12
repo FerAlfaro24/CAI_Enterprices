@@ -6,7 +6,9 @@ import { LocalLogin } from './LocalLogin'
 import { LocalRequestDialog } from './LocalRequestDialog'
 import { LocalInvitationDialog } from './LocalInvitationDialog'
 import { LocalOverview, LocalRequests, LocalStudents } from './LocalAccessViews'
-import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type RequestDecision } from './api'
+import { LocalPublications } from '../local-publications/LocalPublications'
+import { PublicationReviewDialog } from '../local-publications/PublicationReviewDialog'
+import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type PublicationDecision, type RequestDecision, type ReviewPost } from './api'
 import s from '../admin/admin.module.css'
 
 export function LocalAccessApp() {
@@ -14,6 +16,8 @@ export function LocalAccessApp() {
   const [checking, setChecking] = useState(true)
   const [requests, setRequests] = useState<LocalRequest[]>([])
   const [students, setStudents] = useState<LocalStudent[]>([])
+  const [posts, setPosts] = useState<ReviewPost[]>([])
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null)
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState('')
   const [actionError, setActionError] = useState('')
@@ -25,11 +29,11 @@ export function LocalAccessApp() {
   const [filter, setFilter] = useState('pendiente')
   const heading = useRef<HTMLHeadingElement>(null)
   const { pathname } = useLocation()
-  const section = pathname === '/gestion/solicitudes' ? 'requests' : pathname === '/gestion/alumnos' ? 'students' : 'home'
-  const title = section === 'requests' ? 'Solicitudes de ingreso' : section === 'students' ? 'Alumnos' : 'Tu trabajo pendiente'
+  const section = pathname === '/gestion/solicitudes' ? 'requests' : pathname === '/gestion/alumnos' ? 'students' : pathname === '/gestion/publicaciones' ? 'posts' : 'home'
+  const title = section === 'requests' ? 'Solicitudes de ingreso' : section === 'students' ? 'Alumnos' : section === 'posts' ? 'Publicaciones' : 'Tu trabajo pendiente'
   const handleError = useCallback((error: unknown) => {
     if (error instanceof ApiError && error.status === 401) {
-      setUser(null); setLoaded(false); setSelectedId(null); setInvitation(null)
+      setUser(null); setLoaded(false); setSelectedId(null); setSelectedPostId(null); setPosts([]); setInvitation(null)
       setNotice('Tu sesión terminó. Vuelve a entrar para continuar.')
       return ''
     }
@@ -49,14 +53,14 @@ export function LocalAccessApp() {
     return () => { active = false }
   }, [handleError])
   const refresh = useCallback(async () => {
-    const [r, st] = await Promise.all([localApi.requests(), localApi.students()])
-    setRequests(r.requests); setStudents(st.students); setLoaded(true); setError('')
+    const [r, st, publications] = await Promise.all([localApi.requests(), localApi.students(), localApi.posts()])
+    setRequests(r.requests); setStudents(st.students); setPosts(publications.posts); setLoaded(true); setError('')
   }, [])
   useEffect(() => {
     if (!user) return
     let active = true
-    void Promise.all([localApi.requests(), localApi.students()]).then(([r, st]) => {
-      if (active) { setRequests(r.requests); setStudents(st.students); setLoaded(true); setError('') }
+    void Promise.all([localApi.requests(), localApi.students(), localApi.posts()]).then(([r, st, publications]) => {
+      if (active) { setRequests(r.requests); setStudents(st.students); setPosts(publications.posts); setLoaded(true); setError('') }
     }).catch((error: unknown) => { if (active) setError(handleError(error)) })
     return () => { active = false }
   }, [user, handleError])
@@ -92,6 +96,20 @@ export function LocalAccessApp() {
       if (error instanceof ApiError && error.status === 409) await reload()
     } finally { setBusy(false) }
   }
+  const moderate = async (decision: PublicationDecision, reason?: string, confirmed?: boolean) => {
+    const post = posts.find((post) => post.id === selectedPostId)
+    if (!post || busy) return
+    setBusy(true); setActionError(''); setNotice('')
+    try {
+      await localApi.moderate(post, decision, reason, confirmed)
+      setSelectedPostId(null)
+      setNotice(decision === 'approve' ? 'Publicación compartida con su programa y grupo.' : decision === 'reject' ? 'Publicación rechazada. El alumno puede consultar el motivo.' : 'Publicación devuelta a revisión y oculta del grupo.')
+      try { await refresh() } catch (error) { setError(handleError(error)) }
+    } catch (error) {
+      setActionError(handleError(error))
+      if (error instanceof ApiError && error.status === 409) { setSelectedPostId(null); await reload() }
+    } finally { setBusy(false) }
+  }
   const invite = async (student: LocalStudent) => {
     if (busy) return
     setBusy(true); setActionError(''); setNotice('')
@@ -106,7 +124,7 @@ export function LocalAccessApp() {
   }
   const logout = async () => {
     setBusy(true)
-    try { await localApi.logout(); setUser(null); setLoaded(false); setRequests([]); setStudents([]); setNotice(''); setActionError(''); setInvitation(null) }
+    try { await localApi.logout(); setUser(null); setLoaded(false); setRequests([]); setStudents([]); setPosts([]); setSelectedPostId(null); setNotice(''); setActionError(''); setInvitation(null) }
     catch (error) { setError(handleError(error)) }
     finally { setBusy(false) }
   }
@@ -116,26 +134,27 @@ export function LocalAccessApp() {
   const visibleRequests = requests.filter((r) => (filter === 'todas' || r.status === filter) && `${r.name} ${r.id} ${r.program}`.toLocaleLowerCase('es').includes(matching))
   const visibleStudents = students.filter((st) => `${st.name} ${st.id} ${st.group}`.toLocaleLowerCase('es').includes(matching))
   const selected = requests.find((r) => r.id === selectedId)
+  const selectedPost = posts.find((post) => post.id === selectedPostId)
   const open = (request: LocalRequest) => { setActionError(''); setSelectedId(request.id) }
   return (
     <div className={s.admin}>
       <a className={s['skip-link']} href="#local-content">Saltar al contenido</a>
-      <aside className={s['local-notice']}>Pruebas locales · Usa datos ficticios. Solicitudes, cuentas y permisos de alumnos se guardan en este equipo. Las publicaciones de Community siguen en demostración.</aside>
+      <aside className={s['local-notice']}>Pruebas locales · Usa datos ficticios. Solicitudes, alumnos y publicaciones de texto se guardan en este equipo. Community conserva su demostración visual.</aside>
       <header className={s.topbar}>
         <Link to="/gestion" className={s['card-link']}>CAI · Administración</Link>
         <div className={s['topbar-end']}><ThemeSelector /><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void logout() }}>Cerrar sesión</button></div>
       </header>
       <nav className={s['local-nav']} aria-label="Administración local">
-        {[['/gestion', 'Inicio'], ['/gestion/solicitudes', 'Solicitudes'], ['/gestion/alumnos', 'Alumnos']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`} onClick={() => { setQuery(''); setActionError('') }}>{label}</NavLink>)}
+        {[['/gestion', 'Inicio'], ['/gestion/solicitudes', 'Solicitudes'], ['/gestion/alumnos', 'Alumnos'], ['/gestion/publicaciones', 'Publicaciones']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`} onClick={() => { setQuery(''); setActionError('') }}>{label}</NavLink>)}
       </nav>
       <main className={s.content} id="local-content" tabIndex={-1}>
         <div className={s['page-head']}><div><p className={s.eyebrow}>Hola, {user.name}</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>{title}</h1></div><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void reload() }}><Icon name="refresh" size={16} />Actualizar</button></div>
         {notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{notice}</p>}
         {error && <div role="alert" className={s.alert}><p>{error}</p><button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void reload() }}>Volver a cargar los datos</button></div>}
-        {actionError && !selected && <p role="alert" className={s.alert}>{actionError}</p>}
+        {actionError && !selected && !selectedPost && <p role="alert" className={s.alert}>{actionError}</p>}
         {!loaded && !error && <p role="status">Cargando solicitudes y alumnos…</p>}
         {loaded && !error && <>
-          {section === 'home' ? <LocalOverview requests={requests} students={students} onReview={open} /> : <>
+          {section === 'home' ? <LocalOverview requests={requests} students={students} pendingPosts={posts.filter((post) => post.status === 'pendiente').length} onReview={open} /> : section === 'posts' ? <LocalPublications posts={posts} onReview={(post) => { setActionError(''); setSelectedPostId(post.id) }} /> : <>
             <div className={s.toolbar}>
               {section === 'requests' && <div className={s.tabs} role="group" aria-label="Estado de solicitudes">{[['pendiente', 'Pendientes'], ['aprobada', 'Aprobadas'], ['rechazada', 'Rechazadas'], ['todas', 'Todas']].map(([value, label]) => <button type="button" key={value} className={s.tab} aria-pressed={filter === value} onClick={() => setFilter(value!)}>{label}</button>)}</div>}
               <div className={s.search}><Icon name="search" size={16} /><label htmlFor="local-search" className={s['sr-only']}>Buscar {section === 'requests' ? 'solicitud' : 'alumno'}</label><input id="local-search" type="search" placeholder="Buscar por nombre o folio" value={query} onChange={(event) => setQuery(event.target.value)} /></div>
@@ -152,6 +171,7 @@ export function LocalAccessApp() {
       </main>
       {selected && <LocalRequestDialog key={selected.id} request={selected} busy={busy} error={actionError} onClose={() => setSelectedId(null)} onDecide={(decision, reference) => { void decide(decision, reference) }} />}
       {invitation && <LocalInvitationDialog invitation={invitation} name={invitation.name} onClose={() => setInvitation(null)} />}
+      {selectedPost && <PublicationReviewDialog key={`${selectedPost.id}-${selectedPost.revision}`} post={selectedPost} busy={busy} error={actionError} onClose={() => setSelectedPostId(null)} onDecide={(decision, reason, confirmed) => { void moderate(decision, reason, confirmed) }} />}
     </div>
   )
 }

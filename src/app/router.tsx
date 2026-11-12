@@ -30,6 +30,7 @@ export function AppRoutes() {
       <Route path="gestion/*" element={<LocalAccessApp />} />
       <Route path="activar" element={<ActivateAccountPage />} />
       <Route path="alumnos" element={<StudentArea />} />
+      <Route path="alumnos/publicaciones" element={<StudentArea />} />
       <Route path="solicitud-google" element={<GoogleOnboardingPage />} />
       <Route element={<CommunityLayout />}>
         <Route path="community" element={<CommunityPage />} />

@@ -1,4 +1,4 @@
-import type { ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, Receipt, RequestDecision, StudentUser, Submission } from '../../../server/contracts'
+import type { ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, Receipt, RequestDecision, ReviewPost, StudentUser, Submission } from '../../../server/contracts'
 
 export class ApiError extends Error {
   status: number
@@ -30,6 +30,8 @@ export const localApi = {
   decide: (request: LocalRequest, decision: RequestDecision, reference?: string) => call(`/requests/${request.id}/${decision}`, 'POST', { revision: request.revision, reference }),
   studentStatus: (student: LocalStudent, status: 'activo' | 'suspendido') => call(`/students/${student.id}`, 'PATCH', { revision: student.revision, status }),
   invite: (student: LocalStudent) => call<ActivationInvitation>(`/students/${student.id}/invitation`, 'POST', { revision: student.revision }),
+  posts: () => call<{ posts: ReviewPost[] }>('/posts'),
+  moderate: (post: ReviewPost, decision: PublicationDecision, reason?: string, confirmed?: boolean) => call(`/posts/${post.id}/${decision}`, 'POST', { revision: post.revision, reason, confirmed }),
 }
 
 export const studentApi = {
@@ -39,6 +41,9 @@ export const studentApi = {
   logout: () => call('/student/logout', 'POST', {}),
   me: () => call<{ user: StudentUser }>('/student/me'),
   group: () => call<{ members: GroupMember[] }>('/student/group'),
+  posts: () => call<{ posts: PublishedPost[]; mine: OwnPost[] }>('/student/posts'),
+  createPost: (draft: PublicationDraft, key: string) => call<{ post: OwnPost }>('/student/posts', 'POST', draft, { 'Idempotency-Key': key }),
+  withdrawPost: (post: OwnPost) => call(`/student/posts/${post.id}/withdraw`, 'POST', { revision: post.revision }),
 }
 
 export const googleApi = {
@@ -51,4 +56,4 @@ export const googleApi = {
   logout: () => call('/google/logout', 'POST', {}),
 }
 
-export type { ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, RequestDecision, StudentUser, Submission }
+export type { ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }

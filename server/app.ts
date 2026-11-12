@@ -4,8 +4,9 @@ import { accessRepository } from './access-repository.ts'
 import { authRepository } from './auth.ts'
 import { studentAccounts } from './student-accounts.ts'
 import { googleAccounts, type GoogleOptions } from './google-auth.ts'
+import { publications, validatePublication } from './publications.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
-import type { RequestDecision } from './contracts.ts'
+import type { PublicationDecision, RequestDecision } from './contracts.ts'
 
 const frontendOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173', 'http://127.0.0.1:4180', 'http://localhost:4180']
 
@@ -37,6 +38,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const auth = authRepository(db)
   const studentAuth = studentAccounts(db)
   const google = googleAccounts(db, googleOptions)
+  const posts = publications(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -146,6 +148,20 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       if (!user) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible. Vuelve a entrar o consulta con CAI.')
       if (path === '/api/local/student/me' && method === 'GET') return json(response, 200, { user })
       if (path === '/api/local/student/group' && method === 'GET') return json(response, 200, { members: studentAuth.group(user) })
+      if (path === '/api/local/student/posts' && method === 'GET') return json(response, 200, { posts: posts.feed(user), mine: posts.mine(user) })
+      if (path === '/api/local/student/posts' && method === 'POST') {
+        limit(`post:${user.id}`, 20, 60 * 60_000)
+        const key = request.headers['idempotency-key']
+        if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador del envío.')
+        return json(response, 201, { post: posts.create(user, validatePublication(await body(request)), key) })
+      }
+      const withdrawal = path.match(/^\/api\/local\/student\/posts\/(PUB-\d+)\/withdraw$/)
+      if (withdrawal && method === 'POST') {
+        const data = await body(request)
+        if (Object.keys(data).some((key) => key !== 'revision')) throw new HttpError(400, 'El retiro contiene datos no admitidos.')
+        posts.withdraw(user, withdrawal[1]!, revisionOf(data.revision))
+        return json(response, 200, { ok: true })
+      }
       throw new HttpError(404, 'No se encontró esta operación.')
     }
     if (path === '/api/local/requests' && method === 'POST') {
@@ -158,6 +174,14 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     if (!user || user.role !== 'admin') throw new HttpError(401, 'Inicia sesión para abrir la administración local.')
     if (path === '/api/local/requests' && method === 'GET') return json(response, 200, { requests: access.requests() })
     if (path === '/api/local/students' && method === 'GET') return json(response, 200, { students: access.students() })
+    if (path === '/api/local/posts' && method === 'GET') return json(response, 200, { posts: posts.review() })
+    const review = path.match(/^\/api\/local\/posts\/(PUB-\d+)\/(approve|reject|undo)$/)
+    if (review && method === 'POST') {
+      const data = await body(request)
+      if (Object.keys(data).some((key) => !['revision', 'reason', 'confirmed'].includes(key))) throw new HttpError(400, 'La revisión contiene datos no admitidos.')
+      posts.decide(review[1]!, revisionOf(data.revision), review[2] as PublicationDecision, user.id, data.reason, data.confirmed)
+      return json(response, 200, { ok: true })
+    }
     const invite = path.match(/^\/api\/local\/students\/(CAI-\d+)\/invitation$/)
     if (invite && method === 'POST') {
       const data = await body(request)

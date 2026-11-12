@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, NavLink, useLocation } from 'react-router'
 import { ThemeSelector } from '../../components/ThemeSelector'
 import { StudentLogin } from './StudentLogin'
+import { StudentPublications } from '../local-publications/StudentPublications'
 import { ApiError, studentApi, type GroupMember, type StudentUser } from './api'
 import s from '../admin/admin.module.css'
 
 export function StudentArea() {
+  const { pathname } = useLocation()
+  const publicationsPage = pathname === '/alumnos/publicaciones'
   const [user, setUser] = useState<StudentUser | null>(null)
   const [members, setMembers] = useState<GroupMember[]>([])
   const [checking, setChecking] = useState(true)
@@ -41,9 +44,9 @@ export function StudentArea() {
   }, [refresh])
   const signedInId = user?.id
   useEffect(() => {
-    document.title = signedInId ? 'Mi espacio · Alumnos CAI · Prueba local' : 'Acceso de alumnos · CAI · Prueba local'
+    document.title = signedInId ? `${publicationsPage ? 'Publicaciones' : 'Mi espacio'} · Alumnos CAI · Prueba local` : 'Acceso de alumnos · CAI · Prueba local'
     if (signedInId) heading.current?.focus()
-  }, [signedInId])
+  }, [signedInId, publicationsPage])
   const logout = async () => {
     setBusy(true)
     try {
@@ -63,17 +66,18 @@ export function StudentArea() {
   return (
     <div className={s.admin}>
       <a href="#student-content" className={s['skip-link']}>Saltar a mi espacio</a>
-      <aside className={s['local-notice']}>Prueba local · Tu acceso y tu grupo están conectados al servidor. Las publicaciones de Community siguen en demostración.</aside>
+      <aside className={s['local-notice']}>Prueba local · Usa datos ficticios. Tu acceso, grupo y publicaciones de texto se guardan en este equipo. Community conserva su demostración visual.</aside>
       <header className={s.topbar}>
         <Link to="/" className={s['card-link']}>CAI · Mi espacio</Link>
         <div className={s['topbar-end']}><ThemeSelector /><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void logout() }}>Cerrar sesión</button></div>
       </header>
+      <nav className={s['local-nav']} aria-label="Espacio del alumno">{[['/alumnos', 'Mi inscripción'], ['/alumnos/publicaciones', 'Publicaciones']].map(([to, label]) => <NavLink key={to} end to={to!} className={({ isActive }) => `${s['nav-item']} ${isActive ? s['nav-item--active'] : ''}`}>{label}</NavLink>)}</nav>
       <main className={s.content} id="student-content" tabIndex={-1}>
         <div className={s['page-head']}>
-          <div><p className={s.eyebrow}>TU ESPACIO CAI</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>Hola, {user.displayName}</h1></div>
-          <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void refresh() }}>Actualizar mi espacio</button>
+          <div><p className={s.eyebrow}>TU ESPACIO CAI</p><h1 ref={heading} tabIndex={-1} className={s['page-title']}>{publicationsPage ? 'Comunidad de mi grupo' : `Hola, ${user.displayName}`}</h1></div>
+          {!publicationsPage && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void refresh() }}>Actualizar mi espacio</button>}
         </div>
-        <section className={s.card} aria-labelledby="student-profile-title">
+        {publicationsPage ? <StudentPublications key={user.id} user={user} onAccessLost={refresh} /> : <><section className={s.card} aria-labelledby="student-profile-title">
           <h2 id="student-profile-title" className={s['card-title']}>Mi inscripción</h2>
           <dl className={s.details}>
             <dt>Nombre visible</dt><dd>{user.displayName}</dd>
@@ -88,6 +92,7 @@ export function StudentArea() {
             {members.map((member, index) => <li key={`${member.displayName}-${index}`}><span className={s.avatar} style={{ background: member.avatarColor }} aria-hidden="true">{member.displayName[0]}</span><strong>{member.displayName}</strong></li>)}
           </ul> : <p className={s.empty}>Tu grupo aparecerá cuando CAI confirme su asignación.</p>}
         </section>
+        </>}
       </main>
     </div>
   )

@@ -73,3 +73,14 @@ export type GoogleState =
   | { status: 'anonymous' }
   | { status: 'profile'; email: string }
   | { status: 'pending' | 'approved' | 'rejected' | 'suspended'; requestId: string }
+
+export const publicationLimits = { titleMin: 4, titleMax: 100, bodyMin: 10, bodyMax: 1200 } as const
+export const publicationCategories = { achievement: 'Logro', experience: 'Experiencia' } as const
+export type PublicationDraft = { title: string; body: string; category: keyof typeof publicationCategories }
+export type PublicationStatus = 'pendiente' | 'publicada' | 'rechazada' | 'retirada'
+export type PublicationDecision = 'approve' | 'reject' | 'undo'
+export type PublishedPost = PublicationDraft & {
+  id: string; author: { displayName: string; avatarColor: string }; createdAt: string; publishedAt: string | null
+}
+export type OwnPost = PublishedPost & { status: PublicationStatus; revision: number; reason: string | null }
+export type ReviewPost = OwnPost & { studentId: string; studentName: string; program: string; group: string; authorActive: boolean; authorIsMinor: boolean }

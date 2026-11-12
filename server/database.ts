@@ -77,6 +77,27 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations(version, applied_at) VALUES (3, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 4').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE publications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, author_id INTEGER NOT NULL REFERENCES requests(id),
+        idempotency_key TEXT NOT NULL, title TEXT NOT NULL, body TEXT NOT NULL,
+        category TEXT NOT NULL CHECK(category IN ('achievement','experience')),
+        program TEXT NOT NULL, group_name TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pendiente' CHECK(status IN ('pendiente','publicada','rechazada','retirada')),
+        reason TEXT, created_at TEXT NOT NULL, published_at TEXT, revision INTEGER NOT NULL DEFAULT 1,
+        UNIQUE(author_id, idempotency_key)
+      );
+      CREATE INDEX publications_feed ON publications(status, program, group_name, published_at);
+      CREATE INDEX publications_author ON publications(author_id, id DESC);
+      CREATE TABLE publication_audit (
+        id INTEGER PRIMARY KEY, publication_id INTEGER NOT NULL REFERENCES publications(id),
+        admin_id INTEGER REFERENCES admin_users(id), student_id INTEGER REFERENCES requests(id),
+        action TEXT NOT NULL, created_at TEXT NOT NULL
+      );
+      INSERT INTO migrations(version, applied_at) VALUES (4, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 
