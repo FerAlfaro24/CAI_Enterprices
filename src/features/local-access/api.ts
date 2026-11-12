@@ -31,6 +31,7 @@ export const localApi = {
   session: () => call<{ user: LocalUser | null }>('/auth/session'),
   login: (email: string, password: string) => call<{ user: LocalUser }>('/auth/login', 'POST', { email, password }),
   logout: () => call('/auth/logout', 'POST', {}),
+  changePassword: (currentPassword: string, password: string, confirm: string) => call('/auth/password', 'POST', { currentPassword, password, confirm }),
   requests: () => call<{ requests: LocalRequest[] }>('/requests'),
   students: () => call<{ students: LocalStudent[] }>('/students'),
   submit: (submission: Submission, key: string) => call<Receipt>('/requests', 'POST', submission, { 'Idempotency-Key': key }),

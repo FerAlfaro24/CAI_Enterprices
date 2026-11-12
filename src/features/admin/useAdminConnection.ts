@@ -6,6 +6,7 @@ export function useAdminConnection() {
   const [user, setUser] = useState<LocalUser | null>(null)
   const [checking, setChecking] = useState(true), [loaded, setLoaded] = useState(false)
   const [sessionError, setSessionError] = useState('')
+  const [accessMessage, setAccessMessage] = useState('')
   const [requests, setRequests] = useState<LocalRequest[]>([]), [students, setStudents] = useState<LocalStudent[]>([]), [posts, setPosts] = useState<ReviewPost[]>([])
   const [configuration, setConfiguration] = useState<{groups: CatalogGroup[];settings:CommunityControls} | null>(null)
   const [error, setError] = useState(''), [busy, setBusy] = useState(false), [notice, setNotice] = useState('')
@@ -82,8 +83,11 @@ export function useAdminConnection() {
     setBusy(true)
     try {await localApi.logout();generation.current++;setUser(null);setLoaded(false);setRequests([]);setStudents([]);setPosts([]);setInvitation(null);setError('') }catch(error){failure(error)}finally{setBusy(false)}
   }
+  const requireLogin=(message:string)=>{
+    generation.current++;setUser(null);setLoaded(false);setRequests([]);setStudents([]);setPosts([]);setInvitation(null);setConfiguration(null);setError('');setSessionError('');setNotice('');setAccessMessage(message)
+  }
   const directory=students.map(s=>({...s,posts:posts.filter(p=>p.studentId===s.id&&p.status==='publicada').length,isNew:s.joinedAt.startsWith(new Date().toISOString().slice(0,7))}))
   const state:AdminState={requests,posts:posts.map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:{...defaultSettings,allowPhotos:false,allowReactions:false,allowComments:false},directory}
-  return {user,checking,sessionError,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setUser(user)}}
+  return {user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
 }
 export type AdminConnection=ReturnType<typeof useAdminConnection>

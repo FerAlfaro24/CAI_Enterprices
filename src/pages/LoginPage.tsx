@@ -6,7 +6,7 @@ import { GoogleSignInButton } from '../features/local-access/GoogleSignInButton'
 import s from '../features/login/login.module.css'
 import { AccessFrame } from '../features/login/AccessFrame'
 
-export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void}) {
+export function LoginPage({ admin=false,onAdminLogin,message }: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void;message?:string}) {
   const navigate = useNavigate()
   const form = useRef<HTMLFormElement>(null)
   const heading = useRef<HTMLHeadingElement>(null)
@@ -37,6 +37,7 @@ export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminL
           <p className={s.lead}>Entra y sigue compartiendo tu camino.</p>
           <p className={s.notice} id="login-demo-notice"><ShieldCheck size={20} aria-hidden="true" /><span><strong>Acceso local · Pruebas</strong>Usa cuentas ficticias activadas. La autorización se comprueba en el servidor.</span></p>
           {!admin && <GoogleSignInButton />}
+          {message && <p role="status">{message}</p>}
           <form ref={form} onSubmit={(event)=>{void submit(event)}} aria-busy={busy} aria-label={admin?'Acceso de administración':'Acceso de alumnos'} aria-describedby="login-demo-notice">
             <label htmlFor="login-email">Correo electrónico</label>
             <input id="login-email" name="email" type="email" placeholder="tu.nombre@example.com" autoComplete="off" required maxLength={160} />

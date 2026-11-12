@@ -1,6 +1,7 @@
 import s from '../features/admin/admin.module.css'
 import { Avatar, Icon, Switch } from '../features/admin/components/ui'
 import { CatalogSettings } from '../features/admin/components/CatalogSettings'
+import { AdminPasswordForm } from '../features/admin/components/AdminPasswordForm'
 import { adminTeam } from '../features/admin/data/mockData'
 import { displayName, useAdmin, type Settings } from '../features/admin/state'
 
@@ -77,6 +78,7 @@ export function AdminSettingsPage() {
         ))}
 
         <CatalogSettings />
+        <AdminPasswordForm />
         <section className={s.card} aria-labelledby="preview-title">
           <div className={s['card-head']}>
             <div>

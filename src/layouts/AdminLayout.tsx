@@ -54,7 +54,7 @@ export function AdminLayout() {
 
   if (connection.checking) return <main className={s.admin}><p role="status" className={s.content}>Comprobando acceso…</p></main>
   if (connection.sessionError) return <AccessFrame><h1>No pudimos comprobar tu acceso</h1><p role="alert">{connection.sessionError}</p><button type="button" className={accessStyles.primary} onClick={()=>window.location.reload()}>Volver a intentar</button></AccessFrame>
-  if (!connection.user) return <LoginPage admin onAdminLogin={connection.onLogin} />
+  if (!connection.user) return <LoginPage admin onAdminLogin={connection.onLogin} message={connection.accessMessage} />
   return (
     <div className={s.admin}>
       <a className={s['skip-link']} href="#admin-content">Saltar al contenido</a>
