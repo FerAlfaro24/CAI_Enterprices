@@ -374,6 +374,13 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .inbox-records span, .inbox-records time { font-size: .85rem; color: var(--muted); }
 .contact-followup select, .contact-followup textarea { width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; }
 .contact-followup label { font-size: .88rem; font-weight: 600; }
+.gallery-fields { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; }
+.gallery-fields > input, .gallery-fields > select { width: 100%; min-width: 0; padding: 10px; min-height: 44px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; }
+.gallery-fields > label { font-size: .88rem; font-weight: 600; }
+.gallery-fields .confirm input { flex: none; width: 18px; height: 18px; accent-color: var(--blue-600); }
+.upload-preview { display: block; max-width: 100%; max-height: 240px; object-fit: contain; border-radius: 10px; }
+.gallery-records { margin-top: 24px; }
+.gallery-thumbnail { width: 220px; max-width: 100%; height: 140px; object-fit: contain; border-radius: 10px; margin-bottom: 10px; background: var(--blue-50); }
 .assignment-form .confirm { display: flex; }
 .card-title-row { display: flex; align-items: center; gap: 12px; }
 .setting { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 0; border-top: 1px solid var(--line); }

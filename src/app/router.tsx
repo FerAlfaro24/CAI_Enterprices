@@ -6,6 +6,7 @@ import { CommunityLayout } from '../layouts/CommunityLayout'
 import { AdminPage } from '../pages/AdminPage'
 import { AdminRequestsPage } from '../pages/AdminRequestsPage'
 import { AdminStudentsPage } from '../pages/AdminStudentsPage'
+import { AdminGalleryPage } from '../pages/AdminGalleryPage'
 import { AdminInboxPage } from '../pages/AdminInboxPage'
 import { AdminSettingsPage } from '../pages/AdminSettingsPage'
 import { AdminPostsPage } from '../pages/AdminPostsPage'
@@ -47,6 +48,7 @@ export function AppRoutes() {
         <Route path="alumnos" element={<AdminStudentsPage />} />
         <Route path="configuracion" element={<AdminSettingsPage />} />
         <Route path="mensajes" element={<AdminInboxPage />} />
+        <Route path="galeria" element={<AdminGalleryPage />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
       <Route element={<AppLayout />}>

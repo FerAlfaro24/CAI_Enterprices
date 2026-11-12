@@ -1,3 +1,4 @@
+import type { GalleryItem } from '../../local-access/api'
 import { getMember } from '../data/members'
 import { celebrationCount, DEMO_DATE } from '../model'
 import type { Category, Photo, Post } from '../types'
@@ -7,6 +8,7 @@ export type AlbumFilter = 'all' | AlbumCategory
 export type AlbumSort = 'editorial' | 'recent' | 'oldest' | 'celebrated'
 
 export interface Album {
+  private?: boolean
   id: string
   postId: Post['id']
   title: string
@@ -39,7 +41,8 @@ const categoryFromPost: Record<Category, AlbumCategory> = {
 
 const editorialOrder = ['cai-club', 'weekly-note', 'nico-corner', 'vale-gallery', 'teo-desk', 'first-week']
 
-export function formatAlbumDate(value: string) {
+export function formatAlbumDate(value: string, privateImage = false) {
+  if (privateImage) return new Intl.DateTimeFormat('es-MX', {day:'numeric',month:'short',year:'numeric'}).format(new Date(value))
   const calendar = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit' })
   const days = Math.max(0, Math.round((Date.parse(calendar.format(new Date(DEMO_DATE))) - Date.parse(calendar.format(new Date(value)))) / 86_400_000))
   return days === 0 ? 'Hoy · Demo' : days === 1 ? 'Hace 1 día · Demo' : `Hace ${days} días · Demo`
@@ -62,7 +65,18 @@ export function deriveAlbums(posts: readonly Post[]): Album[] {
 }
 
 export function selectAlbums(posts: readonly Post[], filter: AlbumFilter = 'all', sort: AlbumSort = 'recent'): Album[] {
-  return deriveAlbums(posts)
+  return selectAlbumRecords(deriveAlbums(posts),filter,sort)
+}
+
+export function privateAlbums(images: readonly GalleryItem[]): Album[] {
+  return images.map(image => {
+    const photo: Photo = {id:image.id,src:image.imagePath,alt:image.alt,caption:image.description}
+    return {id:image.id,postId:`gallery:${image.id}`,title:image.title,description:image.description,category:image.category,cover:photo,photos:[photo],author:{id:'cai-team',alias:'Equipo CAI'},provenance:'Imagen publicada por coordinación para tu programa y grupo.',createdAt:image.createdAt,status:'approved',celebrations:0,private:true}
+  })
+}
+
+export function selectAlbumRecords(albums: readonly Album[], filter: AlbumFilter = 'all', sort: AlbumSort = 'recent'): Album[] {
+  return albums
     .filter((album) => album.status === 'approved' && (filter === 'all' || album.category === filter))
     .sort((a, b) => {
       const byDate = Date.parse(b.createdAt) - Date.parse(a.createdAt)

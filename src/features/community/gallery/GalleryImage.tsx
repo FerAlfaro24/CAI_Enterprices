@@ -9,6 +9,6 @@ export function GalleryImage({ photo, eager = false }: { photo: Photo; eager?: b
   return <div className={s.galleryImage} data-image-state={status} aria-busy={status === 'loading'}>
     {status !== 'error' && <img src={photo.src} alt={photo.alt} width="900" height="600" loading={eager ? 'eager' : 'lazy'} decoding="async" onLoad={() => setStatus('ready')} onError={() => setStatus('error')} />}
     {status === 'loading' && <span className={s.imagePlaceholder}><CommunityIcon name="gallery" size={26} /><span>Cargando fotografía…</span></span>}
-    {status === 'error' && <div className={s.imageError} role="img" aria-label={`${photo.alt}. Fotografía ilustrativa no disponible`}><CommunityIcon name="gallery" size={28} /><strong>Fotografía ilustrativa no disponible</strong><span>{photo.alt}</span></div>}
+    {status === 'error' && <div className={s.imageError} role="img" aria-label={`${photo.alt}. Fotografía no disponible`}><CommunityIcon name="gallery" size={28} /><strong>Fotografía no disponible</strong><span>{photo.alt}</span></div>}
   </div>
 }

@@ -1,4 +1,4 @@
-import type { ContactInquiry, ContactReceipt, ContactSubmission, ContactStatus, StudentNotice, CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, Receipt, RequestDecision, ReviewPost, StudentUser, Submission } from '../../../server/contracts'
+import type { GalleryItem, GalleryReview, GalleryUpload, ContactInquiry, ContactReceipt, ContactSubmission, ContactStatus, StudentNotice, CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, Receipt, RequestDecision, ReviewPost, StudentUser, Submission } from '../../../server/contracts'
 
 export class ApiError extends Error {
   status: number
@@ -41,6 +41,12 @@ export const localApi = {
   moderate: (post: ReviewPost, decision: PublicationDecision, reason?: string, confirmed?: boolean) => call(`/posts/${post.id}/${decision}`, 'POST', { revision: post.revision, reason, confirmed }),
 }
 
+export const galleryApi = {
+  list: () => call<{images: GalleryReview[]}>('/gallery'),
+  upload: (draft: GalleryUpload, key: string) => call<{image: GalleryReview}>('/gallery','POST',draft,{'Idempotency-Key':key}),
+  withdraw: (image: GalleryReview) => call(`/gallery/${image.id}/withdraw`,'POST',{revision:image.revision,confirmed:true}),
+}
+
 export const contactApi = {
   submit: (submission: ContactSubmission, key: string) => call<ContactReceipt>('/contact', 'POST', submission, {'Idempotency-Key':key}),
   list: () => call<{ contacts: ContactInquiry[] }>('/contacts'),
@@ -48,6 +54,7 @@ export const contactApi = {
 }
 
 export const studentApi = {
+  gallery: () => call<{images: GalleryItem[]}>('/student/gallery'),
   notices: () => call<{ notices: StudentNotice[] }>('/student/notices'),
   seen: (id: number) => call(`/student/notices/${id}/seen`, 'POST', {}),
   requestRecovery: (email: string) => call<{message: string}>('/recovery/request', 'POST', { email }),
@@ -80,4 +87,4 @@ export const googleApi = {
   logout: () => call('/google/logout', 'POST', {}),
 }
 
-export type { ContactInquiry, ContactReceipt, ContactSubmission, ContactStatus, StudentNotice, CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }
+export type { GalleryItem, GalleryReview, GalleryUpload, ContactInquiry, ContactReceipt, ContactSubmission, ContactStatus, StudentNotice, CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }
