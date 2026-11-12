@@ -3,6 +3,7 @@ import { cx } from '../../landing/utils'
 import s from '../admin.module.css'
 import { formatDate, useAdmin, type DirectoryStudent } from '../state'
 import { StudentAssignment } from './StudentAssignment'
+import { StudentRecordEditor } from './StudentRecordEditor'
 import { Avatar, Icon, StatusBadge } from './ui'
 
 export function StudentDialog({ student, onClose }: { student: DirectoryStudent | null; onClose: () => void }) {
@@ -54,6 +55,7 @@ export function StudentDialog({ student, onClose }: { student: DirectoryStudent 
               {account && <><dt>Acceso de cuenta</dt><dd>{account.accountStatus==='activada'?'Cuenta activada':'Cuenta por activar'}</dd></>}
             </dl>
             {account && <StudentAssignment key={`${account.id}-${account.revision}`} student={account} onSaved={onClose} />}
+            {account && <StudentRecordEditor key={account.id} studentId={account.id}/>}
             {forcedPrivate && (
               <p className={cx(s.alert, s['alert--ok'])}>
                 Perfil privado. Solo coordinación consulta el expediente; su grupo solo recibe el nombre visible autorizado.

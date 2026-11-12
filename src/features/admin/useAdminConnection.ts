@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type ReviewPost, type PublicationDecision, type CatalogGroup, type CommunityControls } from '../local-access/api'
 import { defaultSettings, type AdminAction, type AdminState } from './state'
-import { adminTeamApi,type AdminAccount } from '../local-access/api'
+import { adminTeamApi,studentRecordApi,type AdminAccount,type StudentRecordDraft } from '../local-access/api'
 
 export function useAdminConnection() {
   const [user, setUser] = useState<LocalUser | null>(null)
@@ -67,6 +67,10 @@ export function useAdminConnection() {
     finally{writing.current=false;setBusy(false)}
   }
   const saveControls=(settings:CommunityControls)=>configure(()=>localApi.saveControls(settings),'Configuración guardada.')
+  const correctRecord=(id:string,draft:StudentRecordDraft,key:string)=>configure(async()=>{
+    try{return await studentRecordApi.correct(id,draft,key)}
+    catch(error){if(error instanceof ApiError&&(error.status===0||error.status>=500||(error.status>=200&&error.status<300)))throw new ApiError(error.status,'No pudimos confirmar si se guardó la corrección. Conservamos tu borrador sin la contraseña. Puedes reintentar el mismo envío o cargar el expediente y revisar su historial.');throw error}
+  },'Expediente corregido. Se cerraron las sesiones del alumno; el correo y el grupo se conservaron.')
   const manageTeam=(operation:()=>Promise<unknown>,message:string)=>configure(async()=>{
     try{return await operation()}
     catch(error){if(error instanceof ApiError&&(error.status===0||error.status>=500||(error.status>=200&&error.status<300)))throw new ApiError(error.status,'No pudimos confirmar el resultado. No se reintentó automáticamente. Actualiza el equipo antes de repetir; si era una invitación, prepara otro enlace.');throw error}
@@ -94,6 +98,6 @@ export function useAdminConnection() {
   }
   const directory=students.map(s=>({...s,posts:posts.filter(p=>p.studentId===s.id&&p.status==='publicada').length,isNew:s.joinedAt.startsWith(new Date().toISOString().slice(0,7))}))
   const state:AdminState={requests,posts:posts.map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:{...defaultSettings,allowPhotos:false,allowReactions:false,allowComments:false},directory}
-  return {team,manageTeam,user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
+  return {correctRecord,team,manageTeam,user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
 }
 export type AdminConnection=ReturnType<typeof useAdminConnection>

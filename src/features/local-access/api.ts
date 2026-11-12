@@ -12,6 +12,11 @@ export const adminRecoveryApi = {
 
 export type { StudentProfile, StudentProfileDraft } from '../../../server/contracts'
 export type { AdminAccount } from '../../../server/contracts'
+export type { StudentRecord,StudentRecordDraft,StudentRecordSnapshot } from '../../../server/contracts'
+export const studentRecordApi={
+  get:(id:string)=>call<{record:import('../../../server/contracts').StudentRecord}>(`/students/${id}/record`),
+  correct:(id:string,draft:import('../../../server/contracts').StudentRecordDraft,key:string)=>call(`/students/${id}/record`,'PATCH',draft,{'Idempotency-Key':key}),
+}
 export const adminTeamApi={
   list:()=>call<{accounts:import('../../../server/contracts').AdminAccount[]}>('/admin-team'),
   create:(name:string,email:string,currentPassword:string,key:string)=>call('/admin-team','POST',{name,email,currentPassword,confirmed:true},{'Idempotency-Key':key}),
