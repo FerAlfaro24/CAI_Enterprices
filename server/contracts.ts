@@ -3,6 +3,11 @@ export type RequestStatus = 'pendiente' | 'aprobada' | 'rechazada'
 export type CatalogGroup = { id: number; program: string; name: string; active: boolean; revision: number }
 export type CommunityControls = { registrationOpen: boolean; submissionsOpen: boolean; revision: number }
 export type PublicCatalog = { groups: Pick<CatalogGroup, 'id' | 'program' | 'name'>[]; settings: Omit<CommunityControls, 'revision'> }
+export type ContactSubmission = { name: string; contact: string; program: string; consent: true }
+export type ContactStatus = 'nueva' | 'seguimiento' | 'atendida'
+export type ContactInquiry = ContactSubmission & { id: string; status: ContactStatus; note: string; revision: number; createdAt: string; updatedAt: string }
+export type ContactReceipt = { id: string; createdAt: string }
+export type StudentNotice = { id: number; subject: string; message: string; kind: string; createdAt: string; read: boolean }
 
 export interface Submission {
   firstName: string

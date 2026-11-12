@@ -2,6 +2,7 @@ import { createHash, randomBytes } from 'node:crypto'
 import { hashPassword } from './auth.ts'
 import { transaction, type Database } from './database.ts'
 import { HttpError } from './validation.ts'
+import type { StudentNotice, StudentUser } from './contracts.ts'
 
 export function queueNotice(db: Database, id: number, subject: string, message: string, kind = 'information') {
   db.prepare('INSERT INTO local_notices(request_id,subject,message,kind,created_at) VALUES (?,?,?,?,?)').run(id, subject, message, kind, new Date().toISOString())
@@ -26,6 +27,13 @@ export function notices(db: Database) {
     list() {
       return db.prepare(`SELECT n.id, n.subject, n.message, n.kind, n.created_at AS createdAt, n.acknowledged,
         r.email AS recipient FROM local_notices n JOIN requests r ON r.id = n.request_id ORDER BY n.id DESC`).all()
+    },
+    forStudent(user: StudentUser): StudentNotice[] {
+      return db.prepare('SELECT id,subject,message,kind,created_at,student_seen_at FROM local_notices WHERE request_id = ? ORDER BY id DESC').all(Number(user.id.slice(4))).map(row => ({ id: Number(row.id), subject: String(row.subject), message: String(row.message), kind: String(row.kind), createdAt: String(row.created_at), read: row.student_seen_at !== null }))
+    },
+    studentSeen(user: StudentUser, id: number) {
+      const result = db.prepare('UPDATE local_notices SET student_seen_at = COALESCE(student_seen_at, ?) WHERE id = ? AND request_id = ?').run(new Date().toISOString(), id, Number(user.id.slice(4)))
+      if (!result.changes) throw new HttpError(404, 'No se encontró el aviso.')
     },
     acknowledge(id: number) {
       const result = db.prepare('UPDATE local_notices SET acknowledged = 1 WHERE id = ?').run(id)

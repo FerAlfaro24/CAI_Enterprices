@@ -7,6 +7,7 @@ import { googleAccounts, type GoogleOptions } from './google-auth.ts'
 import { publications, validatePublication } from './publications.ts'
 import { notices } from './notices.ts'
 import { administration } from './administration.ts'
+import { contactRepository, validateContact } from './contact.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
 
@@ -43,6 +44,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const posts = publications(db)
   const mail = notices(db)
   const config = administration(db)
+  const contacts = contactRepository(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -69,6 +71,12 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     limit(`all:${request.socket.remoteAddress}`, 600, 60_000)
     if (path === '/api/local/health' && method === 'GET') return json(response, 200, { status: 'ok', mode: 'local-test' })
     if (path === '/api/local/catalog' && method === 'GET') return json(response, 200, config.publicCatalog())
+    if (path === '/api/local/contact' && method === 'POST') {
+      limit(`contact:${request.socket.remoteAddress}`, 20, 60 * 60_000)
+      const key = request.headers['idempotency-key']
+      if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador del envío.')
+      return json(response, 201, contacts.submit(validateContact(await body(request)), key))
+    }
     if (path === '/api/local/recovery/request' && method === 'POST') {
       limit(`recovery:${request.socket.remoteAddress}`, 10, 15 * 60_000)
       const data = await body(request)
@@ -167,6 +175,14 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       const user = studentAuth.session(request)
       if (!user) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible. Vuelve a entrar o consulta con CAI.')
       if (path === '/api/local/student/me' && method === 'GET') return json(response, 200, { user })
+      if (path === '/api/local/student/notices' && method === 'GET') return json(response, 200, { notices: mail.forStudent(user) })
+      const seen = path.match(/^\/api\/local\/student\/notices\/(\d+)\/seen$/)
+      if (seen && method === 'POST') {
+        const id = Number(seen[1]), data = await body(request)
+        if (!Number.isSafeInteger(id) || id < 1 || Object.keys(data).length) throw new HttpError(400, 'Aviso no válido.')
+        mail.studentSeen(user, id)
+        return json(response, 200, { ok: true })
+      }
       if (path === '/api/local/student/group' && method === 'GET') return json(response, 200, { members: studentAuth.group(user) })
       if (path === '/api/local/student/posts' && method === 'GET') return json(response, 200, { posts: posts.feed(user), mine: posts.mine(user) })
       if (path === '/api/local/student/posts' && method === 'POST') {
@@ -192,6 +208,12 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     const user = auth.session(request)
     if (!user || user.role !== 'admin') throw new HttpError(401, 'Inicia sesión para abrir la administración local.')
+    if (path === '/api/local/contacts' && method === 'GET') return json(response, 200, { contacts: contacts.list() })
+    const contact = path.match(/^\/api\/local\/contacts\/(CON-\d+)$/)
+    if (contact && method === 'PATCH') {
+      contacts.update(contact[1]!, await body(request), user.id)
+      return json(response, 200, { ok: true })
+    }
     if (path === '/api/local/configuration' && method === 'GET') return json(response, 200, { groups: config.groups(), settings: config.settings() })
     if (path === '/api/local/configuration' && method === 'PATCH') {
       config.updateSettings(await body(request), user.id)

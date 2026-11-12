@@ -152,6 +152,17 @@ export function migrateDatabase(db: DatabaseSync) {
       db.prepare("INSERT INTO migrations VALUES (7, strftime('%Y-%m-%dT%H:%M:%fZ','now'))").run()
     })
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 8').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE contact_inquiries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, idempotency_key TEXT NOT NULL UNIQUE, payload TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'nueva' CHECK(status IN ('nueva','seguimiento','atendida')),
+        note TEXT NOT NULL DEFAULT '', revision INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      );
+      ALTER TABLE local_notices ADD COLUMN student_seen_at TEXT;
+      INSERT INTO migrations VALUES (8, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 
