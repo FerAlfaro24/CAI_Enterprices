@@ -695,6 +695,8 @@
 .carousel { position: relative; }
 .carousel-controls { display: none; }
 .field { display: grid; gap: 6px; min-width: 0; }
+.landing .contact__form .contact-consent { display: flex; align-items: flex-start; gap: 10px; font-size: .85rem; }
+.contact__form .contact-consent input { width: 18px; min-height: 18px; height: 18px; flex: none; margin-top: 3px; accent-color: #1f56d6; }
 .waitlist { flex-wrap: wrap; align-items: start; }
 .waitlist .field { flex: 1; min-width: 180px; }
 .waitlist input { width: 100%; }
@@ -786,3 +788,5 @@
 .landing :focus-visible { outline-color: var(--app-focus); }
 /* El acceso largo y el selector caben sin cambiar el menú móvil aprobado. */
 @media (min-width: 1101px) { .nav__inner { gap: 20px; } .nav__links { gap: 18px; } .nav__actions .btn--ghost { padding-inline: 6px; font-size: .85rem; } }
+
+.contact .demo-link { display: block; width: fit-content; margin-top: 10px; }

@@ -1,9 +1,11 @@
-import type { GroupMember, OwnPost, PublicationDraft, StudentUser } from '../local-access/api'
+import type { GroupMember, StudentNotice, OwnPost, PublicationDraft, StudentUser } from '../local-access/api'
 import type { Member, Post } from './types'
 
 export interface CommunityConnection {
   user: StudentUser
   members: Member[]
+  notices: StudentNotice[]
+  seen: (id: number) => Promise<boolean>
   mine: OwnPost[]
   submissionsOpen: boolean
   busy: boolean

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router'
-import { ThemeSelector } from '../../components/ThemeSelector'
+import { AccessFrame } from '../login/AccessFrame'
 import { studentApi } from './api'
 import s from '../login/login.module.css'
 
@@ -37,19 +37,17 @@ function ActivationForm({ token, recovery }: { token: string; recovery: boolean 
     finally { setBusy(false) }
   }
   return (
-    <main className={s.main} style={{ minHeight: '100dvh' }}>
-      <div className={s.card}>
-        <div className={s.topline}><Link to="/">Volver al sitio</Link><ThemeSelector /></div>
+    <AccessFrame>
         <span className={s.kicker}>TU ESPACIO CAI</span>
         <h1 ref={heading} tabIndex={-1}>{done ? recovery ? 'Contraseña actualizada' : 'Tu acceso está listo' : recovery ? 'Elige tu nueva contraseña' : 'Activa tu acceso'}</h1>
         <p className={s.notice}>Prueba local con datos ficticios. Usa una contraseña de prueba que no utilices en otros sitios.</p>
         {done ? <>
           <p role="status">{recovery ? 'Cerramos las sesiones anteriores. Vuelve a entrar con tu nueva contraseña.' : 'Tu cuenta quedó activada. Ya puedes entrar con el correo de tu solicitud y la contraseña que elegiste.'}</p>
-          <Link className={s.primary} to="/alumnos">Entrar a mi espacio</Link>
+          <Link className={s.primary} to="/login">Entrar a mi espacio</Link>
         </> : !/^[a-f0-9]{64}$/.test(token) ? <>
           <p role="alert">Necesitas un enlace {recovery ? 'de recuperación' : 'de activación'} válido. Pídeselo a coordinación de CAI.</p>
-          <Link to="/alumnos">Volver al acceso de alumnos</Link>
-        </> : <form aria-label="Activar cuenta de alumno" onSubmit={(event) => { void submit(event) }} aria-busy={busy}>
+          <Link to="/login">Volver al acceso de alumnos</Link>
+        </> : <form aria-label={recovery ? "Cambiar contraseña de alumno" : "Activar cuenta de alumno"} onSubmit={(event) => { void submit(event) }} aria-busy={busy}>
           <p className={s.lead}>Elige una contraseña de 15 a 128 caracteres. Puede ser una frase fácil de recordar.</p>
           <label htmlFor="activation-password">Nueva contraseña</label>
           <input id="activation-password" name="password" type="password" autoComplete="new-password" minLength={15} maxLength={128} required />
@@ -58,7 +56,6 @@ function ActivationForm({ token, recovery }: { token: string; recovery: boolean 
           {error && <p role="alert">{error}</p>}
           <button className={s.primary} type="submit" disabled={busy}>{busy ? 'Guardando…' : recovery ? 'Guardar nueva contraseña' : 'Activar mi cuenta'}</button>
         </form>}
-      </div>
-    </main>
+    </AccessFrame>
   )
 }

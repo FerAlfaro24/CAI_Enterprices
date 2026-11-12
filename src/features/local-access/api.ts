@@ -1,4 +1,4 @@
-import type { CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, Receipt, RequestDecision, ReviewPost, StudentUser, Submission } from '../../../server/contracts'
+import type { ContactInquiry, ContactReceipt, ContactSubmission, ContactStatus, StudentNotice, CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GoogleState, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, Receipt, RequestDecision, ReviewPost, StudentUser, Submission } from '../../../server/contracts'
 
 export class ApiError extends Error {
   status: number
@@ -41,7 +41,15 @@ export const localApi = {
   moderate: (post: ReviewPost, decision: PublicationDecision, reason?: string, confirmed?: boolean) => call(`/posts/${post.id}/${decision}`, 'POST', { revision: post.revision, reason, confirmed }),
 }
 
+export const contactApi = {
+  submit: (submission: ContactSubmission, key: string) => call<ContactReceipt>('/contact', 'POST', submission, {'Idempotency-Key':key}),
+  list: () => call<{ contacts: ContactInquiry[] }>('/contacts'),
+  update: (contact: ContactInquiry, status: ContactStatus, note: string) => call(`/contacts/${contact.id}`, 'PATCH', {revision:contact.revision,status,note}),
+}
+
 export const studentApi = {
+  notices: () => call<{ notices: StudentNotice[] }>('/student/notices'),
+  seen: (id: number) => call(`/student/notices/${id}/seen`, 'POST', {}),
   requestRecovery: (email: string) => call<{message: string}>('/recovery/request', 'POST', { email }),
   resetPassword: (token: string, password: string, confirm: string) => call('/recovery/reset', 'POST', { token, password, confirm }),
   activate: (token: string, password: string, confirm: string) => call('/activation', 'POST', { token, password, confirm }),
@@ -72,4 +80,4 @@ export const googleApi = {
   logout: () => call('/google/logout', 'POST', {}),
 }
 
-export type { CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }
+export type { ContactInquiry, ContactReceipt, ContactSubmission, ContactStatus, StudentNotice, CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }

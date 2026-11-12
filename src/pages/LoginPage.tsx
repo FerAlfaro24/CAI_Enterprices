@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
-import { ArrowLeft, ArrowRight, Eye, EyeOff, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, ShieldCheck } from 'lucide-react'
 import { localApi, studentApi, type LocalUser } from '../features/local-access/api'
 import { GoogleSignInButton } from '../features/local-access/GoogleSignInButton'
-import emblem from '../assets/cai/logo-cai-blanco.svg'
 import s from '../features/login/login.module.css'
-import { ThemeSelector } from '../components/ThemeSelector'
+import { AccessFrame } from '../features/login/AccessFrame'
 
 export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void}) {
   const navigate = useNavigate()
@@ -32,25 +31,7 @@ export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminL
     finally{setBusy(false)}
   }
 
-  return (
-    <div className={s.page}>
-      <a className={s.skip} href="#login-content">Saltar al acceso</a>
-      <aside className={s.story} aria-label="Bienvenido a CAI">
-        <Link to="/" className={s.brand} aria-label="CAI, volver al sitio institucional">
-          <img src={emblem} width="52" height="49" alt="" />
-          <span>Centro de Asesorías<br />Integrales</span>
-        </Link>
-        <div className={s.storyContent}>
-          <span className={s.eyebrow}>APRENDEMOS. COMPARTIMOS. CRECEMOS.</span>
-          <p className={s.statement}>Un idioma.<br /> Muchas <em>historias.</em></p>
-          <p className={s.intro}>Cada pequeño avance merece un lugar. Descubre lo que podemos construir juntos en CAI.</p>
-          <div className={s.paths} aria-hidden="true"><span>01 / Aprende</span><span>02 / Conecta</span><span>03 / Celebra</span></div>
-        </div>
-        <p className={s.storyFooter}>Tu siguiente paso empieza aquí.</p>
-      </aside>
-      <main className={s.main} id="login-content" tabIndex={-1}>
-        <div className={s.topline}><Link to="/" className={s.back}><ArrowLeft size={16} aria-hidden="true" /> Volver al sitio</Link><ThemeSelector /></div>
-        <div className={s.card}>
+  return <AccessFrame>
           <span className={s.kicker}>{admin?'ADMINISTRACIÓN CAI':'TU ESPACIO CAI'}</span>
           <h1 ref={heading} tabIndex={-1}>Qué gusto verte<br />de nuevo.</h1>
           <p className={s.lead}>Entra y sigue compartiendo tu camino.</p>
@@ -61,7 +42,7 @@ export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminL
             <input id="login-email" name="email" type="email" placeholder="tu.nombre@example.com" autoComplete="off" required maxLength={160} />
             <label htmlFor="login-password">Contraseña</label>
             <div className={s.password}>
-              <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="off" placeholder="Usa una contraseña ficticia" required maxLength={64} />
+              <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="off" placeholder="Usa una contraseña ficticia" required maxLength={128} />
               <button type="button" className={s.reveal} onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={showPassword} aria-controls="login-password">{showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}</button>
             </div>
             {error && <p role="alert">{error}</p>}
@@ -69,9 +50,5 @@ export function LoginPage({ admin=false,onAdminLogin }: {admin?:boolean;onAdminL
           </form>
           {!admin && <><p className={s.signup}>¿Es tu primera visita? <Link to="/registro">Solicita tu acceso</Link></p><p className={s.footnote}><Link to="/recuperar-acceso">Olvidé mi contraseña</Link></p></>}
           <p className={s.footnote}><Link to={admin?'/login':'/admin'}>{admin?'Acceso de alumnos':'Acceso de administración'}</Link></p>
-        </div>
-        <p className={s.footer}>CAI · El inglés nos conecta.</p>
-      </main>
-    </div>
-  )
+  </AccessFrame>
 }

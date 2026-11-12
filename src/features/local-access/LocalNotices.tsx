@@ -1,40 +1,35 @@
-import { useEffect, useRef, useState } from 'react'
-import { noticeApi, type LocalNotice, type ActivationInvitation } from './api'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { ApiError, noticeApi, type LocalNotice, type ActivationInvitation } from './api'
+import { LocalInvitationDialog } from './LocalInvitationDialog'
 import s from '../admin/admin.module.css'
 
-export function LocalNotices() {
-  const [items, setItems] = useState<LocalNotice[]>([]), [error, setError] = useState(''), [busy, setBusy] = useState(false)
-  const [preview, setPreview] = useState<ActivationInvitation | null>(null)
-  const load = () => noticeApi.list().then(({notices}) => { setItems(notices); setError('') }).catch((error: unknown) => setError(error instanceof Error ? error.message : 'No pudimos cargar los avisos.'))
-  useEffect(() => { void load() }, [])
-  const action = async (item: LocalNotice, open: boolean) => {
-    if (busy) return
-    setBusy(true); setError('')
-    try { if (open) setPreview(await noticeApi.preview(item.id)); else { await noticeApi.acknowledge(item.id); await load() } }
-    catch (error) { setError(error instanceof Error ? error.message : 'No se pudo completar la operación.') }
-    finally { setBusy(false) }
+export function LocalNotices({ onAccessLost }: { onAccessLost?: () => Promise<void> }) {
+  const [items,setItems]=useState<LocalNotice[]>([]),[error,setError]=useState(''),[busy,setBusy]=useState(false),[loading,setLoading]=useState(true)
+  const [all,setAll]=useState(false),[preview,setPreview]=useState<{invitation:ActivationInvitation;name:string}|null>(null)
+  const generation=useRef(0),writing=useRef(false)
+  const failure=useCallback((error:unknown)=>{
+    if(error instanceof ApiError&&error.status===401){setItems([]);setPreview(null);void onAccessLost?.()}
+    setError(error instanceof Error?error.message:'No pudimos cargar los avisos.')
+  },[onAccessLost])
+  const load=useCallback(()=>{
+    const current=++generation.current
+    return noticeApi.list().then(({notices})=>{if(current===generation.current){setItems(notices);setError('')}})
+      .catch((error:unknown)=>{if(current===generation.current)failure(error)}).finally(()=>{if(current===generation.current)setLoading(false)})
+  },[failure])
+  useEffect(()=>{const sequence=generation;void load();return()=>{sequence.current++}},[load])
+  const action=async(item:LocalNotice,open:boolean)=>{
+    if(writing.current)return
+    writing.current=true;setBusy(true);setError('')
+    try{if(open)setPreview({invitation:await noticeApi.preview(item.id),name:item.recipient});else{await noticeApi.acknowledge(item.id);await load()}}
+    catch(error){failure(error)}finally{writing.current=false;setBusy(false)}
   }
+  const visible=items.filter(item=>all||!item.acknowledged)
   return <>
-    <p className={s.alert}>Bandeja de pruebas locales. Estos avisos no se han enviado por correo. Los enlaces de recuperación son solo para comprobar el recorrido con cuentas ficticias; no prueban la identidad del destinatario.</p>
-    <button className={`${s.btn} ${s['btn--ghost']}`} type="button" onClick={() => { void load() }}>Actualizar avisos</button>
-    {error && <p className={s.alert} role="alert">{error}</p>}
-    <ul className={`${s.queue} ${s['local-records']}`}>{items.map((item) => <li key={item.id}>
-      <div className={s['queue-person']}><div><strong>{item.subject}</strong><span>{item.recipient}</span><span>{item.message}</span><span>{item.acknowledged ? 'Revisado · Sin envío de correo' : 'Por revisar · Sin envío de correo'}</span></div></div>
-      {item.kind === 'recovery' && <button type="button" className={`${s.btn} ${s['btn--primary']}`} disabled={busy} onClick={() => { void action(item, true) }}>Preparar enlace de prueba<span className={s['sr-only']}> para {item.recipient}</span></button>}
-      {!item.acknowledged && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void action(item, false) }}>Marcar revisado<span className={s['sr-only']}>: {item.subject}</span></button>}
-    </li>)}</ul>
-    {!items.length && <p className={s.empty}>No hay avisos locales todavía.</p>}
-    {preview && <RecoveryPreview invitation={preview} onClose={() => setPreview(null)} />}
+    <p className={s.alert}>Avisos de pruebas locales. No se enviaron por correo. Los enlaces de recuperación son para comprobar el recorrido con cuentas ficticias; no prueban la identidad del destinatario.</p>
+    <div className={s.toolbar}><div className={s.tabs} role="group" aria-label="Filtrar avisos"><button type="button" className={s.tab} aria-pressed={!all} onClick={()=>setAll(false)}>Por revisar<span>{items.filter(item=>!item.acknowledged).length}</span></button><button type="button" className={s.tab} aria-pressed={all} onClick={()=>setAll(true)}>Todos los avisos<span>{items.length}</span></button></div><button className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} type="button" onClick={()=>{void load()}}>Actualizar avisos</button></div>
+    {error&&<p className={s.alert} role="alert">{error}</p>}
+    {loading?<p role="status">Cargando avisos…</p>:<ul className={`${s.queue} ${s['inbox-records']}`} aria-label="Avisos de administración">{visible.map(item=><li key={item.id} data-notice-id={item.id}><div><strong>{item.subject}</strong><span>{item.recipient}</span><span>{item.message}</span><span>{item.acknowledged?'Revisado':'Por revisar'} · Sin envío de correo</span></div><div className={s['head-actions']}>{item.kind==='recovery'&&<button type="button" className={`${s.btn} ${s['btn--primary']}`} disabled={busy} onClick={()=>{void action(item,true)}}>Preparar enlace de prueba<span className={s['sr-only']}> para {item.recipient}</span></button>}{!item.acknowledged&&<button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={()=>{void action(item,false)}}>Marcar revisado<span className={s['sr-only']}>: {item.subject}</span></button>}</div></li>)}</ul>}
+    {!loading&&!error&&!visible.length&&<p className={s.empty}>No hay avisos con este filtro.</p>}
+    {preview&&<LocalInvitationDialog recovery invitation={preview.invitation} name={preview.name} onClose={()=>setPreview(null)}/>}
   </>
-}
-function RecoveryPreview({ invitation, onClose }: { invitation: ActivationInvitation; onClose: () => void }) {
-  const ref = useRef<HTMLDialogElement>(null)
-  useEffect(() => { ref.current?.showModal() }, [])
-  return <dialog ref={ref} className={`${s.dialog} ${s['local-dialog']}`} aria-labelledby="recovery-preview-title" onClose={onClose} onCancel={onClose}>
-    <div className={s['dialog-head']}><h2 id="recovery-preview-title">Enlace de recuperación de prueba</h2></div>
-    <div className={s['dialog-body']}><p>Caduca en 15 minutos. Preparar otro invalida el anterior. No se envió por correo.</p>
-      <div className={s['local-link-field']}><label htmlFor="recovery-preview-link">Enlace de recuperación</label><textarea id="recovery-preview-link" readOnly value={window.location.origin + invitation.path} /></div>
-      <a className={`${s.btn} ${s['btn--primary']}`} href={invitation.path}>Probar recuperación</a>
-    </div><div className={s['dialog-foot']}><button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={onClose}>Cerrar</button></div>
-  </dialog>
 }

@@ -56,14 +56,14 @@ export function ContactSection() {
         <div>
           <span className={s.eyebrow}>Da el primer paso</span>
           <h2 id="contact-title">Explora tu clase muestra</h2>
-          <p>Así se vería la solicitud de información para conocer CAI. Puedes probar el formulario con datos ficticios.</p>
+          <p>Solicita información para conocer CAI. Durante estas pruebas locales utiliza datos ficticios.</p>
           <ul className={s.contact__info}>
             <li><b>Teléfono:</b> Pendiente de confirmar</li>
             <li><b>WhatsApp:</b> Pendiente de confirmar</li>
             <li><b>Dirección:</b> Sede y ubicación por validar</li>
             <li><b>Horario:</b> Disponibilidad por confirmar</li>
           </ul>
-          <ContentNote>No hay atención ni reservas conectadas a esta página. La clase muestra, sus condiciones y los medios de contacto deben validarse con el cliente.</ContentNote>
+          <ContentNote>Las consultas se guardan para coordinación en este equipo; no se reservan clases ni se envían correos. Las condiciones de la clase muestra y los medios de contacto deben validarse con CAI.</ContentNote>
           <Link className={s['demo-link']} to="/community">Conoce también la comunidad demo →</Link>
           <Link className={s['demo-link']} to="/registro">¿Ya eres alumno? Solicita tu acceso →</Link>
         </div>

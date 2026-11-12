@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Navigate } from 'react-router'
-import { ApiError, catalogApi, studentApi, type GroupMember, type OwnPost, type PublishedPost, type StudentUser } from '../local-access/api'
+import { ApiError, catalogApi, studentApi, type GroupMember, type OwnPost, type PublishedPost, type StudentUser, type StudentNotice } from '../local-access/api'
 import { CommunityContext } from './context'
 import { CommunityDialogContext, type PostDetail } from './dialogContext'
 import { feedPost, publicMember, type CommunityConnection } from './connection'
@@ -8,7 +8,7 @@ import type { CommunityAction, CommunityState } from './types'
 import s from './community.module.css'
 
 const emptyState: CommunityState = { posts: [], mode: 'student', section: 'home', filter: 'recent', challengeId: '', attempts: {}, badgeRequests: [], notice: '', sequence: 0, resetKey: 0, focusedPostId: null, focusRequest: 0 }
-type Snapshot = { user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; submissionsOpen: boolean }
+type Snapshot = { user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean }
 
 /** Usa las vistas de v1.0 con una instantánea autorizada, sin inicializar fixtures. */
 export function ConnectedCommunity({ children }: { children: ReactNode }) {
@@ -27,9 +27,9 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const refresh = useCallback(() => {
     const version = ++generation.current
     return studentApi.me().then(async ({ user }) => {
-      const [group, feed, catalog] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get()])
+      const [group, feed, catalog, notices] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get(), studentApi.notices()])
       if (version !== generation.current) return
-      setSnapshot({ user, members: group.members, ...feed, submissionsOpen: catalog.settings.submissionsOpen }); setAnonymous(false); setError('')
+      setSnapshot({ user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen }); setAnonymous(false); setError('')
     }).catch((error: unknown) => { if (version === generation.current) failure(error) })
       .finally(() => { if (version === generation.current) setChecking(false) })
   }, [failure])
@@ -59,7 +59,7 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const members = snapshot.members.map(publicMember)
   const publicMembers = [...members, own, ...snapshot.posts.map(post => publicMember(post.author))]
   const connection: CommunityConnection = {
-    user, members, mine: snapshot.mine, submissionsOpen: snapshot.submissionsOpen, busy, error, notice, refresh,
+    user, members, notices: snapshot.notices, seen: id => write(() => studentApi.seen(id), 'Aviso marcado como leído.'), mine: snapshot.mine, submissionsOpen: snapshot.submissionsOpen, busy, error, notice, refresh,
     resolveMember: id => publicMembers.find(member => member.id === id) ?? publicMember({ id, displayName: 'Miembro no disponible', avatarColor: '#1f56d6' }),
     submit: (draft, key) => write(() => studentApi.createPost(draft, key), 'Tu publicación se guardó y está pendiente de revisión.'),
     withdraw: post => write(() => studentApi.withdrawPost(post), 'Publicación retirada. Ya no aparece en el feed.'),

@@ -169,7 +169,8 @@ Usar estados explícitos: **pendiente**, **en curso**, **implementado sin compro
 | Registro, acceso, aprobación, activación y suspensión con diseño v1.0 | Comprobado localmente | `8e205b0`; `v1-connected-access.md`; nuevo recorrido de navegador | Google/correo reales siguen pendientes. |
 | Dashboard, solicitudes y alumnos originales conectados | Comprobado localmente en el alcance descrito | `8e205b0`; 48 resultados Node, 30 comprobaciones por navegador Brave/Opera; contraste de indicadores, vacío y autorización de menor | Grupos/perfil completo/ajustes y demás bloques siguen pendientes; moderación se completó después, en la fila siguiente. |
 | Moderación y Community avanzadas, bloque 4 | Comprobado localmente en `feat/v1-community-connected`, base `cf12d8a` | `f9e60bc` (interfaz) y `4c0af54` (contratos); `v1-connected-community.md`; 48 resultados Node, 39 comprobaciones por navegador Brave/Opera, respaldo antes de migración 6 | Configuración, grupos/perfil completo, archivos e interacciones secundarias siguen pendientes. |
-| Grupos, asignaciones y ajustes mínimos, bloque 5 | Comprobado localmente en `feat/v1-groups-settings`, base `9a5ef81` | `45900a2` y `08ce05d`; `v1-groups-settings.md`; 56 resultados Node, 27 comprobaciones por navegador Brave/Opera; migración 7 respaldada | Catálogo final de CAI, edición completa de expediente/perfil y otras cuentas administrativas no incluidos. Siguiente: avisos/recuperación/contacto oficiales. |
+| Grupos, asignaciones y ajustes mínimos, bloque 5 | Comprobado localmente en `feat/v1-groups-settings`, base `9a5ef81` | `45900a2` y `08ce05d`; `v1-groups-settings.md`; 56 resultados Node, 27 comprobaciones por navegador Brave/Opera; migración 7 respaldada | Catálogo final de CAI, edición completa de expediente/perfil y otras cuentas administrativas no incluidos. Avisos/recuperación/contacto se completaron después, en la fila siguiente. |
+| Recuperación, avisos y contacto oficiales, bloque 6 | Comprobado localmente en `feat/v1-inbox-recovery-contact`, base `e083c8f` | `v1-inbox-recovery-contact.md`; 63 resultados Node, 37 comprobaciones por navegador Brave/Opera, migración 8 respaldada | Correo real/identidad del destinatario, datos comerciales y entrega al cliente continúan pendientes. |
 
 Lista de comprobación del bloque 4:
 
@@ -184,7 +185,7 @@ Lista de comprobación del bloque 4:
 
 Última base funcional auditada: `1b84fb3`. Después de la auditoría se completó el primer recorrido conectado en `integration/cai-v1-connected`, desde `be90193`: registro/login oficiales, protección administrativa, solicitudes y alumnos en dashboard original, activación/suspensión e indicadores con datos del servidor. Detalles, archivos y pruebas en `v1-connected-access.md`; identificar su commit con `git log -- docs/v1-connected-access.md`.
 
-Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores; 4 comprobado localmente con moderación y Community avanzadas (ver `v1-connected-community.md`); 5 comprobado en catálogo/asignaciones y ajustes mínimos (ver `v1-groups-settings.md`). **Siguiente bloque: 6, recuperación, avisos y contacto en la experiencia oficial**. La edición completa de expediente/perfil y otras cuentas administrativas siguen pendientes; el catálogo/asignaciones y ajustes mínimos del bloque 5 sí están conectados. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
+Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores; 4 comprobado localmente con moderación y Community avanzadas (ver `v1-connected-community.md`); 5 comprobado en catálogo/asignaciones y ajustes mínimos (ver `v1-groups-settings.md`). 6 comprobado localmente en recuperación, avisos y contacto oficiales (ver `v1-inbox-recovery-contact.md`). **Siguiente bloque: 7, archivos privados e imágenes reutilizando la galería existente**. La edición completa de expediente/perfil y otras cuentas administrativas siguen pendientes; el catálogo/asignaciones y ajustes mínimos del bloque 5 sí están conectados. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
 
 Al cerrar cada tarea añadir: rama/base y commit; archivos de interfaz reutilizados; datos/endpoint conectado; criterio de cierre demostrado; pruebas realmente ejecutadas; pendientes. «Implementado en una rama», «integrado visualmente», «conectado al servidor», «probado localmente» y «listo para producción» son estados distintos y nunca intercambiables.
 
@@ -230,3 +231,36 @@ Lista de comprobación del bloque 5:
 - [x] Pruebas de servidor, ambos navegadores, errores, móvil, lint/typecheck/build y documentación.
 
 Siguiente tarea autónoma: reutilizar `notices.ts`, recuperación existente y componentes oficiales para conectar avisos y recuperación en un solo recorrido. Verificar primero lo ya hecho; Google/correo/cuentas/presupuesto siguen para el final. No comenzar otra administración ni reconstruir el contacto sin revisar el formulario existente.
+
+
+### Notas cronológicas del bloque 6 (los pendientes intermedios se resuelven en el cierre)
+
+Rama `feat/v1-inbox-recovery-contact`, base `e083c8f`. Respaldo previo a migración 8 realizado. Se reutilizan `notices.ts`, recuperación/activación existentes, `LocalNotices`, `LoginPage`, el panel original y `DemoForm` de contacto. Alcance: recuperación con diseño oficial; mensajes de contacto persistentes y atendibles en administración; bandeja de avisos administrativa y avisos propios del alumno con lectura independiente. No entrega de correo ni reservas, sin convertir la lista de interés de cursos futuros en un servicio nuevo.
+
+Implementado sin cierre: migración 8, contacto con consentimiento/idempotencia/seguimiento, avisos propios filtrados por sesión. Las 56 regresiones previas pasaron antes de incorporar pruebas nuevas; un error de sintaxis al ampliar la validación de notas se corrigió y se están repitiendo las pruebas. No se da por validada todavía la interfaz.
+
+Cierre previsto: probar permisos, privacidad, concurrencia y persistencia; recorrer contacto → seguimiento y login → recuperación → aviso → cambio → nuevo login con sesiones separadas; verificar lectura propia, móvil, errores, lint/build, documentación y puntos de retorno. Google/correo/datos comerciales siguen para el final.
+
+Avance comprobado del bloque 6: servidor con 63 resultados correctos y typecheck; contacto privado/idempotente, seguimiento con revisiones y notas, avisos por sesión con lectura independiente y persistencia al reiniciar. Implementación de interfaz: marco de acceso original compartido por login/activación/recuperación, mensajes en panel oficial, contacto original persistente y avisos propios en Mi espacio. Falta comprobar recorridos y móvil en navegador.
+
+Verificación del bloque 6 en curso: los primeros intentos de navegador necesitaron llevar al frente la ventana de contacto durante el reintento; el botón respondía al probarlo en la ventana activa. Se ajustó el script para probar las sesiones en primer plano, sin forzar clics ni sustituir interacciones por envíos directos. Se corrigió el espaciado de la casilla de consentimiento. No se cuentan esos intentos incompletos como recorridos aprobados.
+
+El recorrido oficial del bloque 6 comprobó contacto/reintento/seguimiento, avisos propios y solicitud de recuperación. Detectó desbordamiento del correo largo en el texto del diálogo privado a 375 px. Se corrigió el ajuste de palabras del texto en el diálogo original; falta repetir el recorrido completo antes de contarlo como superado.
+
+Verificación del bloque 6 en Brave: 37 comprobaciones completas superadas. Contacto con consentimiento, respuesta perdida y reintento único, seguimiento/nota persistente, avisos propios y separación de lectura/revisión, recuperación desde login oficial, revocación de otra sesión, contraseña larga y enlace de un uso. Cuatro anchuras 1440/768/375/320 para diálogo privado, seguimiento, recuperación y avisos. Corrección móvil repetida y cero errores de ejecución JavaScript. Opera y cierre final pendientes.
+
+Verificación final del bloque 6: Opera GX también superó las 37 comprobaciones completas. En Brave se inspeccionaron además la bandeja de escritorio, bandeja móvil a 320 px, contacto móvil y recuperación móvil. Comprobada activación real desde su formulario compartido y vuelta al login oficial; se corrigió el color del enlace/botón de éxito tras compartir el marco de acceso. Backend: 63 resultados correctos. Lint/typecheck/build correctos, salvo aviso conocido de tamaño del paquete principal (~693 KB). Cierre documental y Git pendiente.
+
+Cierre del bloque 6: contacto original persistente, seguimiento privado en panel oficial, bandeja administrativa reutilizada, avisos propios con lectura independiente y recuperación/activación con diseño oficial comprobados localmente. Rama `feat/v1-inbox-recovery-contact`, base `e083c8f`; servidor guardado en `4a84a05`; el punto de retorno de interfaz corresponde al commit que incorpora `docs/v1-inbox-recovery-contact.md`. No se da por comprobado correo real, reservas, identidad del destinatario ni producción.
+
+Lista de comprobación del bloque 6:
+
+- [x] Respaldo y migración aditiva, contacto idempotente y seguimiento con revisión.
+- [x] Bandeja administrativa dentro del panel original, sin sustituirlo.
+- [x] Avisos propios autorizados por sesión y lectura independiente de revisión administrativa.
+- [x] Recuperación y activación con composición v1.0, sin prometer correo ni auto-login.
+- [x] Cambio de contraseña probado entre sesiones y con más de 64 caracteres.
+- [x] Recorridos completos Brave/Opera, cuatro anchuras, revisión visual, errores y lint/typecheck/build.
+- [x] Registro de archivos/servicios, límites y puntos de retorno; correo y Google reales quedan para el final.
+
+Estado vigente: bloques 2–6 conectados en los alcances descritos, con las limitaciones de sus documentos. Siguiente tarea autónoma: revisar galería, permisos y almacenamiento ya existentes antes de conectar archivos/imágenes privadas (bloque 7). Usar contenido ficticio; las autorizaciones y medios reales del cliente no se inventan. Después se consolidan rutas y se estabiliza el recorrido conjunto.

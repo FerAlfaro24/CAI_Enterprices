@@ -14,6 +14,10 @@
 .community :where(button):disabled { cursor: default; }
 .community :where(h1, h2, h3, p, figure, fieldset) { margin: 0; }
 .community :where(input, select, textarea) { min-width: 0; }
+.personalNotices { list-style: none; margin: 16px 0 0; padding: 0; }
+.personalNotices li { padding: 16px 0; border-top: 1px solid var(--line); }
+.personalNotices small { display: block; color: var(--muted); margin-bottom: 10px; }
+.noticeHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .community :where(p, h1, h2, h3) { overflow-wrap: anywhere; }
 .skipLink { position: fixed; top: 8px; left: 8px; transform: translateY(-170%); z-index: 100; padding: 12px 18px; background: var(--paper); color: var(--navy); border-radius: 8px; }
 .skipLink:focus { transform: none; }

@@ -277,6 +277,7 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .dialog-head p { margin: 2px 0 0; font-size: .85rem; color: var(--muted); }
 .dialog-head .icon-btn { margin-left: auto; flex: none; }
 .dialog-body { padding: 18px 22px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.dialog-body > p { min-width: 0; overflow-wrap: anywhere; }
 .request-guide { padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--blue-50); }
 .request-guide h3 { margin: 0; font-size: .95rem; }
 .request-guide ol { margin: 8px 0; padding-left: 20px; list-style: decimal; font-size: .88rem; }
@@ -366,6 +367,13 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .assignment-form { display: grid; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); min-width: 0; }
 .assignment-form > div { display: grid; gap: 6px; font-size: .88rem; }
 .assignment-form h3 { margin: 0; font-size: 1rem; }
+.inbox-records li { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.inbox-records li > div { min-width: 0; overflow-wrap: anywhere; }
+.inbox-records li > div:first-child { flex: 1 1 240px; }
+.inbox-records strong, .inbox-records span, .inbox-records time { display: block; }
+.inbox-records span, .inbox-records time { font-size: .85rem; color: var(--muted); }
+.contact-followup select, .contact-followup textarea { width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; }
+.contact-followup label { font-size: .88rem; font-weight: 600; }
 .assignment-form .confirm { display: flex; }
 .card-title-row { display: flex; align-items: center; gap: 12px; }
 .setting { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 0; border-top: 1px solid var(--line); }
