@@ -14,6 +14,10 @@ export function record(value: unknown): Record<string, unknown> {
   return value as Record<string, unknown>
 }
 
+export function abbreviatedNames(firstName: string, lastName: string) {
+  return [`${firstName.split(/\s+/)[0]} ${lastName[0]!.toUpperCase()}.`, `${firstName[0]!.toUpperCase()}. ${lastName[0]!.toUpperCase()}.`]
+}
+
 function text(value: unknown, label: string, min: number, max: number) {
   if (typeof value !== 'string' || value.trim().length < min || value.trim().length > max || [...value].some((char) => char.charCodeAt(0) < 32 && ![9, 10, 13].includes(char.charCodeAt(0)))) {
     throw new HttpError(400, `Revisa ${label}.`)
@@ -53,7 +57,7 @@ export function validateSubmission(value: unknown, now = new Date(), catalog?: P
   const lastName = text(v.lastName, 'los apellidos', 2, 80)
   const displayName = text(v.displayName, 'el nombre visible', 1, 141)
   // Los menores no pueden enviar un nombre completo ni hacerse públicos alterando el navegador.
-  const safeNames = [`${firstName.split(/\s+/)[0]} ${lastName[0]!.toUpperCase()}.`, `${firstName[0]!.toUpperCase()}. ${lastName[0]!.toUpperCase()}.`]
+  const safeNames = abbreviatedNames(firstName, lastName)
   if (minor && (v.visibility !== 'privado' || !safeNames.includes(displayName))) throw new HttpError(400, 'El perfil de un menor debe usar nombre abreviado y visibilidad privada.')
   let guardian: Submission['guardian']
   if (minor) {

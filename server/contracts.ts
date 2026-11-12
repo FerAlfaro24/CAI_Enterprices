@@ -77,6 +77,10 @@ export type StudentUser = {
   program: string; group: string; avatarColor: string
 }
 export type GroupMember = { id: string; displayName: string; avatarColor: string }
+export type StudentProfile = {
+  displayName: string; avatarColor: string; revision: number; nameOptions: string[] | null
+}
+export type StudentProfileDraft = Pick<StudentProfile, 'displayName' | 'avatarColor' | 'revision'>
 export type ActivationInvitation = { path: string; expiresAt: string }
 
 export type RequestDecision = 'approve' | 'reject' | 'undo' | 'consent'

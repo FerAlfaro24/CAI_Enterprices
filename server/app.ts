@@ -9,6 +9,7 @@ import { notices } from './notices.ts'
 import { administration } from './administration.ts'
 import { contactRepository, validateContact } from './contact.ts'
 import { galleryRepository } from './gallery.ts'
+import { studentProfiles } from './public-profiles.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
@@ -48,6 +49,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const config = administration(db)
   const contacts = contactRepository(db)
   const gallery = galleryRepository(db)
+  const profiles = studentProfiles(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -192,6 +194,11 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
         return data
       }
       if (path === '/api/local/student/me' && method === 'GET') return json(response, 200, { user })
+      if (path === '/api/local/student/profile' && method === 'GET') return json(response, 200, { profile: profiles.get(user) })
+      if (path === '/api/local/student/profile' && method === 'PATCH') {
+        limit(`profile:${user.id}`, 30, 15 * 60_000)
+        return json(response, 200, { profile: profiles.update(user, await protectedBody()) })
+      }
       if (path === '/api/local/student/gallery' && method === 'GET') return json(response, 200, { images: gallery.forStudent(user) })
       if (path === '/api/local/student/notices' && method === 'GET') return json(response, 200, { notices: mail.forStudent(user) })
       const seen = path.match(/^\/api\/local\/student\/notices\/(\d+)\/seen$/)
