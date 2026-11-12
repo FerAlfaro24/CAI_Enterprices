@@ -156,6 +156,31 @@ No se reconstruyó ni se recorrió visualmente cada rama histórica por separado
 
 ## 8. Registro de continuidad
 
+### Control antes y después de cada cambio lógico
+
+Antes de modificar una función: leer este registro, comprobar rama/estado de Git y localizar su implementación existente. Definir qué pendiente se resolverá y cómo se comprobará. Después de cada avance coherente: registrar resultado, archivos/servicios afectados, comprobación ejecutada y siguiente paso. No esperar al final de una sesión larga para actualizar un avance significativo.
+
+Usar estados explícitos: **pendiente**, **en curso**, **implementado sin comprobar**, **comprobado localmente** y **dependencia externa pendiente**. Conservar incidencias o pruebas fallidas relevantes hasta documentar su corrección y nueva comprobación. No guardar contraseñas, tokens ni información de alumnos en esta bitácora. Un cambio documental no requiere repetir pruebas de aplicación ni se cuenta como una función nueva.
+
+| Hito | Estado actual | Evidencia / punto de retorno | Falta |
+| --- | --- | --- | --- |
+| Auditoría y base oficial | Comprobado | `bd3e606`; v1.0 `f3ba46b`; inventario de esta guía | Mantener fotografía histórica y registro actual diferenciados. |
+| Prioridad de trabajo autónomo | Registrada | `be90193` | Agrupar intervención humana al final; continuar tareas independientes. |
+| Registro, acceso, aprobación, activación y suspensión con diseño v1.0 | Comprobado localmente | `8e205b0`; `v1-connected-access.md`; nuevo recorrido de navegador | Google/correo reales siguen pendientes. |
+| Dashboard, solicitudes y alumnos originales conectados | Comprobado localmente en el alcance descrito | `8e205b0`; 48 resultados Node, 30 comprobaciones por navegador Brave/Opera; contraste de indicadores, vacío y autorización de menor | Grupos/perfil completo/ajustes, moderación avanzada y demás bloques no se dan por terminados. |
+| Moderación y Community avanzadas, bloque 4 | Pendiente; siguiente trabajo | Reutilizar `AdminPostsPage`, `HomeView`, Composer, tarjetas y servicios de publicaciones existentes | Completar la lista siguiente y registrar cada punto al comprobarlo. |
+
+Lista de comprobación del bloque 4 (todavía sin implementar):
+
+- [ ] Definir identidad/perfil público y contratos de publicaciones compartidos, sin fallback a Alex Demo.
+- [ ] Aplicar sesión y permisos a las consultas de Community conectada.
+- [ ] Conectar el editor existente con envío persistente y estado del autor.
+- [ ] Conectar la bandeja/detalle originales de moderación a las decisiones del servidor.
+- [ ] Mostrar aprobadas en el feed avanzado del programa/grupo autorizado.
+- [ ] Reflejar rechazo con motivo, retiro y suspensión sin mezclar datos de muestra.
+- [ ] Comprobar recorrido entre sesiones, recarga, errores y diseño adaptable en Brave/Opera.
+- [ ] Actualizar rutas, documentación y punto de retorno; indicar expresamente lo que siga pendiente.
+
 Última base funcional auditada: `1b84fb3`. Después de la auditoría se completó el primer recorrido conectado en `integration/cai-v1-connected`, desde `be90193`: registro/login oficiales, protección administrativa, solicitudes y alumnos en dashboard original, activación/suspensión e indicadores con datos del servidor. Detalles, archivos y pruebas en `v1-connected-access.md`; identificar su commit con `git log -- docs/v1-connected-access.md`.
 
 Estado de bloques: 1 resuelto para acceso/solicitudes/directorio; 2 comprobado por contraseña; 3 conectado en esas vistas e indicadores, con Publicaciones/Configuración explícitamente pendientes; **siguiente bloque: 4, conectar moderación y Community avanzadas**. La ficha completa de usuario, catálogo/grupos y ajustes siguen pendientes conforme al inventario. La tabla de ramas y el inventario de las secciones 2–4 son la fotografía de la auditoría previa, no una afirmación de que esta integración posterior no exista. **No comenzar imágenes ni otra administración paralela.**
