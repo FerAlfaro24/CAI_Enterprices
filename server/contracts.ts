@@ -1,7 +1,7 @@
 export type RequestStatus = 'pendiente' | 'aprobada' | 'rechazada'
 
 export type CatalogGroup = { id: number; program: string; name: string; active: boolean; revision: number }
-export type CommunityControls = { registrationOpen: boolean; submissionsOpen: boolean; reactionsOpen: boolean; revision: number }
+export type CommunityControls = { registrationOpen: boolean; submissionsOpen: boolean; reactionsOpen: boolean; commentsOpen: boolean; revision: number }
 export type PublicCatalog = { groups: Pick<CatalogGroup, 'id' | 'program' | 'name'>[]; settings: Omit<CommunityControls, 'revision'> }
 export type ContactSubmission = { name: string; contact: string; program: string; consent: true }
 export type ContactStatus = 'nueva' | 'seguimiento' | 'atendida'
@@ -111,7 +111,18 @@ export const reactionKinds = ['love', 'wellDone', 'congrats', 'amazing', 'funny'
 export type ReactionKind = typeof reactionKinds[number]
 export type ReactionSummary = { counts: Record<ReactionKind, number>; myReaction: ReactionKind | null; revision: number }
 export type PublishedPost = PublicationDraft & {
-  id: string; author: GroupMember; createdAt: string; publishedAt: string | null; engagement?: ReactionSummary
+  id: string; author: GroupMember; createdAt: string; publishedAt: string | null; engagement?: ReactionSummary; commentCount?:number; commentsOpen?:boolean
 }
 export type OwnPost = PublishedPost & { status: PublicationStatus; revision: number; reason: string | null }
 export type ReviewPost = OwnPost & { studentId: string; studentName: string; program: string; group: string; authorActive: boolean; authorIsMinor: boolean }
+
+export type CommentStatus = 'pendiente' | 'publicado' | 'rechazado' | 'retirado'
+export type PublicComment = { id:string;body:string;author:GroupMember;createdAt:string }
+export type OwnComment = PublicComment & { status:CommentStatus;revision:number;reason:string|null }
+export type CommentPage<T> = { items:T[];nextCursor:number|null }
+export type CommentCounts = Record<CommentStatus,number>
+export type CommentReview = OwnComment & {
+  authorActive:boolean;
+  publication:{id:string;title:string;status:PublicationStatus;program:string;group:string;revision:number;commentsOpen:boolean}
+}
+export type CommentHistory = { action:string;reason:string|null;actor:string;createdAt:string }

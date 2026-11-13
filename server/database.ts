@@ -228,6 +228,27 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (13, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 14').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      ALTER TABLE community_controls ADD COLUMN comments_open INTEGER NOT NULL DEFAULT 0 CHECK(comments_open IN (0,1));
+      ALTER TABLE publications ADD COLUMN comments_open INTEGER NOT NULL DEFAULT 1 CHECK(comments_open IN (0,1));
+      CREATE TABLE post_comments (
+        id INTEGER PRIMARY KEY, publication_id INTEGER NOT NULL REFERENCES publications(id),
+        author_id INTEGER NOT NULL REFERENCES students(request_id), request_key TEXT NOT NULL,
+        body TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pendiente' CHECK(status IN ('pendiente','publicado','rechazado','retirado')),
+        reason TEXT, revision INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL,
+        UNIQUE(author_id,request_key)
+      );
+      CREATE INDEX comment_conversation ON post_comments(publication_id,status,id);
+      CREATE INDEX comment_review ON post_comments(status,id);
+      CREATE TABLE comment_audit (
+        id INTEGER PRIMARY KEY, comment_id INTEGER NOT NULL REFERENCES post_comments(id),
+        admin_id INTEGER REFERENCES admin_users(id), student_id INTEGER REFERENCES students(request_id),
+        action TEXT NOT NULL, reason TEXT, created_at TEXT NOT NULL
+      );
+      INSERT INTO migrations VALUES (14, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

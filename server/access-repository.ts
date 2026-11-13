@@ -136,6 +136,7 @@ export function accessRepository(db: Database) {
         db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
         db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
         // Mantener la audiencia original de cada envío. Volver a un grupo no republica historias automáticamente.
+        holdAuthorComments(db,key,actor,'Cambio de grupo del autor; requiere nueva revisión.')
         db.prepare("UPDATE publications SET status = CASE WHEN status = 'publicada' THEN 'pendiente' ELSE status END, published_at = NULL, revision = revision + 1 WHERE author_id = ? AND status <> 'retirada'").run(key)
         audit(actor, key, 'student.assigned')
         administrationAudit(db, actor, 'student.assigned', { id, before, after: { program, group } })
@@ -144,3 +145,4 @@ export function accessRepository(db: Database) {
     },
   }
 }
+import { holdAuthorComments } from './comments.ts'

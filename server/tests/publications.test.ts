@@ -102,7 +102,7 @@ test('Publicaciones: revisión, privacidad, retirada y persistencia', async (t) 
     assert.equal((await decide(post, 'reject', { reason: 'Un motivo ficticio' })).status, 409)
     const feed = (await lists('bob')).posts
     assert.equal(feed.length, 1); assert.equal(feed[0]!.id, post.id)
-    assert.deepEqual(Object.keys(feed[0]!).sort(), ['author', 'body', 'category', 'createdAt', 'engagement', 'id', 'publishedAt', 'title'])
+    assert.deepEqual(Object.keys(feed[0]!).sort(), ['author', 'body', 'category', 'commentCount', 'commentsOpen', 'createdAt', 'engagement', 'id', 'publishedAt', 'title'])
     assert.deepEqual(feed[0]!.engagement, { counts: { love: 0, wellDone: 0, congrats: 0, amazing: 0, funny: 0 }, myReaction: null, revision: 0 })
     assert.deepEqual(Object.keys(feed[0]!.author).sort(), ['avatarColor', 'displayName', 'id'])
     const session = await (await call('/student/me')).json() as { user: { publicId: string } }

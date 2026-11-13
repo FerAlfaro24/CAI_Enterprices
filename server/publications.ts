@@ -9,7 +9,7 @@ import { publicationCategories, publicationLimits, type OwnPost, type Publicatio
 type Row = {
   id: number; author_id: number; title: string; body: string; category: PublicationDraft['category']; status: PublicationStatus
   program: string; group_name: string; created_at: string; published_at: string | null; reason: string | null; revision: number
-  payload: string; student_status: string | null; request_status: string
+  payload: string; student_status: string | null; request_status: string; comments_open:number
 }
 const select = `SELECT p.*, r.payload, r.status AS request_status, s.status AS student_status FROM publications p
   JOIN requests r ON r.id = p.author_id LEFT JOIN students s ON s.request_id = p.author_id`
@@ -32,7 +32,7 @@ export function validatePublication(value: unknown): PublicationDraft {
 function publicPost(db: Database, row: Row): PublishedPost {
   const profile = JSON.parse(row.payload) as Submission
   return { id: folio(row.id), title: row.title, body: row.body, category: row.category,
-    author: { id: publicProfileId(db, row.author_id), displayName: profile.displayName, avatarColor: profile.avatarColor }, createdAt: row.created_at, publishedAt: row.published_at }
+    author: { id: publicProfileId(db, row.author_id), displayName: profile.displayName, avatarColor: profile.avatarColor }, createdAt: row.created_at, publishedAt: row.published_at, commentsOpen:row.comments_open===1 }
 }
 
 export function publications(db: Database) {
@@ -47,7 +47,14 @@ export function publications(db: Database) {
     const profile = JSON.parse(row.payload) as Submission
     return row.request_status === 'aprobada' && row.student_status === 'activo' && profile.group !== 'Por asignar' && profile.program === row.program && profile.group === row.group_name
   }
+  const visible = (user:StudentUser,id:string) => {
+    const profile = activeProfile(user)
+    const row = db.prepare(`${select} WHERE p.id = ?`).get(idOf(id, 'PUB')) as Row | undefined
+    if (!row || row.status !== 'publicada' || !available(row) || profile.group === 'Por asignar' || row.program !== profile.program || row.group_name !== profile.group) throw new HttpError(404, 'Esta publicación ya no está disponible para tu grupo.')
+    return row
+  }
   return {
+    visible,
     create(user: StudentUser, draft: PublicationDraft, key: string): OwnPost {
       return transaction(db, () => {
         const profile = activeProfile(user)
@@ -72,9 +79,7 @@ export function publications(db: Database) {
     },
     react(user: StudentUser, id: string, value: unknown, key: string) {
       transaction(db, () => {
-        const profile = activeProfile(user)
-        const row = db.prepare(`${select} WHERE p.id = ?`).get(idOf(id, 'PUB')) as Row | undefined
-        if (!row || row.status !== 'publicada' || !available(row) || profile.group === 'Por asignar' || row.program !== profile.program || row.group_name !== profile.group) throw new HttpError(404, 'Esta publicación ya no está disponible para tu grupo.')
+        const row = visible(user,id)
         saveReaction(db, row.id, idOf(user.id, 'CAI'), value, key, administration(db).settings().reactionsOpen)
       })
     },

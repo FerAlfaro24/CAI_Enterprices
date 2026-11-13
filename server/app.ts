@@ -13,6 +13,7 @@ import { studentProfiles } from './public-profiles.ts'
 import { adminRecovery, adminRecoveryMessage, type AdminRecoveryDelivery } from './admin-recovery.ts'
 import { adminTeam } from './admin-team.ts'
 import { studentRecords } from './student-records.ts'
+import { commentsRepository, commentCursor, commentStatus } from './comments.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
@@ -56,6 +57,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const recovery = adminRecovery(db, options.adminRecoveryDelivery)
   const team=adminTeam(db)
   const records=studentRecords(db)
+  const comments=commentsRepository(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -242,7 +244,18 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
         return json(response, 200, { ok: true })
       }
       if (path === '/api/local/student/group' && method === 'GET') return json(response, 200, { members: studentAuth.group(user) })
-      if (path === '/api/local/student/posts' && method === 'GET') return json(response, 200, { posts: posts.feed(user), mine: posts.mine(user) })
+      if (path === '/api/local/student/posts' && method === 'GET') return json(response, 200, { posts: posts.feed(user).map(post=>({...post,commentCount:comments.count(post.id)})), mine: posts.mine(user) })
+      const conversation=path.match(/^\/api\/local\/student\/posts\/(PUB-\d+)\/comments(\/mine)?$/)
+      if(conversation&&method==='GET')return json(response,200,conversation[2]?comments.mine(user,conversation[1]!,commentCursor(url.searchParams.get('before'))):comments.list(user,conversation[1]!,commentCursor(url.searchParams.get('before'))))
+      if(conversation&&!conversation[2]&&method==='POST'){
+        limit(`comment:${user.id}`,20,60*60_000)
+        const key=request.headers['idempotency-key'];if(typeof key!=='string')throw new HttpError(400,'Falta el identificador del comentario.')
+        return json(response,201,{comment:comments.create(user,conversation[1]!,await protectedBody(),key)})
+      }
+      const ownComment=path.match(/^\/api\/local\/student\/comments\/(CMT-\d+)\/withdraw$/)
+      if(ownComment&&method==='POST'){
+        limit(`comment-withdraw:${user.id}`,60,15*60_000);comments.withdraw(user,ownComment[1]!,await protectedBody());return json(response,200,{ok:true})
+      }
       const reaction = path.match(/^\/api\/local\/student\/posts\/(PUB-\d+)\/reaction$/)
       if (reaction && method === 'PATCH') {
         limit(`reaction:${user.id}`, 60, 15 * 60_000)
@@ -358,6 +371,15 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       return json(response, 200, { ok: true })
     }
     if (path === '/api/local/posts' && method === 'GET') return json(response, 200, { posts: posts.review() })
+    if(path==='/api/local/comment-counts'&&method==='GET')return json(response,200,{counts:comments.counts()})
+    if(path==='/api/local/comments'&&method==='GET')return json(response,200,{...comments.reviews(commentStatus(url.searchParams.get('status')??'pendiente'),commentCursor(url.searchParams.get('before'))),counts:comments.counts()})
+    const comment=path.match(/^\/api\/local\/comments\/(CMT-\d+)(?:\/(approve|reject|undo|withdraw))?$/)
+    if(comment&&!comment[2]&&method==='GET')return json(response,200,comments.detail(comment[1]!))
+    if(comment&&comment[2]&&method==='POST'){
+      limit(`comment-review:${user.id}`,60,15*60_000);comments.decide(comment[1]!,comment[2] as 'approve'|'reject'|'undo'|'withdraw',await protectedBody(),user.id);return json(response,200,{ok:true})
+    }
+    const discussion=path.match(/^\/api\/local\/posts\/(PUB-\d+)\/comments$/)
+    if(discussion&&method==='PATCH'){comments.configure(discussion[1]!,await protectedBody(),user.id);return json(response,200,{ok:true})}
     const review = path.match(/^\/api\/local\/posts\/(PUB-\d+)\/(approve|reject|undo)$/)
     if (review && method === 'POST') {
       const data = await protectedBody()

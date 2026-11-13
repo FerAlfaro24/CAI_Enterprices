@@ -115,7 +115,7 @@ test('Recuperación administrativa: entrega privada, enlace de un uso y revocaci
   })
   await t.test('respaldo/reinicio conservan credenciales y token entregado sin texto privado',async()=>{
     const value=await issue('pending'),copy=await backupLocalDatabase(path,join(directory,'backups')),bytes=await readFile(copy)
-    assert.equal(bytes.includes(Buffer.from(value)),false);assert.equal((await verifyLocalBackup(copy)).schema,13)
+    assert.equal(bytes.includes(Buffer.from(value)),false);assert.equal((await verifyLocalBackup(copy)).schema,14)
     const restored=openDatabase(copy);try{assert.ok(await authRepository(restored).login('owner@example.test',next));await adminRecovery(restored).changePassword(value,next)}finally{restored.close()}
     recovery.stop();await close();app=createApplication(path);base=await listen();recovery=adminRecovery(app.db)
     assert.equal((await change(value)).status,200);assert.equal((await change(value)).status,400)
@@ -133,8 +133,8 @@ test('migración 10 preserva cuentas, sesiones y copias históricas de esquema 9
   try {
     const db=openDatabase(path);db.prepare("INSERT INTO admin_users(email,name,password_hash,role) VALUES ('legacy@example.test','Prueba','hash-ficticio','admin')").run()
     db.prepare('INSERT INTO sessions VALUES (?,?,?)').run('token-hash-ficticio',1,Date.now()+60000)
-    db.exec('DROP TABLE reaction_requests; DROP TABLE post_reactions; ALTER TABLE community_controls DROP COLUMN reactions_open; DELETE FROM migrations WHERE version=13; DROP TABLE student_record_changes; DELETE FROM migrations WHERE version=12; DROP TABLE admin_invitations; DROP INDEX admin_create_key; ALTER TABLE admin_users DROP COLUMN create_key; ALTER TABLE admin_users DROP COLUMN revision; ALTER TABLE admin_users DROP COLUMN activated; ALTER TABLE admin_users DROP COLUMN active; DELETE FROM migrations WHERE version=11; DROP TABLE admin_password_resets; DELETE FROM migrations WHERE version=10');db.close()
+    db.exec('DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14; DROP TABLE reaction_requests; DROP TABLE post_reactions; ALTER TABLE community_controls DROP COLUMN reactions_open; DELETE FROM migrations WHERE version=13; DROP TABLE student_record_changes; DELETE FROM migrations WHERE version=12; DROP TABLE admin_invitations; DROP INDEX admin_create_key; ALTER TABLE admin_users DROP COLUMN create_key; ALTER TABLE admin_users DROP COLUMN revision; ALTER TABLE admin_users DROP COLUMN activated; ALTER TABLE admin_users DROP COLUMN active; DELETE FROM migrations WHERE version=11; DROP TABLE admin_password_resets; DELETE FROM migrations WHERE version=10');db.close()
     assert.equal((await verifyLocalBackup(path)).schema,9)
-    const migrated=openDatabase(path);try{assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM admin_users').get()!.n,1);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM sessions').get()!.n,1);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM admin_password_resets').get()!.n,0);assert.equal(migrated.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,13)}finally{migrated.close()}
+    const migrated=openDatabase(path);try{assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM admin_users').get()!.n,1);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM sessions').get()!.n,1);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM admin_password_resets').get()!.n,0);assert.equal(migrated.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,14)}finally{migrated.close()}
   }finally{assert.equal(dirname(directory),root);assert.ok(directory.startsWith(join(root,'recovery-migration-')));await rm(directory,{recursive:true})}
 })
