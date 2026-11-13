@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `feat/v1-community-reactions` conserva los avances acumulados y añade reacciones persistentes y su control administrativo: servicio `3ceb1ee`, interfaz `2816175`, esquema 13. Ver [reacciones comprobadas y límites](docs/v1-community-reactions.md) y [registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `feat/v1-community-comments` conserva los avances acumulados y añade conversación/revisión de comentarios: servicio `baa078f`, interfaz `9024905`, esquema 14. Ver [comentarios comprobados y límites](docs/v1-community-comments.md) y [registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación actual:** reacciones conectadas y comprobadas localmente: API 147 resultados, recorrido de reacciones 28 y regresión Community 39 por navegador. Sigue comentarios/moderación, luego retos, insignias y vídeos privados solo subidos por coordinación, según [el alcance autorizado](docs/v1-community-expansion.md). Diez alertas de desarrollo pendientes; Google/correo/validación con CAI agrupados y presupuesto/alojamiento al final. Las ramas son acumulativas; no fusionarlas como trabajos independientes.
+> **Continuación actual:** comentarios y reacciones conectados/comprobados localmente: API 163 resultados y matriz de 228 comprobaciones de navegador (comentarios 47, reacciones 28 y Community 39 por navegador). Sigue Retos con administración/calendario/progreso persistente, después Insignias y vídeos privados de coordinación, según [el alcance autorizado](docs/v1-community-expansion.md). Diez alertas de desarrollo pendientes; Google/correo/validación con CAI agrupados y presupuesto/alojamiento al final. Las ramas son acumulativas; no fusionarlas como trabajos independientes.
 
 ## Objetivo inmediato
 
@@ -20,7 +20,7 @@ Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Rout
 
 `/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. Los enlaces antiguos `/gestion/*`, `/registro-local`, `/alumnos` y `/alumnos/publicaciones` redirigen al destino oficial correspondiente. `/mi-inscripcion` conserva la ficha y grupo del alumno; `/admin/mensajes?bandeja=avisos` abre los avisos directamente. El contacto institucional guarda consultas y permite seguimiento en el panel original. La lista de interés de la plataforma futura conserva su demostración.
 
-La comunidad oficial consulta la cuenta autenticada, miembros del grupo, publicaciones aprobadas, avisos propios e imágenes privadas del servidor local. Las reacciones ya se guardan por cuenta/publicación y se activan desde Configuración; inicialmente están pausadas. Comentarios, retos, insignias y vídeos están autorizados, pero todavía pendientes de conectar/implementar; se reutilizarán sus componentes existentes. La galería conectada actual sigue siendo de imágenes y no mezcla fotografías de stock con registros del grupo.
+La comunidad oficial consulta la cuenta autenticada, miembros del grupo, publicaciones aprobadas, avisos propios e imágenes privadas del servidor local. Reacciones y comentarios se guardan por cuenta/publicación y tienen permisos distintos en Configuración, inicialmente pausados. Los comentarios pasan por revisión en Publicaciones y ofrecen estado/motivo privados, retirada e historial. Retos, Insignias y vídeos están autorizados, todavía pendientes de conectar/implementar. La galería conectada actual sigue siendo de imágenes y no mezcla fotografías de stock con registros del grupo.
 
 ## Desarrollo local
 
@@ -50,6 +50,7 @@ Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: 
 Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para alumnos autorizados y `/admin/*` para administración. Activación y recuperación conservan enlaces auxiliares. Los permisos se aplican en el servidor local, también a cada recurso de imagen. Las rutas desconocidas muestran 404; dentro de administración se vuelve a su inicio protegido.
 
 ## Documentación
+- [Comentarios, moderación, privacidad y pruebas](docs/v1-community-comments.md)
 - [Reacciones persistentes, control administrativo y pruebas](docs/v1-community-reactions.md)
 - [Ampliación de comunidad autorizada: inventario, mejoras y orden de trabajo](docs/v1-community-expansion.md)
 - [Revisión final local: resultados, incidencias y siguiente tanda con CAI](docs/v1-final-review.md)

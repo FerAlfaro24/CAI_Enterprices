@@ -11,6 +11,8 @@
 | Preparar acceso, revisar una ficha o suspender un alumno | Alumnos |
 | Corregir nombre, nacimiento, matrícula o tutor | Alumnos → Ficha → Corregir expediente |
 | Aprobar o rechazar una historia | Publicaciones |
+| Revisar comentarios de los alumnos | Publicaciones → Comentarios |
+| Pausar nuevos comentarios | Configuración → Comentarios de las historias |
 | Compartir o retirar una imagen de un grupo | Galería privada |
 | Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
 | Mantener grupos o pausar solicitudes/envíos | Configuración |
@@ -50,7 +52,7 @@ El alumno puede cambiar por sí mismo su **nombre visible y color del avatar** d
 
 En Alumnos, abrir la **Ficha** de la persona correcta y pulsar **Corregir expediente**. Modificar los datos necesarios, indicar el motivo y confirmar con la contraseña propia y la casilla de verificación. Cancelar no guarda. El historial privado muestra quién corrigió, cuándo, por qué y los valores anteriores/nuevos.
 
-Si la corrección afecta nombre, nacimiento o tutor de un menor, registrar una nueva referencia de autorización comprobada, distinta de la anterior. Un adulto corregido a menor también necesita tutor y autorización. Se ajusta el alias a una abreviatura privada y sus historias publicadas vuelven a revisión. Corregir solo matrícula no exige esa renovación. Revisar también imágenes donde aparezca: la galería no identifica automáticamente personas dentro de una foto.
+Si la corrección afecta nombre, nacimiento o tutor de un menor, registrar una nueva referencia de autorización comprobada, distinta de la anterior. Un adulto corregido a menor también necesita tutor y autorización. Se ajusta el alias a una abreviatura privada y sus historias y comentarios publicados vuelven a revisión. Corregir solo matrícula no exige esa renovación. Revisar también imágenes donde aparezca: la galería no identifica automáticamente personas dentro de una foto.
 
 Al guardar se cierran las sesiones del alumno y se invalidan sus enlaces anteriores; conserva cuenta, correo y grupo. Un alumno suspendido sigue suspendido. Corregir edad a adulto no abre su privacidad ni cambia su alias automáticamente. La referencia o casilla no sustituye comprobar y custodiar la autorización real.
 
@@ -61,6 +63,18 @@ Si la información cambió en otra ventana, el borrador se conserva hasta elegir
 En Publicaciones, abrir **Revisar** sobre la historia correspondiente. Leer el contenido y comprobar su privacidad. Para publicar, confirmar la revisión. Para rechazar, elegir un motivo; lo verá su autor, no todo el grupo.
 
 Una publicación aprobada se muestra únicamente al programa y grupo autorizados. Devolverla a revisión la oculta hasta otra aprobación. Si el autor la retira, se conserva el historial y no se puede republicar desde la bandeja de retiradas.
+
+## Revisar comentarios
+
+En **Publicaciones → Comentarios**, abrir un comentario En revisión y comprobar su texto, autor, historia y grupo. Elegir **Publicar comentario** o **No aprobar**, confirmar la revisión y guardar. Para no aprobar, escribir una indicación útil: solo la verá su autor y coordinación.
+
+El alumno consulta el estado en **Mis comentarios**, dentro de la historia. Sus envíos pendientes/no aprobados no aparecen al grupo. Publicar una historia y aprobar sus comentarios son decisiones distintas.
+
+Se puede devolver un comentario publicado/no aprobado a revisión, o retirar uno publicado, indicando motivo. Los retirados conservan historial y no se pueden republicar. El alumno también puede retirar su propio comentario, incluso estando pausados los nuevos envíos.
+
+**Configuración → Recibir nuevos comentarios** controla todos los grupos; inicialmente está pausado. **Recibir comentarios en esta historia**, dentro de la revisión, permite pausar solo esa historia. Se conservan comentarios existentes, revisión de pendientes y retirada propia. Para nuevos envíos deben estar activos ambos permisos.
+
+Si otra ventana revisó primero o se perdió la respuesta, cargar el estado actual antes de decidir otra vez. El panel explica que cargarlo descarta la decisión y el motivo que estabas preparando. Las listas tienen **Ver anteriores** cuando hay más registros. El [informe de comentarios](v1-community-comments.md) detalla pruebas y límites.
 
 ## Publicar una imagen
 
@@ -89,7 +103,7 @@ Pausar solicitudes de ingreso no borra solicitudes recibidas. Pausar nuevos env�
 
 En Configuración → **Reacciones a las historias**, activar **Permitir reacciones** para que los alumnos celebren las historias aprobadas de su grupo. Inicialmente están pausadas. Pausar nuevas publicaciones y pausar reacciones son controles distintos.
 
-Cada alumno tiene una elección por historia y puede cambiarla o usar **Quitar mi reacción**. Al pausar, los contadores se conservan y cada persona puede quitar la suya. Listado y detalle muestran la misma elección; no se publica una lista de quién reaccionó. Comentarios siguen pendientes de integración. La [guía de reacciones](v1-community-reactions.md) detalla pruebas y límites.
+Cada alumno tiene una elección por historia y puede cambiarla o usar **Quitar mi reacción**. Al pausar, los contadores se conservan y cada persona puede quitar la suya. Listado y detalle muestran la misma elección; no se publica una lista de quién reaccionó. Los comentarios tienen su propio permiso y revisión; activar reacciones no los activa. La [guía de reacciones](v1-community-reactions.md) detalla pruebas y límites.
 
 ## Gestionar el equipo administrador
 

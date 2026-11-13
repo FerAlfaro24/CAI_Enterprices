@@ -1,5 +1,7 @@
 # Reacciones conectadas de Community
 
+> Avance posterior: [comentarios/moderación](v1-community-comments.md) ya integrados y comprobados, esquema 14. Las referencias a comentarios pendientes de este informe son históricas; sus resultados de reacciones se conservan y se repitieron como regresión.
+
 **Integradas y comprobadas localmente con cuentas ficticias.** Rama `feat/v1-community-reactions`, base `e1b2a0f`. Puntos de retorno: `3ceb1ee` (servicio/migración/pruebas) y `2816175` (interfaz/recorrido). Es la primera implementación de la [ampliación autorizada](v1-community-expansion.md), no el cierre de comentarios, retos, insignias o vídeos.
 
 ## Experiencia
