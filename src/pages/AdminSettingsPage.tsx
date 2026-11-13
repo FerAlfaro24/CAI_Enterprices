@@ -61,7 +61,7 @@ export function AdminSettingsPage() {
                 </div>
               </div>
             </div>
-            {group.items.map((item) => (
+            {group.items.filter(item => !connection || item.key !== 'allowReactions').map((item) => (
               <Switch
                 key={item.key}
                 label={connection && item.key === 'hideLastNames' ? 'Usar el nombre visible aprobado' : connection && item.key === 'minorsPrivateByDefault' ? 'Expedientes de menores privados' : item.label}
@@ -78,6 +78,7 @@ export function AdminSettingsPage() {
           </section>
         ))}
 
+        {connection?.configuration && <section className={s.card} aria-labelledby="reaction-settings-title"><h2 id="reaction-settings-title" className={s['card-title']}>Reacciones a las historias</h2><Switch label="Permitir reacciones" description="Los alumnos de cada grupo pueden celebrar sus historias. Al pausar se conservan los contadores y cada alumno puede quitar su reacción." checked={connection.configuration.settings.reactionsOpen} disabled={connection.busy} onChange={value => { void connection.saveControls({...connection.configuration!.settings,reactionsOpen:value}) }} /></section>}
         <CatalogSettings />
         <AdminPasswordForm />
         <section className={s.card} aria-labelledby="preview-title">
@@ -100,9 +101,9 @@ export function AdminSettingsPage() {
               <div className={s.media} role="img" aria-label="Imagen ilustrativa"><Icon name="image" size={24} /><span>Imagen ilustrativa</span></div>
             )}
             <div className={s['preview-actions']}>
-              {settings.allowReactions && <span>👏 Felicitar · 12</span>}
+              {(connection?.configuration?.settings.reactionsOpen ?? settings.allowReactions) && <span>👏 Felicitar · 12</span>}
               {settings.allowComments && <span>💬 Comentar</span>}
-              {!settings.allowReactions && !settings.allowComments && <span>Sin interacción: solo lectura</span>}
+              {!(connection?.configuration?.settings.reactionsOpen ?? settings.allowReactions) && !settings.allowComments && <span>Sin interacción: solo lectura</span>}
             </div>
           </div>
         </section>

@@ -75,6 +75,7 @@ export const contactApi = {
 }
 
 export const studentApi = {
+  react: (postId: string, reaction: import('../../../server/contracts').ReactionKind | null, revision: number, key: string) => call(`/student/posts/${postId}/reaction`, 'PATCH', { reaction, revision }, { 'Idempotency-Key': key }),
   profile: () => call<{ profile: import('../../../server/contracts').StudentProfile }>('/student/profile'),
   updateProfile: (draft: import('../../../server/contracts').StudentProfileDraft) => call<{ profile: import('../../../server/contracts').StudentProfile }>('/student/profile', 'PATCH', draft),
   gallery: () => call<{images: GalleryItem[]}>('/student/gallery'),

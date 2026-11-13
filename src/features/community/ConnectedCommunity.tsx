@@ -9,7 +9,7 @@ import s from './community.module.css'
 import type { StudentProfile } from '../local-access/api'
 
 const emptyState: CommunityState = { posts: [], mode: 'student', section: 'home', filter: 'recent', challengeId: '', attempts: {}, badgeRequests: [], notice: '', sequence: 0, resetKey: 0, focusedPostId: null, focusRequest: 0 }
-type Snapshot = { profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean }
+type Snapshot = { profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean; reactionsOpen: boolean }
 
 /** Usa las vistas de v1.0 con una instantánea autorizada, sin inicializar fixtures. */
 export function ConnectedCommunity({ children }: { children: ReactNode }) {
@@ -30,7 +30,7 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
     return studentApi.me().then(async ({ user }) => {
       const [group, feed, catalog, notices, gallery, profile] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get(), studentApi.notices(), studentApi.gallery(), studentApi.profile()])
       if (version !== generation.current) return
-      setSnapshot({ profile: profile.profile, gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen }); setAnonymous(false); setError('')
+      setSnapshot({ profile: profile.profile, gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen, reactionsOpen: catalog.settings.reactionsOpen }); setAnonymous(false); setError('')
     }).catch((error: unknown) => { if (version === generation.current) failure(error) })
       .finally(() => { if (version === generation.current) setChecking(false) })
   }, [failure])
@@ -60,6 +60,8 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const members = snapshot.members.map(publicMember)
   const publicMembers = [own, ...members, ...snapshot.posts.map(post => publicMember(post.author))]
   const connection: CommunityConnection = {
+    reactionsOpen: snapshot.reactionsOpen,
+    react: (post, reaction, key) => write(() => studentApi.react(post.id, reaction, post.reactionRevision ?? 0, key), reaction === null ? 'Quitaste tu reacción.' : 'Tu reacción se guardó.'),
     profile: snapshot.profile,
     saveProfile: draft => write(async () => {
       try {

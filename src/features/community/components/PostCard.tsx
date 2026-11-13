@@ -9,6 +9,7 @@ import { CommentItem, Comments } from './Comments'
 import { PostMedia } from './PostMedia'
 import { CommunityIcon } from './ui'
 import { MemberLink } from './MemberLink'
+import { ReactionsBar } from './ReactionsBar'
 
 export function PostCard({ post, initialCommentsOpen = false }: { post: Post; initialCommentsOpen?: boolean }) {
   const { state, dispatch, connection } = useCommunity()
@@ -29,6 +30,7 @@ export function PostCard({ post, initialCommentsOpen = false }: { post: Post; in
       {post.milestone && <div className={s.milestone}><span aria-hidden="true">✦</span><div><small>UN PASO QUE CUENTA</small><strong>{post.milestone.label}</strong><p>{post.milestone.detail}</p></div><CommunityIcon name="award" size={36} /></div>}
       {post.event && <div className={s.eventCard}><div className={s.eventDate}><strong>{post.event.day}</strong><span>{post.event.month}</span></div><div><strong>{post.event.detail}</strong><p>Escenario de muestra · Sin registro real</p></div></div>}
       {post.photos.length > 0 && <PostMedia post={post} />}
+      {connection && <ReactionsBar post={post} />}
       {!connection && <><div className={s.engagementLine}><span><span className={s.miniReactions} aria-hidden="true">💙 👏 🎉</span> {celebrationCount(post)} celebraciones</span><span>{commentCount}</span></div>
       <div className={s.reactions} role="group" aria-label={`Reacciones a ${post.title}`}>
         {reactionOptions.map(({ id, emoji, label }) => <button type="button" key={id} aria-label={`${label}: ${post.reactions[id]}`} aria-pressed={post.myReaction === id} title={label} onClick={() => dispatch({ type: 'react', postId: post.id, reaction: id })}><span aria-hidden="true">{emoji}</span><span>{post.reactions[id]}</span></button>)}

@@ -9,6 +9,7 @@ import { MemberLink } from '../components/MemberLink'
 import { CommunityIcon } from '../components/ui'
 import { StockImage } from '../components/PostMedia'
 import { MotionButton, MotionCard, MotionFeedback } from '../components/CommunityMotion'
+import { ReactionsBar } from '../components/ReactionsBar'
 import s from './home.module.css'
 
 export function EditorialPostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
@@ -34,6 +35,7 @@ export function EditorialPostCard({ post, featured = false }: { post: Post; feat
       {featured && post.milestone && <div className={s.pullQuote}><CommunityIcon name="award" size={26} /><div><strong>{post.milestone.label}</strong><span>{post.milestone.detail}</span></div></div>}
       {featured && post.photos.length > 0 && <button className={s.featuredPhoto} type="button" onClick={() => open()} aria-label={`Ver imágenes de ${post.title}`}><StockImage photo={post.photos[0]!} /><span>{post.photos.length > 1 ? `${post.photos.length} fotos · Abrir galería` : 'Fotografía ilustrativa · Abrir'}</span></button>}
       {post.event && <div className={s.eventTeaser}><span><strong>{post.event.day}</strong>{post.event.month}</span><p>{post.event.detail}</p></div>}
+      {connection && <ReactionsBar post={post} />}
       <div className={s.cardFooter}>
         {connection ? <button type="button" className={s.commentCount} onClick={() => open()}>Leer historia <CommunityIcon name="arrow" size={15} /></button> : <><span className={s.celebrationCount}><span aria-hidden="true">💙 👏</span> <MotionFeedback key={celebrationCount(post)}>{celebrationCount(post)}</MotionFeedback><span className={s.srOnly}> celebraciones</span></span>
         <button type="button" className={s.commentCount} onClick={() => open(true)} aria-label={`Ver ${post.comments.length} comentarios de ${post.title}`}><CommunityIcon name="comment" size={15} />{post.comments.length}</button>

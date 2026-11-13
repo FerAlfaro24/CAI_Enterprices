@@ -1,0 +1,12 @@
+.bar { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; color: var(--navy); font-size: 13px; }
+.heading > span, .help { color: var(--muted); font-size: 12px; }
+.help { margin: 8px 0; line-height: 1.6; }
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 8px; margin-top: 10px; }
+.options button { display: flex; align-items: center; gap: 6px; min-height: 44px; min-width: 0; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--navy); font-size: 12px; text-align: left; }
+.options button > span:first-child { font-size: 19px; }
+.options b { margin-left: auto; font-size: 12px; }
+.options button:hover, .options button[aria-pressed='true'] { background: var(--blue-soft); border-color: var(--primary); }
+.options button[aria-pressed='true'] { box-shadow: inset 0 0 0 1px var(--primary); font-weight: 700; }
+.options button:disabled { opacity: .65; }
+.remove { min-height: 44px; margin-top: 4px; padding: 8px 0; border: 0; background: transparent; color: var(--primary); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
