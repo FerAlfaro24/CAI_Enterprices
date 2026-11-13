@@ -14,6 +14,7 @@
 | Compartir o retirar una imagen de un grupo | Galería privada |
 | Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
 | Mantener grupos o pausar solicitudes/envíos | Configuración |
+| Activar o pausar reacciones a historias | Configuración → Reacciones a las historias |
 | Cambiar mi contraseña | Configuración → Seguridad de mi cuenta |
 | Recuperar acceso si olvidé mi contraseña | Acceso de administración → Olvidé mi contraseña |
 | Agregar, desactivar o reactivar un administrador | Configuración → Equipo administrador |
@@ -83,6 +84,12 @@ La recuperación real requiere configurar correo y comprobar la entrega. Una cue
 En Configuración, mantener el catálogo de programas/grupos y los controles disponibles. Archivar un grupo impide nuevas selecciones, pero sus alumnos actuales conservan la lectura. Se puede reactivar sin borrar su historial.
 
 Pausar solicitudes de ingreso no borra solicitudes recibidas. Pausar nuevos envíos tampoco elimina publicaciones aprobadas ni impide retirarlas. Las opciones marcadas como pendientes no deben tratarse como funciones operativas.
+
+## Reacciones a las historias
+
+En Configuración → **Reacciones a las historias**, activar **Permitir reacciones** para que los alumnos celebren las historias aprobadas de su grupo. Inicialmente están pausadas. Pausar nuevas publicaciones y pausar reacciones son controles distintos.
+
+Cada alumno tiene una elección por historia y puede cambiarla o usar **Quitar mi reacción**. Al pausar, los contadores se conservan y cada persona puede quitar la suya. Listado y detalle muestran la misma elección; no se publica una lista de quién reaccionó. Comentarios siguen pendientes de integración. La [guía de reacciones](v1-community-reactions.md) detalla pruebas y límites.
 
 ## Gestionar el equipo administrador
 

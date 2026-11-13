@@ -4,6 +4,8 @@
 
 Rama de análisis `docs/v1-community-expansion`, base `fee87d1` de `chore/v1-final-review`. No modifica la aplicación ni migra bases. La revisión anterior conserva su validez para el código y alcance que probó; sus porcentajes y “pendientes de alcance” no describen esta ampliación.
 
+**Avance posterior:** [reacciones conectadas](v1-community-reactions.md) ya implementadas y comprobadas en `feat/v1-community-reactions` (`3ceb1ee`/`2816175`, esquema 13). Sigue comentarios/moderación. El inventario y las descripciones de planificación siguientes registran el punto de partida, no tareas de reacciones para rehacer.
+
 ## Inventario contrastado con código
 
 | Área | Lo que existe | Qué falta realmente | Reutilizar |
@@ -104,7 +106,7 @@ Rama propuesta `feat/v1-community-videos`. Se puede preparar/probar localmente a
 
 Es una ampliación funcional importante, especialmente retos/insignias con administración y vídeo privado. No se garantiza completar todo con calidad dentro del calendario original únicamente por el avance del alcance anterior. Mantener entregas verificables por bloque; revisar capacidad/plazo tras la primera implementación. No comprometer una fecha nueva sin acuerdo ni quitar pruebas/privacidad para encajar.
 
-**Siguiente trabajo autónomo:** bloque 1, empezando por diseño conectado y reacciones persistentes; después comentarios y su revisión. Esta sesión realiza inventario y plan, no implementación de esos servicios. No pedir otra vez permiso para incluir los cinco módulos ni para que solo coordinación suba vídeos.
+**Siguiente trabajo autónomo:** continuar bloque 1 con comentarios y su revisión; conservar reacciones ya comprobadas. La sesión original de este plan fue documental; la implementación posterior se registra en v1-community-reactions y PROJECT_STATE. No pedir otra vez permiso para incluir los cinco módulos ni para que solo coordinación suba vídeos.
 
 Google/correo reales, contenido/reglas finales y aceptación de CAI conservan su tanda agrupada; contratación de servidor/presupuesto al final. Vídeo local no equivale a almacenamiento/reproducción en producción. No hace falta esperar a cuentas externas para construir interacciones, retos o insignias localmente.
 
