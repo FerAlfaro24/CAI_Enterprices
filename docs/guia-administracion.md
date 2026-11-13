@@ -152,3 +152,16 @@ La [revisión técnica local](v1-final-review.md) ya se realizó. Sigue pendient
 Registrar por tarea si pudo terminar sin ayuda, dónde se detuvo y qué texto/acción no entendió. No marcar esta validación como completada por haber pasado pruebas automáticas. Confirmar también programas, permisos, responsables y procedimiento de respaldo. La contratación de servidor se resuelve después, como se acordó; las cuentas y servicios externos se agrupan con esta revisión final.
 
 Para las operaciones técnicas de copia y recuperación, consultar [respaldos y recuperación local](respaldo-recuperacion-local.md). El administrador no necesita ejecutar restauraciones durante su rutina diaria.
+
+
+## Retos de inglés: preparar sin hacerlo cada día
+
+En **Retos de inglés**, el calendario automático sirve tres preguntas diarias: gramática, vocabulario y vida diaria. Cambian a medianoche de Ciudad de México. El banco inicial tiene 180 preguntas y 45 temas, con explicación y ejemplo. No hace falta subir retos todos los días.
+
+1. En **Calendario**, elige fecha y grupo. Abre Revisar pregunta y explicación. Para sustituir una, escoge otra del área y pulsa Usar esta pregunta. Puedes programar desde hoy hasta 90 días después.
+2. Si ya hay respuestas, el contenido queda conservado: puedes pausar la pregunta o programar otra para otro día. Pausar todos los retos conserva resultados y permite repasar.
+3. En **Banco de preguntas**, busca por tema y filtra área/disponibilidad. Crear pregunta permite escribir la instrucción, tres o cuatro opciones, marcar una sola correcta y añadir explicación/ejemplo. Revisa Vista previa con solución antes de guardar.
+4. Borrador queda solo en administración. Lista entra en futuras rotaciones. Archivada se conserva sin entrar en nuevas selecciones. Editar el banco no reescribe preguntas ya servidas/programadas; para sustituir una del calendario elige otra entrada.
+5. Si otra ventana cambió la pregunta/calendario, actualiza y revisa antes de guardar; evita confirmar a ciegas con datos viejos.
+
+El alumno tiene un intento por pregunta, cinco puntos por participar y diez más por acertar. Completar tres preguntas suma un día de constancia, incluso con errores. Puede repasar sus respuestas anteriores; no es una calificación. Las insignias persistentes se integrarán en el siguiente módulo. Añadir a la validación final con CAI: revisar un reto, preparar un borrador, programarlo para el grupo correcto y explicar la pausa sin borrar resultados.

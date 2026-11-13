@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `feat/v1-community-comments` conserva los avances acumulados y añade conversación/revisión de comentarios: servicio `baa078f`, interfaz `9024905`, esquema 14. Ver [comentarios comprobados y límites](docs/v1-community-comments.md) y [registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `feat/v1-community-challenges` conserva avances y conecta Retos: banco original de 180 preguntas/45 temas, tres preguntas diarias, repaso/progreso privado y calendario/banco administrables; servicio `fbb1545`, interfaz `e14eda7`, esquema 15. Ver [Retos y comprobaciones](docs/v1-community-challenges.md) y [registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
 
-> **Continuación actual:** comentarios y reacciones conectados/comprobados localmente: API 163 resultados y matriz de 228 comprobaciones de navegador (comentarios 47, reacciones 28 y Community 39 por navegador). Sigue Retos con administración/calendario/progreso persistente, después Insignias y vídeos privados de coordinación, según [el alcance autorizado](docs/v1-community-expansion.md). Diez alertas de desarrollo pendientes; Google/correo/validación con CAI agrupados y presupuesto/alojamiento al final. Las ramas son acumulativas; no fusionarlas como trabajos independientes.
+> **Continuación actual:** comentarios, reacciones y retos comprobados localmente. API 179 resultados; Retos 142 comprobaciones de navegador (53 funcionales y 18 de distribución/teclado por navegador), más modelos y bloqueos privados. Siguen Insignias y vídeos privados de coordinación, según [el alcance autorizado](docs/v1-community-expansion.md). Diez alertas de desarrollo pendientes; Google/correo/validación de CAI y alojamiento mantienen su tanda final.
 
 ## Objetivo inmediato
 
@@ -54,6 +54,7 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 - [Reacciones persistentes, control administrativo y pruebas](docs/v1-community-reactions.md)
 - [Ampliación de comunidad autorizada: inventario, mejoras y orden de trabajo](docs/v1-community-expansion.md)
 - [Revisión final local: resultados, incidencias y siguiente tanda con CAI](docs/v1-final-review.md)
+- [Retos diarios: 180 preguntas, progreso, calendario y pruebas](docs/v1-community-challenges.md)
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
 - [Herramientas y alertas: revisión actual y corrección pendiente](docs/v1-tooling-audit.md)
 - [Correcciones del expediente, historial y protección de menores](docs/v1-student-record.md)

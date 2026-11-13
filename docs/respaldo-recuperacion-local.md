@@ -24,7 +24,7 @@ Usar la ruta exacta mostrada al crearla; este nombre es solo un ejemplo que debe
 npm.cmd run local:verify-backup -- ".local/backups/NOMBRE-DE-LA-COPIA.sqlite"
 ```
 
-`local:verify-backup` abre la copia en **modo de solo lectura**. Comprueba integridad de SQLite, relaciones, versión compatible 9–14, registros principales y decodificación de imágenes. El esquema 10 añade recuperación administrativa, el 11 estados/invitaciones, el 12 historial privado de correcciones del expediente el 13 elecciones/reintentos de reacciones y su pausa, y el 14 comentarios, revisiones y permisos generales/por historia. Los enlaces se conservan como hashes, no en texto. Devuelve únicamente totales; no imprime expedientes, credenciales o enlaces. Incluye imágenes retiradas, comentarios, reacciones e historial personal: proteger también todas las copias. Las pruebas de reacciones/comentarios abren una copia separada con su API y comprueban selección, texto/estados, historial, sesión y reintento; no restaura sobre la base habitual.
+`local:verify-backup` abre la copia en **modo de solo lectura**. Comprueba integridad de SQLite, relaciones, versión compatible 9–15, registros principales y decodificación de imágenes. El esquema 10 añade recuperación administrativa, el 11 estados/invitaciones, el 12 historial privado de correcciones del expediente el 13 elecciones/reintentos de reacciones y su pausa, el 14 comentarios, revisiones y permisos generales/por historia, y el 15 banco/calendario/respuestas/progreso de retos. Los enlaces se conservan como hashes, no en texto. Devuelve únicamente totales; no imprime expedientes, credenciales o enlaces. Incluye imágenes retiradas, comentarios, reacciones, respuestas/puntos de retos e historial personal: proteger también todas las copias. Las pruebas de reacciones/comentarios abren una copia separada con su API y comprueban selección, texto/estados, historial, sesión y reintento; no restaura sobre la base habitual.
 
 No restaura, migra, repara ni modifica la copia. El comando rechaza como entrada la ruta habitual de la base activa. Una ruta inexistente no crea una base nueva. Si falla, conservar el archivo original y revisar la ruta, versión e integridad; no intentar resolverlo reemplazando la base en uso.
 
@@ -59,3 +59,8 @@ No se proporciona una orden que sobrescriba la base activa ni elimine archivos d
 ## Comprobado en esta etapa
 
 Se creó y verificó una copia local real de pruebas: esquema 9, 119 solicitudes/alumnos, 104 cuentas, 76 publicaciones y tres imágenes. Los totales son una fotografía del ensayo, no una condición que deban cumplir copias posteriores. La suite comprueba por separado imágenes, cuentas, acceso y lectura sin alterar el archivo. No se restauró sobre la base activa.
+
+
+### Retos (esquema 15)
+
+La copia incluye banco editado, controles, preguntas congeladas por fecha/grupo, respuestas y auditoría. Puntos/constancia se calculan desde las respuestas, no del navegador. Las pruebas arrancan la API con una copia separada y comprueban snapshot, historial y persistencia; no restauran sobre la base habitual. El verificador admite 9–15 sin migrar la copia. No se han añadido concesiones de insignias ni archivos de vídeo en este esquema.
