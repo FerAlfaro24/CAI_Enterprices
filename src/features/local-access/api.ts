@@ -53,6 +53,23 @@ export const challengesApi={
  saveBank:(item:import('../../../server/contracts').ChallengeBankItem|null,question:Omit<import('../../../server/contracts').ChallengeDefinition,'id'>,status:import('../../../server/contracts').ChallengeBankItem['status'],key:string)=>call<{item:import('../../../server/contracts').ChallengeBankItem}>('/challenges/bank'+(item?'/'+item.id:''),item?'PATCH':'POST',{question,status,...(item?{revision:item.revision}:{})},{'Idempotency-Key':key}),
  schedule:(item:import('../../../server/contracts').ChallengeSchedule,groupId:number,bankId:string,state:'published'|'archived')=>call<ChallengeCalendar>('/challenges/calendar','POST',{day:item.day,groupId,slot:item.slot,revision:item.revision,bankId,state}),
 }
+export type { BadgeSpec,EarnedBadge,BadgeApplication,BadgeSnapshot,BadgeReview,BadgeGrantReview,BadgeAudit,BadgeApplicationPage } from '../../../server/contracts'
+export const badgesApi={
+ snapshot:()=>call<import('../../../server/contracts').BadgeSnapshot>('/student/badges'),
+ requests:(before=0)=>call<import('../../../server/contracts').BadgeApplicationPage>(`/student/badge-requests?before=${before}`),
+ apply:(badgeId:string,description:string,key:string)=>call('/student/badge-requests','POST',{badgeId,description},{'Idempotency-Key':key}),
+ withdraw:(item:import('../../../server/contracts').BadgeApplication)=>call(`/student/badge-requests/${item.id}/withdraw`,'POST',{revision:item.revision,confirmed:true}),
+ detail:(id:string)=>call<{request:import('../../../server/contracts').BadgeApplication;history:import('../../../server/contracts').BadgeAudit[]}>(`/student/badge-requests/${id}`),
+ grantDetail:(id:string)=>call<{grant:import('../../../server/contracts').EarnedBadge;history:import('../../../server/contracts').BadgeAudit[]}>(`/student/badges/${id}`),
+ counts:()=>call<{counts:Record<import('../../../server/contracts').BadgeApplication['status'],number>}>('/badge-counts'),
+ reviews:(status:string,before=0)=>call<{items:import('../../../server/contracts').BadgeReview[];nextCursor:number|null;counts:Record<import('../../../server/contracts').BadgeApplication['status'],number>}>(`/badge-requests?status=${status}&before=${before}`),
+ reviewDetail:(id:string)=>call<{request:import('../../../server/contracts').BadgeReview;history:import('../../../server/contracts').BadgeAudit[]}>(`/badge-requests/${id}`),
+ decide:(item:import('../../../server/contracts').BadgeReview,decision:'approve'|'reject',reason:string)=>call(`/badge-requests/${item.id}/${decision}`,'POST',{revision:item.revision,reason,confirmed:true}),
+ grants:(before=0)=>call<{items:import('../../../server/contracts').BadgeGrantReview[];nextCursor:number|null}>(`/badge-grants?before=${before}`),
+ adminGrant:(id:string)=>call<{grant:import('../../../server/contracts').BadgeGrantReview;history:import('../../../server/contracts').BadgeAudit[]}>(`/badge-grants/${id}`),
+ award:(studentId:string,badgeId:string,reason:string,key:string)=>call('/badge-grants','POST',{studentId,badgeId,reason,confirmed:true},{'Idempotency-Key':key}),
+ correct:(item:import('../../../server/contracts').BadgeGrantReview,status:'active'|'revoked',reason:string)=>call(`/badge-grants/${item.id}`,'PATCH',{revision:item.revision,status,reason,confirmed:true}),
+}
 export const catalogApi = { get: () => call<PublicCatalog>('/catalog') }
 
 export const commentsApi = {

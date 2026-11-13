@@ -6,8 +6,12 @@ import { useCommunityDialog } from '../useCommunityDialog'
 import { badgeRequestLimits, requestableBadges } from './catalog'
 import { badgeRequestBlock, validateBadgeRequest } from './model'
 import s from './achievements.module.css'
+import { ConnectedBadgeRequestForm } from './ConnectedBadgeRequests'
 
-export function BadgeRequestForm({ badgeId, onBadgeChange, onSubmitted }: { badgeId: string; onBadgeChange: (id: string) => void; onSubmitted?: () => void }) {
+export function BadgeRequestForm(props:{badgeId:string;onBadgeChange:(id:string)=>void;onSubmitted?:()=>void}){const {connection}=useCommunity();return connection?<ConnectedBadgeRequestForm {...props} connection={connection}/>:<DemoBadgeRequestForm {...props}/>}
+
+
+function DemoBadgeRequestForm({ badgeId, onBadgeChange, onSubmitted }: { badgeId: string; onBadgeChange: (id: string) => void; onSubmitted?: () => void }) {
   const { state, dispatch } = useCommunity()
   const id = useId()
   const [description, setDescription] = useState('')
@@ -38,7 +42,8 @@ export function BadgeRequestForm({ badgeId, onBadgeChange, onSubmitted }: { badg
 }
 
 export function BadgeRequestDialog({ badgeId, onBadgeChange, onClose }: { badgeId: string; onBadgeChange: (id: string) => void; onClose: () => void }) {
+  const {connection}=useCommunity()
   const dialog = useCommunityDialog()
   const id = useId()
-  return <dialog ref={dialog} className={s.dialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-help`} onCancel={(event) => { event.preventDefault(); onClose() }}><header className={s.dialogHeading}><h2 id={`${id}-title`}>Solicitar una insignia</h2><button type="button" className={s.iconButton} aria-label="Cerrar solicitud" onClick={onClose}><CommunityIcon name="close" /></button></header><p id={`${id}-help`} className={s.dialogIntro}>Una aventura fuera de la plataforma también puede contar. Usa solo contenido ficticio; enviarla no concede la insignia.</p><BadgeRequestForm badgeId={badgeId} onBadgeChange={onBadgeChange} onSubmitted={onClose} /></dialog>
+  return <dialog ref={dialog} className={s.dialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-help`} onCancel={(event) => { event.preventDefault(); onClose() }}><header className={s.dialogHeading}><h2 id={`${id}-title`}>Solicitar una insignia</h2><button type="button" className={s.iconButton} aria-label="Cerrar solicitud" onClick={onClose}><CommunityIcon name="close" /></button></header><p id={`${id}-help`} className={s.dialogIntro}>{connection?'Una aventura fuera de la plataforma también puede contar. La solicitud será privada y CAI revisará lo que aprendiste.':'Una aventura fuera de la plataforma también puede contar. Usa solo contenido ficticio; enviarla no concede la insignia.'}</p><BadgeRequestForm badgeId={badgeId} onBadgeChange={onBadgeChange} onSubmitted={onClose} /></dialog>
 }

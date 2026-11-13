@@ -7,6 +7,10 @@ import { findBadge } from './catalog'
 import type { BadgeRequest } from './types'
 import { BadgeArtwork } from './BadgeArtwork'
 import s from './achievements.module.css'
+import { ConnectedBadgeRequestHistory } from './ConnectedBadgeRequests'
+
+export function BadgeRequestHistory(){const {connection}=useCommunity();return connection?<ConnectedBadgeRequestHistory connection={connection}/>:<DemoBadgeRequestHistory/>}
+
 
 const labels = { pending: 'Pendiente', approved: 'Aprobada', rejected: 'Rechazada' }
 function RequestDetail({ request, onClose }: { request: BadgeRequest; onClose: () => void }) {
@@ -15,7 +19,7 @@ function RequestDetail({ request, onClose }: { request: BadgeRequest; onClose: (
   return <dialog ref={dialog} className={s.dialog} aria-labelledby={id} onCancel={(event) => { event.preventDefault(); onClose() }}><header className={s.dialogHeading}><h2 id={id}>Tu solicitud: {findBadge(request.badgeId)?.title}</h2><button type="button" className={s.iconButton} aria-label="Cerrar detalles de solicitud" onClick={onClose}><CommunityIcon name="close" /></button></header><span className={`${s.status} ${s[request.status]}`}>{labels[request.status]}</span><p className={s.dialogIntro}>Declaración ficticia para revisión; no es prueba verificada ni una historia pública.</p><blockquote className={s.statement}>{request.description}</blockquote><p className={s.smallText}>Enviada: {formatPostDate(request.createdAt)} · Escenario ficticio</p>{request.status !== 'pending' && <div className={s.decision}><strong>Decisión de CAI · Demo</strong><p>{request.decisionReason}</p><small>{formatPostDate(request.reviewedAt)}</small></div>}</dialog>
 }
 
-export function BadgeRequestHistory() {
+function DemoBadgeRequestHistory() {
   const { state } = useCommunity()
   const [selected, setSelected] = useState<string | null>(null)
   const requests = state.badgeRequests.filter((request) => request.memberId === 'alex').reverse()

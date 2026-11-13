@@ -31,6 +31,7 @@ export function AdminPage() {
           </p>
         </div>
         <div className={s['head-actions']}>
+          {!!connection?.badgeCounts.pending&&<Link to="/admin/insignias" className={`${s.btn} ${s['btn--ghost']}`}>Revisar insignias ({connection.badgeCounts.pending})</Link>}
           {!!connection?.commentCounts.pendiente&&<Link to="/admin/publicaciones?bandeja=comentarios" className={`${s.btn} ${s['btn--ghost']}`}>Revisar comentarios ({connection.commentCounts.pendiente})</Link>}
           <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => {
             dispatch({ type: 'reset' })

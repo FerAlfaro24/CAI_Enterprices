@@ -506,3 +506,12 @@
 @media (prefers-reduced-motion: reduce) {
   .achievements :is(article, button), .unlockNotice, .unlockNotice > div { transform: none !important; transition: none !important; animation: none !important; }
 }
+
+.connected { overflow-wrap:anywhere; }
+.privateStatement { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.65; margin:12px 0; }
+.privateAudit { padding-left:20px; font-size:13px; line-height:1.65; }
+.privateAudit li { margin:12px 0; }
+.sharedBadge { display:flex; gap:12px; align-items:center; padding:12px; margin:12px 0; border:1px solid var(--line); border-radius:12px; background:var(--notice-bg); color:var(--navy); }
+.sharedArtwork { display:block; width:48px; height:48px; flex:none; }
+.sharedArtwork img { width:100%;height:100%; }
+.sharedBadge small { display:block; margin-top:4px; font-size:11px; }

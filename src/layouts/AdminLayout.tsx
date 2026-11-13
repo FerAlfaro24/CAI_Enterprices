@@ -11,7 +11,7 @@ import { Icon, type IconName } from '../features/admin/components/ui'
 import { countByStatus, postStatuses, requestStatuses, type AdminContext } from '../features/admin/state'
 import { cx } from '../features/landing/utils'
 
-type Section = { to: string; label: string; icon: IconName; countKey?: 'requests' | 'posts' }
+type Section = { to: string; label: string; icon: IconName; countKey?: 'requests' | 'posts' | 'badges' }
 
 const sections: Section[] = [
   { to: '/admin', label: 'Resumen', icon: 'home' },
@@ -20,6 +20,7 @@ const sections: Section[] = [
   { to: '/admin/alumnos', label: 'Alumnos', icon: 'users' },
   { to: '/admin/galeria', label: 'Galería privada', icon: 'image' },
   { to: '/admin/retos', label: 'Retos de inglés', icon: 'trend' },
+  { to: '/admin/insignias', label: 'Insignias', icon: 'shield',countKey:'badges' },
   { to: '/admin/mensajes', label: 'Mensajes y avisos', icon: 'chat' },
   { to: '/admin/configuracion', label: 'Configuración', icon: 'settings' },
 ]
@@ -35,6 +36,7 @@ export function AdminLayout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
   const pending = {
+    badges:connection.badgeCounts.pending,
     requests: countByStatus(state.requests, requestStatuses).pendiente,
     posts: countByStatus(state.posts, postStatuses).pendiente + connection.commentCounts.pendiente,
   }

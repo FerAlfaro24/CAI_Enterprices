@@ -1,3 +1,4 @@
+import { SharedBadge } from '../achievements/SharedBadge'
 import { useId, useRef, useState } from 'react'
 import { useCommunity } from '../context'
 import { useCommunityDialogs } from '../dialogContext'
@@ -32,6 +33,7 @@ export function EditorialPostCard({ post, featured = false }: { post: Post; feat
       {featured && <span className={s.storyEyebrow}>{post.category === 'achievement' ? 'PEQUEÑOS GRANDES AVANCES' : author.institution ? 'LA VOZ DE CAI' : 'HISTORIAS QUE NOS CONECTAN'}</span>}
       <h3 id={`${id}-title`}><button type="button" onClick={() => open()}>{post.title}</button></h3>
       {(featured || !cover) && <p className={s.cardBody}>{post.body}</p>}
+      <SharedBadge post={post}/>
       {featured && post.milestone && <div className={s.pullQuote}><CommunityIcon name="award" size={26} /><div><strong>{post.milestone.label}</strong><span>{post.milestone.detail}</span></div></div>}
       {featured && post.photos.length > 0 && <button className={s.featuredPhoto} type="button" onClick={() => open()} aria-label={`Ver imágenes de ${post.title}`}><StockImage photo={post.photos[0]!} /><span>{post.photos.length > 1 ? `${post.photos.length} fotos · Abrir galería` : 'Fotografía ilustrativa · Abrir'}</span></button>}
       {post.event && <div className={s.eventTeaser}><span><strong>{post.event.day}</strong>{post.event.month}</span><p>{post.event.detail}</p></div>}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError, localApi, type ActivationInvitation, type LocalRequest, type LocalStudent, type LocalUser, type ReviewPost, type PublicationDecision, type CatalogGroup, type CommunityControls } from '../local-access/api'
 import { defaultSettings, type AdminAction, type AdminState } from './state'
-import { adminTeamApi,studentRecordApi,commentsApi,type AdminAccount,type StudentRecordDraft } from '../local-access/api'
+import { adminTeamApi,studentRecordApi,commentsApi,badgesApi,type AdminAccount,type StudentRecordDraft } from '../local-access/api'
 
 export function useAdminConnection() {
   const [user, setUser] = useState<LocalUser | null>(null)
@@ -13,6 +13,7 @@ export function useAdminConnection() {
   const [error, setError] = useState(''), [busy, setBusy] = useState(false), [notice, setNotice] = useState('')
   const [invitation, setInvitation] = useState<(ActivationInvitation & {name:string}) | null>(null)
   const [team,setTeam]=useState<AdminAccount[]>([])
+  const [badgeCounts,setBadgeCounts]=useState({pending:0,approved:0,rejected:0,withdrawn:0})
   const [commentCounts,setCommentCounts]=useState({pendiente:0,publicado:0,rechazado:0,retirado:0})
   const generation = useRef(0), writing = useRef(false)
   const failure = useCallback((error: unknown) => {
@@ -21,9 +22,9 @@ export function useAdminConnection() {
   }, [])
   const refresh = useCallback(() => {
     const current = ++generation.current
-    return Promise.all([localApi.requests(),localApi.students(),localApi.posts(),localApi.configuration(),adminTeamApi.list(),commentsApi.counts()]).then(([r,s,p,c,t,cc])=>{
+    return Promise.all([localApi.requests(),localApi.students(),localApi.posts(),localApi.configuration(),adminTeamApi.list(),commentsApi.counts(),badgesApi.counts()]).then(([r,s,p,c,t,cc,bc])=>{
       if (current !== generation.current) return
-      setRequests(r.requests);setStudents(s.students);setPosts(p.posts);setConfiguration(c);setTeam(t.accounts);setCommentCounts(cc.counts);setLoaded(true);setError('')
+      setRequests(r.requests);setStudents(s.students);setPosts(p.posts);setConfiguration(c);setTeam(t.accounts);setCommentCounts(cc.counts);setBadgeCounts(bc.counts);setLoaded(true);setError('')
     }).catch((error:unknown)=>{if(current===generation.current)failure(error)})
   }, [failure])
   useEffect(() => {
@@ -100,6 +101,6 @@ export function useAdminConnection() {
   }
   const directory=students.map(s=>({...s,posts:posts.filter(p=>p.studentId===s.id&&p.status==='publicada').length,isNew:s.joinedAt.startsWith(new Date().toISOString().slice(0,7))}))
   const state:AdminState={requests,posts:posts.map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:{...defaultSettings,allowPhotos:false,allowReactions:false,allowComments:false},directory}
-  return {handleFailure:failure,setCommentsOpen,commentCounts,correctRecord,team,manageTeam,user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
+  return {badgeCounts,handleFailure:failure,setCommentsOpen,commentCounts,correctRecord,team,manageTeam,user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
 }
 export type AdminConnection=ReturnType<typeof useAdminConnection>

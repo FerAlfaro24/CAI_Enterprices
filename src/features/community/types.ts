@@ -34,6 +34,7 @@ export interface Comment {
 }
 
 export interface Post {
+  recognition?:{badgeId:string;title:string;awardedAt:string}
   id: string
   authorId: string
   title: string

@@ -7,10 +7,10 @@ import { feedPost, publicMember, type CommunityConnection } from './connection'
 import type { CommunityAction, CommunityState } from './types'
 import s from './community.module.css'
 import type { StudentProfile } from '../local-access/api'
-import { challengesApi, type ChallengeSnapshot } from '../local-access/api'
+import { challengesApi,badgesApi,type BadgeSnapshot, type ChallengeSnapshot } from '../local-access/api'
 
 const emptyState: CommunityState = { posts: [], mode: 'student', section: 'home', filter: 'recent', challengeId: '', attempts: {}, badgeRequests: [], notice: '', sequence: 0, resetKey: 0, focusedPostId: null, focusRequest: 0 }
-type Snapshot = { challenges:ChallengeSnapshot;profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean; reactionsOpen: boolean;commentsOpen:boolean }
+type Snapshot = { badges:BadgeSnapshot;challenges:ChallengeSnapshot;profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean; reactionsOpen: boolean;commentsOpen:boolean }
 
 /** Usa las vistas de v1.0 con una instantánea autorizada, sin inicializar fixtures. */
 export function ConnectedCommunity({ children }: { children: ReactNode }) {
@@ -29,9 +29,10 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const refresh = useCallback(() => {
     const version = ++generation.current
     return studentApi.me().then(async ({ user }) => {
+      const badges=await badgesApi.snapshot()
       const [group, feed, catalog, notices, gallery, profile, challenges] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get(), studentApi.notices(), studentApi.gallery(), studentApi.profile(),challengesApi.today()])
       if (version !== generation.current) return
-      setSnapshot({ challenges, profile: profile.profile, gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen, reactionsOpen: catalog.settings.reactionsOpen,commentsOpen:catalog.settings.commentsOpen }); setAnonymous(false); setError('')
+      setSnapshot({ badges,challenges, profile: profile.profile, gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen, reactionsOpen: catalog.settings.reactionsOpen,commentsOpen:catalog.settings.commentsOpen }); setAnonymous(false); setError('')
     }).catch((error: unknown) => { if (version === generation.current) failure(error) })
       .finally(() => { if (version === generation.current) setChecking(false) })
   }, [failure])
@@ -61,6 +62,9 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const members = snapshot.members.map(publicMember)
   const publicMembers = [own, ...members, ...snapshot.posts.map(post => publicMember(post.author))]
   const connection: CommunityConnection = {
+    badges:snapshot.badges,
+    requestBadge:(badgeId,description,key)=>write(()=>badgesApi.apply(badgeId,description,key),'Solicitud guardada. CAI la revisará en privado.'),
+    withdrawBadge:item=>write(()=>badgesApi.withdraw(item),'Solicitud retirada. Se conserva su historial.'),
     challenges:snapshot.challenges,
     answerChallenge:(question,index,key)=>write(()=>challengesApi.answer(question,index,key),'Tu respuesta se guardó. Revisa la explicación.'),
     handleFailure:failure,

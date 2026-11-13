@@ -8,6 +8,7 @@ const AdminPage = lazy(() => import('../pages/AdminPage').then(module => ({ defa
 const AdminRequestsPage = lazy(() => import('../pages/AdminRequestsPage').then(module => ({ default: module.AdminRequestsPage })))
 const AdminStudentsPage = lazy(() => import('../pages/AdminStudentsPage').then(module => ({ default: module.AdminStudentsPage })))
 const AdminGalleryPage = lazy(() => import('../pages/AdminGalleryPage').then(module => ({ default: module.AdminGalleryPage })))
+const AdminBadgesPage = lazy(() => import('../pages/AdminBadgesPage').then(module => ({ default: module.AdminBadgesPage })))
 const AdminChallengesPage = lazy(() => import('../pages/AdminChallengesPage').then(module => ({ default: module.AdminChallengesPage })))
 const AdminInboxPage = lazy(() => import('../pages/AdminInboxPage').then(module => ({ default: module.AdminInboxPage })))
 const AdminSettingsPage = lazy(() => import('../pages/AdminSettingsPage').then(module => ({ default: module.AdminSettingsPage })))
@@ -62,6 +63,7 @@ export function AppRoutes() {
         <Route path="mensajes" element={<AdminInboxPage />} />
         <Route path="galeria" element={<AdminGalleryPage />} />
         <Route path="retos" element={<AdminChallengesPage />} />
+        <Route path="insignias" element={<AdminBadgesPage />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
       <Route element={<AppLayout />}>

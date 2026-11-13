@@ -4,6 +4,7 @@ import { useCommunity } from '../context'
 import { demoMember } from '../data/members'
 import s from '../community.module.css'
 import themeStyles from '../communityTheme.module.css'
+import { BadgeUnlockNotice } from '../achievements/BadgeUnlockNotice'
 import { useCommunityTheme } from '../useCommunityTheme'
 import { CommunityNavigation } from './CommunityNavigation'
 import { MemberProfileDialog } from './MemberProfileDialog'
@@ -61,6 +62,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
         <p className={s.demoStatus} role="status" aria-live="polite" aria-atomic="true">{state.notice}</p>
       </div>
       <main id="community-content" tabIndex={-1} className={s.workspace}>{children}</main>
+      {connection&&<BadgeUnlockNotice/>}
       <footer className={s.communityFooter}>{connection ? <><span>CAI Community · Historias de tu grupo, revisadas por CAI.</span><span>Prueba local · <Link to="/">Sitio institucional ↗</Link></span></> : <><span>CAI Community · Un prototipo para imaginar lo que podemos construir juntos.</span><span>Sin cuentas reales ni datos de alumnos. <Link to="/">Sitio institucional ↗</Link></span></>}</footer>
       {detail && <PostDetailDialog key={`${detail.postId}-${state.resetKey}`} />}
       {profileId && <MemberProfileDialog key={profileId} memberId={profileId} onClose={() => setProfileId(null)} />}

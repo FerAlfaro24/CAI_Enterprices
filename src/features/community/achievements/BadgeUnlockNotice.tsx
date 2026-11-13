@@ -7,14 +7,15 @@ import { selectBadgeGrants } from './model'
 import { findBadge } from './catalog'
 import { BadgeArtwork } from './BadgeArtwork'
 import s from './achievements.module.css'
+import { connectedGrants } from './connectedBadges'
 
 /** Celebrate only a new derived grant while this view is mounted. Returning to
  * a section initializes from current grants, so it never replays old awards.
  * Nothing is persisted, published, awarded or dispatched by this presentation.
  */
 export function BadgeUnlockNotice() {
-  const { state } = useCommunity()
-  const grants = selectBadgeGrants(state)
+  const { state,connection } = useCommunity()
+  const grants = connection?connectedGrants(connection):selectBadgeGrants(state)
   const signature = grants.map((grant) => grant.id).join('|')
   const [seen, setSeen] = useState(signature)
   const [badgeId, setBadgeId] = useState<string | null>(null)

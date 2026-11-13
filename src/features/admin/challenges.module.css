@@ -27,3 +27,7 @@
 .toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:12px; justify-content:space-between; margin-bottom:18px; }
 .notice { padding:14px; margin:16px 0; border:1px solid var(--line); border-radius:10px; background:var(--blue-50); line-height:1.6; }
 @media(max-width:700px){.two,.catalog,.filters {grid-template-columns:minmax(0,1fr)}.calendar article {padding:14px}.editor {padding:18px}}
+
+.audit { padding-left:20px; font-size:13px; line-height:1.6; }
+.audit li { margin:12px 0; overflow-wrap:anywhere; }
+.statement { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.6; margin:14px 0; }
