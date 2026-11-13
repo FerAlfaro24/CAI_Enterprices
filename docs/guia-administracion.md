@@ -165,3 +165,16 @@ En **Retos de inglés**, el calendario automático sirve tres preguntas diarias:
 5. Si otra ventana cambió la pregunta/calendario, actualiza y revisa antes de guardar; evita confirmar a ciegas con datos viejos.
 
 El alumno tiene un intento por pregunta, cinco puntos por participar y diez más por acertar. Completar tres preguntas suma un día de constancia, incluso con errores. Puede repasar sus respuestas anteriores; no es una calificación. Las insignias persistentes se integrarán en el siguiente módulo. Añadir a la validación final con CAI: revisar un reto, preparar un borrador, programarlo para el grupo correcto y explicar la pausa sin borrar resultados.
+
+
+## Insignias y reconocimientos
+
+En **Insignias** aparecen solicitudes pendientes y concesiones registradas. El número de pendientes también se muestra en el menú y en Resumen.
+
+1. En Solicitudes, abre Revisar solicitud, comprueba alumno, grupo y lo aprendido. Elige aprobar o no aprobar, escribe un motivo claro de 8–280 caracteres y confirma. La declaración y el motivo son privados; aprobar no publica una historia. Si no se aprueba, el alumno puede reforzar lo indicado y solicitar otra vez.
+2. Las automáticas no requieren revisión: primera respuesta, tres días completos seguidos y cinco días completos de retos. No se exige acertar todas las respuestas. Las aventuras de películas, canciones y lectura sí las revisa CAI.
+3. Dar reconocimiento permite elegir alumno activo y una distinción institucional: Sin miedo al inglés, Buen compañero o Constancia. Comprueba al alumno, escribe el motivo privado y confirma. Las demás insignias siguen sus propios recorridos.
+4. En Concesiones e historial, abre Ver concesión. Si hubo un error, puedes retirar/restaurar con motivo y confirmación. Se conserva la fecha y la historia original. Una retirada no borra puntos ni respuestas; las historias públicas vinculadas vuelven a revisión. Restaurar no las publica otra vez: revisa la historia por separado.
+5. Si aparece conflicto o se pierde la conexión durante una decisión, carga el estado actual antes de repetirla. El alumno conserva el texto de una solicitud que no pudo confirmar y puede reintentar sin duplicarla.
+
+El alumno decide si comparte su insignia. El formulario de publicación usa un texto nuevo editable, sin copiar la solicitud ni los motivos. No hay reconocimiento público automático ni acceso a colecciones privadas de compañeros. Añadir a la validación final con CAI: revisar una solicitud, explicar una indicación, conceder un reconocimiento al alumno correcto y corregir una concesión sin republicar una historia por accidente.

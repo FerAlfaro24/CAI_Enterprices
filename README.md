@@ -2,9 +2,9 @@
 
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
-> **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `feat/v1-community-challenges` conserva avances y conecta Retos: banco original de 180 preguntas/45 temas, tres preguntas diarias, repaso/progreso privado y calendario/banco administrables; servicio `fbb1545`, interfaz `e14eda7`, esquema 15. Ver [Retos y comprobaciones](docs/v1-community-challenges.md) y [registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
+> **Estado vigente:** v1.0 es la base oficial de diseño. `feat/v1-community-badges` conserva los avances y conecta nueve insignias con progreso real, solicitudes/revisión/correcciones privadas y compartición voluntaria moderada; servicio `bf9cf2e`, interfaz `c8788bf`, esquema 16. Ver [Insignias comprobadas y límites](docs/v1-community-badges.md) y [registro de continuidad](docs/PROJECT_STATE.md). No es una entrega de producción.
 
-> **Continuación actual:** comentarios, reacciones y retos comprobados localmente. API 179 resultados; Retos 142 comprobaciones de navegador (53 funcionales y 18 de distribución/teclado por navegador), más modelos y bloqueos privados. Siguen Insignias y vídeos privados de coordinación, según [el alcance autorizado](docs/v1-community-expansion.md). Diez alertas de desarrollo pendientes; Google/correo/validación de CAI y alojamiento mantienen su tanda final.
+> **Continuación actual:** retos, insignias, comentarios y reacciones comprobados localmente. API 193 resultados; matriz de esta tarea 234 comprobaciones en Brave/Opera, incluyendo regresión de Retos. Siguen los vídeos privados de coordinación para el grupo, según [el alcance autorizado](docs/v1-community-expansion.md). Google/correo/validación de CAI y alojamiento conservan la tanda final. Diez alertas de desarrollo pendientes según su informe.
 
 ## Objetivo inmediato
 
@@ -54,6 +54,7 @@ Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para a
 - [Reacciones persistentes, control administrativo y pruebas](docs/v1-community-reactions.md)
 - [Ampliación de comunidad autorizada: inventario, mejoras y orden de trabajo](docs/v1-community-expansion.md)
 - [Revisión final local: resultados, incidencias y siguiente tanda con CAI](docs/v1-final-review.md)
+- [Insignias: colección, reglas, revisión y privacidad](docs/v1-community-badges.md)
 - [Retos diarios: 180 preguntas, progreso, calendario y pruebas](docs/v1-community-challenges.md)
 - [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
 - [Herramientas y alertas: revisión actual y corrección pendiente](docs/v1-tooling-audit.md)

@@ -4,7 +4,7 @@
 
 Rama de análisis `docs/v1-community-expansion`, base `fee87d1` de `chore/v1-final-review`. No modifica la aplicación ni migra bases. La revisión anterior conserva su validez para el código y alcance que probó; sus porcentajes y “pendientes de alcance” no describen esta ampliación.
 
-**Avance posterior:** reacciones, [comentarios/moderación](v1-community-comments.md) y [Retos diarios](v1-community-challenges.md) ya comprobados. Retos: rama `feat/v1-community-challenges`, `fbb1545`/`e14eda7`, esquema 15, banco 180/45 temas, tres preguntas/día, calendario/banco administrables y progreso/repaso privado; API 179, matriz 142. Siguen Insignias y vídeos. El inventario/descripciones siguientes son el punto de partida histórico; no rehacer los bloques ya comprobados.
+**Avance posterior:** reacciones, [comentarios](v1-community-comments.md), [Retos](v1-community-challenges.md) e [Insignias](v1-community-badges.md) ya comprobados localmente. Insignias en `feat/v1-community-badges`, `bf9cf2e`/`c8788bf`, esquema 16: nueve originales, reglas desde progreso real, solicitudes/revisión/corrección privadas y compartición voluntaria moderada. API 193, matriz de esta tarea 234 (incluye regresión de Retos). Sigue vídeo privado de coordinación para el grupo. El inventario siguiente es histórico; no rehacer módulos ya comprobados.
 
 ## Inventario contrastado con código
 
