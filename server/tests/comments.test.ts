@@ -150,14 +150,14 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   let limited=false;for(let i=0;i<21;i++){const response=await create('',randomUUID(),'limited');if(response.status===429){limited=true;break}assert.equal(response.status,400)}assert.equal(limited,true)
  })
  await t.test('copia separada/reinicio conservan comentarios privados, decisiones y reintentos',async()=>{
-  const before=await own(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,15)
+  const before=await own(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,16)
   await close();app=createApplication(copy);await start();assert.deepEqual(await own(),before);assert.equal((await create('Primera palabra de ánimo ficticia',key)).status,201)
   assert.ok((await detail(first.id)).history.length>3)
  })
  await t.test('migración 13→14 conserva reacciones/sesiones e inicia comentarios cerrados',async()=>{
   const copy=await backupLocalDatabase(path,join(directory,'legacy')),legacy=openDatabase(copy)
   const sessions=legacy.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),reactions=legacy.prepare('SELECT * FROM post_reactions').all()
-  legacy.exec('DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14');legacy.close()
+  legacy.exec('DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14');legacy.close()
   assert.equal((await verifyLocalBackup(copy)).schema,13);const migrated=openDatabase(copy)
   try{assert.deepEqual(migrated.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),sessions);assert.deepEqual(migrated.prepare('SELECT * FROM post_reactions').all(),reactions);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM post_comments').get()!.n,0);assert.equal(migrated.prepare('SELECT comments_open FROM community_controls').get()!.comments_open,0)}finally{migrated.close()}
  })

@@ -104,13 +104,14 @@ export type GoogleState =
 
 export const publicationLimits = { titleMin: 4, titleMax: 100, bodyMin: 10, bodyMax: 1200 } as const
 export const publicationCategories = { achievement: 'Logro', experience: 'Experiencia' } as const
-export type PublicationDraft = { title: string; body: string; category: keyof typeof publicationCategories }
+export type PublicationDraft = { title: string; body: string; category: keyof typeof publicationCategories;badgeGrantId?:string }
 export type PublicationStatus = 'pendiente' | 'publicada' | 'rechazada' | 'retirada'
 export type PublicationDecision = 'approve' | 'reject' | 'undo'
 export const reactionKinds = ['love', 'wellDone', 'congrats', 'amazing', 'funny'] as const
 export type ReactionKind = typeof reactionKinds[number]
 export type ReactionSummary = { counts: Record<ReactionKind, number>; myReaction: ReactionKind | null; revision: number }
 export type PublishedPost = PublicationDraft & {
+  recognition?:{badgeId:string;title:string;awardedAt:string}
   id: string; author: GroupMember; createdAt: string; publishedAt: string | null; engagement?: ReactionSummary; commentCount?:number; commentsOpen?:boolean
 }
 export type OwnPost = PublishedPost & { status: PublicationStatus; revision: number; reason: string | null }
@@ -137,3 +138,11 @@ export type ChallengeProgress={points:number;answered:number;correct:number;part
 export type ChallengeSnapshot={day:string;timeZone:string;enabled:boolean;items:DailyQuestion[];progress:ChallengeProgress;needsGroup:boolean}
 export type ChallengeSchedule={id:string;day:string;slot:number;program:string;group:string;revision:number;state:'published'|'archived';question:ChallengeDefinition;source:'automatic'|'scheduled';attempts:number}
 export type ChallengeHistory={items:DailyQuestion[];nextCursor:number|null}
+export type BadgeSpec={id:string;title:string;description:string;symbol:string;tone:'blue'|'yellow'|'mint'|'purple'|'peach';category:'retos'|'aventuras'|'comunidad';mode:'automatic'|'review';availability:'active'|'institutional'}
+export type EarnedBadge={id:string;badge:BadgeSpec;source:'automatic'|'cai';condition:string;awardedAt:string;status:'active'|'revoked';revision:number;reason:string|null}
+export type BadgeApplication={id:string;badgeId:string;description:string;status:'pending'|'approved'|'rejected'|'withdrawn';revision:number;createdAt:string;reason:string|null}
+export type BadgeApplicationPage={items:BadgeApplication[];nextCursor:number|null}
+export type BadgeSnapshot={catalog:(BadgeSpec&{progress:number;target:number})[];grants:EarnedBadge[];requests:BadgeApplicationPage;pendingBadgeIds:string[]}
+export type BadgeReview=BadgeApplication&{studentId:string;studentName:string;program:string;group:string;active:boolean;badgeTitle:string}
+export type BadgeGrantReview=EarnedBadge&{studentId:string;studentName:string;program:string;group:string;active:boolean}
+export type BadgeAudit={action:string;reason:string|null;actor:string;createdAt:string}

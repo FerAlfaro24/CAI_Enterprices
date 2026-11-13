@@ -98,13 +98,13 @@ test('Reacciones: identidad, audiencia, revisión, reintentos y persistencia',as
  })
  await t.test('copias/reinicio conservan selección y claves; verificador admite esquema 13',async()=>{
   key=randomUUID();assert.equal((await react('love',5,key)).status,200);const before=await summary(),copy=await backupLocalDatabase(path,join(directory,'copies'))
-  assert.equal((await verifyLocalBackup(copy)).schema,15)
+  assert.equal((await verifyLocalBackup(copy)).schema,16)
   await close();app=createApplication(copy);await start();assert.deepEqual(await summary(),before);assert.equal((await react('love',5,key)).status,200)
  })
  await t.test('migración 12→13 conserva datos/sesiones y empieza sin reacciones',async()=>{
   const copy=await backupLocalDatabase(path,join(directory,'migration')),db=openDatabase(copy)
   const before=db.prepare('SELECT id,payload,revision FROM requests ORDER BY id').all(),sessions=db.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all()
-  db.exec('DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14; DROP TABLE reaction_requests; DROP TABLE post_reactions; ALTER TABLE community_controls DROP COLUMN reactions_open; DELETE FROM migrations WHERE version=13');db.close()
+  db.exec('DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14; DROP TABLE reaction_requests; DROP TABLE post_reactions; ALTER TABLE community_controls DROP COLUMN reactions_open; DELETE FROM migrations WHERE version=13');db.close()
   assert.equal((await verifyLocalBackup(copy)).schema,12);const upgraded=openDatabase(copy)
   try{assert.deepEqual(upgraded.prepare('SELECT id,payload,revision FROM requests ORDER BY id').all(),before);assert.deepEqual(upgraded.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),sessions);assert.equal(upgraded.prepare('SELECT COUNT(*) AS n FROM post_reactions').get()!.n,0);assert.equal(upgraded.prepare('SELECT reactions_open FROM community_controls').get()!.reactions_open,0)}finally{upgraded.close()}
  })

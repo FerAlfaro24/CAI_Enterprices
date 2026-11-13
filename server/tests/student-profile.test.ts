@@ -99,7 +99,7 @@ test('Perfil propio: privacidad, concurrencia y persistencia', async t => {
   })
   await t.test('persiste tras reinicio con UUID, revisión y sin migración', async () => {
     const before = await profile(); await close(); app = createApplication(path); base = await listen()
-    assert.deepEqual(await profile(), before); assert.equal(app.db.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n, 15)
+    assert.deepEqual(await profile(), before); assert.equal(app.db.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n, 16)
   })
   await t.test('caducar sesión durante lectura del cuerpo impide editar', async () => {
     const before = payload(), value = JSON.stringify({ ...(await draft()), displayName: 'No guardar' }), received = once(app.server, 'request')

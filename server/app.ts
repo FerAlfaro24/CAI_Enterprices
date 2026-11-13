@@ -15,6 +15,7 @@ import { adminTeam } from './admin-team.ts'
 import { studentRecords } from './student-records.ts'
 import { commentsRepository, commentCursor, commentStatus } from './comments.ts'
 import { challengesRepository } from './challenges.ts'
+import { badgesRepository } from './badges.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
@@ -60,6 +61,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const records=studentRecords(db)
   const comments=commentsRepository(db)
   const challenges=challengesRepository(db,options.challengeClock)
+  const badges=badgesRepository(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -230,6 +232,16 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
         if (studentAuth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
         return data
       }
+      if(path==='/api/local/student/badges'&&method==='GET')return json(response,200,badges.snapshot(user))
+      if(path==='/api/local/student/badge-requests'&&method==='GET')return json(response,200,badges.mine(user,commentCursor(url.searchParams.get('before'))))
+      if(path==='/api/local/student/badge-requests'&&method==='POST'){
+        limit(`badge-request:${user.id}`,20,60*60_000);const key=request.headers['idempotency-key'];if(typeof key!=='string')throw new HttpError(400,'Falta el identificador de tu solicitud.');return json(response,201,{request:badges.apply(user,await protectedBody(),key)})
+      }
+      const badgeRequest=path.match(/^\/api\/local\/student\/badge-requests\/(BSR-\d+)(\/withdraw)?$/)
+      if(badgeRequest&&!badgeRequest[2]&&method==='GET')return json(response,200,badges.requestDetail(user,badgeRequest[1]!))
+      if(badgeRequest&&badgeRequest[2]&&method==='POST'){limit(`badge-withdraw:${user.id}`,30,15*60_000);badges.withdraw(user,badgeRequest[1]!,await protectedBody());return json(response,200,{ok:true})}
+      const badgeGrant=path.match(/^\/api\/local\/student\/badges\/(BDG-\d+)$/)
+      if(badgeGrant&&method==='GET')return json(response,200,badges.grantDetail(user,badgeGrant[1]!))
       if(path==='/api/local/student/challenges'&&method==='GET')return json(response,200,challenges.snapshot(user))
       if(path==='/api/local/student/challenges/history'&&method==='GET')return json(response,200,challenges.history(user,commentCursor(url.searchParams.get('before'))))
       const challenge=path.match(/^\/api\/local\/student\/challenges\/(Q-\d+)\/answer$/)
@@ -302,6 +314,16 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       if (auth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
       return data
     }
+    if(path==='/api/local/badge-counts'&&method==='GET')return json(response,200,{counts:badges.counts()})
+    if(path==='/api/local/badge-requests'&&method==='GET')return json(response,200,badges.reviews(url.searchParams.get('status')??'pending',commentCursor(url.searchParams.get('before'))))
+    const badgeReview=path.match(/^\/api\/local\/badge-requests\/(BSR-\d+)(?:\/(approve|reject))?$/)
+    if(badgeReview&&!badgeReview[2]&&method==='GET')return json(response,200,badges.reviewDetail(badgeReview[1]!))
+    if(badgeReview&&badgeReview[2]&&method==='POST'){limit(`badge-review:${user.id}`,60,15*60_000);badges.decide(badgeReview[1]!,badgeReview[2] as 'approve'|'reject',await protectedBody(),user.id);return json(response,200,{ok:true})}
+    if(path==='/api/local/badge-grants'&&method==='GET')return json(response,200,badges.grants(commentCursor(url.searchParams.get('before'))))
+    if(path==='/api/local/badge-grants'&&method==='POST'){limit(`badge-award:${user.id}`,30,15*60_000);const key=request.headers['idempotency-key'];if(typeof key!=='string')throw new HttpError(400,'Falta el identificador del reconocimiento.');return json(response,201,{grant:badges.award(await protectedBody(),user.id,key)})}
+    const grantReview=path.match(/^\/api\/local\/badge-grants\/(BDG-\d+)$/)
+    if(grantReview&&method==='GET')return json(response,200,badges.adminGrant(grantReview[1]!))
+    if(grantReview&&method==='PATCH'){limit(`badge-correct:${user.id}`,30,15*60_000);badges.correct(grantReview[1]!,await protectedBody(),user.id);return json(response,200,{ok:true})}
     if(path==='/api/local/challenges/bank'&&method==='GET')return json(response,200,{items:challenges.bank()})
     if(path==='/api/local/challenges/controls'&&method==='GET')return json(response,200,challenges.controls())
     if(path==='/api/local/challenges/controls'&&method==='PATCH'){challenges.configure(await protectedBody(),user.id);return json(response,200,{ok:true})}

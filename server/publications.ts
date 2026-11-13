@@ -9,7 +9,7 @@ import { publicationCategories, publicationLimits, type OwnPost, type Publicatio
 type Row = {
   id: number; author_id: number; title: string; body: string; category: PublicationDraft['category']; status: PublicationStatus
   program: string; group_name: string; created_at: string; published_at: string | null; reason: string | null; revision: number
-  payload: string; student_status: string | null; request_status: string; comments_open:number
+  payload: string; student_status: string | null; request_status: string; comments_open:number;badge_grant_id:number|null
 }
 const select = `SELECT p.*, r.payload, r.status AS request_status, s.status AS student_status FROM publications p
   JOIN requests r ON r.id = p.author_id LEFT JOIN students s ON s.request_id = p.author_id`
@@ -24,15 +24,18 @@ function field(value: unknown, label: string, min: number, max: number) {
 }
 export function validatePublication(value: unknown): PublicationDraft {
   const data = record(value)
-  if (Object.keys(data).some((key) => !['title', 'body', 'category'].includes(key))) throw new HttpError(400, 'La publicación contiene datos no admitidos.')
+  if (Object.keys(data).some((key) => !['title', 'body', 'category','badgeGrantId'].includes(key))) throw new HttpError(400, 'La publicación contiene datos no admitidos.')
+  if(data.badgeGrantId!==undefined&&(typeof data.badgeGrantId!=='string'||!/^BDG-\d{4,}$/.test(data.badgeGrantId)||!Number.isSafeInteger(Number(data.badgeGrantId.slice(4)))||data.category!=='achievement'))throw new HttpError(400,'Solo puedes compartir una insignia válida como logro.')
   if (typeof data.category !== 'string' || !Object.hasOwn(publicationCategories, data.category)) throw new HttpError(400, 'Elige Logro o Experiencia.')
   return { title: field(data.title, 'el título', publicationLimits.titleMin, publicationLimits.titleMax),
-    body: field(data.body, 'el texto', publicationLimits.bodyMin, publicationLimits.bodyMax), category: data.category as PublicationDraft['category'] }
+    body: field(data.body, 'el texto', publicationLimits.bodyMin, publicationLimits.bodyMax), category: data.category as PublicationDraft['category'],...(data.badgeGrantId?{badgeGrantId:data.badgeGrantId as string}:{}) }
 }
 function publicPost(db: Database, row: Row): PublishedPost {
   const profile = JSON.parse(row.payload) as Submission
+  const grant=row.badge_grant_id?db.prepare("SELECT badge_json,awarded_at FROM badge_grants WHERE id=? AND student_id=? AND status='active'").get(row.badge_grant_id,row.author_id):undefined
+  const badge=grant?JSON.parse(String(grant.badge_json)) as {id:string;title:string}:null
   return { id: folio(row.id), title: row.title, body: row.body, category: row.category,
-    author: { id: publicProfileId(db, row.author_id), displayName: profile.displayName, avatarColor: profile.avatarColor }, createdAt: row.created_at, publishedAt: row.published_at, commentsOpen:row.comments_open===1 }
+    author: { id: publicProfileId(db, row.author_id), displayName: profile.displayName, avatarColor: profile.avatarColor }, createdAt: row.created_at, publishedAt: row.published_at, commentsOpen:row.comments_open===1,...(grant&&badge?{recognition:{badgeId:badge.id,title:badge.title,awardedAt:String(grant.awarded_at)}}:{}) }
 }
 
 export function publications(db: Database) {
@@ -62,11 +65,16 @@ export function publications(db: Database) {
         const author = idOf(user.id, 'CAI')
         const existing = db.prepare(`${select} WHERE p.author_id = ? AND p.idempotency_key = ?`).get(author, key) as Row | undefined
         if (existing) {
-          if (existing.title !== draft.title || existing.body !== draft.body || existing.category !== draft.category) throw new HttpError(409, 'Este envío ya se recibió con otros datos. Actualiza tus publicaciones antes de continuar.')
+          if (existing.title !== draft.title || existing.body !== draft.body || existing.category !== draft.category||(existing.badge_grant_id??null)!==(draft.badgeGrantId?Number(draft.badgeGrantId.slice(4)):null)) throw new HttpError(409, 'Este envío ya se recibió con otros datos. Actualiza tus publicaciones antes de continuar.')
           return ownPost(existing)
         }
         if (!administration(db).settings().submissionsOpen) throw new HttpError(409, 'CAI pausó los nuevos envíos. Puedes consultar tus historias y retirar publicaciones existentes.')
-        const result = db.prepare('INSERT INTO publications(author_id,idempotency_key,title,body,category,program,group_name,created_at) VALUES (?,?,?,?,?,?,?,?)').run(author, key, draft.title, draft.body, draft.category, profile.program, profile.group, new Date().toISOString())
+        const badgeGrant=draft.badgeGrantId?Number(draft.badgeGrantId.slice(4)):null
+        if(badgeGrant){
+          if(!db.prepare("SELECT id FROM badge_grants WHERE id=? AND student_id=? AND status='active'").get(badgeGrant,author))throw new HttpError(409,'La insignia debe ser tuya y estar activa para compartirla.')
+          if(db.prepare("SELECT id FROM publications WHERE badge_grant_id=? AND status IN ('pendiente','publicada')").get(badgeGrant))throw new HttpError(409,'Ya tienes una historia de esta insignia publicada o en revisión. Consulta Mis publicaciones.')
+        }
+        const result = db.prepare('INSERT INTO publications(author_id,idempotency_key,title,body,category,program,group_name,created_at,badge_grant_id) VALUES (?,?,?,?,?,?,?,?,?)').run(author, key, draft.title, draft.body, draft.category, profile.program, profile.group, new Date().toISOString(),badgeGrant)
         const id = Number(result.lastInsertRowid)
         audit(id, 'publication.submitted', null, author)
         return ownPost(db.prepare(`${select} WHERE p.id = ?`).get(id) as Row)
@@ -113,9 +121,11 @@ export function publications(db: Database) {
         if (row.status === 'retirada') throw new HttpError(409, 'El alumno retiró esta publicación. No se puede volver a publicar.')
         if (decision === 'undo' ? row.status === 'pendiente' : row.status !== 'pendiente') throw new HttpError(409, 'El estado de la publicación cambió. Actualiza antes de decidir.')
         if (decision === 'approve') {
+          if(row.badge_grant_id&&!db.prepare("SELECT id FROM badge_grants WHERE id=? AND student_id=? AND status='active'").get(row.badge_grant_id,row.author_id))throw new HttpError(409,'La insignia fue retirada. Revisa su concesión antes de publicar la historia.')
           if (!available(row)) throw new HttpError(409, 'El autor debe tener acceso activo y conservar el programa y grupo de esta publicación.')
           if (confirmed !== true) throw new HttpError(400, 'Confirma que revisaste el contenido y la privacidad antes de publicar.')
         }
+        if(decision!=='reject'&&row.badge_grant_id&&db.prepare("SELECT id FROM publications WHERE badge_grant_id=? AND id!=? AND status IN ('pendiente','publicada')").get(row.badge_grant_id,row.id))throw new HttpError(409,'Ya hay otra historia de esta insignia publicada o en revisión.')
         const explanation = decision === 'reject' ? field(reason, 'el motivo del rechazo', 5, 240) : null
         db.prepare('UPDATE publications SET status = ?, reason = ?, published_at = ?, revision = revision + 1 WHERE id = ?').run(decision === 'approve' ? 'publicada' : decision === 'reject' ? 'rechazada' : 'pendiente', explanation, decision === 'approve' ? new Date().toISOString() : null, row.id)
         audit(row.id, `publication.${decision}`, admin, null)

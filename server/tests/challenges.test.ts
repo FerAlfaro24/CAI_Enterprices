@@ -153,13 +153,13 @@ test('Retos: calendario real, aprendizaje privado, administración y persistenci
   assert.equal((await call('/student/challenges','GET',undefined,'carol')).status,200)
  })
  await t.test('copia independiente y reinicio conservan preguntas, respuestas y auditoría',async()=>{
-  const before=await snapshot(),history=await (await call('/student/challenges/history')).json(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,15)
+  const before=await snapshot(),history=await (await call('/student/challenges/history')).json(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,16)
   await close();app=createApplication(copy,{}, {challengeClock:()=>time});await start();assert.deepEqual(await snapshot(),before);assert.deepEqual(await (await call('/student/challenges/history')).json(),history)
   assert.ok(app.db.prepare("SELECT COUNT(*) AS n FROM administration_audit WHERE kind LIKE 'challenge%'").get()!.n as number>0)
  })
  await t.test('migración 14→15 aditiva, banco sembrado una sola vez',async()=>{
   const copy=await backupLocalDatabase(path,join(directory,'legacy')),legacy=openDatabase(copy),before=legacy.prepare('SELECT * FROM requests ORDER BY id').all()
-  legacy.exec('DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15');legacy.close();assert.equal((await verifyLocalBackup(copy)).schema,14)
+  legacy.exec('DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15');legacy.close();assert.equal((await verifyLocalBackup(copy)).schema,14)
   const upgraded=openDatabase(copy);assert.deepEqual(upgraded.prepare('SELECT * FROM requests ORDER BY id').all(),before);assert.equal(upgraded.prepare('SELECT COUNT(*) AS n FROM challenge_bank').get()!.n,180);upgraded.prepare("UPDATE challenge_bank SET status='archived' WHERE id='grammar-001'").run();upgraded.close()
   const reopened=openDatabase(copy);try{assert.equal(reopened.prepare("SELECT status FROM challenge_bank WHERE id='grammar-001'").get()!.status,'archived');assert.equal(reopened.prepare('SELECT COUNT(*) AS n FROM challenge_bank').get()!.n,180)}finally{reopened.close()}
  })

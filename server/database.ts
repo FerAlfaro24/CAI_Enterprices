@@ -278,6 +278,29 @@ export function migrateDatabase(db: DatabaseSync) {
       for(const question of challengeBank)insert.run(question.id,JSON.stringify(question))
     })
   }
+  if(!db.prepare('SELECT version FROM migrations WHERE version=16').get()){
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE badge_requests (
+        id INTEGER PRIMARY KEY,student_id INTEGER NOT NULL REFERENCES students(request_id),badge_id TEXT NOT NULL,
+        description TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected','withdrawn')),
+        revision INTEGER NOT NULL DEFAULT 1,reason TEXT,created_at TEXT NOT NULL,request_key TEXT NOT NULL,UNIQUE(student_id,request_key)
+      );
+      CREATE UNIQUE INDEX badge_pending ON badge_requests(student_id,badge_id) WHERE status='pending';
+      CREATE TABLE badge_grants (
+        id INTEGER PRIMARY KEY,student_id INTEGER NOT NULL REFERENCES students(request_id),badge_id TEXT NOT NULL,
+        badge_json TEXT NOT NULL,source TEXT NOT NULL CHECK(source IN ('automatic','cai')),condition TEXT NOT NULL,awarded_at TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','revoked')),revision INTEGER NOT NULL DEFAULT 1,reason TEXT,
+        source_request INTEGER REFERENCES badge_requests(id),create_key TEXT UNIQUE,fingerprint TEXT,UNIQUE(student_id,badge_id)
+      );
+      CREATE TABLE badge_audit (
+        id INTEGER PRIMARY KEY,request_id INTEGER REFERENCES badge_requests(id),grant_id INTEGER REFERENCES badge_grants(id),
+        admin_id INTEGER REFERENCES admin_users(id),student_id INTEGER REFERENCES students(request_id),action TEXT NOT NULL,reason TEXT,created_at TEXT NOT NULL
+      );
+      ALTER TABLE publications ADD COLUMN badge_grant_id INTEGER REFERENCES badge_grants(id);
+      CREATE UNIQUE INDEX publication_badge_grant ON publications(badge_grant_id) WHERE badge_grant_id IS NOT NULL AND status IN ('pendiente','publicada');
+      INSERT INTO migrations VALUES (16,strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 
