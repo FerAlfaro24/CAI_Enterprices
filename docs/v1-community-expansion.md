@@ -106,7 +106,7 @@ Rama propuesta `feat/v1-community-videos`. Se puede preparar/probar localmente a
 
 Es una ampliación funcional importante, especialmente retos/insignias con administración y vídeo privado. No se garantiza completar todo con calidad dentro del calendario original únicamente por el avance del alcance anterior. Mantener entregas verificables por bloque; revisar capacidad/plazo tras la primera implementación. No comprometer una fecha nueva sin acuerdo ni quitar pruebas/privacidad para encajar.
 
-**Siguiente trabajo autónomo:** bloque 2, Retos con administración/calendario/progreso persistente; conservar comentarios/reacciones ya comprobados. La sesión original de este plan fue documental; las implementaciones posteriores se registran en sus informes y PROJECT_STATE. No pedir otra vez permiso para incluir los cinco módulos ni para que solo coordinación suba vídeos.
+**Siguiente trabajo autónomo vigente:** bloque 4, vídeos privados de coordinación para el grupo. Retos e Insignias ya están conectados y comprobados; conservar también comentarios/reacciones. La sesión original de este plan fue documental; las implementaciones posteriores se registran en sus informes y PROJECT_STATE. Ver [pendientes actualizados al 12 de noviembre](pendientes-2026-11-12.md) para entrega y mejoras propuestas. No pedir otra vez permiso para incluir los cinco módulos ni para que solo coordinación suba vídeos.
 
 Google/correo reales, contenido/reglas finales y aceptación de CAI conservan su tanda agrupada; contratación de servidor/presupuesto al final. Vídeo local no equivale a almacenamiento/reproducción en producción. No hace falta esperar a cuentas externas para construir interacciones, retos o insignias localmente.
 
