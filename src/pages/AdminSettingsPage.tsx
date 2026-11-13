@@ -61,7 +61,7 @@ export function AdminSettingsPage() {
                 </div>
               </div>
             </div>
-            {group.items.filter(item => !connection || item.key !== 'allowReactions').map((item) => (
+            {group.items.filter(item => !connection || !['allowReactions','allowComments'].includes(item.key)).map((item) => (
               <Switch
                 key={item.key}
                 label={connection && item.key === 'hideLastNames' ? 'Usar el nombre visible aprobado' : connection && item.key === 'minorsPrivateByDefault' ? 'Expedientes de menores privados' : item.label}
@@ -79,6 +79,7 @@ export function AdminSettingsPage() {
         ))}
 
         {connection?.configuration && <section className={s.card} aria-labelledby="reaction-settings-title"><h2 id="reaction-settings-title" className={s['card-title']}>Reacciones a las historias</h2><Switch label="Permitir reacciones" description="Los alumnos de cada grupo pueden celebrar sus historias. Al pausar se conservan los contadores y cada alumno puede quitar su reacción." checked={connection.configuration.settings.reactionsOpen} disabled={connection.busy} onChange={value => { void connection.saveControls({...connection.configuration!.settings,reactionsOpen:value}) }} /></section>}
+        {connection?.configuration&&<section className={s.card} aria-labelledby="comment-settings-title"><h2 id="comment-settings-title" className={s['card-title']}>Comentarios de las historias</h2><Switch label="Recibir nuevos comentarios" description="Cada comentario se envía a revisión antes de mostrarse al grupo. Al pausar se conservan los existentes y cada alumno puede retirar los suyos." checked={connection.configuration.settings.commentsOpen} disabled={connection.busy} onChange={value=>{void connection.saveControls({...connection.configuration!.settings,commentsOpen:value})}}/></section>}
         <CatalogSettings />
         <AdminPasswordForm />
         <section className={s.card} aria-labelledby="preview-title">
@@ -102,8 +103,8 @@ export function AdminSettingsPage() {
             )}
             <div className={s['preview-actions']}>
               {(connection?.configuration?.settings.reactionsOpen ?? settings.allowReactions) && <span>👏 Felicitar · 12</span>}
-              {settings.allowComments && <span>💬 Comentar</span>}
-              {!(connection?.configuration?.settings.reactionsOpen ?? settings.allowReactions) && !settings.allowComments && <span>Sin interacción: solo lectura</span>}
+              {(connection?.configuration?.settings.commentsOpen??settings.allowComments) && <span>💬 Comentar · Con revisión</span>}
+              {!(connection?.configuration?.settings.reactionsOpen ?? settings.allowReactions) && !(connection?.configuration?.settings.commentsOpen??settings.allowComments) && <span>Sin interacción: solo lectura</span>}
             </div>
           </div>
         </section>

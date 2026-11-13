@@ -31,6 +31,7 @@ export function AdminPage() {
           </p>
         </div>
         <div className={s['head-actions']}>
+          {!!connection?.commentCounts.pendiente&&<Link to="/admin/publicaciones?bandeja=comentarios" className={`${s.btn} ${s['btn--ghost']}`}>Revisar comentarios ({connection.commentCounts.pendiente})</Link>}
           <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => {
             dispatch({ type: 'reset' })
           }}>

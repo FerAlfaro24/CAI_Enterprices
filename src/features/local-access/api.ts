@@ -42,6 +42,18 @@ async function call<T>(path: string, method = 'GET', body?: unknown, headers?: R
 
 export const catalogApi = { get: () => call<PublicCatalog>('/catalog') }
 
+export const commentsApi = {
+  list:(postId:string,before=0)=>call<import('../../../server/contracts').CommentPage<import('../../../server/contracts').PublicComment>&{commentsOpen:boolean}>(`/student/posts/${postId}/comments?before=${before}`),
+  mine:(postId:string,before=0)=>call<import('../../../server/contracts').CommentPage<import('../../../server/contracts').OwnComment>>(`/student/posts/${postId}/comments/mine?before=${before}`),
+  create:(postId:string,body:string,key:string)=>call<{comment:import('../../../server/contracts').OwnComment}>(`/student/posts/${postId}/comments`,'POST',{body},{'Idempotency-Key':key}),
+  withdraw:(comment:import('../../../server/contracts').OwnComment)=>call(`/student/comments/${comment.id}/withdraw`,'POST',{revision:comment.revision,confirmed:true}),
+  counts:()=>call<{counts:import('../../../server/contracts').CommentCounts}>('/comment-counts'),
+  reviews:(status:import('../../../server/contracts').CommentStatus,before=0)=>call<import('../../../server/contracts').CommentPage<import('../../../server/contracts').CommentReview>&{counts:import('../../../server/contracts').CommentCounts}>(`/comments?status=${status}&before=${before}`),
+  detail:(id:string)=>call<{comment:import('../../../server/contracts').CommentReview;history:import('../../../server/contracts').CommentHistory[]}>(`/comments/${id}`),
+  decide:(comment:import('../../../server/contracts').CommentReview,decision:'approve'|'reject'|'undo'|'withdraw',reason:string)=>call(`/comments/${comment.id}/${decision}`,'POST',{revision:comment.revision,reason,confirmed:true}),
+  configure:(post:{id:string;revision:number},open:boolean)=>call(`/posts/${post.id}/comments`,'PATCH',{revision:post.revision,open}),
+}
+
 export const localApi = {
   configuration: () => call<{ groups: CatalogGroup[]; settings: CommunityControls }>('/configuration'),
   saveControls: (settings: CommunityControls) => call('/configuration', 'PATCH', settings),

@@ -35,7 +35,7 @@ export function AdminLayout() {
   const { pathname } = useLocation()
   const pending = {
     requests: countByStatus(state.requests, requestStatuses).pendiente,
-    posts: countByStatus(state.posts, postStatuses).pendiente,
+    posts: countByStatus(state.posts, postStatuses).pendiente + connection.commentCounts.pendiente,
   }
   const pageTitle = titles[pathname.replace(/\/$/, '')] ?? 'Administración'
 

@@ -1,30 +1,18 @@
 import { useId, useState, type FormEvent } from 'react'
 import { useCommunity } from '../context'
-import { getMember } from '../data/members'
-import { formatPostDate } from '../model'
-import type { Comment, Post } from '../types'
+import type { Post } from '../types'
+import { ConnectedComments } from './ConnectedComments'
 import s from '../community.module.css'
 import { CommunityIcon } from './ui'
-import { MemberLink } from './MemberLink'
+import { CommentItem } from './CommentItem'
+export { CommentItem } from './CommentItem'
 
-export function CommentItem({ comment }: { comment: Comment }) {
-  const member = getMember(comment.authorId)
-  return (
-    <div className={s.comment}>
-      <MemberLink member={member} avatar small />
-      <div className={s.commentBubble}>
-        <div className={s.commentMeta}><strong><MemberLink member={member} /></strong>{member.institution && <span>CAI · Demo</span>}<time dateTime={comment.createdAt}>{formatPostDate(comment.createdAt)}</time></div>
-        <p>{comment.body}</p>
-      </div>
-    </div>
-  )
-}
-
-export function Comments({ post }: { post: Post }) {
-  const { state, dispatch } = useCommunity()
+export function Comments({ post,autoFocus=false }: { post: Post;autoFocus?:boolean }) {
+  const { state, dispatch,connection } = useCommunity()
   const [body, setBody] = useState('')
   const [error, setError] = useState('')
   const id = useId()
+  if(connection)return <ConnectedComments key={post.id} post={post} autoFocus={autoFocus}/>
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!body.trim()) {

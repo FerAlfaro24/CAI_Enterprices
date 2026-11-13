@@ -50,6 +50,8 @@ export interface Post {
   reactions: ReactionCounts
   myReaction: Reaction | null
   reactionRevision?: number
+  commentCount?:number
+  commentsOpen?:boolean
   comments: Comment[]
 }
 

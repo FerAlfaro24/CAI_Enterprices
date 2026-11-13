@@ -3,7 +3,7 @@ import { cx } from '../../landing/utils'
 import s from '../admin.module.css'
 import { rejectReasons, type Post } from '../data/mockData'
 import { formatDate, useAdmin } from '../state'
-import { Avatar, Icon, StatusBadge, TypeTag } from './ui'
+import { Avatar, Icon, StatusBadge, TypeTag, Switch } from './ui'
 
 /** Marcador gráfico: el prototipo no muestra fotografías de alumnos. */
 function MediaPlaceholder({ caption }: { caption: string }) {
@@ -124,6 +124,7 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
               {post.authorIsMinor && <span className={cx(s.tag, s['tag--minor'])}>Autor menor de edad</span>}
             </div>
             {raw && <p>Grupo: {raw.group}</p>}
+            {raw&&raw.status!=='retirada'&&<Switch label="Recibir comentarios en esta historia" description="Pausar detiene nuevos comentarios. Conserva los publicados y permite retirar los propios." checked={raw.commentsOpen!==false} disabled={connection?.busy} onChange={open=>{void connection?.setCommentsOpen(raw,open)}}/>}
             <p style={{ margin: 0, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{post.body}</p>
             {cannotPublish && <p className={s.alert}>El autor debe tener acceso activo y conservar el programa y grupo del envío para publicarlo.</p>}
             {connection?.error && <p className={s.alert} role="alert">{connection.error}</p>}
