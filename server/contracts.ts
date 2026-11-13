@@ -1,7 +1,7 @@
 export type RequestStatus = 'pendiente' | 'aprobada' | 'rechazada'
 
 export type CatalogGroup = { id: number; program: string; name: string; active: boolean; revision: number }
-export type CommunityControls = { registrationOpen: boolean; submissionsOpen: boolean; revision: number }
+export type CommunityControls = { registrationOpen: boolean; submissionsOpen: boolean; reactionsOpen: boolean; revision: number }
 export type PublicCatalog = { groups: Pick<CatalogGroup, 'id' | 'program' | 'name'>[]; settings: Omit<CommunityControls, 'revision'> }
 export type ContactSubmission = { name: string; contact: string; program: string; consent: true }
 export type ContactStatus = 'nueva' | 'seguimiento' | 'atendida'
@@ -107,8 +107,11 @@ export const publicationCategories = { achievement: 'Logro', experience: 'Experi
 export type PublicationDraft = { title: string; body: string; category: keyof typeof publicationCategories }
 export type PublicationStatus = 'pendiente' | 'publicada' | 'rechazada' | 'retirada'
 export type PublicationDecision = 'approve' | 'reject' | 'undo'
+export const reactionKinds = ['love', 'wellDone', 'congrats', 'amazing', 'funny'] as const
+export type ReactionKind = typeof reactionKinds[number]
+export type ReactionSummary = { counts: Record<ReactionKind, number>; myReaction: ReactionKind | null; revision: number }
 export type PublishedPost = PublicationDraft & {
-  id: string; author: GroupMember; createdAt: string; publishedAt: string | null
+  id: string; author: GroupMember; createdAt: string; publishedAt: string | null; engagement?: ReactionSummary
 }
 export type OwnPost = PublishedPost & { status: PublicationStatus; revision: number; reason: string | null }
 export type ReviewPost = OwnPost & { studentId: string; studentName: string; program: string; group: string; authorActive: boolean; authorIsMinor: boolean }

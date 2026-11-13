@@ -12,7 +12,7 @@ export async function verifyLocalBackup(path: string) {
     if (checks.length !== 1 || checks[0]?.quick_check !== 'ok') throw new Error('La copia no superó la comprobación de integridad de SQLite.')
     if (db.prepare('PRAGMA foreign_key_check').all().length) throw new Error('La copia contiene referencias incompletas.')
     const version = Number(db.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n)
-    if (![9,10,11,12].includes(version)) throw new Error('La versión de esta copia no corresponde a un esquema local compatible. No se modificó ni migró.')
+    if (![9,10,11,12,13].includes(version)) throw new Error('La versión de esta copia no corresponde a un esquema local compatible. No se modificó ni migró.')
     const counts = {
       requests: Number(db.prepare('SELECT COUNT(*) AS n FROM requests').get()!.n),
       students: Number(db.prepare('SELECT COUNT(*) AS n FROM students').get()!.n),

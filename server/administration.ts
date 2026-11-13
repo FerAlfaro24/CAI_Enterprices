@@ -14,22 +14,22 @@ export function administrationAudit(db: Database, actor: number, kind: string, d
 export function administration(db: Database) {
   const settings = (): CommunityControls => {
     const row = db.prepare('SELECT * FROM community_controls WHERE id = 1').get()!
-    return { registrationOpen: row.registration_open === 1, submissionsOpen: row.submissions_open === 1, revision: Number(row.revision) }
+    return { registrationOpen: row.registration_open === 1, submissionsOpen: row.submissions_open === 1, reactionsOpen: row.reactions_open === 1, revision: Number(row.revision) }
   }
   const groups = (): CatalogGroup[] => db.prepare('SELECT * FROM course_groups ORDER BY program, name').all().map(row => ({ id: Number(row.id), program: String(row.program), name: String(row.name), active: row.active === 1, revision: Number(row.revision) }))
   return {
     settings, groups,
     publicCatalog(): PublicCatalog {
-      const { registrationOpen, submissionsOpen } = settings()
-      return { groups: groups().filter(group => group.active).map(({ id, program, name }) => ({ id, program, name })), settings: { registrationOpen, submissionsOpen } }
+      const { registrationOpen, submissionsOpen, reactionsOpen } = settings()
+      return { groups: groups().filter(group => group.active).map(({ id, program, name }) => ({ id, program, name })), settings: { registrationOpen, submissionsOpen, reactionsOpen } }
     },
     updateSettings(value: unknown, actor: number) {
       const data = record(value), revision = revisionOf(data.revision)
-      if (Object.keys(data).some(key => !['revision', 'registrationOpen', 'submissionsOpen'].includes(key)) || typeof data.registrationOpen !== 'boolean' || typeof data.submissionsOpen !== 'boolean') throw new HttpError(400, 'Revisa los ajustes de solicitudes y publicaciones.')
+      if (Object.keys(data).some(key => !['revision', 'registrationOpen', 'submissionsOpen', 'reactionsOpen'].includes(key)) || typeof data.registrationOpen !== 'boolean' || typeof data.submissionsOpen !== 'boolean' || typeof data.reactionsOpen !== 'boolean') throw new HttpError(400, 'Revisa los ajustes de solicitudes, publicaciones y reacciones.')
       transaction(db, () => {
         if (settings().revision !== revision) throw new HttpError(409, 'La configuración cambió en otra ventana. Actualiza antes de guardar.')
-        db.prepare('UPDATE community_controls SET registration_open = ?, submissions_open = ?, revision = revision + 1 WHERE id = 1').run(Number(data.registrationOpen), Number(data.submissionsOpen))
-        administrationAudit(db, actor, 'settings.updated', { registrationOpen: data.registrationOpen, submissionsOpen: data.submissionsOpen })
+        db.prepare('UPDATE community_controls SET registration_open = ?, submissions_open = ?, reactions_open = ?, revision = revision + 1 WHERE id = 1').run(Number(data.registrationOpen), Number(data.submissionsOpen), Number(data.reactionsOpen))
+        administrationAudit(db, actor, 'settings.updated', { registrationOpen: data.registrationOpen, submissionsOpen: data.submissionsOpen, reactionsOpen: data.reactionsOpen })
       })
     },
     createGroup(value: unknown, actor: number) {

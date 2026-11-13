@@ -105,7 +105,7 @@ test('Galería privada: decodificación, permisos por recurso y respaldo complet
   })
   await t.test('verificar copia sin escribir, ensayar acceso aislado y detectar imagen corrupta',async()=>{
     const copy=await backupLocalDatabase(path,join(directory,'verification')),before=await readFile(copy)
-    assert.deepEqual(await verifyLocalBackup(copy),{schema:12,requests:3,students:3,accounts:3,posts:0,images:1})
+    assert.deepEqual(await verifyLocalBackup(copy),{schema:13,requests:3,students:3,accounts:3,posts:0,images:1})
     assert.deepEqual(await readFile(copy),before)
     const rehearsal=createApplication(copy)
     rehearsal.server.listen(0,'127.0.0.1');await once(rehearsal.server,'listening')

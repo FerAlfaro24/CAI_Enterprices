@@ -243,6 +243,14 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       }
       if (path === '/api/local/student/group' && method === 'GET') return json(response, 200, { members: studentAuth.group(user) })
       if (path === '/api/local/student/posts' && method === 'GET') return json(response, 200, { posts: posts.feed(user), mine: posts.mine(user) })
+      const reaction = path.match(/^\/api\/local\/student\/posts\/(PUB-\d+)\/reaction$/)
+      if (reaction && method === 'PATCH') {
+        limit(`reaction:${user.id}`, 60, 15 * 60_000)
+        const key = request.headers['idempotency-key']
+        if (typeof key !== 'string') throw new HttpError(400, 'Falta el identificador de la reacción.')
+        posts.react(user, reaction[1]!, await protectedBody(), key)
+        return json(response, 200, { ok: true })
+      }
       if (path === '/api/local/student/posts' && method === 'POST') {
         limit(`post:${user.id}`, 20, 60 * 60_000)
         const key = request.headers['idempotency-key']

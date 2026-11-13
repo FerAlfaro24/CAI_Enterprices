@@ -213,6 +213,21 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (12, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 13').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      ALTER TABLE community_controls ADD COLUMN reactions_open INTEGER NOT NULL DEFAULT 0 CHECK(reactions_open IN (0,1));
+      CREATE TABLE post_reactions (
+        publication_id INTEGER NOT NULL REFERENCES publications(id), student_id INTEGER NOT NULL REFERENCES students(request_id),
+        reaction TEXT CHECK(reaction IS NULL OR reaction IN ('love','wellDone','congrats','amazing','funny')),
+        revision INTEGER NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(publication_id,student_id)
+      );
+      CREATE TABLE reaction_requests (
+        student_id INTEGER NOT NULL REFERENCES students(request_id), request_key TEXT NOT NULL,
+        fingerprint TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY(student_id,request_key)
+      );
+      INSERT INTO migrations VALUES (13, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

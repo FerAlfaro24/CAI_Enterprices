@@ -3,6 +3,7 @@ import { ageAt, HttpError, record } from './validation.ts'
 import { queueNotice } from './notices.ts'
 import { publicProfileId } from './public-profiles.ts'
 import { administration } from './administration.ts'
+import { reactionSummary, saveReaction } from './reactions.ts'
 import { publicationCategories, publicationLimits, type OwnPost, type PublicationDecision, type PublicationDraft, type PublicationStatus, type PublishedPost, type ReviewPost, type StudentUser, type Submission } from './contracts.ts'
 
 type Row = {
@@ -67,7 +68,15 @@ export function publications(db: Database) {
     feed(user: StudentUser): PublishedPost[] {
       const profile = activeProfile(user)
       if (profile.group === 'Por asignar') return []
-      return (db.prepare(`${select} WHERE p.status = 'publicada' AND p.program = ? AND p.group_name = ? ORDER BY p.published_at DESC, p.id DESC`).all(profile.program, profile.group) as Row[]).filter(available).map(row => publicPost(db, row))
+      return (db.prepare(`${select} WHERE p.status = 'publicada' AND p.program = ? AND p.group_name = ? ORDER BY p.published_at DESC, p.id DESC`).all(profile.program, profile.group) as Row[]).filter(available).map(row => ({ ...publicPost(db, row), engagement: reactionSummary(db, row.id, idOf(user.id, 'CAI'), profile.program, profile.group) }))
+    },
+    react(user: StudentUser, id: string, value: unknown, key: string) {
+      transaction(db, () => {
+        const profile = activeProfile(user)
+        const row = db.prepare(`${select} WHERE p.id = ?`).get(idOf(id, 'PUB')) as Row | undefined
+        if (!row || row.status !== 'publicada' || !available(row) || profile.group === 'Por asignar' || row.program !== profile.program || row.group_name !== profile.group) throw new HttpError(404, 'Esta publicación ya no está disponible para tu grupo.')
+        saveReaction(db, row.id, idOf(user.id, 'CAI'), value, key, administration(db).settings().reactionsOpen)
+      })
     },
     mine(user: StudentUser): OwnPost[] {
       activeProfile(user)
