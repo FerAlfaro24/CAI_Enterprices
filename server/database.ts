@@ -1,4 +1,5 @@
 import { DatabaseSync } from 'node:sqlite'
+import { challengeBank } from './challenge-bank.ts'
 import { mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { accessRequests, students } from '../src/features/admin/data/mockData.ts'
@@ -248,6 +249,34 @@ export function migrateDatabase(db: DatabaseSync) {
       );
       INSERT INTO migrations VALUES (14, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
+  }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 15').get()) {
+    transaction(db, () => {
+      db.exec(`CREATE TABLE challenge_bank (
+        id TEXT PRIMARY KEY, content_json TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1,
+        status TEXT NOT NULL CHECK(status IN ('draft','ready','archived')), source TEXT NOT NULL CHECK(source IN ('base','custom'))
+      );
+      CREATE TABLE challenge_controls (id INTEGER PRIMARY KEY CHECK(id=1), enabled INTEGER NOT NULL CHECK(enabled IN (0,1)), revision INTEGER NOT NULL DEFAULT 1);
+      INSERT INTO challenge_controls VALUES (1,1,1);
+      CREATE TABLE daily_challenges (
+        id INTEGER PRIMARY KEY, day TEXT NOT NULL, program TEXT NOT NULL, group_name TEXT NOT NULL,
+        slot INTEGER NOT NULL CHECK(slot BETWEEN 0 AND 2), bank_id TEXT NOT NULL REFERENCES challenge_bank(id),
+        content_json TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1,
+        state TEXT NOT NULL CHECK(state IN ('published','archived')), source TEXT NOT NULL CHECK(source IN ('automatic','scheduled')),
+        UNIQUE(day,program,group_name,slot)
+      );
+      CREATE TABLE challenge_attempts (
+        id INTEGER PRIMARY KEY, student_id INTEGER NOT NULL REFERENCES students(request_id),
+        assignment_id INTEGER NOT NULL REFERENCES daily_challenges(id), day TEXT NOT NULL, slot INTEGER NOT NULL CHECK(slot BETWEEN 0 AND 2),
+        answer_index INTEGER NOT NULL, correct INTEGER NOT NULL CHECK(correct IN (0,1)), points INTEGER NOT NULL CHECK(points IN (5,15)),
+        created_at TEXT NOT NULL, request_key TEXT NOT NULL, fingerprint TEXT NOT NULL,
+        UNIQUE(student_id,day,slot), UNIQUE(student_id,request_key)
+      );
+      CREATE INDEX challenge_history ON challenge_attempts(student_id,id DESC);
+      INSERT INTO migrations VALUES (15,strftime('%Y-%m-%dT%H:%M:%fZ','now'));`)
+      const insert=db.prepare("INSERT INTO challenge_bank(id,content_json,status,source) VALUES (?,?,'ready','base')")
+      for(const question of challengeBank)insert.run(question.id,JSON.stringify(question))
+    })
   }
   return db
 }

@@ -126,3 +126,14 @@ export type CommentReview = OwnComment & {
   publication:{id:string;title:string;status:PublicationStatus;program:string;group:string;revision:number;commentsOpen:boolean}
 }
 export type CommentHistory = { action:string;reason:string|null;actor:string;createdAt:string }
+
+export type ChallengeLane='grammar'|'words'|'everyday'
+export type ChallengeKind='complete'|'choose'|'meaning'|'reply'|'order'
+export type ChallengeDefinition={id:string;lane:ChallengeLane;topic:string;kind:ChallengeKind;instruction:string;question:string;options:string[];correctIndex:number;explanation:string;example:string}
+export type ChallengeBankItem=ChallengeDefinition&{revision:number;status:'draft'|'ready'|'archived';source:'base'|'custom'}
+export type ChallengeResult={answerIndex:number;correct:boolean;points:number;createdAt:string;correctIndex:number;explanation:string;example:string}
+export type DailyQuestion={id:string;revision:number;day:string;slot:number;topic:string;kind:ChallengeKind;instruction:string;question:string;options:string[];attempt:ChallengeResult|null;previousGroup:boolean}
+export type ChallengeProgress={points:number;answered:number;correct:number;participatedDays:number;completedDays:number;currentStreak:number;longestStreak:number;todayAnswered:number}
+export type ChallengeSnapshot={day:string;timeZone:string;enabled:boolean;items:DailyQuestion[];progress:ChallengeProgress;needsGroup:boolean}
+export type ChallengeSchedule={id:string;day:string;slot:number;program:string;group:string;revision:number;state:'published'|'archived';question:ChallengeDefinition;source:'automatic'|'scheduled';attempts:number}
+export type ChallengeHistory={items:DailyQuestion[];nextCursor:number|null}

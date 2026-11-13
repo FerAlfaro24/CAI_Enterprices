@@ -14,6 +14,7 @@ import { adminRecovery, adminRecoveryMessage, type AdminRecoveryDelivery } from 
 import { adminTeam } from './admin-team.ts'
 import { studentRecords } from './student-records.ts'
 import { commentsRepository, commentCursor, commentStatus } from './comments.ts'
+import { challengesRepository } from './challenges.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
@@ -42,7 +43,7 @@ function json(response: ServerResponse, status: number, data: unknown) {
   response.end(JSON.stringify(data))
 }
 
-export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery} = {}) {
+export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date} = {}) {
   const db = openDatabase(databasePath)
   const access = accessRepository(db)
   const auth = authRepository(db)
@@ -58,6 +59,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const team=adminTeam(db)
   const records=studentRecords(db)
   const comments=commentsRepository(db)
+  const challenges=challengesRepository(db,options.challengeClock)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -228,6 +230,14 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
         if (studentAuth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
         return data
       }
+      if(path==='/api/local/student/challenges'&&method==='GET')return json(response,200,challenges.snapshot(user))
+      if(path==='/api/local/student/challenges/history'&&method==='GET')return json(response,200,challenges.history(user,commentCursor(url.searchParams.get('before'))))
+      const challenge=path.match(/^\/api\/local\/student\/challenges\/(Q-\d+)\/answer$/)
+      if(challenge&&method==='POST'){
+        limit(`challenge:${user.id}`,60,15*60_000)
+        const key=request.headers['idempotency-key'];if(typeof key!=='string')throw new HttpError(400,'Falta el identificador de tu respuesta.')
+        return json(response,200,{result:challenges.answer(user,challenge[1]!,await protectedBody(),key)})
+      }
       if (path === '/api/local/student/me' && method === 'GET') return json(response, 200, { user })
       if (path === '/api/local/student/profile' && method === 'GET') return json(response, 200, { profile: profiles.get(user) })
       if (path === '/api/local/student/profile' && method === 'PATCH') {
@@ -291,6 +301,18 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       const data = await body(request, maximum)
       if (auth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
       return data
+    }
+    if(path==='/api/local/challenges/bank'&&method==='GET')return json(response,200,{items:challenges.bank()})
+    if(path==='/api/local/challenges/controls'&&method==='GET')return json(response,200,challenges.controls())
+    if(path==='/api/local/challenges/controls'&&method==='PATCH'){challenges.configure(await protectedBody(),user.id);return json(response,200,{ok:true})}
+    if(path==='/api/local/challenges/calendar'&&method==='GET')return json(response,200,challenges.calendar(url.searchParams.get('day'),Number(url.searchParams.get('groupId'))))
+    if(path==='/api/local/challenges/calendar'&&method==='POST'){
+      limit(`challenge-calendar:${user.id}`,60,15*60_000);return json(response,200,challenges.schedule(await protectedBody(),user.id))
+    }
+    const bankQuestion=path.match(/^\/api\/local\/challenges\/bank\/([a-zA-Z0-9-]+)$/)
+    if((path==='/api/local/challenges/bank'&&method==='POST')||(bankQuestion&&method==='PATCH')){
+      limit(`challenge-bank:${user.id}`,60,15*60_000)
+      const key=request.headers['idempotency-key'];return json(response,200,{item:challenges.saveBank(bankQuestion?.[1]??null,await protectedBody(),user.id,typeof key==='string'?key:'')})
     }
     if (path === '/api/local/auth/password' && method === 'POST') {
       limit(`admin-password:${user.id}`, 5, 15 * 60_000)

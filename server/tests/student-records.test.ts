@@ -135,17 +135,17 @@ test('Corrección de expediente: datos privados, tutor, identidad y revisiones',
     assert.equal(await logging,null)
   })
   await t.test('copia/reinicio conservan expediente, historial y otras cuentas',async()=>{
-    const before=await get(),copy=await backupLocalDatabase(path,join(directory,'backups'));assert.equal((await verifyLocalBackup(copy)).schema,14)
+    const before=await get(),copy=await backupLocalDatabase(path,join(directory,'backups'));assert.equal((await verifyLocalBackup(copy)).schema,15)
     const restored=openDatabase(copy);try{assert.deepEqual(studentRecords(restored).get(ids.adult!),before)}finally{restored.close()}
     await close();app=createApplication(path);base=await listen();assert.deepEqual(await get(),before);assert.equal((await call('/student/me','GET',undefined,'peer')).status,200)
   })
   await t.test('migración 12 añade historial vacío sin alterar expedientes ni sesiones de esquema 11',async()=>{
     const copy=await backupLocalDatabase(path,join(directory,'legacy')),legacy=openDatabase(copy)
     const before=legacy.prepare('SELECT id,payload,revision FROM requests ORDER BY id').all(),sessions=legacy.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all()
-    legacy.exec('DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14; DROP TABLE reaction_requests; DROP TABLE post_reactions; ALTER TABLE community_controls DROP COLUMN reactions_open; DELETE FROM migrations WHERE version=13; DROP TABLE student_record_changes; DELETE FROM migrations WHERE version=12');legacy.close()
+    legacy.exec('DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14; DROP TABLE reaction_requests; DROP TABLE post_reactions; ALTER TABLE community_controls DROP COLUMN reactions_open; DELETE FROM migrations WHERE version=13; DROP TABLE student_record_changes; DELETE FROM migrations WHERE version=12');legacy.close()
     assert.equal((await verifyLocalBackup(copy)).schema,11)
     const upgraded=openDatabase(copy)
-    try{assert.deepEqual(upgraded.prepare('SELECT id,payload,revision FROM requests ORDER BY id').all(),before);assert.deepEqual(upgraded.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),sessions);assert.equal(upgraded.prepare('SELECT COUNT(*) AS n FROM student_record_changes').get()!.n,0);assert.equal(upgraded.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,14)}finally{upgraded.close()}
+    try{assert.deepEqual(upgraded.prepare('SELECT id,payload,revision FROM requests ORDER BY id').all(),before);assert.deepEqual(upgraded.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),sessions);assert.equal(upgraded.prepare('SELECT COUNT(*) AS n FROM student_record_changes').get()!.n,0);assert.equal(upgraded.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,15)}finally{upgraded.close()}
   })
   await t.test('limita confirmaciones por administrador sin bloquear otras cuentas',async()=>{
     await login('validation')
