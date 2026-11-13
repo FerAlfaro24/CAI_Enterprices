@@ -8,6 +8,9 @@ const proxy = { '/api/local': { target: `http://127.0.0.1:${apiPort}` } }
 const privateChallenges = ['challenge-bank.ts', 'challenges.ts'].map(name => '**/[sS][eE][rR][vV][eE][rR]/' + name.replace(/[a-z]/g, letter => `[${letter}${letter.toUpperCase()}]`))
 
 export default defineConfig({
+  // Los verificadores de modelos usan la caché SSR predeterminada. No compartirla
+  // con la web abierta; las fixtures también usan otro puerto de API.
+  cacheDir: `node_modules/.vite-cai-web-${apiPort}`,
   plugins: [react(), tailwindcss()],
   build: { manifest: true },
   server: { proxy, fs: { deny: ['.env', '.env.*', '**/*.{crt,pem}', '**/.[gG][iI][tT]/**', '**/.[lL][oO][cC][aA][lL]/**', ...privateChallenges] } },
