@@ -1,4 +1,17 @@
 .challenges { color: var(--text); }
+.connected { overflow-wrap:anywhere; }
+.dailyTrack { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.dailyTrack button { padding:8px 3px; gap:5px; }
+.dailyTrack small { font-size:10px; font-weight:600; }
+.history { margin-top:28px; padding-top:24px; border-top:1px solid var(--line); }
+.history h2 { color:var(--navy); font-size:28px; margin:10px 0; }
+.history p { color:var(--text-secondary); line-height:1.65; margin:10px 0; font-size:14px; }
+.review { margin-top:12px; padding:18px; background:var(--paper); border:1px solid var(--line); border-radius:14px; overflow-wrap:anywhere; }
+.review summary { cursor:pointer; color:var(--navy); font-size:14px; font-weight:750; line-height:1.6; min-height:30px; }
+.finished { display:flex; gap:14px; margin-top:24px; padding:18px; border:1px solid var(--success-line); border-radius:14px; background:var(--success-bg); color:var(--success-ink); }
+.finished h2 { margin:0 0 7px; font-size:22px; }
+.finished p { font-size:14px; line-height:1.6; }
+.checkButton:disabled { opacity:.65; cursor:wait; }
 .pageHeading { display: grid; grid-template-columns: minmax(0,1.85fr) minmax(0,1fr); gap: 32px; align-items: center; }
 .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--primary); font-size: 10px; font-weight: 800; line-height: 1.5; letter-spacing: 1.1px; }
 .pageHeading h1 { max-width: 760px; margin: 16px 0 12px; color: var(--navy); font-size: clamp(34px,3.2vw,47px); line-height: 1.05; font-weight: 800; letter-spacing: -1.6px; scroll-margin-top: 140px; }
@@ -185,4 +198,13 @@
 @media (prefers-reduced-motion: reduce) {
   .challenges *, .challenges *::before, .challenges *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
   .challenges :where(button,label,aside), .challenges [role='status'] { transform: none !important; }
+}
+/* El recorrido real de tres preguntas debe aparecer antes del formulario también en móvil. */
+.connected .dailyTrack { grid-template-columns:repeat(3,minmax(0,1fr)); }
+@media (max-width:850px) {
+  .challenges.connected { display:block; }
+  .connected .pageHeading { display:grid; grid-template-columns:minmax(0,1fr); }
+  .connected .pageHeading > div { min-width:0; }
+  .connected .challengeGrid { display:grid; grid-template-columns:minmax(0,1fr); gap:20px; }
+  .connected .questionPanel { margin-top:0; }
 }

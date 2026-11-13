@@ -40,6 +40,19 @@ async function call<T>(path: string, method = 'GET', body?: unknown, headers?: R
   return data as T
 }
 
+export type { ChallengeSnapshot, DailyQuestion, ChallengeBankItem, ChallengeDefinition, ChallengeSchedule, ChallengeHistory } from '../../../server/contracts'
+export type ChallengeCalendar={day:string;timeZone:string;today:string;items:import('../../../server/contracts').ChallengeSchedule[];controls:{enabled:boolean;revision:number}}
+export const challengesApi={
+ today:()=>call<import('../../../server/contracts').ChallengeSnapshot>('/student/challenges'),
+ answer:(question:{id:string;revision:number},answerIndex:number,key:string)=>call(`/student/challenges/${question.id}/answer`,'POST',{revision:question.revision,answerIndex},{'Idempotency-Key':key}),
+ history:(before=0)=>call<import('../../../server/contracts').ChallengeHistory>(`/student/challenges/history?before=${before}`),
+ bank:()=>call<{items:import('../../../server/contracts').ChallengeBankItem[]}>('/challenges/bank'),
+ calendar:(day:string,groupId:number)=>call<ChallengeCalendar>(`/challenges/calendar?day=${encodeURIComponent(day)}&groupId=${groupId}`),
+ controls:()=>call<{enabled:boolean;revision:number}>('/challenges/controls'),
+ configure:(controls:{enabled:boolean;revision:number})=>call('/challenges/controls','PATCH',controls),
+ saveBank:(item:import('../../../server/contracts').ChallengeBankItem|null,question:Omit<import('../../../server/contracts').ChallengeDefinition,'id'>,status:import('../../../server/contracts').ChallengeBankItem['status'],key:string)=>call<{item:import('../../../server/contracts').ChallengeBankItem}>('/challenges/bank'+(item?'/'+item.id:''),item?'PATCH':'POST',{question,status,...(item?{revision:item.revision}:{})},{'Idempotency-Key':key}),
+ schedule:(item:import('../../../server/contracts').ChallengeSchedule,groupId:number,bankId:string,state:'published'|'archived')=>call<ChallengeCalendar>('/challenges/calendar','POST',{day:item.day,groupId,slot:item.slot,revision:item.revision,bankId,state}),
+}
 export const catalogApi = { get: () => call<PublicCatalog>('/catalog') }
 
 export const commentsApi = {

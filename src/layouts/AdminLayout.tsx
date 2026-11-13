@@ -19,6 +19,7 @@ const sections: Section[] = [
   { to: '/admin/publicaciones', label: 'Publicaciones', icon: 'file', countKey: 'posts' },
   { to: '/admin/alumnos', label: 'Alumnos', icon: 'users' },
   { to: '/admin/galeria', label: 'Galería privada', icon: 'image' },
+  { to: '/admin/retos', label: 'Retos de inglés', icon: 'trend' },
   { to: '/admin/mensajes', label: 'Mensajes y avisos', icon: 'chat' },
   { to: '/admin/configuracion', label: 'Configuración', icon: 'settings' },
 ]

@@ -6,9 +6,11 @@ import type { Attempt, Challenge } from '../types'
 import { CommunityIcon } from '../components/ui'
 import { useChallengeAnswer } from './useChallengeAnswer'
 import s from './challenges.module.css'
+import { useCommunity } from '../context'
 
 export function ChallengeQuestionPanel({ challenge, attempt }: { challenge: Challenge; attempt: Attempt | undefined }) {
-  const { selected, error, choose, submit } = useChallengeAnswer(challenge, attempt)
+  const { connection }=useCommunity()
+  const { selected, error, choose, submit,pending,unavailable } = useChallengeAnswer(challenge, attempt)
   const id = useId()
   const reduced = useCommunityReducedMotion()
   const result = useRef<HTMLDivElement>(null)
@@ -18,11 +20,11 @@ export function ChallengeQuestionPanel({ challenge, attempt }: { challenge: Chal
   }, [attempt])
 
   return <section className={s.questionPanel} aria-label="Reto del día compartido">
-    <form className={s.questionForm} aria-label={`Reto ${challenge.day}: ${challenge.topic}`} onSubmit={(event) => { submittedHere.current = selected !== null; submit(event) }}>
+    <form className={s.questionForm} aria-label={`Reto ${challenge.day}: ${challenge.topic}`} onSubmit={(event) => { submittedHere.current = selected !== null; void submit(event) }}>
       <div className={s.questionMeta}><span>{challenge.day} · {challenge.topic}</span><span>{attempt ? `+${attempt.points} PUNTOS OBTENIDOS` : 'HASTA +15 PUNTOS'}</span></div>
-      <fieldset disabled={Boolean(attempt)} aria-describedby={`${id}-intro ${id}-help${error ? ` ${id}-error` : ''}`}>
+      <fieldset disabled={Boolean(attempt)||pending||unavailable} aria-describedby={`${id}-intro ${id}-help${error ? ` ${id}-error` : ''}`}>
         <legend>{challenge.question}</legend>
-        <p className={s.questionIntro} id={`${id}-intro`}>{attempt ? 'Este reto ya está completado. Aquí puedes revisar tu respuesta y lo que aprendiste.' : 'Una opción es correcta. Toca la que te suene mejor.'}</p>
+        <p className={s.questionIntro} id={`${id}-intro`}>{attempt ? 'Este reto ya está completado. Aquí puedes revisar tu respuesta y lo que aprendiste.' : `${challenge.instruction??'Una opción es correcta.'} Toca la que te suene mejor.`}</p>
         <div className={s.options}>
           {challenge.options.map((option, index) => {
             const correct = Boolean(attempt) && index === challenge.correctIndex
@@ -39,15 +41,16 @@ export function ChallengeQuestionPanel({ challenge, attempt }: { challenge: Chal
       </fieldset>
       {error && <p className={s.error} id={`${id}-error`} role="alert">{error}</p>}
       <div className={s.checkRow}>
-        {attempt ? <span className={s.completed}><CommunityIcon name="check" size={17} /> Reto ya completado</span> : <MotionButton type="submit" className={s.checkButton}>¡Comprobar! <CommunityIcon name="arrow" size={17} /></MotionButton>}
+        {attempt ? <span className={s.completed}><CommunityIcon name="check" size={17} /> Reto ya completado</span> : <MotionButton type="submit" disabled={pending||unavailable} className={s.checkButton}>{pending?'Guardando…':'¡Comprobar!'} <CommunityIcon name="arrow" size={17} /></MotionButton>}
         <p id={`${id}-help`}>Sin reloj. Sin castigos. Solo aprender.</p>
       </div>
       {attempt && <m.div ref={result} className={s.result} data-result={attempt.correct ? 'correct' : 'incorrect'} tabIndex={-1} role="status" aria-live="polite" aria-atomic="true" initial={{ opacity: reduced ? 1 : .65 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : .2 }}>
         <strong>{attempt.correct ? '✓ ¡Respuesta correcta!' : '✕ Respuesta incorrecta. ¡Gracias por intentarlo!'}</strong>
         {!attempt.correct && <p>La respuesta correcta es: <b>{challenge.options[challenge.correctIndex]}</b></p>}
         <p>{challenge.explanation}</p>
-        <span>+{attempt.points} puntos ficticios · {attempt.correct ? '5 por participar y 10 por acertar' : '5 por participar, sin penalizaciones'}</span>
-        <small>Este reto ya está registrado en la demo. No volverá a sumar puntos.</small>
+        {challenge.example&&<p><b>Otro ejemplo:</b> {challenge.example}</p>}
+        <span>+{attempt.points} puntos{connection?'':' ficticios'} · {attempt.correct ? '5 por participar y 10 por acertar' : '5 por participar, sin penalizaciones'}</span>
+        <small>{connection?'Tu respuesta está guardada. Puedes repasarla cuando quieras, sin volver a sumar puntos.':'Este reto ya está registrado en la demo. No volverá a sumar puntos.'}</small>
       </m.div>}
     </form>
   </section>

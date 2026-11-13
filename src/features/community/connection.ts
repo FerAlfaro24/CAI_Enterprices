@@ -3,6 +3,8 @@ import type { Member, Post } from './types'
 import type { StudentProfile, StudentProfileDraft } from '../local-access/api'
 
 export interface CommunityConnection {
+  challenges: import('../../../server/contracts').ChallengeSnapshot
+  answerChallenge:(question:{id:string;revision:number},answerIndex:number,key:string)=>Promise<boolean>
   user: StudentUser
   profile: StudentProfile
   saveProfile: (draft: StudentProfileDraft) => Promise<boolean>

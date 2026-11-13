@@ -1,0 +1,29 @@
+.form { display:grid; gap:18px; border:0; padding:0; margin:0; min-width:0; }
+.field { display:grid; gap:7px; min-width:0; }
+.field label { font-size:.88rem; font-weight:600; }
+.field :is(input,select,textarea) { width:100%; min-width:0; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); font:inherit; }
+.two { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.option { display:flex; align-items:center; gap:14px; margin:12px 0; }
+.option > input { width:20px; height:20px; flex:none; accent-color:var(--blue-600); }
+.option .field { flex:1; }
+.options { min-width:0; }
+.editor { margin:20px 0; }
+.editor h2 { font-size:1.2rem; }
+.editor p { line-height:1.6; }
+.preview { padding:16px; background:var(--blue-50); border:1px solid var(--line); border-radius:10px; overflow-wrap:anywhere; }
+.preview summary { min-height:32px; cursor:pointer; font-weight:700; }
+.preview :is(p,h3,ol) { margin-top:12px; line-height:1.6; }
+.calendar { display:grid; gap:20px; }
+.calendar article { border:1px solid var(--line); border-radius:12px; padding:18px; min-width:0; overflow-wrap:anywhere; }
+.calendar h3 { font-size:1.1rem; margin:10px 0; }
+.calendar p { line-height:1.6; margin:8px 0; }
+.calendar .field { margin:16px 0; }
+.catalog { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; list-style:none; padding:0; }
+.catalog li { border:1px solid var(--line); border-radius:12px; padding:18px; min-width:0; overflow-wrap:anywhere; }
+.catalog h3 { font-size:1rem; line-height:1.5; margin:8px 0; }
+.catalog p { font-size:.88rem; line-height:1.6; margin:10px 0; }
+.catalog small { color:var(--muted); }
+.filters { display:grid; grid-template-columns:2fr 1fr 1fr; gap:14px; margin:20px 0; }
+.toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:12px; justify-content:space-between; margin-bottom:18px; }
+.notice { padding:14px; margin:16px 0; border:1px solid var(--line); border-radius:10px; background:var(--blue-50); line-height:1.6; }
+@media(max-width:700px){.two,.catalog,.filters {grid-template-columns:minmax(0,1fr)}.calendar article {padding:14px}.editor {padding:18px}}

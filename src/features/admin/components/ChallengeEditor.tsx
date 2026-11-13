@@ -1,0 +1,28 @@
+import { useEffect,useId,useRef,useState,type FormEvent } from 'react'
+import type { ChallengeBankItem,ChallengeDefinition } from '../../local-access/api'
+import s from '../admin.module.css'
+import c from '../challenges.module.css'
+
+const empty:Omit<ChallengeDefinition,'id'>={lane:'grammar',kind:'complete',topic:'',instruction:'Completa la frase.',question:'',options:['','',''],correctIndex:0,explanation:'',example:''}
+export function ChallengeEditor({item,onSave,onCancel}:{item:ChallengeBankItem|null;onSave:(question:Omit<ChallengeDefinition,'id'>,status:ChallengeBankItem['status'],key:string)=>Promise<boolean>;onCancel:()=>void}){
+ const id=useId(),[draft,setDraft]=useState<Omit<ChallengeDefinition,'id'>>(()=>item?{lane:item.lane,kind:item.kind,topic:item.topic,instruction:item.instruction,question:item.question,options:item.options,correctIndex:item.correctIndex,explanation:item.explanation,example:item.example}:empty)
+ const [status,setStatus]=useState(item?.status??'draft'),[busy,setBusy]=useState(false)
+ const sending=useRef(false),request=useRef({fingerprint:'',key:crypto.randomUUID()})
+ useEffect(()=>{document.getElementById(id+'-topic')?.focus()},[id])
+ const submit=async(event:FormEvent)=>{
+  event.preventDefault();if(sending.current)return
+  const fingerprint=JSON.stringify([draft,status]);if(fingerprint!==request.current.fingerprint)request.current={fingerprint,key:crypto.randomUUID()}
+  sending.current=true;setBusy(true)
+  try{await onSave(draft,status,request.current.key)}finally{sending.current=false;setBusy(false)}
+ }
+ const textField=(key:'topic'|'instruction'|'question'|'explanation'|'example',label:string,min:number,max:number,multiline=false)=><div className={c.field}><label htmlFor={id+'-'+key}>{label}</label>{multiline?<textarea id={id+'-'+key} value={draft[key]} minLength={min} maxLength={max} required rows={3} onChange={e=>setDraft({...draft,[key]:e.target.value})}/>:<input id={id+'-'+key} value={draft[key]} minLength={min} maxLength={max} required onChange={e=>setDraft({...draft,[key]:e.target.value})}/>}</div>
+ return <section className={`${s.card} ${c.editor}`} aria-label={item?'Editar pregunta':'Crear pregunta'}><div className={s['card-head']}><h2>{item?'Editar pregunta':'Nueva pregunta'}</h2><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={onCancel}>Cancelar edición</button></div><p className={s.footnote}>Los cambios se usarán en próximos retos automáticos. Las preguntas que ya están en el calendario conservan su contenido. Cada pregunta debe tener una sola respuesta correcta y una explicación que ayude a aprender.</p>
+ <form onSubmit={e=>{void submit(e)}}><fieldset className={c.form} disabled={busy}>
+ <div className={c.two}><div className={c.field}><label htmlFor={id+'-lane'}>Área</label><select id={id+'-lane'} value={draft.lane} onChange={e=>setDraft({...draft,lane:e.target.value as ChallengeDefinition['lane']})}><option value="grammar">Gramática</option><option value="words">Vocabulario</option><option value="everyday">Vida diaria</option></select></div><div className={c.field}><label htmlFor={id+'-kind'}>Formato</label><select id={id+'-kind'} value={draft.kind} onChange={e=>setDraft({...draft,kind:e.target.value as ChallengeDefinition['kind']})}><option value="complete">Completar una frase</option><option value="choose">Elegir una frase</option><option value="meaning">Significado</option><option value="reply">Responder una situación</option><option value="order">Orden de palabras</option></select></div></div>
+ {textField('topic','Tema',3,90)}{textField('instruction','Instrucción',5,180)}{textField('question','Pregunta',5,400,true)}
+ <div className={c.options}><legend>Opciones y respuesta correcta</legend><p className={s.footnote}>Marca la opción correcta. Evita dos respuestas válidas o frases sin contexto.</p>{draft.options.map((option,index)=><div className={c.option} key={index}><input type="radio" name={id+'-correct'} aria-label={'Marcar opción '+(index+1)+' como correcta'} checked={draft.correctIndex===index} onChange={()=>setDraft({...draft,correctIndex:index})}/><div className={c.field}><label htmlFor={id+'-option-'+index}>Opción {index+1}</label><input id={id+'-option-'+index} required maxLength={180} value={option} onChange={e=>setDraft({...draft,options:draft.options.map((old,i)=>i===index?e.target.value:old)})}/></div></div>)}<button className={`${s.btn} ${s['btn--ghost']}`} type="button" onClick={()=>setDraft({...draft,options:draft.options.length===3?[...draft.options,'']:draft.options.slice(0,3),correctIndex:draft.correctIndex===3?0:draft.correctIndex})}>{draft.options.length===3?'Añadir cuarta opción':'Usar tres opciones'}</button></div>
+ {textField('explanation','Explicación en español',10,700,true)}{textField('example','Otro ejemplo con traducción',5,400,true)}
+ <div className={c.field}><label htmlFor={id+'-status'}>Disponibilidad</label><select id={id+'-status'} value={status} onChange={e=>setStatus(e.target.value as ChallengeBankItem['status'])}><option value="draft">Borrador: solo administración</option><option value="ready">Lista: participa en la rotación diaria</option><option value="archived">Archivada: conservar sin volver a programar</option></select></div>
+ <details className={c.preview}><summary>Vista previa con solución</summary><p>{draft.instruction}</p><h3>{draft.question||'Tu pregunta aparecerá aquí'}</h3><ol type="A">{draft.options.map((option,i)=><li key={i}>{option||'Opción sin completar'}{draft.correctIndex===i?' ✓ Correcta':''}</li>)}</ol><p>{draft.explanation}</p><p>{draft.example}</p></details>
+ <button className={`${s.btn} ${s['btn--primary']}`} type="submit">{busy?'Guardando…':'Guardar pregunta'}</button></fieldset></form></section>
+}

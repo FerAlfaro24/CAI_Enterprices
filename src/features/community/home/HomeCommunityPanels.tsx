@@ -10,7 +10,10 @@ import s from './home.module.css'
 
 export function HomeChallengePreview() {
   const { state, dispatch, connection } = useCommunity()
-  if (connection) return <section className={s.challengePreview}><span className={s.moduleEyebrow}>JUNTOS APRENDEMOS</span><h2>Un pequeño paso.<br />Una gran historia.</h2><p>Comparte tu experiencia o celebra un avance. CAI revisará tu publicación antes de compartirla con tu grupo.</p><small>Retos e insignias pendientes de conexión.</small></section>
+  if (connection) {
+    const data=connection.challenges,done=data.progress.todayAnswered===3,question=data.items.find(q=>!q.attempt)??data.items[0]
+    return <section className={s.challengePreview} aria-labelledby="home-challenge-title"><span className={s.moduleEyebrow}>TUS TRES PREGUNTAS DE HOY <CommunityIcon name="spark" size={22}/></span><h2 id="home-challenge-title">{done?'¡Buen trabajo!':'Un intento.'}<br/>{done?'Mañana hay más.':'Algo nuevo.'}</h2><span className={s.challengeIntro}>{data.progress.todayAnswered}/3 respondidas · {data.day}</span><p className={s.challengeQuestion}>{data.needsGroup?'Coordinación debe asignarte un grupo para empezar.':!data.enabled?'Los retos están pausados. Puedes repasar lo que aprendiste.':done?'Ya practicaste gramática, vocabulario y vida cotidiana.':question?.question??'Pronto habrá más preguntas para practicar.'}</p><MotionButton type="button" className={s.yellowButton} onClick={()=>dispatch({type:'section',section:'challenges'})}>{done||!data.enabled?'Revisar mis respuestas':'Practicar hoy'} <CommunityIcon name="arrow" size={18}/></MotionButton><small>+5 por participar · +10 por acertar · Sin tiempo límite</small></section>
+  }
   const challenge = challenges.find((item) => item.id === state.challengeId) ?? challenges[0]!
   const attempt = state.attempts[challenge.id]
 

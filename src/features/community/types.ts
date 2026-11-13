@@ -56,6 +56,9 @@ export interface Post {
 }
 
 export interface Challenge {
+  revision?:number
+  instruction?:string
+  example?:string
   id: string
   day: string
   topic: string

@@ -35,7 +35,7 @@ export function CommunityWorkspace() {
   }, [state.focusedPostId, state.focusRequest, state.section])
 
   if (state.section === 'home') return <HomeView key={state.resetKey} />
-  if (connection && state.section !== 'members' && state.section !== 'gallery') return <CommunitySectionLayout><header className={s.welcomeHeader}><h1 id="community-title" tabIndex={-1}>{state.section === 'challenges' ? 'Retos' : 'Insignias'}</h1><p>Esta sección está pendiente de conexión. Puedes compartir logros y experiencias desde Inicio.</p></header></CommunitySectionLayout>
+  if (connection && state.section === 'achievements') return <CommunitySectionLayout><header className={s.welcomeHeader}><h1 id="community-title" tabIndex={-1}>Insignias</h1><p>Esta sección está pendiente de conexión. Puedes compartir logros y experiencias desde Inicio.</p></header></CommunitySectionLayout>
   if (state.section === 'challenges') return <ChallengesView />
   if (state.section === 'gallery') return <GalleryView key={state.resetKey} />
   if (state.section === 'achievements') return <AchievementsView key={state.resetKey} />
