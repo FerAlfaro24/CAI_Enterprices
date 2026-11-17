@@ -2,7 +2,7 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 17 de noviembre de 2026:** aplicación integrada y persistente localmente, esquema SQLite 16. Base funcional verificada: `fix/v1-dev-preview-cache` / `3971284`. Esta documentación está en `docs/continuidad-auditoria-2026-11-17`, [PR #9](https://github.com/FerAlfaro24/CAI_Enterprices/pull/9), e incluye el mismo código de aplicación. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada. No es una entrega productiva.
+**Estado al 17 de noviembre de 2026:** aplicación integrada y persistente localmente, esquema SQLite 16. **Continuar en `test/v1-integral-review-2026-11-17`**: incorpora la documentación corregida de [PR #9](https://github.com/FerAlfaro24/CAI_Enterprices/pull/9) y la revisión integral posterior. Código de aplicación sin cambios frente a `fix/v1-dev-preview-cache` / `3971284`; punto de retorno de pruebas `8c515de`. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada. No es una entrega productiva.
 
 ## Qué funciona localmente
 
@@ -23,7 +23,7 @@ Repositorio privado: autentícate mediante el gestor de credenciales de GitHub q
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/docs/continuidad-auditoria-2026-11-17
+git switch --track origin/test/v1-integral-review-2026-11-17
 code .
 npm.cmd ci
 ```
@@ -40,15 +40,16 @@ Node >=24.12.0 y npm >=10. Seguir [RUN_LOCAL.md](docs/RUN_LOCAL.md) para elegir 
 | Prioridades y dependencias | [NEXT_STEPS](docs/NEXT_STEPS.md) |
 | Instalar/probar sin datos habituales | [RUN_LOCAL](docs/RUN_LOCAL.md) |
 | Pruebas y resultados históricos | [TESTING](docs/TESTING.md) |
+| Revisión integral nueva y hallazgos | [Informe del 17 de noviembre](docs/v1-integral-review-2026-11-17.md) |
 | Encontrar cualquier documento | [Índice completo](docs/DOCUMENTATION_INDEX.md) |
 | Usar el panel | [Guía administrativa](docs/guia-administracion.md) |
 | Conservar datos | [Respaldos](docs/respaldo-recuperacion-local.md) |
 | Instrucciones para agentes | [AGENTS](AGENTS.md) |
 
-Última suite API **registrada**: 193 resultados correctos en Insignias. La revisión anterior de 134 API/844 comprobaciones y las matrices posteriores son cortes distintos; no se suman como una prueba nueva. Ver TESTING.
+**Revisión integral nueva:** 193 API aprobadas y 1,314 comprobaciones de navegador en 38 recorridos completos, más modelos, lint, tipos/compilación, inspección visual y trece bloqueos de archivos privados. Intentos interrumpidos y límites en el informe; no sumar matrices históricas como una prueba nueva. Aceptación de CAI y producción pendientes.
 
 ## Trabajo y límites
 
 Conservar diseño y componentes de v1.0. Trabajar por ramas y revisar antes de integrar. Actualizar documentación junto al código. No reconstruir funciones porque un informe antiguo las describa como demo. Nunca subir bases/WAL/SHM, accesos, sesiones, secretos o datos reales de alumnos; `.local/` está ignorada.
 
-Esta auditoría es documental: no cambia aplicación/dependencias/datos ni fusiona PR, actualiza main o despliega. [NEXT_STEPS](docs/NEXT_STEPS.md) describe la preparación pendiente de producción.
+La revisión actual solo cambia pruebas/documentación; no cambia aplicación/dependencias/datos, fusiona PRs, actualiza main o despliega. [NEXT_STEPS](docs/NEXT_STEPS.md) describe la preparación pendiente de producción. Las pruebas de uso se hicieron sobre fixtures nuevas, sin tocar la instalación habitual.

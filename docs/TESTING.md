@@ -1,6 +1,6 @@
 # CAI — pruebas y lectura de evidencia
 
-**Actualizado: 17-11-2026.** Esta auditoría documental no reejecuta pruebas de producto. Distinguir resultados registrados de las comprobaciones realizadas en una nueva entrega. No probar contra la base/acceso habitual.
+**Actualizado: 17-11-2026, después de la revisión integral.** [Resultado nuevo](v1-integral-review-2026-11-17.md): **193 API y 1,314 comprobaciones en 38 recorridos completos**, 657 por navegador, modelos/lint/build y trece bloqueos privados. La auditoría documental inicial no reejecutó producto; esta revisión posterior sí. No probar contra la base/acceso habitual.
 
 ## Evidencia histórica por corte
 
@@ -12,6 +12,7 @@
 | Retos, `fbb1545` / `e14eda7` | 179 correctos | 142: 53 funcionales +18 adicionales por navegador | [Informe](v1-community-challenges.md) |
 | Insignias, `bf9cf2e` / `c8788bf` | **193 correctos** | 234: insignias 46+18 y regresión de Retos 53 por navegador | [Informe](v1-community-badges.md) |
 | Caché, `3971284` | No repetida | Portada/login/admin anónimos en Brave/Opera; modelos, tipos, lint de configuración y HEAD privados | [Informe](solucion-pantalla-blanca-local.md) |
+| Revisión integral posterior, base `b55cd50`, pruebas `8c515de` | **193 aprobados de nuevo** | **1,314: 19 recorridos/657 por navegador**, módulos acumulados y menor nuevo de extremo a extremo | [Informe nuevo, intentos y límites](v1-integral-review-2026-11-17.md) |
 
 No sumar estas matrices como pruebas únicas de una sola versión ni deducir menor cobertura del total inferior de una tanda: cada una tiene alcance propio y regresiones seleccionadas. No se volvió a ejecutar la matriz antigua completa al conectar cada módulo. Las cifras son resultados, no garantías de producción.
 
@@ -47,6 +48,7 @@ Brave principal, Opera GX para compatibilidad; perfiles/contextos aislados. [RUN
 | Recorrido | Servidor nuevo | Script |
 | --- | --- | --- |
 | Insignias | `server/tests/badges-browser-server.ts` | `scripts/check-connected-badges.browser.mjs`, `check-connected-badges-visual.browser.mjs` |
+| Menor nuevo: ingreso a primera insignia y suspensión | `server/tests/final-review-browser-server.ts` | `scripts/check-student-full-journey.browser.mjs` (email/password ficticios, browserLabel, baseURL y screenshotDir opcional) |
 | Retos | `server/tests/challenges-browser-server.ts` | `scripts/check-connected-challenges.browser.mjs`, `check-connected-challenges-visual.browser.mjs` |
 | Comentarios | `server/tests/comments-browser-server.ts` | `scripts/check-connected-comments.browser.mjs` |
 | Reacciones | `server/tests/reactions-browser-server.ts` | `scripts/check-connected-reactions.browser.mjs` |
@@ -58,12 +60,14 @@ Comprobar 1440/768/375/320 según vista, teclado/foco, claro/oscuro, movimiento 
 
 ## Archivos privados y copias
 
-Con un servidor **de desarrollo** en el destino correcto, `node scripts/check-private-paths.mjs` hace HEAD sin cookies. Se registraron 13 bloqueos después de proteger el banco de retos. No descargar una base/credenciales para probar seguridad. Preview responde fallback HTML en algunas rutas: un 200 HTML no es un 403 comprobado ni demuestra una fuga. Revisar también el artefacto público antes de publicar.
+Con un servidor **de desarrollo** en el destino correcto, `node scripts/check-private-paths.mjs` hace HEAD sin cookies. Para un clon/worktree nuevo, usar **CAI_TEST_FIXTURE_DIR** apuntando a una fixture nueva bajo `.local/tests` con fixture.sqlite/browser.json existentes y CAI_TEST_URL a ese Vite. Ver [ejemplo del informe](v1-integral-review-2026-11-17.md#repetir-y-conservar-evidencia). El modo conserva la exigencia 403, comprueba casos codificados/mayúsculas/raw/@fs y admite .git como archivo de worktree. Se aprobaron **trece bloqueos nuevos** en esa modalidad.
+
+El modo original sin CAI_TEST_FIXTURE_DIR sigue disponible; espera rutas habituales existentes y no debe motivar crearlas, abrirlas o migrarlas para probar. Tanto desarrollo como preview pueden devolver HTML de navegación si una ruta no existe: un 200 HTML no es un 403 comprobado ni demuestra fuga. En esta tanda se contrastaron cabeceras/ETag con la portada sin descargar cuerpos. Revisar también el artefacto público antes de publicar.
 
 Copias y restauración separada: [guía](respaldo-recuperacion-local.md). No copiar, reemplazar, migrar o borrar `.local/cai.sqlite` para un test. Los logs y capturas locales ignorados pueden no existir tras clonar; los informes versionados conservan el resultado y cómo repetirlo, no prometen esos archivos.
 
 ## Incidencias abiertas y actualización
 
-Auditoría de herramientas: diez alertas moderadas de desarrollo y cero de ejecución **en aquel corte**, pendiente actualización compatible. No es una auditoría de npm ejecutada hoy. Dos recorridos Opera antiguos pasaron en nuevas fixtures sin identificar causa inicial; no afirmar corrección. Fotos externas pendientes de validación final. Ver [herramientas](v1-tooling-audit.md) y [revisión](v1-final-review.md).
+Auditoría de herramientas: diez alertas moderadas de desarrollo y cero de ejecución **en aquel corte**, pendiente actualización compatible; no repetida hoy. Los dos recorridos Opera antiguos no fallaron en la revisión nueva, sin identificar su causa anterior. Un intento nuevo de reacciones tuvo un error route.fulfill del simulador; repeticiones completas correctas, causa exacta sin confirmar. La dependencia de datos de la prueba visual de insignias sí quedó corregida y comprobada en fixtures nuevas. Las trece imágenes de portada cargaron en la inspección Brave; material definitivo de CAI y disponibilidad futura de terceros pendientes. Ver [informe actual](v1-integral-review-2026-11-17.md), [herramientas](v1-tooling-audit.md) y [revisión anterior](v1-final-review.md).
 
 Cada nueva entrega debe registrar fecha/base/commit, comandos y recorridos realizados, resultados, fallos/intentados/no ejecutados y límites. Para cambios solo Markdown, comprobar enlaces/referencias/diff y consignar que no se ejecutaron npm/API/navegadores. No reutilizar el resultado de otra rama como prueba nueva.

@@ -6,14 +6,15 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `docs/continuidad-auditoria-2026-11-17` | Esta documentación corregida y código funcional completo. PR #9, sin fusión automática. |
+| `test/v1-integral-review-2026-11-17` / pruebas `8c515de` | **Continuación actual:** código completo, documentación corregida y revisión integral posterior, sin cambios funcionales. |
+| `docs/continuidad-auditoria-2026-11-17` | Auditoría documental inicial y código funcional completo. PR #9, anterior a los resultados de la revisión integral. |
 | `fix/v1-dev-preview-cache` / `3971284` | Última base funcional verificada: insignias, retos y corrección de caché. |
 | `feat/v1-community-badges` / `bdef066` | Paso anterior acumulativo; sin la corrección posterior de caché. |
 | `chore/v1-final-review` / `fee87d1` | Revisión anterior, 15 commits detrás; sin las integraciones posteriores de reacciones/comentarios/retos/insignias. |
 | `release/cai-demo-v1.0` / `f3ba46b` | Referencia visual oficial congelada. |
 | `main` / `a3c2569` | Rama predeterminada antigua, 74 commits detrás de la base funcional al corte. |
 
-Esta actualización conserva los siete commits originales de PR #9 e incorpora la línea funcional en su rama de trabajo. La PR se dirige a `fix/v1-dev-preview-cache` y su diferencia debe ser **solo Markdown**. No se mueve main/release ni se fusiona la PR. Ver [BRANCHES](BRANCHES.md).
+PR #9 conserva sus siete commits originales e incorpora la línea funcional; se dirige a fix/v1-dev-preview-cache y su diff es solo Markdown. La rama de revisión posterior parte de b55cd50 y añade pruebas/documentación, con [193 API y 1,314 navegador comprobados de nuevo](v1-integral-review-2026-11-17.md). Ninguna PR se fusiona automáticamente ni mueve main/release. Ver [BRANCHES](BRANCHES.md).
 
 ## Qué hay
 
@@ -36,7 +37,7 @@ Node >=24.12.0, npm >=10. Repositorio privado: autentícate con el gestor de Git
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/docs/continuidad-auditoria-2026-11-17
+git switch --track origin/test/v1-integral-review-2026-11-17
 code .
 npm.cmd ci
 ```
@@ -63,4 +64,4 @@ Los informes de entregas describen sus propios cortes; sus próximos pasos hist�
 
 Identificar componente/servicio existente y criterio de cierre. Crear rama desde el avance funcional acordado; no fusionar todas las features ni duplicar pantallas. Cada entrega registra base/commit, alcance, archivos, pruebas realmente ejecutadas/no ejecutadas y siguiente paso. Mantener estas guías junto al código.
 
-Esta auditoría es documental: no reejecuta pruebas de producto ni valida producción. La aplicación no cambia respecto a `3971284`.
+La auditoría documental inicial no reejecutó pruebas; la revisión integral posterior sí, con alcance e intentos en su informe. La aplicación no cambia respecto a `3971284`; producción y aceptación humana siguen pendientes.
