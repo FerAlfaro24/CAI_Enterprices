@@ -2,7 +2,7 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 17 de noviembre de 2026:** aplicación integrada y persistente localmente, esquema SQLite 16. **Continuar en `test/v1-integral-review-2026-11-17`**: incorpora la documentación corregida de [PR #9](https://github.com/FerAlfaro24/CAI_Enterprices/pull/9) y la revisión integral posterior. Código de aplicación sin cambios frente a `fix/v1-dev-preview-cache` / `3971284`; punto de retorno de pruebas `8c515de`. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada. No es una entrega productiva.
+**Estado al 17 de noviembre de 2026:** aplicación integrada, esquema SQLite 16. **Continuar en `feat/v1-production-preparation`**, desde la revisión integral `95e53e2`. Código de preparación productiva comprobado: `9be8081`; incorpora las guías de [PR #9](https://github.com/FerAlfaro24/CAI_Enterprices/pull/9) y la revisión de PR #10. Hay configuración explícita de producción, sesiones seguras y operación inicial ensayadas; **no hay despliegue real validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
 
 ## Qué funciona localmente
 
@@ -14,7 +14,7 @@
 - Insignias: **nueve**, automáticas o concedidas por CAI, solicitudes/correcciones privadas y compartición voluntaria moderada.
 - SQLite, migraciones, copias/verificación, avisos y recuperación locales.
 
-Google real, entrega real de correo, preparación productiva, contenidos/autorizaciones y aceptación de CAI siguen pendientes. **Vídeos: menor prioridad y opcionales; no implementados.** Si se retoman, solo coordinación sube y el grupo autorizado ve.
+Google real, entrega real de correo, contenido/autorizaciones, aceptación de CAI y validación del alojamiento siguen pendientes. La base técnica del servidor está [preparada y comprobada en simulación](docs/PRODUCTION_PREPARATION.md). **Vídeos: menor prioridad y opcionales; no implementados.** Si se retoman, solo coordinación sube y el grupo autorizado ve.
 
 ## Recuperar el proyecto
 
@@ -23,7 +23,7 @@ Repositorio privado: autentícate mediante el gestor de credenciales de GitHub q
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/test/v1-integral-review-2026-11-17
+git switch --track origin/feat/v1-production-preparation
 code .
 npm.cmd ci
 ```
@@ -41,15 +41,16 @@ Node >=24.12.0 y npm >=10. Seguir [RUN_LOCAL.md](docs/RUN_LOCAL.md) para elegir 
 | Instalar/probar sin datos habituales | [RUN_LOCAL](docs/RUN_LOCAL.md) |
 | Pruebas y resultados históricos | [TESTING](docs/TESTING.md) |
 | Revisión integral nueva y hallazgos | [Informe del 17 de noviembre](docs/v1-integral-review-2026-11-17.md) |
+| Configuración y preparación del alojamiento | [PRODUCTION_PREPARATION](docs/PRODUCTION_PREPARATION.md) |
 | Encontrar cualquier documento | [Índice completo](docs/DOCUMENTATION_INDEX.md) |
 | Usar el panel | [Guía administrativa](docs/guia-administracion.md) |
 | Conservar datos | [Respaldos](docs/respaldo-recuperacion-local.md) |
 | Instrucciones para agentes | [AGENTS](AGENTS.md) |
 
-**Revisión integral nueva:** 193 API aprobadas y 1,314 comprobaciones de navegador en 38 recorridos completos, más modelos, lint, tipos/compilación, inspección visual y trece bloqueos de archivos privados. Intentos interrumpidos y límites en el informe; no sumar matrices históricas como una prueba nueva. Aceptación de CAI y producción pendientes.
+**Última tanda:** 217 API aprobadas, lint/tipos/build y 104 comprobaciones de navegador seleccionadas —54 de producción simulada y 50 locales, Brave/Opera—. La revisión integral anterior de 1,314 no se repitió completa ni se suma a estas 104. Simular el origen HTTPS no valida un certificado o proveedor real. Resultados y límites en la guía productiva y TESTING.
 
 ## Trabajo y límites
 
 Conservar diseño y componentes de v1.0. Trabajar por ramas y revisar antes de integrar. Actualizar documentación junto al código. No reconstruir funciones porque un informe antiguo las describa como demo. Nunca subir bases/WAL/SHM, accesos, sesiones, secretos o datos reales de alumnos; `.local/` está ignorada.
 
-La revisión actual solo cambia pruebas/documentación; no cambia aplicación/dependencias/datos, fusiona PRs, actualiza main o despliega. [NEXT_STEPS](docs/NEXT_STEPS.md) describe la preparación pendiente de producción. Las pruebas de uso se hicieron sobre fixtures nuevas, sin tocar la instalación habitual.
+La preparación actual cambia servidor, pruebas y documentación, sin añadir dependencias ni alterar interfaz o datos habituales. No fusiona PRs, actualiza main o despliega. [NEXT_STEPS](docs/NEXT_STEPS.md) ordena operación/recuperación y las dependencias externas finales. Las pruebas usan fixtures nuevas; no se reinicia la API habitual.

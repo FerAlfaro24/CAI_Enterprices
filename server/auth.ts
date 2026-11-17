@@ -4,6 +4,7 @@ import { transaction, type Database } from './database.ts'
 import type { LocalUser } from './contracts.ts'
 import { HttpError, record } from './validation.ts'
 import { administrationAudit } from './administration.ts'
+import { localCookies, sessionCookie, sessionCookieName, type CookiePolicy } from './session-cookie.ts'
 
 const duration = 8 * 60 * 60
 export const cookieName = 'cai_local_session'
@@ -28,9 +29,10 @@ export function tokenFrom(request: IncomingMessage, name = cookieName) {
   return token && /^[a-f0-9]{64}$/.test(token) ? token : null
 }
 
-export function authRepository(db: Database) {
+export function authRepository(db: Database, cookies: CookiePolicy = localCookies) {
+  const sessionName = sessionCookieName(cookieName, cookies)
   const session = (request: IncomingMessage): LocalUser | null => {
-    const token = tokenFrom(request)
+    const token = tokenFrom(request, sessionName)
     if (!token) return null
     const row = db.prepare("SELECT u.id, u.name, u.role FROM sessions s JOIN admin_users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ? AND u.role = 'admin' AND u.active=1 AND u.activated=1").get(digest(token), Date.now())
     return row ? row as unknown as LocalUser : null
@@ -72,12 +74,12 @@ export function authRepository(db: Database) {
       const token = randomBytes(32).toString('hex')
       db.prepare('DELETE FROM sessions WHERE expires_at <= ?').run(Date.now())
       db.prepare('INSERT INTO sessions VALUES (?, ?, ?)').run(digest(token), user.id, Date.now() + duration * 1000)
-      return `${cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/api/local; Max-Age=${duration}`
+      return sessionCookie(cookieName, token, duration, cookies)
     },
     end(request: IncomingMessage) {
-      const token = tokenFrom(request)
+      const token = tokenFrom(request, sessionName)
       if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(digest(token))
-      return `${cookieName}=; HttpOnly; SameSite=Strict; Path=/api/local; Max-Age=0`
+      return sessionCookie(cookieName, '', 0, cookies)
     },
   }
 }

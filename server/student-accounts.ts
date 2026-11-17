@@ -5,11 +5,11 @@ import { hashPassword, tokenFrom, verifyPassword } from './auth.ts'
 import { transaction, type Database } from './database.ts'
 import { HttpError } from './validation.ts'
 import { publicProfileId } from './public-profiles.ts'
+import { localCookies, sessionCookie, sessionCookieName, type CookiePolicy } from './session-cookie.ts'
 
 const cookieName = 'cai_student_session'
 const sessionSeconds = 8 * 60 * 60
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
-const cookie = (token: string, age: number) => `${cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/api/local; Max-Age=${age}`
 const accountQuery = `SELECT r.id, r.payload, r.revision AS record_revision, a.password_hash FROM requests r
   JOIN students s ON s.request_id = r.id
   LEFT JOIN student_accounts a ON a.request_id = r.id
@@ -34,7 +34,9 @@ function validPassword(password: unknown): asserts password is string {
   }
 }
 
-export function studentAccounts(db: Database) {
+export function studentAccounts(db: Database, cookies: CookiePolicy = localCookies) {
+  const sessionName = sessionCookieName(cookieName, cookies)
+  const cookie = (token: string, age: number) => sessionCookie(cookieName, token, age, cookies)
   const activated = (id: number) => db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ? UNION ALL SELECT request_id FROM google_identities WHERE request_id = ?').get(id, id)
   const available = (id: number) => db.prepare("SELECT r.id FROM requests r JOIN students s ON s.request_id = r.id WHERE r.id = ? AND r.status = 'aprobada' AND s.status = 'activo'").get(id)
   const audit = (id: number, action: string, actor: number | null = null) => db.prepare('INSERT INTO audit_log(actor_id, request_id, action, created_at) VALUES (?, ?, ?, ?)').run(actor, id, action, new Date().toISOString())
@@ -96,13 +98,13 @@ export function studentAccounts(db: Database) {
       return cookie(token, sessionSeconds)
     },
     session(request: IncomingMessage): StudentUser | null {
-      const token = tokenFrom(request, cookieName)
+      const token = tokenFrom(request, sessionName)
       if (!token) return null
       const row = db.prepare(`${accountQuery} AND r.id = (SELECT request_id FROM student_sessions WHERE token_hash = ? AND expires_at > ?)`).get(hashToken(token), Date.now()) as AccountRow | undefined
       return row ? userFrom(db, row) : null
     },
     end(request: IncomingMessage) {
-      const token = tokenFrom(request, cookieName)
+      const token = tokenFrom(request, sessionName)
       if (token) db.prepare('DELETE FROM student_sessions WHERE token_hash = ?').run(hashToken(token))
       return cookie('', 0)
     },

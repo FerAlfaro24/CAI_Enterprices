@@ -1,11 +1,12 @@
 # CAI — estado vigente
 
-**Actualizado: 17 de noviembre de 2026, después de la revisión integral.** Pruebas nuevas: 193 API y 1,314 comprobaciones en 38 recorridos de navegador. Los resultados de entregas anteriores siguen siendo históricos y no se suman. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice documental](DOCUMENTATION_INDEX.md).
+**Actualizado: 17 de noviembre de 2026, después de la preparación productiva.** Última tanda: 217 API y 104 comprobaciones de navegador seleccionadas. La matriz integral anterior de 1,314 corresponde a su corte y no se suma ni se declara repetida completa. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice documental](DOCUMENTATION_INDEX.md).
 
 ## Referencias de continuación
 
-- **Base funcional verificada:** `fix/v1-dev-preview-cache`, `3971284f30110eb054f0d3616899ddafe97e3683`.
-- **Continuación actual:** `test/v1-integral-review-2026-11-17`, desde b55cd50. Punto de retorno de pruebas `8c515de`, sin cambios de aplicación. [Informe integral y límites](v1-integral-review-2026-11-17.md).
+- **Continuación actual:** `feat/v1-production-preparation`, desde `95e53e2`, código `9be8081`. [Preparación y límites](PRODUCTION_PREPARATION.md), sin despliegue, nueva migración o dependencias.
+- **Base funcional anterior:** `fix/v1-dev-preview-cache`, `3971284f30110eb054f0d3616899ddafe97e3683`.
+- **Revisión integral anterior:** `test/v1-integral-review-2026-11-17`, desde b55cd50; pruebas `8c515de` y cierre `95e53e2`, sin cambios de aplicación en esa tarea. [Informe y límites](v1-integral-review-2026-11-17.md).
 - **Documentación corregida y código acumulado:** `docs/continuidad-auditoria-2026-11-17`, PR #9 hacia esa base. La diferencia de aplicación debe ser vacía; solo cambia Markdown. La PR sigue sin fusionarse.
 - **Base visual:** `release/cai-demo-v1.0`, `f3ba46b`, preservada. Panel/Community avanzados ya existían y se conectaron; no reconstruirlos.
 - **Main:** `a3c2569`, antigua, 74 commits detrás de la base funcional al corte.
@@ -33,20 +34,22 @@ Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BR
 | Insignias | Nueve, automáticas/revisadas/institucionales; concesión única, historial/corrección y compartición voluntaria moderada | `server/badges.ts`, `shared/badges.ts`; [193 API y matriz 234 en su entrega](v1-community-badges.md). |
 | Administración de cuentas | Contraseña propia, recuperación local, equipo e invitaciones | `server/auth.ts`, `server/admin-team.ts`, `server/admin-recovery.ts`; entrega de correo real pendiente. |
 | Perfil/expediente | Alias/color, restricciones de menores, correcciones con reautenticación e historial | `server/student-records.ts`; [informe](v1-student-record.md). No verifica identidad real. |
-| Copias | Copia consistente SQLite/verificación y ensayos en destinos separados | `server/backup.ts`, `server/verify-backup.ts`; [guía](respaldo-recuperacion-local.md), no restauración sobre la base habitual. |
+| Copias | Copia consistente/verificación local y comando productivo con destino privado | `server/backup.ts`, `server/production-backup.ts`, `server/verify-backup.ts`; [guía](respaldo-recuperacion-local.md). Ensayos en destinos separados, sin restaurar sobre la base habitual. |
 | Desarrollo | Caché web separada de comprobadores SSR, portada/login/admin renderizados tras corrección | `vite.config.ts`; [3971284](solucion-pantalla-blanca-local.md). HTTP/health no bastaban. |
 | Vídeos | **No implementados; opcionales y de menor prioridad** | Preferencia posterior al plan ampliado. Si se retoman, solo coordinación sube y grupo autorizado ve. |
-| Producción | **Pendiente** | `server/index.ts` bloquea NODE_ENV=production, escucha 127.0.0.1 y app.ts admite hosts/orígenes locales. No basta contratar alojamiento. |
+| Producción | **Base de servidor preparada; despliegue real pendiente** | `server/runtime-config.ts`, `server/request-policy.ts`, `server/session-cookie.ts`, `server/runtime-server.ts`; configuración explícita, proxy HTTPS loopback, datos privados separados, cookies seguras, bootstrap/preflight/logs/cierre. [Guía y simulación](PRODUCTION_PREPARATION.md). |
 
 ## Evidencia y límites
 
-La suite completa se **repitió: 193/193**. Revisión integral actual: **657 comprobaciones por navegador, 1,314 en 38 recorridos completos**, en Brave/Opera. Incluye módulos anteriores, reacciones/comentarios/retos/insignias y un menor nuevo desde solicitud hasta insignia y suspensión. También modelos, lint, tipos/compilación, inspección visual y trece rutas privadas con 403 sobre fixtures. Intentos interrumpidos excluidos del total. [Informe](v1-integral-review-2026-11-17.md).
+**Última suite: 217/217**, incluida regresión y 24 resultados de preparación productiva. Navegador: 27 de transporte productivo simulado y 25 locales en Brave/Opera, **104 en cuatro recorridos**; flujo de menor nuevo y sesiones seguras. Lint/tipos/build correctos. Ensayo CLI en copia desechable, sin base habitual. [Guía/resultados](PRODUCTION_PREPARATION.md). No valida TLS, certificado, DNS o proceso de un proveedor real.
+
+Revisión integral anterior: 193/193 y **1,314 en 38 recorridos completos**, con módulos acumulados y otras verificaciones del [informe](v1-integral-review-2026-11-17.md). No se repitió completa tras los cambios de transporte; no sumar con las 104 actuales.
 
 La matriz de Insignias de 234 y la revisión antigua de 134 API/844 navegador siguen como evidencia de sus propios cortes; no se agregan a la revisión nueva. Ver [TESTING](TESTING.md).
 
 Esquemas posteriores a la revisión antigua: 13 reacciones, 14 comentarios, 15 retos y 16 insignias. La presencia de tablas, rutas y pruebas contrasta las integraciones; no se deducen de nombres de ramas o botones. La demostración en memoria se conserva como referencia separada, no como seguridad.
 
-Incidencias: diez avisos moderados de herramientas/cero de ejecución en la auditoría anterior, no repetida hoy. Las dos intermitencias Opera antiguas no se reprodujeron; su causa sigue sin confirmar. En la tanda nueva hubo un error route.fulfill del simulador de reacciones; pasó al repetir y tras mejorar la espera, sin causa exacta confirmada. La prueba visual de insignias se hizo independiente del recorrido funcional. Las trece imágenes de portada cargaron en la nueva inspección Brave; material definitivo de CAI sigue pendiente. No se ha probado producción, correo/Google reales, datos reales o aceptación humana.
+Incidencias: diez avisos moderados de herramientas/cero de ejecución en la auditoría anterior, no repetida hoy. Las dos intermitencias Opera antiguas no se reprodujeron; su causa sigue sin confirmar. En la revisión integral hubo un error route.fulfill del simulador de reacciones; pasó al repetir y tras mejorar la espera, sin causa exacta confirmada. La prueba visual de insignias se hizo independiente del recorrido funcional. Las trece imágenes de portada cargaron en aquella inspección Brave; material definitivo de CAI sigue pendiente. No se ha probado producción real, correo/Google reales, datos reales o aceptación humana.
 
 ## Decisiones que prevalecen
 
@@ -63,7 +66,9 @@ Se contrastaron las 37 ramas remotas, ancestros, parches equivalentes y árboles
 
 La auditoría reorganiza documentación, clasifica todos los Markdown versionados y verifica enlaces/rutas/referencias. No instala dependencias, ejecuta la aplicación, reejecuta pruebas funcionales, accede a cuentas o cambia datos/configuración. Criterios y resultados documentales en [AUDIT_2026-11-17](AUDIT_2026-11-17.md).
 
-Después de esa auditoría, el usuario autorizó la revisión integral: [informe nuevo](v1-integral-review-2026-11-17.md). Se completó sobre fixtures nuevas. Solo cambian cuatro scripts de pruebas y documentación; no aplicación, dependencias o datos habituales. Siguiente trabajo autónomo: preparación técnica de producción, sin contratar/publicar todavía.
+Después de esa auditoría, el usuario autorizó la revisión integral: [informe](v1-integral-review-2026-11-17.md). Se completó sobre fixtures nuevas. Esa entrega cambió cuatro scripts de pruebas/documentación, sin aplicación, dependencias o datos habituales.
+
+La siguiente autorización llevó a la [preparación productiva](PRODUCTION_PREPARATION.md), código 9be8081: cambios de servidor/configuración, herramientas y pruebas, con interfaz/dependencias/esquema conservados. Ya está ensayada sin contratar, publicar, leer credenciales personales o abrir/migrar la base habitual. **Próximo bloque vigente: N3, operación y recuperación.**
 
 ## Cómo actualizar este estado
 

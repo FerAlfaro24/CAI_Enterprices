@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import { hashPassword } from './auth.ts'
 import { openDatabase } from './database.ts'
 
+if (process.env.NODE_ENV === 'production') throw Error('local:setup no admite producción. Usa production:setup con una base nueva y configuración privada explícita.')
 const db = openDatabase(resolve('.local/cai.sqlite'))
 try {
   if (db.prepare('SELECT id FROM admin_users LIMIT 1').get()) {

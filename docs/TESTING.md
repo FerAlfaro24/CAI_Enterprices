@@ -1,6 +1,6 @@
 # CAI — pruebas y lectura de evidencia
 
-**Actualizado: 17-11-2026, después de la revisión integral.** [Resultado nuevo](v1-integral-review-2026-11-17.md): **193 API y 1,314 comprobaciones en 38 recorridos completos**, 657 por navegador, modelos/lint/build y trece bloqueos privados. La auditoría documental inicial no reejecutó producto; esta revisión posterior sí. No probar contra la base/acceso habitual.
+**Actualizado: 17-11-2026, después de preparar producción.** [Último resultado](PRODUCTION_PREPARATION.md): **217 API y 104 comprobaciones de navegador seleccionadas**, con lint/tipos/build y ensayo de comandos. La [revisión integral anterior](v1-integral-review-2026-11-17.md) de 193 API/1,314 navegador no se repitió completa ni se suma. No probar contra la base/acceso habitual.
 
 ## Evidencia histórica por corte
 
@@ -13,6 +13,7 @@
 | Insignias, `bf9cf2e` / `c8788bf` | **193 correctos** | 234: insignias 46+18 y regresión de Retos 53 por navegador | [Informe](v1-community-badges.md) |
 | Caché, `3971284` | No repetida | Portada/login/admin anónimos en Brave/Opera; modelos, tipos, lint de configuración y HEAD privados | [Informe](solucion-pantalla-blanca-local.md) |
 | Revisión integral posterior, base `b55cd50`, pruebas `8c515de` | **193 aprobados de nuevo** | **1,314: 19 recorridos/657 por navegador**, módulos acumulados y menor nuevo de extremo a extremo | [Informe nuevo, intentos y límites](v1-integral-review-2026-11-17.md) |
+| Preparación productiva, base `95e53e2`, código `9be8081` | **217 aprobados** | **104: 27 de producción simulada +25 locales por navegador**, cuatro recorridos seleccionados | [Guía/resultados y límites](PRODUCTION_PREPARATION.md) |
 
 No sumar estas matrices como pruebas únicas de una sola versión ni deducir menor cobertura del total inferior de una tanda: cada una tiene alcance propio y regresiones seleccionadas. No se volvió a ejecutar la matriz antigua completa al conectar cada módulo. Las cifras son resultados, no garantías de producción.
 
@@ -27,7 +28,7 @@ npm.cmd run build
 npm.cmd run test:api
 ```
 
-La suite API crea fixtures propias bajo `.local/tests`, utiliza puertos locales y ensaya copias separadas. Requiere permisos de ejecución y localhost; no cambiar límites/aserciones para hacerla pasar. Typecheck cubre aplicación/configuración de Vite según tsconfig, no afirmar que compila estáticamente todo el servidor.
+La suite API crea fixtures propias bajo `.local/tests`, utiliza puertos locales y ensaya copias separadas. Requiere permisos de ejecución y localhost; no cambiar límites/aserciones para hacerla pasar. **Corrección de la nota anterior:** typecheck ya cubría aplicación, configuración Vite y servidor/pruebas mediante tsconfig.app/node/server.json referenciados por tsconfig.json. No se añadió un comprobador nuevo ni se deduce cobertura estática de SQL o infraestructura real.
 
 Modelos existentes, sin instalar otro framework:
 
@@ -49,6 +50,7 @@ Brave principal, Opera GX para compatibilidad; perfiles/contextos aislados. [RUN
 | --- | --- | --- |
 | Insignias | `server/tests/badges-browser-server.ts` | `scripts/check-connected-badges.browser.mjs`, `check-connected-badges-visual.browser.mjs` |
 | Menor nuevo: ingreso a primera insignia y suspensión | `server/tests/final-review-browser-server.ts` | `scripts/check-student-full-journey.browser.mjs` (email/password ficticios, browserLabel, baseURL y screenshotDir opcional) |
+| Mismo recorrido con origen HTTPS simulado | `server/tests/production-browser-server.ts` | `checkProductionStudentJourney` en el mismo script, metadata email/publicOrigin/port y browserLabel; puerto 3181, preview 4180. Interceptación hacia loopback, **sin TLS/certificado reales**. |
 | Retos | `server/tests/challenges-browser-server.ts` | `scripts/check-connected-challenges.browser.mjs`, `check-connected-challenges-visual.browser.mjs` |
 | Comentarios | `server/tests/comments-browser-server.ts` | `scripts/check-connected-comments.browser.mjs` |
 | Reacciones | `server/tests/reactions-browser-server.ts` | `scripts/check-connected-reactions.browser.mjs` |
