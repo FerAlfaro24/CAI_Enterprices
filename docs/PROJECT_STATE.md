@@ -1,5 +1,8 @@
 # Estado oficial y orden de integración de CAI
 
+> **Índice de continuidad (17-11-2026):** [inicio rápido](START_HERE.md) · [ramas (35 al corte previo a esta actualización)](BRANCHES.md) · [pendientes y criterios de cierre](NEXT_STEPS.md). Este archivo conserva deliberadamente el historial extenso de avances; sus notas de etapas anteriores no son un backlog vigente. La información de revisión final procede de resultados históricos, no de pruebas ejecutadas al actualizar los documentos.
+
+
 **Lectura vigente tras el punto 5:** `chore/v1-final-review`, base `9274dc9`, código `940573a`. Revisión técnica local realizada; matriz, incidencias y dependencias en [v1-final-review.md](v1-final-review.md) y en el cierre de este registro. Continúa la tanda agrupada de validación/cuentas/material con CAI; alojamiento al final. El inventario inicial y las notas intermedias siguientes son históricos, no pendientes nuevos ni autorización para rehacer funciones.
 
 Auditoría del 11 de noviembre de 2026. Leer antes de planear o implementar otra tarea. Este documento prevalece sobre las descripciones históricas de demostración de los demás documentos; las instrucciones nuevas del usuario tienen prioridad. Actualizarlo al cerrar cada integración.
