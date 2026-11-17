@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Gestión del equipo administrador
 
 **Punto 2 comprobado localmente con cuentas ficticias.** Rama `feat/v1-admin-team`, base `88ef627`; puntos de retorno `0f0c493` (servicio/migración/pruebas) y `f980067` (Configuración/activación/recorrido). Mantiene el panel y la identidad visual de v1.0. No incluye edición de expediente, roles adicionales, correo real ni despliegue.

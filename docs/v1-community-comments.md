@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Comentarios conectados y revisión administrativa
 
 **Integrados y comprobados localmente con cuentas ficticias.** Rama `feat/v1-community-comments`, base `edba92f`. Puntos de retorno: `baa078f` (servicio/migración/pruebas) y `9024905` (interfaz/recorrido). Conserva las reacciones conectadas y el diseño oficial de v1.0. Cierra comentarios de la ampliación; Retos, Insignias y vídeos siguen pendientes de conectar.

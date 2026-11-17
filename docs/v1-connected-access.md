@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 > Fotografía del primer bloque (`8e205b0`). Community y Publicaciones se conectaron después: consultar `v1-connected-community.md` y el registro vigente de `PROJECT_STATE.md`. Las limitaciones descritas aquí corresponden al momento de esa entrega.
 
 # v1.0 conectada: primer recorrido de ingreso

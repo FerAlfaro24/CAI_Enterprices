@@ -1,3 +1,5 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Publicaciones de texto y moderación local
 
 Rama: `feat/local-publications-moderation`, desde la integración opcional de Google. Esta entrega conecta publicaciones de texto, revisión administrativa e historial a SQLite y a las sesiones existentes. Solo para pruebas locales con datos ficticios. No se ha desplegado para alumnos reales.

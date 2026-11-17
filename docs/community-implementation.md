@@ -1,8 +1,12 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community — Implementación del Issue #3
 
 Prototipo visual e interactivo desarrollado en `feat/community` para el [Issue #3](https://github.com/FerAlfaro24/CAI_Enterprices/issues/3). La comunidad representa cuatro semanas ficticias de actividad, del 22 de septiembre al 17 de octubre de 2026. Ningún perfil, publicación, resultado o interacción representa a alumnos reales.
 
-La base visual y navegación de la fase 1, Inicio de la fase 2, Retos de la fase 3 y Galería de la fase 4 están aprobados. Sus arquitecturas y pruebas se conservan en [fase 1](community-phase-1.md), [fase 2](community-phase-2.md), [fase 3](community-phase-3.md) y [fase 4](community-phase-4.md). La **fase 5 implementa Logros**, pendiente de revisión: catálogo tipado, solicitudes privadas, concesiones derivadas, revisión demo y compartición voluntaria con moderación. Arquitectura y reglas: [community-phase-5.md](community-phase-5.md); capturas: [índice visual](../review/community-phase-5/index.html). Las descripciones históricas de columnas y directorio que siguen abajo corresponden al prototipo inicial; la navegación actual tiene cuatro secciones y los perfiles se abren individualmente.
+La base visual y navegación de la fase 1, Inicio de la fase 2, Retos de la fase 3 y Galería de la fase 4 están aprobados. Sus arquitecturas y pruebas se conservan en [fase 1](community-phase-1.md), [fase 2](community-phase-2.md), [fase 3](community-phase-3.md) y [fase 4](community-phase-4.md). La **fase 5 implementa Logros**, pendiente de revisión: catálogo tipado, solicitudes privadas, concesiones derivadas, revisión demo y compartición voluntaria con moderación. Arquitectura y reglas: [community-phase-5.md](community-phase-5.md); capturas: índice visual (`../review/community-phase-5/index.html`). Las descripciones históricas de columnas y directorio que siguen abajo corresponden al prototipo inicial; la navegación actual tiene cuatro secciones y los perfiles se abren individualmente.
 
 ## Alcance y arquitectura
 

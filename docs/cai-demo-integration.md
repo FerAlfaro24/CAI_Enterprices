@@ -1,3 +1,7 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI — Integración para demostración
 
 > Antecedente previo al commit de v1.0. Esta integración SÍ quedó confirmada en `release/cai-demo-v1.0`, `f3ba46b`. Las referencias siguientes a worktree, integración sin commit y aprobación pendiente describen aquel momento. Para el estado actual leer `PROJECT_STATE.md`.
@@ -90,7 +94,7 @@ Las pruebas de navegador se ejecutan proporcionando la función del archivo a la
 
 ## Evidencias y revisión
 
-[Abrir las siete capturas](../review/cai-demo-integration/index.html) · [Resultados](../review/cai-demo-integration/resultados.json).
+Abrir las siete capturas (`../review/cai-demo-integration/index.html`) · Resultados (`../review/cai-demo-integration/resultados.json`).
 
 1. Landing, 1440 px.
 2. Login, 1440 px.

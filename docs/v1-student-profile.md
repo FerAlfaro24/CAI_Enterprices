@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Perfil visible del alumno
 
 Comprobado localmente en `feat/v1-student-profile`, desde `34b78b4` de cuenta administrativa. Puntos de retorno: `9388b2c` (servicio/pruebas) y `8490701` (interfaz/recorrido). Conserva la base visual oficial v1.0 y todas las integraciones acumulativas. No está desplegado ni habilitado para alumnos reales.

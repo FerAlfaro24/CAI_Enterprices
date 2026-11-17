@@ -1,3 +1,7 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
+> **Decisión posterior:** vídeos son opcionales y de menor prioridad. Retos e Insignias ya están conectados. No iniciar los bloques pendientes de este plan histórico sin contrastar NEXT_STEPS.
+
 # Plan de entrega local — tres semanas
 
 > **Ampliación autorizada después de la revisión local:** comentarios, reacciones, retos, insignias y vídeos deben incluirse y mejorarse. Solo coordinación sube vídeos; su grupo los ve. Orden e inventario en [plan de comunidad ampliada](v1-community-expansion.md) y `PROJECT_STATE.md`. Primero desarrollar estos bloques localmente; cuentas/validación externa agrupadas y alojamiento al final. El calendario de tres semanas sigue siendo una referencia que requiere revisar capacidad con el nuevo alcance, no una garantía de terminación. Las prioridades iniciales siguientes son históricas.

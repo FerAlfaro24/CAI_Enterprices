@@ -1,10 +1,14 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community · Fase 6.2-A · Inicio
 
 ## Alcance y base comprobada
 
 **6.2-A: Inicio está aprobado y respaldado en `652b146`. 6.2-B: Galería está aprobada por el usuario y su respaldo está autorizado.** Rama comprobada: `feat/community-visual-polish`; carpeta `C:\Users\feral\Proyectos\CAI_Enterprices\CAI_Enterprices`. La base inicial de Inicio fue `a8f4d91`; la de Galería es `652b146`.
 
-**Estado actual:** Inicio y Galería aprobados. El usuario autorizó el commit `style(community): renovar galeria editorial fase 6.2-B` y el push exclusivamente a `origin/feat/community-visual-polish`. La fase 6.3 no está iniciada. [Comparativas locales de Galería](../review/community-phase-6-2/gallery/index.html) · [Ajuste aprobado de Inicio](../review/community-phase-6-2/mobile-hero-adjustment/index.html). Las entregas anteriores para revisión se conservan como histórico.
+**Estado actual:** Inicio y Galería aprobados. El usuario autorizó el commit `style(community): renovar galeria editorial fase 6.2-B` y el push exclusivamente a `origin/feat/community-visual-polish`. La fase 6.3 no está iniciada. Comparativas locales de Galería (`../review/community-phase-6-2/gallery/index.html`) · Ajuste aprobado de Inicio (`../review/community-phase-6-2/mobile-hero-adjustment/index.html`). Las entregas anteriores para revisión se conservan como histórico.
 
 **Evidencias locales excluidas del respaldo:** los enlaces de este informe a `review/` requieren los archivos de revisión del entorno original; no se incluyen en Git. También se excluyen `.playwright-mcp/`, `design-reference/`, `reference/` y archivos temporales. Las menciones posteriores a entregas «sin commit ni push» describen los puntos de revisión anteriores a esta aprobación.
 
@@ -68,7 +72,7 @@ Los tres SVG se importan con `?no-inline`: son archivos locales independientes d
 
 ## Validación y comparación
 
-Los resultados finales y las capturas se registran en [el índice visual](../review/community-phase-6-2/index.html). La nueva prueba usa el preview de producción a `127.0.0.1:4173`; el escenario vacío necesita además Vite en `127.0.0.1:5173`.
+Los resultados finales y las capturas se registran en el índice visual (`../review/community-phase-6-2/index.html`). La nueva prueba usa el preview de producción a `127.0.0.1:4173`; el escenario vacío necesita además Vite en `127.0.0.1:5173`.
 
 Para revisar la app: ejecutar `npm.cmd run build` y después `npm.cmd run preview -- --host 127.0.0.1 --port 4173`; abrir `/community`. Para reproducir también el fixture vacío, iniciar en otra terminal `npm.cmd run dev -- --host 127.0.0.1 --port 5173`. El script `.browser.mjs` es una función para `browser_run_code_unsafe` del navegador aislado, no un ejecutable de Node; puede recibir `screenshotDir` absoluto. El índice HTML se puede abrir directamente, sin servidor.
 
@@ -88,16 +92,16 @@ El escenario vacío usa una página aislada del navegador con una respuesta inte
 | Retos existente · Brave / dev | 30 comprobaciones correctas. |
 | Galería existente · Brave / dev | 40 comprobaciones correctas. |
 | Logros existente · Brave / preview | 55 comprobaciones correctas. |
-| Inicio premium · Brave / preview final | **141 comprobaciones correctas**, cero errores/advertencias inesperados. [Registro detallado](../review/community-phase-6-2/resultados-inicio.json). |
+| Inicio premium · Brave / preview final | **141 comprobaciones correctas**, cero errores/advertencias inesperados. Registro detallado (`../review/community-phase-6-2/resultados-inicio.json`). |
 | Visual 6.1 existente · Opera GX / preview | 32 comprobaciones correctas, cero errores/advertencias. Incluye Motion, Lucide, carga de ambas insignias originales, gestos, teclado, temas y movimiento reducido. |
 | Compatibilidad adicional · Opera GX / preview | Seis combinaciones de 1440/375/320 y claro/oscuro sin overflow. Carrusel, foco del feed, compositor/Escape y acceso a Retos correctos; sin errores de ejecución. |
-| Contraste · Opera GX / preview | Once pares sólidos por tema medidos con colores computados: mínimo 4,63:1, máximo 12,64:1. [Registro](../review/community-phase-6-2/contraste.json). No cubre toda la interfaz. |
-| Reflujo equivalente a 200 % · Opera GX / preview | Simulación de 1440 píxeles físicos mediante 720 CSS y DPR 2, sin overflow en ambos temas. Los atajos de zoom nativo no cambiaron la escala; no se afirma haber probado ese control nativo. [Registro](../review/community-phase-6-2/reflow.json). |
+| Contraste · Opera GX / preview | Once pares sólidos por tema medidos con colores computados: mínimo 4,63:1, máximo 12,64:1. Registro (`../review/community-phase-6-2/contraste.json`). No cubre toda la interfaz. |
+| Reflujo equivalente a 200 % · Opera GX / preview | Simulación de 1440 píxeles físicos mediante 720 CSS y DPR 2, sin overflow en ambos temas. Los atajos de zoom nativo no cambiaron la escala; no se afirma haber probado ese control nativo. Registro (`../review/community-phase-6-2/reflow.json`). |
 | `git diff --check` | Correcto. Git muestra avisos de normalización LF/CRLF y acceso denegado a su ignore global; no impidieron los checks. |
 
 La nueva regresión comprueba las tres diapositivas en los cinco anchos y ambos temas: 30 estados con imagen local cargada, alt, cartela sin desbordamiento, ancho estable y altura del hero invariable entre diapositivas. Comprueba asimismo filtros, selección anunciada, trece historias, foco tras revelar cuatro, cinco reacciones y totales 86 → 87 → 87 → 86, comentario y contador 4 → 5, perfil sobre detalle, Tab inverso, Escape y retorno de foco, aviso siguiente, composición, pendiente fuera del feed, aprobación con autor Alex, séptimo álbum derivado, reinicio, vacío, fallback, pausa por foco, avance a los ocho segundos, pausa explícita y persistencia del tema.
 
-La prueba adicional de gesto en Inicio midió aproximadamente −3 px al pasar el puntero y 0 px al activar reducción de movimiento en vivo. Tab muestra un anillo amarillo de 3 px en el hero. La recaptura final verificó también que los márgenes derechos reales permanecieran en 72/51,19/38,39/16/12 px para los cinco anchos. [Registro de capturas y gestos](../review/community-phase-6-2/capturas-y-gestos.json).
+La prueba adicional de gesto en Inicio midió aproximadamente −3 px al pasar el puntero y 0 px al activar reducción de movimiento en vivo. Tab muestra un anillo amarillo de 3 px en el hero. La recaptura final verificó también que los márgenes derechos reales permanecieran en 72/51,19/38,39/16/12 px para los cinco anchos. Registro de capturas y gestos (`../review/community-phase-6-2/capturas-y-gestos.json`).
 
 Build final medido: JavaScript principal **491,67 kB** (**153,06 kB gzip**); bloque diferido de Motion **46,65 kB** (**17,82 kB gzip**); CSS **185,52 kB** (**34,21 kB gzip**). SVG independientes: **2,10**, **2,35** y **2,01 kB**. Son tamaños de build; no son mediciones de tiempo de carga ni Web Vitals.
 
@@ -134,7 +138,7 @@ Se reducen márgenes, padding y altura reservada de la cartela, que continúa si
 | 375 px | 935,9 px | **775,5 px** | **160,4 px · 17,1 %** | 36,375 px |
 | 320 px | 922,9 px | **764,3 px** | **158,6 px · 17,2 %** | 32 px |
 
-Las medidas completas no redondeadas están en [reducciones.json](../review/community-phase-6-2/mobile-hero-adjustment/reducciones.json). El encabezado del feed se adelanta de 1348,6 a 1188,1 px a 375 y de 1335,5 a 1177,0 px a 320. La primera historia se adelanta exactamente los mismos 160,4/158,6 px: no se cambian su contenido ni su posición relativa dentro del feed.
+Las medidas completas no redondeadas están en reducciones.json (`../review/community-phase-6-2/mobile-hero-adjustment/reducciones.json`). El encabezado del feed se adelanta de 1348,6 a 1188,1 px a 375 y de 1335,5 a 1177,0 px a 320. La primera historia se adelanta exactamente los mismos 160,4/158,6 px: no se cambian su contenido ni su posición relativa dentro del feed.
 
 La comparación automática en 1440, 1024 y 768 px, claro/oscuro, mantiene exactamente la geometría anterior del hero, su tipografía principal, sus elementos y el inicio del feed. La comparación SHA-256 de **103 archivos de `src/`** detecta únicamente `src/features/community/home/home.module.css` modificado durante este ajuste. Los tres SVG y toda la lógica previa conservan sus hashes.
 
@@ -151,7 +155,7 @@ Validación efectuada sobre el build actualizado:
 - `npm.cmd run typecheck`, `npm.cmd run lint`, `npm.cmd run build`: correctos, sin advertencia de tamaño.
 - Nueva regresión específica en Brave: **171 comprobaciones correctas**, cero errores/advertencias. Incluye las tres diapositivas en los dos tamaños móviles y ambos temas, ausencia de desbordamientos y superposiciones, textos dentro de sus cajas, CTA íntegros, altura estable, imágenes completas, foco visible, orden de Tab/Enter, navegación de escenas, control de reproducción y reducción de movimiento en vivo. Los CTA de feed y Retos conservan su destino.
 - Script existente `check-community-home-premium.browser.mjs`, sin modificar: **141 comprobaciones correctas**, cero errores/advertencias. Comprueba además autoavance de ocho segundos, pausas, filtros, reacciones, comentarios, perfiles, publicación/moderación, álbum derivado, reinicio y estados vacío/error.
-- Opera GX: comprobación básica en 375/320 y ambos temas; mismas alturas que Brave, sin overflow y con siguiente diapositiva funcional. [Registro](../review/community-phase-6-2/mobile-hero-adjustment/opera-gx.json). No es una regresión completa en ese navegador.
+- Opera GX: comprobación básica en 375/320 y ambos temas; mismas alturas que Brave, sin overflow y con siguiente diapositiva funcional. Registro (`../review/community-phase-6-2/mobile-hero-adjustment/opera-gx.json`). No es una regresión completa en ese navegador.
 - Los registros completos se encuentran en el índice del ajuste. Las capturas reservan el gutter nativo y cargan los medios diferidos con un scroll real, tal como el procedimiento anterior.
 - Índice específico abierto en Brave desde archivo local: ocho imágenes cargadas, cuatro pares de comparación y cero imágenes rotas. La comprobación de sus 40 referencias no encontró destinos de archivo ausentes.
 
@@ -177,9 +181,9 @@ El respaldo contiene los 13 archivos de código, SVG originales, pruebas y docum
 
 La implementación parte de `652b146026624c9ce72076ee2a132cdf1f1ec5bc`, con Inicio aprobado y respaldado. Se confirmó `feat/community-visual-polish`, la carpeta del repositorio y la ausencia de modificaciones rastreadas antes de editar. Se conservaron todos los archivos no rastreados. Se leyeron AGENTS, visión, requisitos, la documentación de Galería de fase 4, el sistema visual 6.1, Inicio 6.2-A y las pruebas existentes. Se revisó directamente `design-reference/GALERÍA — DESKTOP.png`; no se obtuvieron capas nuevas de Figma ni se modificó el PNG.
 
-Antes de editar se capturó Galería en 1440, 1024, 768, 375 y 320 px, claro y oscuro. [Índice visual de 6.2-B](../review/community-phase-6-2/gallery/index.html). Las evidencias son locales y permanecen fuera de Git.
+Antes de editar se capturó Galería en 1440, 1024, 768, 375 y 320 px, claro y oscuro. Índice visual de 6.2-B (`../review/community-phase-6-2/gallery/index.html`). Las evidencias son locales y permanecen fuera de Git.
 
-Solo se modifica la presentación dentro de `src/features/community/gallery/`, cuatro recursos locales, una prueba nueva y este informe. No se requieren cambios en componentes compartidos. `albums.ts`, los modelos, fixtures, permisos, autenticación, administración, landing, Inicio, Retos y Logros conservan sus fuentes. La comparación SHA-256 de **103 archivos originales de `src/`** detecta únicamente los siete archivos de Galería enumerados abajo; cero cambios fuera de esa carpeta. [Registro](../review/community-phase-6-2/gallery/source-comparison.json).
+Solo se modifica la presentación dentro de `src/features/community/gallery/`, cuatro recursos locales, una prueba nueva y este informe. No se requieren cambios en componentes compartidos. `albums.ts`, los modelos, fixtures, permisos, autenticación, administración, landing, Inicio, Retos y Logros conservan sus fuentes. La comparación SHA-256 de **103 archivos originales de `src/`** detecta únicamente los siete archivos de Galería enumerados abajo; cero cambios fuera de esa carpeta. Registro (`../review/community-phase-6-2/gallery/source-comparison.json`).
 
 ### Dirección visual y composición
 
@@ -231,7 +235,7 @@ Valores iguales en claro y oscuro, con fuentes e imágenes cargadas. Alturas de 
 | 375 px | 546,0 → **392,5 px** | 1456,7 → **1285,3 px** · 171,3 px antes | 3390 → **2533 px** · −857 px / **25,3 %** |
 | 320 px | 544,9 → **382,3 px** | 1532,6 → **1261,4 px** · 271,2 px antes | 3511 → **2524 px** · −987 px / **28,1 %** |
 
-En 1440 px el documento pasa de 1748 a 2003 px para dar presencia al póster, títulos y metadatos; no se presenta ese crecimiento de escritorio como una reducción. A 768 px el destacado pasa de 510,2 a 285,8 px y el mosaico comienza a 933,4 px frente a 1213,0 px. [Medidas completas y verificaciones](../review/community-phase-6-2/gallery/resultados-galeria.json).
+En 1440 px el documento pasa de 1748 a 2003 px para dar presencia al póster, títulos y metadatos; no se presenta ese crecimiento de escritorio como una reducción. A 768 px el destacado pasa de 510,2 a 285,8 px y el mosaico comienza a 933,4 px frente a 1213,0 px. Medidas completas y verificaciones (`../review/community-phase-6-2/gallery/resultados-galeria.json`).
 
 ### Validación de 6.2-B
 
@@ -254,15 +258,15 @@ En 1440 px el documento pasa de 1748 a 2003 px para dar presencia al póster, t�
 
 La nueva prueba comprueba seis álbumes y orden original; cuatro portadas originales completas y dos fotos distintas; títulos, metadatos y créditos dentro de sus cajas; ritmos y áreas táctiles; navegación, miniaturas, foco y perfiles; ausencia de saltos del visor; filtros y vacíos; pendiente fuera de la colección; álbum derivado nuevo con dos fotos y autor Alex; reinicio; movimiento normal/reducido; carga retenida y fallos de foto y SVG; persistencia del tema.
 
-Los fallos se fuerzan únicamente mediante interceptación de peticiones en páginas aisladas de prueba. Los `net::ERR_FAILED` esperados se separan de errores inesperados; no se modifica el modelo ni se añade una entrada de prueba al producto. La carga se retiene y después se libera para comprobar el mismo marco antes/después. [Regresiones](../review/community-phase-6-2/gallery/regresiones.json) · [Opera GX](../review/community-phase-6-2/gallery/opera-gx.json).
+Los fallos se fuerzan únicamente mediante interceptación de peticiones en páginas aisladas de prueba. Los `net::ERR_FAILED` esperados se separan de errores inesperados; no se modifica el modelo ni se añade una entrada de prueba al producto. La carga se retiene y después se libera para comprobar el mismo marco antes/después. Regresiones (`../review/community-phase-6-2/gallery/regresiones.json`) · Opera GX (`../review/community-phase-6-2/gallery/opera-gx.json`).
 
-**Incidencia del registro histórico de Inicio:** la ejecución opcional contra el JSON anterior falló en igualdad exacta del ancho de `heroActions`: 350,15625 frente a 350,1875 px (diferencia de **0,03125 px**). Hero, feed y primera historia mantenían sus medidas. Se compiló una copia local de `652b146` dentro de `review/`, sin cambiar de rama ni tocar el trabajo actual: el build aprobado y el actual dieron **geometría exactamente idéntica en los cinco anchos** en claro, incluida esa anchura de CTA. [Comparación directa](../review/community-phase-6-2/gallery/comparacion-inicio-base.json). La variación también está presente en la base aprobada al medirla ahora; no procede de los cambios de Galería. No se modificó la prueba ni el registro histórico para hacerlos pasar. La prueba funcional se ejecutó con su opción predeterminada y pasó 135/135; Inicio premium cubrió además ambos temas y los flujos sociales (141/141).
+**Incidencia del registro histórico de Inicio:** la ejecución opcional contra el JSON anterior falló en igualdad exacta del ancho de `heroActions`: 350,15625 frente a 350,1875 px (diferencia de **0,03125 px**). Hero, feed y primera historia mantenían sus medidas. Se compiló una copia local de `652b146` dentro de `review/`, sin cambiar de rama ni tocar el trabajo actual: el build aprobado y el actual dieron **geometría exactamente idéntica en los cinco anchos** en claro, incluida esa anchura de CTA. Comparación directa (`../review/community-phase-6-2/gallery/comparacion-inicio-base.json`). La variación también está presente en la base aprobada al medirla ahora; no procede de los cambios de Galería. No se modificó la prueba ni el registro histórico para hacerlos pasar. La prueba funcional se ejecutó con su opción predeterminada y pasó 135/135; Inicio premium cubrió además ambos temas y los flujos sociales (141/141).
 
 El build final de producto mide **494,74 kB / 153,94 kB gzip** de JavaScript principal, **46,65 / 17,82 kB** del bloque de Motion y **192,29 / 35,23 kB** de CSS. No se añaden dependencias. No se han medido Web Vitals, redes móviles reales ni tiempos de carga.
 
 ### Evidencias, reproducción y archivos
 
-El [índice local](../review/community-phase-6-2/gallery/index.html) permite alternar cinco anchos y ambos temas y comparar antes/después. Incluye el destacado, mosaico/portadas, filtros, dos vacíos, visor en escritorio y móvil, carga/error, póster fallido, pendiente y álbum recién aprobado. Conserva las primeras iteraciones como histórico. Hay diez capturas anteriores, diez vistas generales finales, dieciocho capturas de componentes/estados y dos iteraciones.
+El índice local (`../review/community-phase-6-2/gallery/index.html`) permite alternar cinco anchos y ambos temas y comparar antes/después. Incluye el destacado, mosaico/portadas, filtros, dos vacíos, visor en escritorio y móvil, carga/error, póster fallido, pendiente y álbum recién aprobado. Conserva las primeras iteraciones como histórico. Hay diez capturas anteriores, diez vistas generales finales, dieciocho capturas de componentes/estados y dos iteraciones.
 
 El índice se abrió desde archivo local en Brave: sus 24 imágenes visibles/cargables se decodificaron sin fallos y el selector recorrió los diez pares antes/después correctamente. Se comprobó la existencia de sus 32 referencias estáticas, sin destinos ausentes. Se separaron las etiquetas de los dos selectores de sus opciones para conservar nombres accesibles precisos.
 

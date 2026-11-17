@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Mensajes, avisos y recuperación en la experiencia oficial
 
 > Cierre histórico del bloque 6. El bloque 7 posterior ya conectó la galería privada; consultar `v1-private-gallery.md` y el estado vigente de PROJECT_STATE antes de planificar.

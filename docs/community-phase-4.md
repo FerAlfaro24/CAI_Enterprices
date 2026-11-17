@@ -1,6 +1,10 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community — Fase 4: Galería
 
-Implementación exclusiva de Galería en `feat/community`, basada en `design-reference/GALERÍA — DESKTOP.png` (1440 × 1630). [Índice de capturas](../review/community-phase-4/index.html) · [Informe visual e inventario](../review/community-phase-4/REVISION-VISUAL.md).
+Implementación exclusiva de Galería en `feat/community`, basada en `design-reference/GALERÍA — DESKTOP.png` (1440 × 1630). Índice de capturas (`../review/community-phase-4/index.html`) · Informe visual e inventario (`../review/community-phase-4/REVISION-VISUAL.md`).
 
 ## Arquitectura y archivos
 

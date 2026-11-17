@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Herramientas y alertas: punto 4
 
 **Revisión completada el 12 de noviembre de 2026; la corrección de diez alertas sigue pendiente de una versión compatible.** Rama `chore/v1-tooling-audit`, base `c712abb`. Esta entrega documenta evidencia actual y decisión técnica; no cambia dependencias, configuración de ESLint, código de aplicación o datos.

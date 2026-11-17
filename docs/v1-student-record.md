@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Correcciones del expediente del alumno
 
 **Punto 3 comprobado localmente, con datos ficticios.** Rama `feat/v1-student-record`, base `7e404a3`; puntos de retorno `6817d95` (servicio/migración/pruebas) y `0f3e9a7` (ficha/editor/recorrido). Conserva el panel y las integraciones anteriores. No es validación de identidad ni autorización para admitir personas reales.

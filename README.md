@@ -1,99 +1,54 @@
-# CAI — Plataforma web
+# CAI — sitio institucional, comunidad y administración
 
-Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
+**Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-> **Estado vigente:** v1.0 es la base oficial de diseño. `feat/v1-community-badges` conserva los avances y conecta nueve insignias con progreso real, solicitudes/revisión/correcciones privadas y compartición voluntaria moderada; servicio `bf9cf2e`, interfaz `c8788bf`, esquema 16. Ver [Insignias comprobadas y límites](docs/v1-community-badges.md) y [registro de continuidad](docs/PROJECT_STATE.md). No es una entrega de producción.
+**Estado al 17 de noviembre de 2026:** aplicación integrada y persistente localmente, esquema SQLite 16. Base funcional verificada: `fix/v1-dev-preview-cache` / `3971284`. Esta documentación está en `docs/continuidad-auditoria-2026-11-17`, [PR #9](https://github.com/FerAlfaro24/CAI_Enterprices/pull/9), e incluye el mismo código de aplicación. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada. No es una entrega productiva.
 
-> **Continuación actual:** retos, insignias, comentarios y reacciones comprobados localmente. API 193 resultados; matriz de esta tarea 234 comprobaciones en Brave/Opera, incluyendo regresión de Retos. Siguen los vídeos privados de coordinación para el grupo, según [el alcance autorizado](docs/v1-community-expansion.md). Google/correo/validación de CAI y alojamiento conservan la tanda final. Diez alertas de desarrollo pendientes según su informe.
+## Qué funciona localmente
 
-## Objetivo inmediato
+- Sitio institucional y contacto persistente; material comercial definitivo por validar.
+- Solicitud, tutor, revisión, activación, contraseña, suspensión, perfiles y expediente.
+- Panel v1.0 conectado: alumnos, grupos, ajustes, equipo, bandejas y moderación.
+- Comunidad por grupo: publicaciones, comentarios revisados, reacciones e imágenes privadas.
+- Retos: **180 preguntas/45 temas**, tres al día, explicaciones, puntos, constancia y repaso.
+- Insignias: **nueve**, automáticas o concedidas por CAI, solicitudes/correcciones privadas y compartición voluntaria moderada.
+- SQLite, migraciones, copias/verificación, avisos y recuperación locales.
 
-Conectar el diseño oficial de v1.0 con los servicios locales ya desarrollados, sin reconstruir sus pantallas. La demostración visual existente se conserva como referencia. El orden y los criterios de cierre están en `docs/PROJECT_STATE.md`.
+Google real, entrega real de correo, preparación productiva, contenidos/autorizaciones y aceptación de CAI siguen pendientes. **Vídeos: menor prioridad y opcionales; no implementados.** Si se retoman, solo coordinación sube y el grupo autorizado ve.
 
-### Módulos previstos
-1. **Web pública:** presentación, programas, información comercial y contacto.
-2. **Comunidad:** feed y logros de alumnos, publicaciones sujetas a moderación.
-3. **Administración:** gestión visual de alumnos, solicitudes y publicaciones.
+## Recuperar el proyecto
 
-## Estado del repositorio
-Esta rama incluye **React + TypeScript + Vite**, **Tailwind CSS** y **React Router**. La landing adapta la propuesta visual original con Figtree, logotipos CAI, secciones responsive y estilos encapsulados mediante CSS Modules. Los textos comerciales, cifras y testimonios se identifican como contenido de muestra.
+Repositorio privado: autentícate mediante el gestor de credenciales de GitHub que utilices; no pongas tokens en comandos o archivos. En un clon nuevo, PowerShell:
 
-`/` utiliza `LandingLayout`; `/community` tiene `CommunityLayout`; `/admin/*` usa el dashboard completo de `AdminLayout`; la página 404 conserva `AppLayout`. Los enlaces antiguos `/gestion/*`, `/registro-local`, `/alumnos` y `/alumnos/publicaciones` redirigen al destino oficial correspondiente. `/mi-inscripcion` conserva la ficha y grupo del alumno; `/admin/mensajes?bandeja=avisos` abre los avisos directamente. El contacto institucional guarda consultas y permite seguimiento en el panel original. La lista de interés de la plataforma futura conserva su demostración.
-
-La comunidad oficial consulta la cuenta autenticada, miembros del grupo, publicaciones aprobadas, avisos propios e imágenes privadas del servidor local. Reacciones y comentarios se guardan por cuenta/publicación y tienen permisos distintos en Configuración, inicialmente pausados. Los comentarios pasan por revisión en Publicaciones y ofrecen estado/motivo privados, retirada e historial. Retos, Insignias y vídeos están autorizados, todavía pendientes de conectar/implementar. La galería conectada actual sigue siendo de imágenes y no mezcla fotografías de stock con registros del grupo.
-
-## Desarrollo local
-
-Requisitos: **Node.js 24.12 o posterior** y **npm 10 o superior**. Consulta [cómo preparar el servicio y la cuenta local](docs/local-backend.md) y [cómo activar cuentas y probar permisos](docs/student-accounts.md). Preparar `local:setup` únicamente al configurar un entorno nuevo según esa guía; no reemplazar la base ni las credenciales de un entorno existente.
-
-```sh
-npm ci
-npm run dev:local
+```powershell
+git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
+cd CAI_Enterprices
+git switch --track origin/docs/continuidad-auditoria-2026-11-17
+code .
+npm.cmd ci
 ```
 
-Abrir `http://127.0.0.1:5173`. `dev:local` inicia interfaz y API en este equipo. Si PowerShell bloquea `npm.ps1`, utilizar `npm.cmd` en lugar de `npm` sin modificar la política de ejecución.
+Node >=24.12.0 y npm >=10. Seguir [RUN_LOCAL.md](docs/RUN_LOCAL.md) para elegir fixture nueva separada o instalación propia. No preparar/migrar la base habitual para probar. `npm.cmd` evita el bloqueo de npm.ps1 sin cambiar la política de PowerShell.
 
-| Comando | Función |
+## Documentación vigente
+
+| Necesito… | Documento |
 | --- | --- |
-| `npm run dev:local` | Interfaz y API local conectadas, con datos ficticios. |
-| `npm run dev` | Solo Vite; las funciones conectadas requieren iniciar la API aparte. |
-| `npm run test:api` | Regresiones de servidor, permisos, persistencia y respaldos. |
-| `npm run local:backup` | Respaldo consistente de SQLite, incluidas imágenes procesadas. |
-| `npm run local:verify-backup -- "RUTA.sqlite"` | Comprobar una copia en solo lectura, sin restaurar ni modificar la base activa. |
-| `npm run typecheck` | Comprobar tipos de la aplicación y la configuración de Vite. |
-| `npm run lint` | Ejecutar ESLint; las advertencias también hacen fallar el control. |
-| `npm run build` | Comprobar tipos y generar los archivos estáticos en `dist/`. |
-| `npm run preview` | Revisar localmente la compilación de `dist/`. |
+| Recuperar el contexto | [Empieza aquí](docs/START_HERE.md) |
+| Estado y evidencia | [PROJECT_STATE](docs/PROJECT_STATE.md) |
+| Entender las 37 ramas auditadas | [BRANCHES](docs/BRANCHES.md) |
+| Prioridades y dependencias | [NEXT_STEPS](docs/NEXT_STEPS.md) |
+| Instalar/probar sin datos habituales | [RUN_LOCAL](docs/RUN_LOCAL.md) |
+| Pruebas y resultados históricos | [TESTING](docs/TESTING.md) |
+| Encontrar cualquier documento | [Índice completo](docs/DOCUMENTATION_INDEX.md) |
+| Usar el panel | [Guía administrativa](docs/guia-administracion.md) |
+| Conservar datos | [Respaldos](docs/respaldo-recuperacion-local.md) |
+| Instrucciones para agentes | [AGENTS](AGENTS.md) |
 
-Para comprobar las reglas de la comunidad sin instalar un framework de pruebas: `node scripts/check-community-model.mjs`.
+Última suite API **registrada**: 193 resultados correctos en Insignias. La revisión anterior de 134 API/844 comprobaciones y las matrices posteriores son cortes distintos; no se suman como una prueba nueva. Ver TESTING.
 
-Rutas principales: `/` institucional, `/login`, `/registro`, `/community` para alumnos autorizados y `/admin/*` para administración. Activación y recuperación conservan enlaces auxiliares. Los permisos se aplican en el servidor local, también a cada recurso de imagen. Las rutas desconocidas muestran 404; dentro de administración se vuelve a su inicio protegido.
+## Trabajo y límites
 
-## Documentación
-- [Comentarios, moderación, privacidad y pruebas](docs/v1-community-comments.md)
-- [Reacciones persistentes, control administrativo y pruebas](docs/v1-community-reactions.md)
-- [Ampliación de comunidad autorizada: inventario, mejoras y orden de trabajo](docs/v1-community-expansion.md)
-- [Revisión final local: resultados, incidencias y siguiente tanda con CAI](docs/v1-final-review.md)
-- [Insignias: colección, reglas, revisión y privacidad](docs/v1-community-badges.md)
-- [Retos diarios: 180 preguntas, progreso, calendario y pruebas](docs/v1-community-challenges.md)
-- [Estado oficial, auditoría de ramas y orden obligatorio de integración](docs/PROJECT_STATE.md)
-- [Herramientas y alertas: revisión actual y corrección pendiente](docs/v1-tooling-audit.md)
-- [Correcciones del expediente, historial y protección de menores](docs/v1-student-record.md)
-- [Equipo administrador, invitaciones, estados y pruebas](docs/v1-admin-team.md)
-- [Recuperación administrativa: enlace privado, pruebas y correo pendiente](docs/v1-admin-recovery.md)
-- [Perfil visible propio del alumno, privacidad y pruebas](docs/v1-student-profile.md)
-- [Contraseña administrativa propia, entrega y pruebas](docs/v1-admin-account-security.md)
-- [Guía sencilla de administración](docs/guia-administracion.md)
-- [Respaldos y recuperación local](docs/respaldo-recuperacion-local.md)
-- [Estabilización: carga, errores, pruebas y alertas pendientes](docs/v1-stabilization.md)
-- [Navegación unificada, compatibilidad de enlaces y pruebas](docs/v1-unified-navigation.md)
-- [Galería privada, límites y pruebas](docs/v1-private-gallery.md)
-- [Contacto, bandejas y recuperación oficiales](docs/v1-inbox-recovery-contact.md)
-- [Catálogo, asignaciones y ajustes conectados](docs/v1-groups-settings.md)
-- [Community y moderación oficiales conectadas](docs/v1-connected-community.md)
-- [Acceso y dashboard originales conectados](docs/v1-connected-access.md)
-- [Recuperación y avisos locales](docs/local-recovery.md)
-- [Publicaciones de texto y moderación local](docs/local-publications.md)
-- [Acceso con Google: configuración y revisión obligatoria](docs/google-signin.md)
-- [Activación de alumnos y permisos locales](docs/student-accounts.md)
-- [Backend local: acceso, solicitudes, alumnos y respaldos](docs/local-backend.md)
-- [Plan de entrega local en tres semanas](docs/local-delivery-plan.md)
-- [Visión del producto](docs/vision.md)
-- [Requisitos iniciales](docs/requirements.md)
-- [Plan de prototipo](docs/prototype-plan.md)
-- [Base del frontend y guía de desarrollo](docs/frontend-foundation.md)
-- [Implementación de la landing, pruebas y procedencia de imágenes](docs/landing-implementation.md)
-- [Implementación de la comunidad y guía de demostración](docs/community-implementation.md)
-- [Instrucciones para Codex](AGENTS.md)
+Conservar diseño y componentes de v1.0. Trabajar por ramas y revisar antes de integrar. Actualizar documentación junto al código. No reconstruir funciones porque un informe antiguo las describa como demo. Nunca subir bases/WAL/SHM, accesos, sesiones, secretos o datos reales de alumnos; `.local/` está ignorada.
 
-## Flujo de trabajo
-- Crear un Issue por funcionalidad o corrección.
-- Desarrollar en una rama específica (ej. `feat/landing`).
-- Revisar los cambios mediante Pull Request antes de fusionar en `main`.
-- Mantener documentación y código alineados.
-
-## Propuesta visual anterior
-La copia local de la propuesta anterior se conserva en `reference/cai-original/`, ignorada por Git. Se adaptó su diseño sin modificarla ni importarla desde la aplicación. Únicamente se copiaron los dos SVG necesarios a `src/assets/cai/`. La procedencia de las fotografías de stock, las diferencias y los contenidos por validar se detallan en la guía de implementación.
-
-## Privacidad
-Utilizar exclusivamente **datos ficticios**. Ya existen autenticación, permisos, moderación persistente y almacenamiento privado locales comprobados en el alcance documentado. La revisión técnica local está realizada; permanecen las incidencias y límites del informe, configuración externa, entrega real de correo/Google, consentimiento/contenido, infraestructura y aceptación humana de CAI. No publicar ni admitir alumnos reales como parte de las pruebas locales.
+Esta auditoría es documental: no cambia aplicación/dependencias/datos ni fusiona PR, actualiza main o despliega. [NEXT_STEPS](docs/NEXT_STEPS.md) describe la preparación pendiente de producción.

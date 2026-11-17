@@ -1,3 +1,7 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community · Fase 6.1 · Playful Premium
 
 Rama verificada: `feat/community-visual-polish`. Base estable: `a6d9603`. La carpeta de diseños y las revisiones anteriores ya existían sin rastrear y se conservaron.
@@ -63,7 +67,7 @@ Modificados:
 
 ## Validación
 
-Resultados finales y capturas: [índice visual](../review/community-phase-6-1/index.html) y [registro de revisión](../review/community-phase-6-1/REVISION.md).
+Resultados finales y capturas: índice visual (`../review/community-phase-6-1/index.html`) y registro de revisión (`../review/community-phase-6-1/REVISION.md`).
 
 - `typecheck`, `lint` y `build`: correctos; build final sin advertencia de tamaño.
 - Modelos existentes: Comunidad 29 + 4 igualdades; Publicaciones 23; Retos 27 + 1 igualdad; Galería 25 + 4 igualdades; Logros 51 + 4 igualdades. Todos correctos.

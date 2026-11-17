@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Retos diarios de inglés: implementación y comprobación
 
 Rama acumulativa `feat/v1-community-challenges`, desde `46466b7` (comentarios/reacciones ya conectados). Puntos de retorno: `fbb1545` servicio/migración/banco/pruebas y `e14eda7` interfaz/administración/recorridos. Base visual oficial v1.0 conservada. Comprobación local con datos ficticios; no despliegue ni prueba con alumnos reales.

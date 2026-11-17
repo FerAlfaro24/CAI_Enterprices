@@ -1,3 +1,5 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](../../docs/START_HERE.md), [estado vigente](../../docs/PROJECT_STATE.md) y [prioridades](../../docs/NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Auditoría visual de CAI Community
 
 Fecha: 17 de octubre de 2026. Rama comprobada: `feat/community`.

@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Reacciones conectadas de Community
 
 > Avance posterior: [comentarios/moderación](v1-community-comments.md) ya integrados y comprobados, esquema 14. Las referencias a comentarios pendientes de este informe son históricas; sus resultados de reacciones se conservan y se repitieron como regresión.

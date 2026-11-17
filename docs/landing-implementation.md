@@ -1,3 +1,5 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Landing institucional de CAI — Issue #2
 
 Implementación local en `feat/landing-page`, a partir de la referencia aprobada en `reference/cai-original/`. Conserva el orden, la paleta, Figtree, los logotipos, los bloques alternados, degradados, tarjetas y composición responsive de la propuesta. Es un prototipo para revisión, sin autenticación, backend, pagos ni usuarios reales.

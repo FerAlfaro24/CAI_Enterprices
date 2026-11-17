@@ -1,3 +1,7 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
+> **Decisión posterior:** vídeos son opcionales y de menor prioridad. Retos e Insignias ya están conectados. No iniciar los bloques pendientes de este plan histórico sin contrastar NEXT_STEPS.
+
 # Comunidad ampliada: alcance y plan de mejora
 
 **Nuevo alcance autorizado por el usuario:** incluir comentarios, reacciones, retos, insignias y vídeos en la entrega final, mejorando su claridad visual y facilidad de uso. **Vídeos: solo coordinación sube; el grupo autorizado puede verlos**, confirmado por el usuario. La inclusión de estos módulos ya no está pendiente de permiso.

@@ -1,3 +1,5 @@
+> **Guía operativa local — revisada documentalmente el 17-11-2026.** Estado completo en [PROJECT_STATE](PROJECT_STATE.md); arranque/aislamiento en [RUN_LOCAL](RUN_LOCAL.md). No es un despliegue ni una validación con usuarios reales.
+
 # Guía sencilla de administración de CAI
 
 **Versión de pruebas locales, con datos ficticios.** Las tareas siguientes ya están conectadas al guardado local. El uso con alumnos reales, permisos del material y entrega de correo se revisan con CAI antes de publicar. Esta guía no presupone que el sitio esté alojado en internet.

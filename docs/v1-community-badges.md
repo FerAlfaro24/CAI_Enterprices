@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Insignias y reconocimientos conectados
 
 Rama acumulativa `feat/v1-community-badges`, desde `980a1ec` (Retos comprobados). Puntos de retorno `bf9cf2e` servicio/migración/pruebas y `c8788bf` interfaz/recorridos. Conserva arte, identificadores y colección de v1.0, su demostración y todos los avances anteriores. Alcance comprobado localmente con datos ficticios; no despliegue ni aceptación con alumnos reales.

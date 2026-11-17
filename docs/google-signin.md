@@ -1,3 +1,7 @@
+> **Referencia de integración preparada — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
+> Google real sigue pendiente. No se ha vuelto a verificar la interfaz de Google Cloud en esta auditoría. Confirmar sus instrucciones oficiales al configurar el proyecto del cliente; no usar cuentas personales como titular definitivo.
+
 # Acceso con Google y solicitud obligatoria
 
 Rama: `feat/google-signin-onboarding`, desde la rama de activación de alumnos. Integración preparada para pruebas locales; falta registrar el cliente web de CAI y comprobar una cuenta real con el propietario. Sin esa configuración, el botón no aparece y no se carga ningún recurso de Google. El acceso con contraseña sigue disponible.

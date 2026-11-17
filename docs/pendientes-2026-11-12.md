@@ -1,3 +1,7 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
+> **Decisión posterior:** vídeos son opcionales y de menor prioridad. Retos e Insignias ya están conectados. No iniciar los bloques pendientes de este plan histórico sin contrastar NEXT_STEPS.
+
 # Pendientes y prioridades al 12 de noviembre de 2026
 
 Inventario contrastado con HEAD `6e1ee02` de `feat/v1-community-badges`, PROJECT_STATE, informes de Retos/Insignias/revisión local y código de arranque/autenticación. Actualización de planificación: no implementa funciones, migra bases ni repite pruebas. Horizonte propuesto: tres semanas, aproximadamente hasta el 3 de diciembre; son bloques de trabajo, no una garantía de aprobaciones externas.

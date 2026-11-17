@@ -1,71 +1,53 @@
-# Respaldo y recuperación del entorno local
+# CAI — respaldo y recuperación local
 
-Procedimiento para quien mantiene el proyecto. El administrador utiliza el panel según [su guía de tareas](guia-administracion.md). Estas instrucciones corresponden al servicio local actual; la operación del servidor contratado se define al final.
+**Guía operativa al 17-11-2026**, contrastada con `server/backup.ts` y `server/verify-backup.ts`; no se ejecuta aquí contra datos del usuario. Para pruebas del agente, usar solo fixtures nuevas y copias separadas. [Inicio](START_HERE.md) · [Arranque](RUN_LOCAL.md) · [Pruebas](TESTING.md).
 
-## Crear una copia
+## Qué se conserva
 
-Desde la carpeta del repositorio, en PowerShell:
+SQLite actual: esquema 16. La copia incluye expedientes/tutores, cuentas y hashes/sesiones, grupos/ajustes, publicaciones, imágenes y retiradas, avisos/contacto, comentarios/reacciones, respuestas/preguntas de retos, solicitudes/concesiones/correcciones de insignias y auditorías. Puntos/constancia se calculan desde respuestas; no dependen de storage del navegador.
+
+Los datos y las copias son privados, aunque una prueba use personas ficticias. No subir `.local`, bases/WAL/SHM, credenciales o enlaces a GitHub. No se han añadido archivos de vídeo; si se implementan habrá que ampliar consistencia, copias y restauración a esos medios.
+
+## Crear una copia: tarea del responsable de la instalación
+
+Con permiso y desde el repositorio de la instalación correspondiente:
 
 ```powershell
 npm.cmd run local:backup
 ```
 
-El comando crea un archivo nuevo dentro de `.local/backups` y muestra su ruta. Utiliza una copia consistente de SQLite, incluso si la API mantiene abierta la base con WAL. No sobrescribe la base activa. No copiar únicamente `.local/cai.sqlite` mientras haya escrituras: puede faltar contenido que siga en WAL.
+El script usa el mecanismo de backup de SQLite y crea un archivo nuevo con fecha/identificador en `.local/backups`, incluso con WAL activo. Abre la base de origen en solo lectura para obtener la copia; no reemplaza la activa. No copiar únicamente el archivo principal mientras haya escrituras.
 
-La copia incluye cuentas, hashes de contraseñas y sesiones, solicitudes, autorizaciones registradas, grupos, ajustes, publicaciones, consultas, avisos, auditoría e imágenes procesadas, incluidas las retiradas. Son datos privados; las copias permanecen excluidas de Git. Se conserva la imagen procesada, no el archivo original elegido al subirla.
+No ejecutar este comando contra la base habitual como parte de una prueba del agente. Las pruebas de código usan `backupLocalDatabase` sobre su fixture y un destino nuevo; no manipulan `.local/cai.sqlite`.
 
-No incluye el código, las dependencias instaladas ni archivos separados de configuración. Mantener identificada la versión del proyecto utilizada. La configuración opcional de Google (`.local/google.json`) y la custodia de acceso se conservan separadamente y con protección adecuada; no se convierten en archivos públicos para facilitar la recuperación. El acceso inicial local es de pruebas y no debe reutilizarse en producción.
+## Verificar una copia, sin restaurar
 
-## Comprobar una copia
-
-Usar la ruta exacta mostrada al crearla; este nombre es solo un ejemplo que debe sustituirse:
+Sustituir el marcador por la ruta concreta de una **copia**, no por la base activa:
 
 ```powershell
-npm.cmd run local:verify-backup -- ".local/backups/NOMBRE-DE-LA-COPIA.sqlite"
+npm.cmd run local:verify-backup -- "RUTA_DE_LA_COPIA.sqlite"
 ```
 
-`local:verify-backup` abre la copia en **modo de solo lectura**. Comprueba integridad de SQLite, relaciones, versión compatible 9–16, registros principales y decodificación de imágenes. El esquema 10 añade recuperación administrativa, el 11 estados/invitaciones, el 12 historial privado de correcciones del expediente el 13 elecciones/reintentos de reacciones y su pausa, el 14 comentarios, revisiones y permisos generales/por historia, el 15 banco/calendario/respuestas/progreso de retos y el 16 solicitudes/concesiones/historial de insignias y vínculos voluntarios de publicaciones. Los enlaces se conservan como hashes, no en texto. Devuelve únicamente totales; no imprime expedientes, credenciales o enlaces. Incluye imágenes retiradas, comentarios, reacciones, respuestas/puntos de retos e historial personal: proteger también todas las copias. Las pruebas de reacciones/comentarios abren una copia separada con su API y comprueban selección, texto/estados, historial, sesión y reintento; no restaura sobre la base habitual.
+Admite esquemas **9–16** y abre en solo lectura; comprueba integridad de SQLite, relaciones, versión y decodificación/dimensiones/bytes de imágenes, y devuelve totales. No migra ni repara ni restaura el archivo. Rechaza la ruta habitual activa. Un archivo inexistente no crea una base nueva.
 
-No restaura, migra, repara ni modifica la copia. El comando rechaza como entrada la ruta habitual de la base activa. Una ruta inexistente no crea una base nueva. Si falla, conservar el archivo original y revisar la ruta, versión e integridad; no intentar resolverlo reemplazando la base en uso.
+Los totales de ensayos antiguos no son valores esperados universales. Contrastar fecha y datos que se quería preservar. Integridad técnica no demuestra que se eligió el momento correcto de copia ni aceptación de producción.
 
-Una copia válida no demuestra por sí sola que incluya los cambios esperados: comprobar también la fecha y los totales con el estado que se pretendía conservar. La antigüedad y la frecuencia de las copias definitivas se acuerdan para la entrega.
+## Ensayo separado
 
-## Ensayo de recuperación separado
-
-Las pruebas automáticas trabajan en carpetas temporales propias bajo `.local/tests`. Crean datos ficticios, obtienen una copia y la abren por separado. Comprueban cuentas y bytes de imágenes, e inician una API aislada con esa copia: el alumno entra con su contraseña, mantiene su programa, no puede consultar solicitudes administrativas y una imagen retirada sigue inaccesible. No sustituyen `.local/cai.sqlite` ni borran copias del usuario. La verificación también comprueba que se detecta una imagen corrupta y que el archivo verificado permanece idéntico tras la lectura.
-
-Para repetir las pruebas existentes:
+La suite API utiliza carpetas temporales bajo `.local/tests`, genera copias y arranca APIs aisladas con ellas. Los informes de módulos registran conservación de sesiones/estado, imágenes/retiradas, comentarios/reacciones, retos, insignias y vínculos moderados. Ver [evidencia](TESTING.md). No se reejecuta esa suite por esta auditoría Markdown.
 
 ```powershell
 npm.cmd run test:api
 ```
 
-El ensayo usa puertos locales temporales y una base independiente. No es una restauración de producción ni una prueba de entrega de correo/Google.
+Ejecutar desde una instalación preparada con permisos de localhost y datos ficticios. Es un ensayo aislado, no restauración productiva ni prueba de correo real.
 
-## Recuperar la base utilizada por el servicio
+## Recuperar una instalación: operación específica
 
-Esto requiere una operación específica acordada; **no se ejecuta como parte de crear o verificar un respaldo**.
+1. Elegir copia y versión de código compatibles; comprobar/abrir primero en destino separado. `openDatabase` puede aplicar migraciones cuando se arranca la aplicación, a diferencia del verificador de solo lectura.
+2. Acordar el punto de recuperación y los cambios posteriores que se perderían; preservar íntegro el estado actual, con WAL/SHM asociados.
+3. Preparar ensayo aislado de acceso/grupos/medios y decisiones; revisar sesiones/suspensiones que hubieran cambiado después de la copia.
+4. Solo con autorización del reemplazo concreto, detener el servicio y aplicar el procedimiento de mantenimiento acordado. No mezclar WAL de otra base ni sobrescribir archivos desde una orden genérica.
+5. Volver a comprobar datos/permisos y conservar el estado previo para regreso. Reabrir al público requiere decisión propia, no ocurre como consecuencia automática de copiar.
 
-1. Elegir la copia y la versión de código correspondiente. Comprobarla primero y ensayar su apertura por separado.
-2. Acordar qué momento se recuperará. Revisar los cambios posteriores que no estarán en esa copia.
-3. Detener el servicio antes de reemplazar archivos. Preservar íntegro el estado actual, incluidos los archivos WAL/SHM que correspondan, para poder volver atrás.
-4. Preparar la recuperación en un destino aislado y revisar acceso, grupos, publicaciones, consultas e imágenes. No mezclar el WAL de una base con el archivo principal de otra.
-5. Solo tras autorizar el reemplazo concreto, aplicar el procedimiento de mantenimiento y volver a comprobar permisos y recorridos. No reabrir el servicio al público como consecuencia automática de copiar un archivo.
-
-Las copias contienen estados y sesiones del momento guardado. Antes de reabrir un entorno recuperado, revisar también suspensiones y accesos que se hubieran cambiado después. La restauración no es un mecanismo para deshacer una decisión administrativa aislada; usar las acciones del panel cuando correspondan.
-
-No se proporciona una orden que sobrescriba la base activa ni elimine archivos del usuario. El procedimiento definitivo de almacenamiento, retención, copias externas, custodia y recuperación del servicio contratado queda pendiente de su infraestructura y de la validación del responsable.
-
-## Comprobado en esta etapa
-
-Se creó y verificó una copia local real de pruebas: esquema 9, 119 solicitudes/alumnos, 104 cuentas, 76 publicaciones y tres imágenes. Los totales son una fotografía del ensayo, no una condición que deban cumplir copias posteriores. La suite comprueba por separado imágenes, cuentas, acceso y lectura sin alterar el archivo. No se restauró sobre la base activa.
-
-
-### Retos (esquema 15)
-
-La copia incluye banco editado, controles, preguntas congeladas por fecha/grupo, respuestas y auditoría. Puntos/constancia se calculan desde las respuestas, no del navegador. Las pruebas arrancan la API con una copia separada y comprueban snapshot, historial y persistencia; no restauran sobre la base habitual. El verificador admite 9–15 sin migrar la copia. No se han añadido concesiones de insignias ni archivos de vídeo en este esquema.
-
-
-### Insignias (esquema 16)
-
-Las copias incluyen declaraciones privadas, decisiones/motivos, concesiones activas y retiradas, fechas/condiciones congeladas e historial, además del vínculo con historias compartidas. Protegerlas igual que los expedientes. La prueba de copia separada/reinicio comprueba colección, solicitudes y vínculo moderado; la migración 15→16 conserva respuestas/sesiones e inicia sin concesiones de demo. El verificador admite 9–16 sin migrar la copia. No se han añadido archivos de vídeo en este esquema.
+No se proporciona un comando destructivo de restauración. No usar esta operación para deshacer una sola decisión administrativa si existe acción revisable en el panel. Custodia, retención, frecuencia, copias externas, supervisión y restauración en el proveedor contratado siguen pendientes de la entrega real.
