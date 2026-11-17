@@ -1,6 +1,6 @@
 # CAI — índice y clasificación de toda la documentación
 
-**Corte: 17-11-2026.** 60 archivos Markdown versionados/en esta PR, incluidos README/AGENTS y el informe visual de review. Cada archivo tiene una entrada. Esta clasificación reemplaza la idea de que todos los documentos viejos son instrucciones vigentes.
+**Actualizado: 17-11-2026, después de la revisión integral.** 61 archivos Markdown: los 60 de la auditoría documental inicial y el informe posterior de pruebas, incluidos README/AGENTS y el informe visual de review. Cada archivo tiene una entrada. Esta clasificación reemplaza la idea de que todos los documentos viejos son instrucciones vigentes.
 
 ## Cómo leer
 
@@ -27,6 +27,7 @@ Empezar por [START_HERE](START_HERE.md), [PROJECT_STATE](PROJECT_STATE.md) y [NE
 | `AGENTS.md` | Vigente | [CAI — instrucciones vigentes para agentes](../AGENTS.md) |
 | `docs/DOCUMENTATION_INDEX.md` | Vigente | [CAI — índice documental](DOCUMENTATION_INDEX.md) |
 | `docs/AUDIT_2026-11-17.md` | Vigente | [Auditoría documental y continuidad — 17 de noviembre de 2026](AUDIT_2026-11-17.md) |
+| `docs/v1-integral-review-2026-11-17.md` | Informe técnico de una entrega | [Revisión integral local, matriz nueva y límites](v1-integral-review-2026-11-17.md) |
 | `docs/PROJECT_HISTORY-2026-11-12.md` | Bitácora histórica | [Estado oficial y orden de integración de CAI](PROJECT_HISTORY-2026-11-12.md) |
 | `docs/admin-dashboard.md` | Antecedente histórico | [Panel de administración](admin-dashboard.md) |
 | `docs/cai-demo-integration.md` | Antecedente histórico | [CAI — Integración para demostración](cai-demo-integration.md) |
@@ -81,7 +82,7 @@ Empezar por [START_HERE](START_HERE.md), [PROJECT_STATE](PROJECT_STATE.md) y [NE
 
 Los informes versionados son recuperables; las capturas/logs/rutas locales ignoradas pueden no serlo. Se han sustituido 51 enlaces rotos de evidencia local en 11 documentos por referencias textuales claramente identificadas. No se publican archivos privados ni se fingen capturas. Los links locales restantes se comprueban frente al árbol; los servicios externos se revisan cuando corresponda, sin prometer disponibilidad de terceros.
 
-Los informes conservan sus cifras y exclusiones históricas. Ver [TESTING](TESTING.md) para comparar cortes; última suite registrada 193, no ejecutada en esta auditoría. [PROJECT_HISTORY](PROJECT_HISTORY-2026-11-12.md) conserva sin recortar la antigua bitácora.
+Los informes conservan sus cifras y exclusiones históricas. Ver [TESTING](TESTING.md) para comparar cortes; la revisión integral posterior sí repitió 193 API y registró 1,314 comprobaciones de navegador. No se suman con matrices antiguas ni se atribuyen a la auditoría documental inicial. [PROJECT_HISTORY](PROJECT_HISTORY-2026-11-12.md) conserva sin recortar la antigua bitácora.
 
 ## Mantener este índice
 

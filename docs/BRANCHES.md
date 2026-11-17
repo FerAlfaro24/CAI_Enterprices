@@ -4,12 +4,17 @@
 
 ## Qué utilizar
 
-- Para esta documentación y código completo: `docs/continuidad-auditoria-2026-11-17`.
+- **Continuación actual:** `test/v1-integral-review-2026-11-17`, desde b55cd50 de la rama documental; incorpora las pruebas/resultados posteriores. Ver sección siguiente.
+- Auditoría documental inicial y código completo: `docs/continuidad-auditoria-2026-11-17`.
 - Base funcional de la PR: `fix/v1-dev-preview-cache` / `3971284`.
 - Referencia visual: `release/cai-demo-v1.0` / `f3ba46b`.
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
-## Todas las ramas auditadas
+## Rama añadida después del corte
+
+`test/v1-integral-review-2026-11-17` parte de b55cd50, punta corregida de PR #9. [8c515de](https://github.com/FerAlfaro24/CAI_Enterprices/commit/8c515ded7a7e60349fff458e629c0d6a5f02a30e) guarda cuatro cambios de pruebas; un commit posterior actualiza las guías y el [informe integral](v1-integral-review-2026-11-17.md). Código de aplicación idéntico a 3971284, con 193 API/1,314 navegador recién comprobados. La revisión se propone hacia la rama documental, conservando ambas historias; no fusiona PR #9 ni mueve main/release. Esta rama es posterior a las 37 referencias de la fotografía siguiente y no altera sus recuentos históricos.
+
+## Todas las ramas auditadas en el corte inicial
 
 | Rama | SHA auditado | Finalidad | Relación con 3971284 |
 | --- | --- | --- | --- |

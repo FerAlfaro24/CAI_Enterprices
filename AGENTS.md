@@ -4,7 +4,7 @@
 
 1. Leer [START_HERE](docs/START_HERE.md), [PROJECT_STATE](docs/PROJECT_STATE.md), [BRANCHES](docs/BRANCHES.md) y [NEXT_STEPS](docs/NEXT_STEPS.md). Las instrucciones nuevas del usuario prevalecen. [DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md) clasifica el resto.
 2. Comprobar Git y cambios del usuario. Localizar componente/servicio existente, base y criterio de cierre antes de editar. No confundir un informe histórico con trabajo pendiente.
-3. Base funcional: `fix/v1-dev-preview-cache` / `3971284`, esquema 16. `docs/continuidad-auditoria-2026-11-17` incorpora ese código y conserva la historia de PR #9. Main es antigua; `release/cai-demo-v1.0` / `f3ba46b` se conserva como referencia visual.
+3. Continuación actual: `test/v1-integral-review-2026-11-17`, que parte de la documentación corregida b55cd50 de PR #9. Pruebas en `8c515de`; [informe integral](docs/v1-integral-review-2026-11-17.md): 193 API/1,314 navegador nuevos. Código de aplicación sin cambios frente a `fix/v1-dev-preview-cache` / `3971284`, esquema 16. Main es antigua; `release/cai-demo-v1.0` / `f3ba46b` se conserva como referencia visual.
 
 ## Alcance y prioridad
 
@@ -23,6 +23,7 @@
 - Caché web `node_modules/.vite-cai-web-${apiPort}`, separada de verificadores SSR. Ver [pantalla en blanco](docs/solucion-pantalla-blanca-local.md). Antes de dar un enlace comprobar renderizado; HTTP/health no bastan. No reiniciar la API habitual ni borrar cachés/datos implícitamente.
 - Brave principal y Opera GX para compatibilidad, en contextos aislados. Revisar interacción, consola, 1440/768/375/320, teclado y temas cuando corresponda.
 - Ejecutar checks existentes proporcionales al cambio. Resultados históricos no son pruebas nuevas. No repetir auditorías/matrices sin cambio relevante. Las alertas e intermitencias antiguas permanecen con sus límites hasta evidencia nueva.
+- La revisión integral local del 17 está completada; no volver a proponerla como tarea abierta sin cambios/hallazgos nuevos. Próximo trabajo autónomo: preparación técnica de producción; aceptación humana sigue para la tanda de CAI. El error intermitente route.fulfill del simulador quedó documentado sin causa exacta confirmada.
 
 ## Git y continuidad
 

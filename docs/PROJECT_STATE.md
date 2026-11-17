@@ -1,10 +1,11 @@
 # CAI — estado vigente
 
-**Actualizado: 17 de noviembre de 2026.** Hechos contrastados con Git y código; pruebas citadas como evidencia histórica, no reejecutadas en esta auditoría. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice documental](DOCUMENTATION_INDEX.md).
+**Actualizado: 17 de noviembre de 2026, después de la revisión integral.** Pruebas nuevas: 193 API y 1,314 comprobaciones en 38 recorridos de navegador. Los resultados de entregas anteriores siguen siendo históricos y no se suman. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice documental](DOCUMENTATION_INDEX.md).
 
 ## Referencias de continuación
 
 - **Base funcional verificada:** `fix/v1-dev-preview-cache`, `3971284f30110eb054f0d3616899ddafe97e3683`.
+- **Continuación actual:** `test/v1-integral-review-2026-11-17`, desde b55cd50. Punto de retorno de pruebas `8c515de`, sin cambios de aplicación. [Informe integral y límites](v1-integral-review-2026-11-17.md).
 - **Documentación corregida y código acumulado:** `docs/continuidad-auditoria-2026-11-17`, PR #9 hacia esa base. La diferencia de aplicación debe ser vacía; solo cambia Markdown. La PR sigue sin fusionarse.
 - **Base visual:** `release/cai-demo-v1.0`, `f3ba46b`, preservada. Panel/Community avanzados ya existían y se conectaron; no reconstruirlos.
 - **Main:** `a3c2569`, antigua, 74 commits detrás de la base funcional al corte.
@@ -39,11 +40,13 @@ Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BR
 
 ## Evidencia y límites
 
-La última suite completa registrada es **193/193**, al cerrar Insignias. Matriz de esa tarea: 46 funcionales +18 de visual/teclado de insignias y 53 de regresión de Retos por navegador, total 234. No cubre de nuevo todos los recorridos históricos. La revisión anterior de 134 API/844 navegador permanece como evidencia de su código anterior. Ver [TESTING](TESTING.md).
+La suite completa se **repitió: 193/193**. Revisión integral actual: **657 comprobaciones por navegador, 1,314 en 38 recorridos completos**, en Brave/Opera. Incluye módulos anteriores, reacciones/comentarios/retos/insignias y un menor nuevo desde solicitud hasta insignia y suspensión. También modelos, lint, tipos/compilación, inspección visual y trece rutas privadas con 403 sobre fixtures. Intentos interrumpidos excluidos del total. [Informe](v1-integral-review-2026-11-17.md).
+
+La matriz de Insignias de 234 y la revisión antigua de 134 API/844 navegador siguen como evidencia de sus propios cortes; no se agregan a la revisión nueva. Ver [TESTING](TESTING.md).
 
 Esquemas posteriores a la revisión antigua: 13 reacciones, 14 comentarios, 15 retos y 16 insignias. La presencia de tablas, rutas y pruebas contrasta las integraciones; no se deducen de nombres de ramas o botones. La demostración en memoria se conserva como referencia separada, no como seguridad.
 
-Incidencias históricas conservadas: diez avisos moderados de herramientas en la auditoría registrada, cero de ejecución en ese corte; dos recorridos Opera interrumpidos que pasaron después sin causa confirmada; fotos externas sin carga final verificada. No se da por reparado lo que no tiene evidencia nueva. No se ha probado aquí producción, entrega real de correo/Google, datos reales o aceptación humana.
+Incidencias: diez avisos moderados de herramientas/cero de ejecución en la auditoría anterior, no repetida hoy. Las dos intermitencias Opera antiguas no se reprodujeron; su causa sigue sin confirmar. En la tanda nueva hubo un error route.fulfill del simulador de reacciones; pasó al repetir y tras mejorar la espera, sin causa exacta confirmada. La prueba visual de insignias se hizo independiente del recorrido funcional. Las trece imágenes de portada cargaron en la nueva inspección Brave; material definitivo de CAI sigue pendiente. No se ha probado producción, correo/Google reales, datos reales o aceptación humana.
 
 ## Decisiones que prevalecen
 
@@ -59,6 +62,8 @@ Incidencias históricas conservadas: diez avisos moderados de herramientas en la
 Se contrastaron las 37 ramas remotas, ancestros, parches equivalentes y árboles; se corrigió PR #9, que partía de `fee87d1` y describía las integraciones posteriores como demo/no autorizadas. README, instrucciones y estado también contenían frases antiguas. La bitácora de 601 líneas se conserva en [PROJECT_HISTORY](PROJECT_HISTORY-2026-11-12.md); este archivo deja de mezclar pendientes antiguos con hechos actuales.
 
 La auditoría reorganiza documentación, clasifica todos los Markdown versionados y verifica enlaces/rutas/referencias. No instala dependencias, ejecuta la aplicación, reejecuta pruebas funcionales, accede a cuentas o cambia datos/configuración. Criterios y resultados documentales en [AUDIT_2026-11-17](AUDIT_2026-11-17.md).
+
+Después de esa auditoría, el usuario autorizó la revisión integral: [informe nuevo](v1-integral-review-2026-11-17.md). Se completó sobre fixtures nuevas. Solo cambian cuatro scripts de pruebas y documentación; no aplicación, dependencias o datos habituales. Siguiente trabajo autónomo: preparación técnica de producción, sin contratar/publicar todavía.
 
 ## Cómo actualizar este estado
 
