@@ -5,6 +5,7 @@ import { tokenFrom } from './auth.ts'
 import { transaction, type Database } from './database.ts'
 import { HttpError } from './validation.ts'
 import type { GoogleState } from './contracts.ts'
+import { localCookies, sessionCookie as serializeCookie, sessionCookieName, type CookiePolicy } from './session-cookie.ts'
 
 export type GoogleIdentity = { subject: string; email: string; nonce: string }
 export type GoogleVerifier = (credential: string) => Promise<GoogleIdentity>
@@ -13,7 +14,6 @@ export type GoogleOptions = { clientId?: string; verify?: GoogleVerifier }
 const challengeCookie = 'cai_google_challenge'
 const sessionCookie = 'cai_google_session'
 const hash = (value: string) => createHash('sha256').update(value).digest('hex')
-const cookie = (name: string, value: string, age: number) => `${name}=${value}; HttpOnly; SameSite=Strict; Path=/api/local; Max-Age=${age}`
 export const validClientId = (value: string) => /^\d+-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i.test(value)
 
 // La biblioteca oficial comprueba firma, audiencia, emisor y caducidad del ID token.
@@ -28,7 +28,9 @@ export function googleVerifier(clientId: string): GoogleVerifier {
   }
 }
 
-export function googleAccounts(db: Database, options: GoogleOptions) {
+export function googleAccounts(db: Database, options: GoogleOptions, cookies: CookiePolicy = localCookies) {
+  const challengeName = sessionCookieName(challengeCookie, cookies), sessionName = sessionCookieName(sessionCookie, cookies)
+  const cookie = (name: string, value: string, age: number) => serializeCookie(name, value, age, cookies)
   const clientId = options.clientId ?? ''
   if (clientId && !validClientId(clientId)) throw new Error('El ID de cliente web de Google no es válido.')
   const verify = options.verify ?? (clientId ? googleVerifier(clientId) : undefined)
@@ -36,7 +38,7 @@ export function googleAccounts(db: Database, options: GoogleOptions) {
     if (!clientId || !verify) throw new HttpError(503, 'El acceso con Google aún no está configurado. Puedes usar el acceso con contraseña.')
   }
   const identity = (request: IncomingMessage) => {
-    const token = tokenFrom(request, sessionCookie)
+    const token = tokenFrom(request, sessionName)
     if (!token) return undefined
     return db.prepare(`SELECT g.subject, g.email, g.request_id FROM google_sessions s
       JOIN google_identities g ON g.subject = s.subject WHERE s.token_hash = ? AND s.expires_at > ?`).get(hash(token), Date.now()) as { subject: string; email: string; request_id: number | null } | undefined
@@ -51,9 +53,9 @@ export function googleAccounts(db: Database, options: GoogleOptions) {
     return { status, requestId: `CAI-${String(account.request_id).padStart(4, '0')}` }
   }
   const end = (request: IncomingMessage) => {
-    const token = tokenFrom(request, sessionCookie)
+    const token = tokenFrom(request, sessionName)
     if (token) db.prepare('DELETE FROM google_sessions WHERE token_hash = ?').run(hash(token))
-    const challenge = tokenFrom(request, challengeCookie)
+    const challenge = tokenFrom(request, challengeName)
     if (challenge) db.prepare('DELETE FROM google_challenges WHERE token_hash = ?').run(hash(challenge))
     return [cookie(sessionCookie, '', 0), cookie(challengeCookie, '', 0)]
   }
@@ -61,7 +63,7 @@ export function googleAccounts(db: Database, options: GoogleOptions) {
     config: () => ({ enabled: Boolean(clientId), clientId: clientId || null }),
     challenge(request: IncomingMessage) {
       enabled()
-      const old = tokenFrom(request, challengeCookie)
+      const old = tokenFrom(request, challengeName)
       if (old) db.prepare('DELETE FROM google_challenges WHERE token_hash = ?').run(hash(old))
       db.prepare('DELETE FROM google_challenges WHERE expires_at <= ?').run(Date.now())
       const nonce = randomBytes(32).toString('hex')
@@ -70,7 +72,7 @@ export function googleAccounts(db: Database, options: GoogleOptions) {
     },
     async signIn(request: IncomingMessage, credential: unknown) {
       enabled()
-      const nonce = tokenFrom(request, challengeCookie)
+      const nonce = tokenFrom(request, challengeName)
       const challenge = () => nonce && db.prepare('SELECT token_hash FROM google_challenges WHERE token_hash = ? AND expires_at > ?').get(hash(nonce), Date.now())
       if (!challenge() || typeof credential !== 'string' || credential.length > 12_000 || credential.length < 20) throw new HttpError(401, 'Vuelve a pulsar Continuar con Google para iniciar el acceso.')
       let verified: GoogleIdentity

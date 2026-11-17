@@ -1,15 +1,16 @@
 /** Recorrido transversal con un menor nuevo: final-review-browser-server, nunca datos reales. */
 export async function checkStudentFullJourney(page, {
-  email, password, browserLabel = 'Prueba', baseURL = 'http://127.0.0.1:4180', screenshotDir,
+  email, password, browserLabel = 'Prueba', baseURL = 'http://127.0.0.1:4180', screenshotDir, configureContext,
 } = {}) {
   if (!email?.startsWith('revision-') || !email.endsWith('@example.test') || password !== 'Frase ficticia de revisión final CAI 2026') {
     throw Error('Este recorrido requiere la fixture aislada final-review-browser-server.')
   }
-  const contexts = [], details = [], errors = []
+  const contexts = [], cleanups = new Map(), details = [], errors = []
   const check = (ok, label) => { if (!ok) throw Error(label); details.push(label) }
   const open = async width => {
     const context = await page.context().browser().newContext({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' })
     contexts.push(context)
+    if (configureContext) cleanups.set(context, await configureContext(context))
     const target = await context.newPage()
     target.setDefaultTimeout(10000)
     target.on('pageerror', error => errors.push(String(error)))
@@ -143,6 +144,51 @@ export async function checkStudentFullJourney(page, {
   } catch (error) {
     throw Error(error.message + '\nCompletadas: ' + details.length + '\n' + details.join('\n'))
   } finally {
-    for (const context of contexts) await context.close()
+    for (const context of contexts) {
+      try { await cleanups.get(context)?.() }
+      finally { await context.close() }
+    }
   }
+}
+
+/** HTTPS simulado por interceptación; no valida un certificado o proxy de alojamiento real. */
+export async function checkProductionStudentJourney(page, {
+  email, browserLabel, publicOrigin, port, screenshotDir,
+} = {}) {
+  if (publicOrigin !== 'https://cai.example.test' || port !== 3181) throw Error('Usa exclusivamente production-browser-server en loopback 3181.')
+  const cookieKinds = new Set(), checks = [], proxyErrors = []
+  let apiRequests = 0
+  const configureContext = async context => {
+    await context.route(publicOrigin + '/**', async route => {
+      const request = route.request(), url = new URL(request.url()), api = url.pathname.startsWith('/api/local/')
+      try {
+        const headers = { ...request.headers() }
+        if (api) {
+          apiRequests++
+          if ((headers.cookie ?? '').includes('__Host-cai_')) {
+            const cookies = (await context.cookies(publicOrigin)).filter(cookie => cookie.name.startsWith('__Host-cai_'))
+            if (cookies.some(cookie => !cookie.secure || !cookie.httpOnly || cookie.sameSite !== 'Strict' || cookie.path !== '/' || cookie.domain !== 'cai.example.test')) throw Error('La sesión del navegador no conserva su política segura.')
+            if (cookies.some(cookie => cookie.name === '__Host-cai_local_session')) cookieKinds.add('admin')
+            if (cookies.some(cookie => cookie.name === '__Host-cai_student_session')) cookieKinds.add('student')
+          }
+          headers.host = 'cai.example.test'; headers['x-forwarded-proto'] = 'https'; headers['x-forwarded-for'] = browserLabel === 'brave' ? '192.0.2.40' : '192.0.2.41'
+        } else headers.host = '127.0.0.1:4180'
+        const response = await route.fetch({ url: (api ? 'http://127.0.0.1:3181' : 'http://127.0.0.1:4180') + url.pathname + url.search, headers, maxRedirects: 0 })
+        await route.fulfill({ response })
+      } catch (error) {
+        proxyErrors.push(String(error))
+        await route.abort('failed').catch(() => {})
+      }
+    })
+    // Acabar las respuestas interceptadas antes de cerrar la pestaña que las originó.
+    return () => context.unrouteAll({ behavior: 'wait' })
+  }
+  const result = await checkStudentFullJourney(page, {
+    email, password: 'Frase ficticia de revisión final CAI 2026', browserLabel, baseURL: publicOrigin, screenshotDir, configureContext,
+  })
+  if (!cookieKinds.has('admin') || !cookieKinds.has('student')) throw Error('El navegador no envió ambas sesiones seguras durante el recorrido.')
+  checks.push('Administrador y alumno envían cookies __Host, Secure, HttpOnly, Strict y de ámbito raíz al origen HTTPS simulado')
+  if (!apiRequests || proxyErrors.length) throw Error('Falló la simulación de proxy: ' + proxyErrors.join('\n'))
+  checks.push('Recorrido completo a través de la política de proxy, sin errores de interceptación')
+  return { ...result, checks: result.checks + checks.length, details: [...result.details, ...checks], apiRequests, realTLS: false }
 }

@@ -19,8 +19,10 @@ import { badgesRepository } from './badges.ts'
 import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
-
-const frontendOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173', 'http://127.0.0.1:4180', 'http://localhost:4180']
+import { randomUUID } from 'node:crypto'
+import { localPolicy, type RequestPolicy } from './runtime-config.ts'
+import { requestContext, validateRequestPolicy } from './request-policy.ts'
+import { requestLogFields, writeOperationalLog, type OperationalLog } from './operational-log.ts'
 
 async function body(request: IncomingMessage, maximum = 16_384) {
   if (request.headers['content-type']?.split(';')[0]?.trim() !== 'application/json') throw new HttpError(415, 'Envía los datos como JSON.')
@@ -44,12 +46,15 @@ function json(response: ServerResponse, status: number, data: unknown) {
   response.end(JSON.stringify(data))
 }
 
-export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date} = {}) {
+export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date;runtime?:RequestPolicy;log?:OperationalLog} = {}) {
+  const policy = validateRequestPolicy(options.runtime ?? localPolicy)
+  const cookies = { secure: policy.mode === 'production' }
+  const log = options.log ?? (policy.mode === 'production' ? event => console.info(JSON.stringify(event)) : undefined)
   const db = openDatabase(databasePath)
   const access = accessRepository(db)
-  const auth = authRepository(db)
-  const studentAuth = studentAccounts(db)
-  const google = googleAccounts(db, googleOptions)
+  const auth = authRepository(db, cookies)
+  const studentAuth = studentAccounts(db, cookies)
+  const google = googleAccounts(db, googleOptions, cookies)
   const posts = publications(db)
   const mail = notices(db)
   const config = administration(db)
@@ -73,33 +78,26 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   }
 
   const handle = async (request: IncomingMessage, response: ServerResponse) => {
-    const host = request.headers.host ?? ''
-    if (!/^(127\.0\.0\.1|localhost):\d+$/.test(host)) throw new HttpError(403, 'Este servicio solo está disponible en el equipo local.')
-    if (!['127.0.0.1', '::ffff:127.0.0.1', '::1'].includes(request.socket.remoteAddress ?? '')) throw new HttpError(403, 'Acceso local requerido.')
-    const url = new URL(request.url ?? '/', `http://${host}`)
-    const path = url.pathname
-    const method = request.method
-    if (!['GET', 'POST', 'PATCH'].includes(method ?? '')) throw new HttpError(405, 'Método no permitido.')
-    if (method !== 'GET') {
-      const origin = request.headers.origin
-      if (!origin || ![...frontendOrigins, `http://${host}`].includes(origin)) throw new HttpError(403, 'El origen de la solicitud no está permitido.')
-      if (request.headers['sec-fetch-site'] === 'cross-site') throw new HttpError(403, 'Solicitud de otro sitio no permitida.')
+    const { url, path, method, clientAddress } = requestContext(request, policy)
+    limit(`all:${clientAddress}`, 600, 60_000)
+    if (path === '/api/local/health' && method === 'GET') return json(response, 200, { status: 'ok', mode: policy.mode === 'production' ? 'production' : 'local-test' })
+    if (path === '/api/local/ready' && method === 'GET') {
+      db.prepare('SELECT 1').get()
+      return json(response, 200, { status: 'ok' })
     }
-    limit(`all:${request.socket.remoteAddress}`, 600, 60_000)
-    if (path === '/api/local/health' && method === 'GET') return json(response, 200, { status: 'ok', mode: 'local-test' })
     if (path === '/api/local/catalog' && method === 'GET') return json(response, 200, config.publicCatalog())
     if (path === '/api/local/admin-recovery/request' && method === 'POST') {
-      limit(`admin-recovery:${request.socket.remoteAddress}`,10,15*60_000)
+      limit(`admin-recovery:${clientAddress}`,10,15*60_000)
       const data=await body(request)
       if (Object.keys(data).some(key=>key!=='email') || typeof data.email!=='string' || data.email.length>160 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) throw new HttpError(400,'Escribe un correo válido.')
       recovery.request(data.email.trim())
-      json(response,202,{message:adminRecoveryMessage})
+      json(response,202,{message:policy.mode === 'local' ? adminRecoveryMessage : 'Si el correo corresponde a una cuenta administrativa, se preparará su recuperación. Consulta con coordinación para recibir ayuda. No se ha cambiado ninguna contraseña.'})
       // La entrega ocurre fuera de la respuesta pública; ninguna URL privada vuelve al solicitante.
       setImmediate(()=>{void recovery.deliverPending().catch(()=>console.error('No se pudo procesar la entrega administrativa.'))})
       return
     }
     if (path === '/api/local/admin-recovery/reset' && method === 'POST') {
-      limit(`admin-reset:${request.socket.remoteAddress}`,20,15*60_000)
+      limit(`admin-reset:${clientAddress}`,20,15*60_000)
       const data=await body(request)
       if (Object.keys(data).some(key=>!['token','password','confirm'].includes(key)) || data.confirm!==data.password) throw new HttpError(400,'Revisa la confirmación de contraseña.')
       const currentUser=auth.session(request)
@@ -108,7 +106,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       return json(response,200,{ok:true})
     }
     if(path==='/api/local/admin-activation'&&method==='POST'){
-      limit(`admin-activation:${request.socket.remoteAddress}`,20,15*60_000)
+      limit(`admin-activation:${clientAddress}`,20,15*60_000)
       const data=await body(request)
       if(Object.keys(data).some(key=>!['token','password','confirm'].includes(key))||data.confirm!==data.password)throw new HttpError(400,'Revisa la confirmación de contraseña.')
       const current=auth.session(request),id=await team.activate(data.token,data.password)
@@ -116,20 +114,20 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       return json(response,200,{ok:true})
     }
     if (path === '/api/local/contact' && method === 'POST') {
-      limit(`contact:${request.socket.remoteAddress}`, 20, 60 * 60_000)
+      limit(`contact:${clientAddress}`, 20, 60 * 60_000)
       const key = request.headers['idempotency-key']
       if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador del envío.')
       return json(response, 201, contacts.submit(validateContact(await body(request)), key))
     }
     if (path === '/api/local/recovery/request' && method === 'POST') {
-      limit(`recovery:${request.socket.remoteAddress}`, 10, 15 * 60_000)
+      limit(`recovery:${clientAddress}`, 10, 15 * 60_000)
       const data = await body(request)
       if (Object.keys(data).some((key) => key !== 'email') || typeof data.email !== 'string' || data.email.length > 160 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) throw new HttpError(400, 'Escribe un correo válido.')
       mail.requestRecovery(data.email.trim())
-      return json(response, 202, { message: 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. En estas pruebas locales no se envían correos; consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' })
+      return json(response, 202, { message: policy.mode === 'local' ? 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. En estas pruebas locales no se envían correos; consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' : 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. Si necesitas ayuda, consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' })
     }
     if (path === '/api/local/recovery/reset' && method === 'POST') {
-      limit(`reset:${request.socket.remoteAddress}`, 20, 15 * 60_000)
+      limit(`reset:${clientAddress}`, 20, 15 * 60_000)
       const data = await body(request)
       if (Object.keys(data).some((key) => !['token','password','confirm'].includes(key)) || data.confirm !== data.password) throw new HttpError(400, 'Revisa la confirmación de contraseña.')
       await mail.changePassword(data.token, data.password)
@@ -138,13 +136,13 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     if (path === '/api/local/google/config' && method === 'GET') return json(response, 200, google.config())
     if (path === '/api/local/google/challenge' && method === 'POST') {
-      limit(`google-challenge:${request.socket.remoteAddress}`, 30, 15 * 60_000)
+      limit(`google-challenge:${clientAddress}`, 30, 15 * 60_000)
       const challenge = google.challenge(request)
       response.setHeader('Set-Cookie', challenge.cookie)
       return json(response, 200, { nonce: challenge.nonce, clientId: challenge.clientId })
     }
     if (path === '/api/local/google/signin' && method === 'POST') {
-      limit(`google-signin:${request.socket.remoteAddress}`, 30, 15 * 60_000)
+      limit(`google-signin:${clientAddress}`, 30, 15 * 60_000)
       const data = await body(request)
       if (Object.keys(data).some((key) => key !== 'credential')) throw new HttpError(400, 'El acceso contiene datos no admitidos.')
       const result = await google.signIn(request, data.credential)
@@ -158,7 +156,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       return json(response, 200, { ok: true })
     }
     if (path === '/api/local/google/profile' && method === 'POST') {
-      limit(`google-profile:${request.socket.remoteAddress}`, 20, 60 * 60_000)
+      limit(`google-profile:${clientAddress}`, 20, 60 * 60_000)
       const identity = google.requireIdentity(request)
       const data = await body(request)
       // Rechazar, en lugar de aceptar silenciosamente, el cambio del correo verificado.
@@ -176,12 +174,12 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     if (path === '/api/local/auth/session' && method === 'GET') return json(response, 200, { user: auth.session(request) })
     if (path === '/api/local/auth/login' && method === 'POST') {
-      limit(`login:${request.socket.remoteAddress}`, 10, 15 * 60_000)
+      limit(`login:${clientAddress}`, 10, 15 * 60_000)
       const data = await body(request)
       if (typeof data.email !== 'string' || data.email.length > 160 || typeof data.password !== 'string' || data.password.length < 1 || data.password.length > 128) throw new HttpError(400, 'Escribe el correo y la contraseña.')
       const user = await auth.login(data.email.trim(), data.password)
       if (!user) throw new HttpError(401, 'El correo o la contraseña no son correctos.')
-      limits.delete(`login:${request.socket.remoteAddress}`)
+      limits.delete(`login:${clientAddress}`)
       response.setHeader('Set-Cookie', [auth.end(request), auth.start(user)])
       return json(response, 200, { user })
     }
@@ -190,7 +188,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       return json(response, 200, { ok: true })
     }
     if (path === '/api/local/activation' && method === 'POST') {
-      limit(`activation:${request.socket.remoteAddress}`, 20, 15 * 60_000)
+      limit(`activation:${clientAddress}`, 20, 15 * 60_000)
       const data = await body(request)
       if (Object.keys(data).some((key) => !['token', 'password', 'confirm'].includes(key))) throw new HttpError(400, 'La activación contiene datos no admitidos.')
       if (typeof data.confirm !== 'string' || data.password !== data.confirm) throw new HttpError(400, 'Las contraseñas no coinciden.')
@@ -202,12 +200,12 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     if (path === '/api/local/student/session' && method === 'GET') return json(response, 200, { user: studentAuth.session(request) })
     if (path === '/api/local/student/login' && method === 'POST') {
-      limit(`student-login:${request.socket.remoteAddress}`, 10, 15 * 60_000)
+      limit(`student-login:${clientAddress}`, 10, 15 * 60_000)
       const data = await body(request)
       if (typeof data.email !== 'string' || data.email.length > 160 || typeof data.password !== 'string' || data.password.length < 1 || data.password.length > 128) throw new HttpError(400, 'Escribe el correo y la contraseña.')
       const user = await studentAuth.login(data.email.trim(), data.password)
       if (!user) throw new HttpError(401, 'Los datos no son correctos o el acceso aún no está disponible. Consulta con CAI.')
-      limits.delete(`student-login:${request.socket.remoteAddress}`)
+      limits.delete(`student-login:${clientAddress}`)
       response.setHeader('Set-Cookie', [...google.end(request), studentAuth.end(request), studentAuth.start(user)])
       return json(response, 200, { user })
     }
@@ -302,7 +300,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       throw new HttpError(404, 'No se encontró esta operación.')
     }
     if (path === '/api/local/requests' && method === 'POST') {
-      limit(`submission:${request.socket.remoteAddress}`, 20, 60 * 60_000)
+      limit(`submission:${clientAddress}`, 20, 60 * 60_000)
       const key = request.headers['idempotency-key']
       if (typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key)) throw new HttpError(400, 'Falta el identificador de la solicitud.')
       return json(response, 201, access.submit(validateSubmission(await body(request), new Date(), config.groups()), key))
@@ -453,16 +451,32 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   }
 
   const server = createServer((request, response) => {
+    const requestId = randomUUID(), started = performance.now(), fields = requestLogFields(request)
+    response.setHeader('X-Request-Id', requestId)
+    response.setHeader('X-Content-Type-Options', 'nosniff')
+    response.setHeader('Referrer-Policy', 'no-referrer')
+    response.setHeader('Cache-Control', 'no-store')
+    response.setHeader('X-Frame-Options', 'DENY')
+    response.setHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'")
+    if (policy.mode === 'production') response.setHeader('Strict-Transport-Security', 'max-age=31536000')
+    response.once('finish', () => writeOperationalLog(log, { event: 'request', requestId, ...fields, status: response.statusCode, durationMs: Math.round(performance.now() - started) }))
     void handle(request, response).catch((error: unknown) => {
       const known = error instanceof HttpError
-      if (!known) console.error('Error interno en la API local. Revisa la base de datos y el estado del servicio.')
+      if (!known) {
+        if (policy.mode === 'local') console.error('Error interno en la API local. Revisa la base de datos y el estado del servicio.')
+        writeOperationalLog(log, { event: 'internal_error', requestId, ...fields, status: 500, durationMs: Math.round(performance.now() - started) })
+      }
+      if (response.destroyed) return
       if (!response.headersSent) json(response, known ? error.status : 500, { error: known ? error.message : 'No se pudo completar la operación. Inténtalo de nuevo.' })
-      else response.end()
+      else if (!response.writableEnded) response.end()
     })
   })
   server.requestTimeout = 15_000
   server.headersTimeout = 10_000
   server.on('listening',()=>{void recovery.deliverPending().catch(()=>console.error('No se pudo procesar la entrega administrativa.'))})
-  server.on('close', () => { recovery.stop(); db.close() })
+  let closed = false
+  const dispose = () => { if (!closed) { closed = true; recovery.stop(); db.close() } }
+  server.on('close', dispose)
+  server.on('error', () => { if (!server.listening) dispose() })
   return { server, db }
 }

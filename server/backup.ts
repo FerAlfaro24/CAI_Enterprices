@@ -15,6 +15,7 @@ export async function backupLocalDatabase(source: string, directory: string) {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  if (process.env.NODE_ENV === 'production') throw Error('local:backup no admite producción. Usa production:backup con su configuración explícita.')
   const path = await backupLocalDatabase(resolve('.local/cai.sqlite'), resolve('.local/backups'))
   console.log(`Respaldo local creado: ${path}. Contiene datos privados; no lo subas a Git.`)
 }
