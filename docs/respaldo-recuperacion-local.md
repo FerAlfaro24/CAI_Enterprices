@@ -2,6 +2,8 @@
 
 **Guía operativa al 17-11-2026**, contrastada con `server/backup.ts` y `server/verify-backup.ts`; no se ejecuta aquí contra datos del usuario. Para pruebas del agente, usar solo fixtures nuevas y copias separadas. [Inicio](START_HERE.md) · [Arranque](RUN_LOCAL.md) · [Pruebas](TESTING.md).
 
+**Producción:** usar `production:backup` con configuración privada explícita; reutiliza el mismo mecanismo y guarda en CAI_DATA_DIR/backups, sin abrir .local como alternativa. `local:backup` se detiene en NODE_ENV=production. Ver [guía productiva](PRODUCTION_PREPARATION.md); la operación/recuperación del alojamiento real aún debe validarse.
+
 ## Qué se conserva
 
 SQLite actual: esquema 16. La copia incluye expedientes/tutores, cuentas y hashes/sesiones, grupos/ajustes, publicaciones, imágenes y retiradas, avisos/contacto, comentarios/reacciones, respuestas/preguntas de retos, solicitudes/concesiones/correcciones de insignias y auditorías. Puntos/constancia se calculan desde respuestas; no dependen de storage del navegador.

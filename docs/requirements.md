@@ -31,7 +31,7 @@ Se conservan los identificadores RF de los documentos anteriores para poder rast
 | --- | --- | --- |
 | RNF-01 | Móvil/escritorio | Comprobaciones locales por módulo a cuatro anchos; no implica todos los dispositivos. |
 | RNF-02 | Privacidad, especialmente menores | Controles locales implementados; material/consentimiento/retención/procedimientos reales por validar con CAI. |
-| RNF-03 | Disponible en internet para entrega final | Pendiente de preparación técnica, servicios aprobados y validación en alojamiento real. |
+| RNF-03 | Disponible en internet para entrega final | Base técnica [preparada y ensayada](PRODUCTION_PREPARATION.md); servicios/configuración TLS, proceso y disco aprobados y validación en alojamiento real pendientes. No está desplegado. |
 | RNF-04 | Accesibilidad | Teclado/foco/etiquetas/temas revisados en recorridos documentados; no auditoría independiente completa. |
 | RNF-05 | Código mantenible y continuidad en GitHub | Arquitectura existente y guías reconciliadas; actualizar con cada cambio. |
 

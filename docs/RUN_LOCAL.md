@@ -85,4 +85,4 @@ Una cuenta administradora no crea una sesión de alumno. En una instalación pro
 - **No puede entrar:** comprobar host/puerto/entorno, cuenta aprobada/activada y suspensión. La fixture y la instalación habitual usan bases distintas.
 - **Cambios del servidor no aparecen:** dev:local no observa código de API; un reinicio debe ser consciente de la base y autorización. Para pruebas, arrancar otra fixture.
 
-El servidor bloquea producción deliberadamente. Publicación/HTTPS/cookies productivas y alojamiento se preparan aparte; este arranque no los resuelve.
+Esta guía inicia **modo local**. La [preparación productiva](PRODUCTION_PREPARATION.md) requiere configuración/base privadas distintas y proxy HTTPS; no se activa con este recorrido ni se considera despliegue validado. Usar una terminal sin variables de producción para las pruebas locales; mezclar ambos entornos se rechaza. No preparar una base real para resolver un error de configuración de pruebas.

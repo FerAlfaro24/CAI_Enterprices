@@ -4,13 +4,16 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `test/v1-integral-review-2026-11-17`, desde b55cd50 de la rama documental; incorpora las pruebas/resultados posteriores. Ver sección siguiente.
+- **Continuación actual:** `feat/v1-production-preparation`, desde 95e53e2 de la revisión integral; código 9be8081. Ver sección siguiente.
+- Revisión integral anterior: `test/v1-integral-review-2026-11-17`, desde b55cd50.
 - Auditoría documental inicial y código completo: `docs/continuidad-auditoria-2026-11-17`.
 - Base funcional de la PR: `fix/v1-dev-preview-cache` / `3971284`.
 - Referencia visual: `release/cai-demo-v1.0` / `f3ba46b`.
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
-## Rama añadida después del corte
+## Ramas añadidas después del corte
+
+`feat/v1-production-preparation` parte de 95e53e2, punta de PR #10. [9be8081](https://github.com/FerAlfaro24/CAI_Enterprices/commit/9be8081c6f790e0be4e507154d622ed0a76077e9) prepara configuración, transporte/cookies, operación inicial y pruebas productivas; las guías se actualizan después. 217 API y 104 navegador seleccionadas, sin desplegar. Es la continuación actual y su revisión se dirige a la rama de PR #10; no fusiona esa PR ni mueve main/release. [Guía](PRODUCTION_PREPARATION.md).
 
 `test/v1-integral-review-2026-11-17` parte de b55cd50, punta corregida de PR #9. [8c515de](https://github.com/FerAlfaro24/CAI_Enterprices/commit/8c515ded7a7e60349fff458e629c0d6a5f02a30e) guarda cuatro cambios de pruebas; un commit posterior actualiza las guías y el [informe integral](v1-integral-review-2026-11-17.md). Código de aplicación idéntico a 3971284, con 193 API/1,314 navegador recién comprobados. La revisión se propone hacia la rama documental, conservando ambas historias; no fusiona PR #9 ni mueve main/release. Esta rama es posterior a las 37 referencias de la fotografía siguiente y no altera sus recuentos históricos.
 

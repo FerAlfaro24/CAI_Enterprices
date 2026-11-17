@@ -4,7 +4,7 @@
 
 1. Leer [START_HERE](docs/START_HERE.md), [PROJECT_STATE](docs/PROJECT_STATE.md), [BRANCHES](docs/BRANCHES.md) y [NEXT_STEPS](docs/NEXT_STEPS.md). Las instrucciones nuevas del usuario prevalecen. [DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md) clasifica el resto.
 2. Comprobar Git y cambios del usuario. Localizar componente/servicio existente, base y criterio de cierre antes de editar. No confundir un informe histórico con trabajo pendiente.
-3. Continuación actual: `test/v1-integral-review-2026-11-17`, que parte de la documentación corregida b55cd50 de PR #9. Pruebas en `8c515de`; [informe integral](docs/v1-integral-review-2026-11-17.md): 193 API/1,314 navegador nuevos. Código de aplicación sin cambios frente a `fix/v1-dev-preview-cache` / `3971284`, esquema 16. Main es antigua; `release/cai-demo-v1.0` / `f3ba46b` se conserva como referencia visual.
+3. Continuación actual: `feat/v1-production-preparation`, desde `95e53e2`; código `9be8081`. Leer también [PRODUCTION_PREPARATION](docs/PRODUCTION_PREPARATION.md): 217 API/104 navegador seleccionadas en esta tanda; TLS/proveedor reales pendientes. El [informe integral](docs/v1-integral-review-2026-11-17.md) de 193 API/1,314 navegador es el corte anterior y no se suma. Esquema 16, sin nuevas migraciones. Main antigua; v1.0/f3ba46b sigue como referencia visual.
 
 ## Alcance y prioridad
 
@@ -12,7 +12,7 @@
 - Retos: 180 preguntas/45 temas, tres al día según Ciudad de México, calendario/banco, respuesta única y progreso/repaso privado. Insignias: nueve, reglas reales, revisión/correcciones privadas, compartición voluntaria moderada. Ver informes especializados.
 - Vídeos son **opcionales y de menor prioridad**; no iniciarlos por un plan histórico. Si se retoman, coordinación sube y grupo autorizado ve. Repaso dirigido, analítica pedagógica, búsqueda ampliada y bienvenida siguen como propuestas sin implementación ni autorización automática.
 - Priorizar trabajo autónomo autorizado. Agrupar Google/correo reales, material/permisos/validación y responsables de CAI al final; presupuesto/contratación después. Registrar dependencias sin inventar funciones para eludirlas.
-- El servidor es local: bloquea producción, limita hosts/orígenes y usa cookies HTTP locales. Preparación productiva pendiente; no admitir alumnos reales ni presentarlo como desplegado.
+- Modo local conservado. Producción requiere origen HTTPS canónico, proxy loopback que sobrescriba cabeceras, datos privados fuera del código y base esquema 16 ya preparada. Cookies __Host/Secure por aplicación; no relajar orígenes, red o confianza para superar una prueba. No presentarlo como desplegado o apto para alumnos reales antes de validar entorno/servicios/CAI.
 
 ## Desarrollo y seguridad
 
@@ -23,7 +23,8 @@
 - Caché web `node_modules/.vite-cai-web-${apiPort}`, separada de verificadores SSR. Ver [pantalla en blanco](docs/solucion-pantalla-blanca-local.md). Antes de dar un enlace comprobar renderizado; HTTP/health no bastan. No reiniciar la API habitual ni borrar cachés/datos implícitamente.
 - Brave principal y Opera GX para compatibilidad, en contextos aislados. Revisar interacción, consola, 1440/768/375/320, teclado y temas cuando corresponda.
 - Ejecutar checks existentes proporcionales al cambio. Resultados históricos no son pruebas nuevas. No repetir auditorías/matrices sin cambio relevante. Las alertas e intermitencias antiguas permanecen con sus límites hasta evidencia nueva.
-- La revisión integral local del 17 está completada; no volver a proponerla como tarea abierta sin cambios/hallazgos nuevos. Próximo trabajo autónomo: preparación técnica de producción; aceptación humana sigue para la tanda de CAI. El error intermitente route.fulfill del simulador quedó documentado sin causa exacta confirmada.
+- Revisión integral y base técnica autónoma de producción completadas con sus límites. Próximo trabajo: operación/recuperación N3, reutilizando copias existentes; no reconstruirlas ni repetir matrices completas sin motivo. Aceptación humana y alojamiento siguen para el final. La causa del error route.fulfill antiguo sigue sin confirmar.
+- Configuración por instancia, sin mutar process.env en pruebas. Arranque productivo no crea/migra una base ausente/incompatible; bootstrap explícito solo para archivo nuevo. No usar local:setup/local:backup/google:setup en producción. El paquete backend conserva sus constantes de shared/src; servir públicamente solo dist, nunca la raíz del repositorio.
 
 ## Git y continuidad
 

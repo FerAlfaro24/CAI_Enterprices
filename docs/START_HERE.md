@@ -6,9 +6,10 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `test/v1-integral-review-2026-11-17` / pruebas `8c515de` | **Continuación actual:** código completo, documentación corregida y revisión integral posterior, sin cambios funcionales. |
+| `feat/v1-production-preparation` / código `9be8081` | **Continuación actual:** desde 95e53e2, añade configuración/sesiones/operación inicial de producción ensayadas; no desplegada. |
+| `test/v1-integral-review-2026-11-17` / pruebas `8c515de` | Revisión integral anterior, código completo y documentación corregida. |
 | `docs/continuidad-auditoria-2026-11-17` | Auditoría documental inicial y código funcional completo. PR #9, anterior a los resultados de la revisión integral. |
-| `fix/v1-dev-preview-cache` / `3971284` | Última base funcional verificada: insignias, retos y corrección de caché. |
+| `fix/v1-dev-preview-cache` / `3971284` | Base funcional anterior a la preparación productiva: insignias, retos y corrección de caché. |
 | `feat/v1-community-badges` / `bdef066` | Paso anterior acumulativo; sin la corrección posterior de caché. |
 | `chore/v1-final-review` / `fee87d1` | Revisión anterior, 15 commits detrás; sin las integraciones posteriores de reacciones/comentarios/retos/insignias. |
 | `release/cai-demo-v1.0` / `f3ba46b` | Referencia visual oficial congelada. |
@@ -22,7 +23,7 @@ Sitio institucional, comunidad privada y panel. Persistencia/permisos locales pa
 
 SQLite esquema 16. Google real, entrega de correo, contenido/autorizaciones, aceptación de CAI e infraestructura pendientes. **Vídeos opcionales y de menor prioridad**, no implementados; si se retoman, solo coordinación sube y grupo autorizado ve. No ejecutar planes antiguos como tareas abiertas.
 
-El servidor rechaza NODE_ENV=production y está limitado a localhost. No es un despliegue validado. Pruebas con datos ficticios. Ver [PROJECT_STATE](PROJECT_STATE.md) y [NEXT_STEPS](NEXT_STEPS.md).
+El modo local sigue limitado a localhost. Producción exige configuración explícita, datos privados separados y proxy HTTPS loopback; se comprobó en simulación, **sin despliegue real**. Ver [guía productiva](PRODUCTION_PREPARATION.md), [PROJECT_STATE](PROJECT_STATE.md) y [NEXT_STEPS](NEXT_STEPS.md).
 
 ## Recuperar un clon en Windows
 
@@ -37,7 +38,7 @@ Node >=24.12.0, npm >=10. Repositorio privado: autentícate con el gestor de Git
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/test/v1-integral-review-2026-11-17
+git switch --track origin/feat/v1-production-preparation
 code .
 npm.cmd ci
 ```
@@ -64,4 +65,4 @@ Los informes de entregas describen sus propios cortes; sus próximos pasos hist�
 
 Identificar componente/servicio existente y criterio de cierre. Crear rama desde el avance funcional acordado; no fusionar todas las features ni duplicar pantallas. Cada entrega registra base/commit, alcance, archivos, pruebas realmente ejecutadas/no ejecutadas y siguiente paso. Mantener estas guías junto al código.
 
-La auditoría documental inicial no reejecutó pruebas; la revisión integral posterior sí, con alcance e intentos en su informe. La aplicación no cambia respecto a `3971284`; producción y aceptación humana siguen pendientes.
+La auditoría documental inicial no reejecutó pruebas; las tandas integral y de preparación productiva posteriores sí, cada una con su código/alcance y sin sumar matrices. La última registra 217 API y 104 navegador seleccionadas. Preserva la interfaz y datos habituales, con cambios en servidor. TLS/proveedor reales y aceptación humana siguen pendientes.
