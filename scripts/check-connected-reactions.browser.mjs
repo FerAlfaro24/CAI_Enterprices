@@ -7,7 +7,14 @@ export async function checkConnectedReactions(page,{admin,fixture,browserLabel='
  const call=(target,path,method='GET',data)=>target.evaluate(async({path,method,data})=>{const r=await fetch('/api/local'+path,{method,headers:{...(data===undefined?{}:{'Content-Type':'application/json'}),...(method==='PATCH'?{'Idempotency-Key':crypto.randomUUID()}:{})},body:data===undefined?undefined:JSON.stringify(data)});return {status:r.status,data:await r.json()}},{path,method,data})
  const bar=target=>target.getByRole('region',{name:'Celebraciones de '+fixture.title,exact:true})
  const login=async(target,account)=>{await target.bringToFront();await target.goto(baseURL+'/login');await target.locator('#login-email').fill(account.email);await target.locator('#login-password').fill(secret);await target.getByRole('button',{name:'Entrar a mi espacio',exact:true}).click();await target.getByRole('button',{name:'Actualizar comunidad',exact:true}).waitFor()}
- const refresh=async target=>{await target.bringToFront();await target.getByRole('button',{name:'Actualizar comunidad',exact:true}).click();await target.getByRole('button',{name:'Actualizar comunidad',exact:true}).waitFor({state:'visible'});await target.waitForFunction(()=>!document.querySelector('button[disabled]')?.textContent?.includes('Actualizar comunidad'))}
+ const refresh=async target=>{
+  await target.bringToFront()
+  const response=target.waitForResponse(r=>r.url().endsWith('/api/local/student/posts')&&r.request().method()==='GET')
+  await target.getByRole('button',{name:'Actualizar comunidad',exact:true}).click();await response
+  // Esperar la respuesta y su renderizado, no el primer botón deshabilitado de
+  // cualquier sección: ese selector podía terminar antes de actualizar el feed.
+  await target.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))))
+ }
  const selected=async(target,label,count)=>{await bar(target).getByRole('button',{name:label+': '+count,exact:true,pressed:true}).waitFor()}
  try{
   if(!fixture?.accounts?.author?.email?.endsWith('-reactions@example.test'))throw Error('Se requiere la fixture ficticia exclusiva.')
