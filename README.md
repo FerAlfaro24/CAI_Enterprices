@@ -1,5 +1,8 @@
 # CAI — Plataforma web
 
+> **Inicio recomendado (17-11-2026):** [Guía de continuidad para recuperar el proyecto sin chats](docs/START_HERE.md) · [Inventario de ramas](docs/BRANCHES.md) · [Próximas decisiones y trabajo](docs/NEXT_STEPS.md). Esta rama documental nace de `chore/v1-final-review`; `main` sigue desactualizada respecto a los avances acumulados. Las pruebas citadas abajo son evidencia histórica, no verificaciones ejecutadas durante esta actualización.
+
+
 Plataforma para **CAI (Centro de Asesorías Integrales)**, centrada en la presentación de sus servicios de enseñanza de inglés y en una futura comunidad privada de estudiantes.
 
 > **Estado vigente:** `release/cai-demo-v1.0` es la base oficial de diseño. `chore/v1-final-review` conserva los avances acumulados hasta expediente (`c712abb`) y herramientas (`9274dc9`), con revisión local y mejora de lectura móvil (`940573a`). Consulta [la revisión final y sus límites](docs/v1-final-review.md) y [el registro de continuidad](docs/PROJECT_STATE.md). No es un sistema apto para usuarios reales.
