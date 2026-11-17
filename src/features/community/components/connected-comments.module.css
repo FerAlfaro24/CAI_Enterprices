@@ -1,0 +1,11 @@
+.heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; }
+.heading time { color:var(--muted); font-size:12px; }
+.help { margin:10px 0; font-size:13px; line-height:1.65; color:var(--muted); }
+.link { min-height:44px; padding:8px 4px; border:0; border-radius:6px; background:transparent; color:var(--primary); font-size:12px; text-decoration:underline; text-underline-offset:3px; }
+.tabs { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
+.tabs button { min-height:44px; padding:8px 12px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--navy); font-size:13px; }
+.tabs button[aria-pressed='true'] { background:var(--blue-soft); border-color:var(--primary); font-weight:700; }
+.receipt { margin:12px 0; padding:12px; border:1px solid var(--line); border-radius:12px; background:var(--blue-soft); color:var(--navy); font-size:13px; }
+.own { margin:12px 0; padding:14px; border:1px solid var(--line); border-radius:12px; color:var(--navy); font-size:13px; }
+.body { margin:10px 0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.confirm { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }

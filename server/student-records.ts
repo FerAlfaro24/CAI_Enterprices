@@ -89,6 +89,7 @@ export function studentRecords(db:Database){
         db.prepare('DELETE FROM password_resets WHERE request_id=?').run(row.id)
         db.prepare('DELETE FROM student_invitations WHERE request_id=?').run(row.id)
         const reviewed=needsConsent?Number(db.prepare("UPDATE publications SET status='pendiente',published_at=NULL,revision=revision+1 WHERE author_id=? AND status='publicada'").run(row.id).changes):0
+        if(needsConsent)holdAuthorComments(db,row.id,actor.id,'Cambio protegido del expediente; requiere nueva revisión de privacidad.')
         const createdAt=new Date().toISOString()
         const correction=Number(db.prepare('INSERT INTO student_record_changes(request_id,actor_id,request_key,fingerprint,reason,fields,before_json,after_json,created_at) VALUES (?,?,?,?,?,?,?,?,?)').run(row.id,actor.id,key,fingerprint,reason,JSON.stringify(changed),JSON.stringify(before),JSON.stringify(after),createdAt).lastInsertRowid)
         administrationAudit(db,actor.id,'student.record_corrected',{id,correctionId:correction,fields:changed,sessionsRevoked:revoked,postsToReview:reviewed})
@@ -98,3 +99,4 @@ export function studentRecords(db:Database){
     },
   }
 }
+import { holdAuthorComments } from './comments.ts'

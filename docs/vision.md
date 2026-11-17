@@ -1,3 +1,5 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Visión del producto — CAI
 > Antecedente de producto. Leer `PROJECT_STATE.md` para inventario real, base oficial y secuencia vigente. El calendario posterior acordado es de tres semanas; las estimaciones iniciales de este documento son históricas.
 **Estado:** Borrador v0.1 · pendiente de validación con el cliente

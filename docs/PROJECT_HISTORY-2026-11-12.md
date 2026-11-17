@@ -1,0 +1,603 @@
+> **Bitácora histórica preservada.** Contiene decisiones y estados sucesivos de octubre/noviembre, incluidos pendientes ya resueltos. No es el estado vigente: ver [PROJECT_STATE.md](PROJECT_STATE.md) y [NEXT_STEPS.md](NEXT_STEPS.md). Copiada de `3971284` durante la auditoría del 17-11-2026.
+
+# Estado oficial y orden de integración de CAI
+
+**Lectura vigente:** Insignias conectadas/comprobadas en `feat/v1-community-badges`, desde `980a1ec`, servicio `bf9cf2e`/interfaz `c8788bf`, esquema 16. Ver [Insignias: reglas, archivos y pruebas](v1-community-badges.md) y cierre de este registro. Nueve originales: tres automáticas desde Retos, tres aventuras con solicitud/revisión privada y tres reconocimientos de coordinación; colección/historial/correcciones/compartición voluntaria moderada. API 193/193; navegador 46+18 de insignias y 53 de regresión Retos por navegador, matriz 234; modelos conservados. Retos/comentarios/reacciones ya comprobados. Sigue vídeo privado de coordinación para el grupo, reutilizando galería/panel; Google/correo/validación externa y alojamiento/presupuesto al final. No abrir/migrar base/acceso habituales; probar en fixtures nuevas. Inventarios anteriores son históricos.
+
+Auditoría del 11 de noviembre de 2026. Leer antes de planear o implementar otra tarea. Este documento prevalece sobre las descripciones históricas de demostración de los demás documentos; las instrucciones nuevas del usuario tienen prioridad. Actualizarlo al cerrar cada integración.
+
+## 1. Decisión y límites
+
+- **Base oficial de interfaz y producto: `release/cai-demo-v1.0`, commit `f3ba46b`.** Contiene landing, login/registro, dashboard administrativo completo y Community avanzada. No reconstruirlos.
+- **Avance técnico acumulado: `feat/local-password-recovery`, commit `1b84fb3`.** Contiene v1.0 y seis commits posteriores. Sus servicios locales son aprovechables, pero sus pantallas paralelas NO sustituyen el diseño oficial ni constituyen una versión final integrada.
+- `main`, `a3c2569`, está 12 commits detrás de v1.0 por alcance del historial; no es la base de desarrollo de esta integración.
+- La auditoría no fusiona ni elimina ramas, no cambia código de aplicación y no despliega nada. El cambio de esta entrega es documentación y reglas de continuidad.
+- El problema actual es integración incompleta y duplicación de interfaces. Parte del trabajo técnico sí era necesario; ampliar una administración y comunidad simplificadas separadas consumió trabajo que debió dirigirse al diseño existente.
+- No describir la aplicación como terminada, operativa con alumnos reales o lista para producción. No asignar porcentajes de avance sin criterios comprobables.
+
+## 2. Ramas revisadas y relación real
+
+Se actualizó `origin` con `git fetch origin`. Se revisaron las 15 ramas remotas de trabajo; las ocho ramas locales existentes reflejan un subconjunto de ellas. `origin/HEAD` es un alias de `origin/main`, no otro trabajo. Referencias al inicio de la auditoría:
+
+| Rama, omitiendo `origin/` | Commit | Relación y contenido | Tratamiento |
+| --- | --- | --- | --- |
+| `main` | `a3c2569` | Base inicial más landing; antecesor de v1.0 | Conservar; no tomarla como versión más completa. |
+| `chore/project-foundation` | `e3ac8fd` | Documentación inicial y reglas. Su árbol es idéntico a `e707cdb`, ya en el historial oficial. | Histórico; nada pendiente de fusionar. |
+| `feat/frontend-foundation` | `eca282f` | Fundación React/TS/Vite; `git cherry` confirma parche equivalente ya incorporado. | Histórico; no repetir integración. |
+| `feat/landing-page` | `a37bb08` | Landing; `git cherry` confirma parche equivalente incorporado. | Histórico; conservar versión y pulidos de v1.0. |
+| `feat/admin-dashboard` | `f38b17c` | Dashboard, solicitudes, publicaciones, alumnos, ajustes y registro. Antecesor de v1.0. | Ya integrado visualmente; reutilizar. |
+| `feat/auth-pages` | `f38b17c` | Apunta exactamente al mismo commit que admin-dashboard. | No es otro avance independiente. |
+| `feat/community` | `a6d9603` | Comunidad funcional simulada; antecesor de v1.0. | Ya incluida; no recuperar una versión anterior. |
+| `feat/community-visual-polish` | `12cf1ce` | Inicio editorial, motion, galería, retos, logros y auditoría; antecesor de v1.0. | Ya incluida en la interfaz oficial. |
+| `release/cai-demo-v1.0` | `f3ba46b` | Merge del panel/registro con Community pulida y landing. | Referencia oficial a preservar. |
+| `feat/admin-guided-requests` | `a54e401` | v1.0 + revisión guiada de solicitudes; 1 commit posterior. | Conservar mejora dentro del panel original. |
+| `feat/local-access-backend` | `f3f07b9` | Cadena anterior + Node/SQLite, solicitudes, administración local y permisos; 2 commits. | Integrar servicios en interfaz oficial. |
+| `feat/student-account-activation` | `e92fff8` | Cadena anterior + activación, contraseña, sesiones y grupo; 3 commits. | Conservar lógica; integrar acceso y perfil existentes. |
+| `feat/google-signin-onboarding` | `35cfe1c` | Cadena anterior + Google opcional y solicitud obligatoria; 4 commits. | Preparado; registro y prueba Google real pendientes. |
+| `feat/local-publications-moderation` | `a60d0a6` | Cadena anterior + texto persistente, revisión, motivos y retiros; 5 commits. | Conectar a dashboard y feed oficial. |
+| `feat/local-password-recovery` | `1b84fb3` | Cadena anterior + recuperación y avisos locales; 6 commits. | Último avance técnico acumulado revisado. |
+
+Las ramas recientes son una cadena: `v1.0 → guiado → backend → activación → Google → publicaciones → recuperación`. La última ya contiene las otras cinco. No fusionarlas todas como si fueran contribuciones independientes. La falta de relación directa por SHA en algunas ramas antiguas se explica por integración equivalente; no significa trabajo perdido.
+
+## 3. Qué existe y en qué forma
+
+**Visual** significa una interfaz ya implementada. **Demo** significa acciones en memoria con datos ficticios. **Local persistente** significa sesiones/permisos y datos en el servidor de este equipo. Ninguna de esas etiquetas implica producción.
+
+| Función | Qué ofrece v1.0 | Avance posterior aprovechable | Falta unir o completar |
+| --- | --- | --- | --- |
+| Identidad visual y navegación | Landing, logotipos, tipografía, temas, móvil, layouts y enlaces | Estilos locales complementarios | Conservar composición; llevar enlaces al recorrido conectado. |
+| Sitio institucional | Programas, servicios, metodología, testimonios y contacto visual | Sin servicio de contacto persistente | Contenido comercial confirmado, contactos reales y receptor del formulario. |
+| Contacto y lista de interés | `DemoForm.tsx` valida y muestra simulación | Ningún endpoint/tablas de contactos | Crear solo el guardado/gestión necesarios; no rehacer formulario. |
+| Acceso | `/login` diseñado; entrada demo sin autenticación | Login real local de alumno y administrador, cookies, cierre y permisos | Usar diseño existente y roles del servidor; proteger rutas finales. |
+| Solicitud | `/registro`, pasos, edad, tutor, programa/grupo y privacidad; alimenta panel demo | Mismo `SignupForm` con modo local en `/registro-local`, folio servidor y persistencia | Adoptar modo conectado en registro oficial; una sola solicitud. |
+| Tutores | Interfaz/validaciones demo | Confirmación administrativa con referencia persistente | Reutilizar diálogo; proceso y textos de autorización confirmados por CAI. No hay prueba automática de identidad/edad. |
+| Dashboard | Menú lateral, tarjetas, gráficas, resúmenes y pendientes | Datos locales de solicitudes/alumnos/publicaciones | Conectar métricas/fechas y acciones; eliminar cifras base ficticias del modo conectado. |
+| Solicitudes administrativas | Tabla, filtros, búsqueda, detalles, aprobar/rechazar/deshacer | Revisiones, conflictos, autorización y auditoría de servidor | Conectar páginas originales a API y errores/cargas reales. |
+| Alumnos | Directorio, filtros, ficha, suspensión/activación demo | Directorio SQLite, suspensión efectiva y enlaces de activación | Conservar tabla/ficha y trasladar acciones reales. Falta editar/asignar grupos. |
+| Activación | No hay activación real | Enlaces de un uso/24 h, contraseña, sesión y bloqueo de suspendidos | Incorporar al recorrido oficial, sin perder controles existentes. |
+| Comunidad e inicio | Feed editorial, filtros, tarjetas, perfil, detalle y composición completos en demo | Feed de texto por grupo en `/alumnos/publicaciones` | Conectar diseño oficial; usuario autenticado, sin identidad fija Alex ni selector de rol demo. |
+| Publicaciones/moderación | Panel y Community tienen escenarios demo separados | Texto persistente, revisión, rechazo con motivo, retiro y auditoría | Una publicación y una decisión compartidas entre dashboard/feed; adaptar contratos. |
+| Miembros/perfiles | Directorio y perfiles ficticios avanzados | Perfil propio y nombres visibles del mismo grupo | API mínima y modelo de miembro autorizado, sin exponer expedientes/tutores/correos. |
+| Grupos/programas | Catálogo de muestra | Servidor valida usando `mockData.ts`; asignación guardada como texto | Catálogo controlado y asignación administrable; no confundirlo con CRUD ya existente. |
+| Ajustes de comunidad | Interruptores y vista previa; equipo ficticio | Reglas fijas de servidor para algunos permisos | Persistir ajustes aprobados y aplicarlos realmente. No mostrar como operativo un interruptor sin efecto. |
+| Administradores | Equipo ficticio en ajustes | Una cuenta local creada por setup, rol `admin` | Cuenta del cliente, cambio/recuperación administrativa y procedimiento de entrega. No hay gestión completa de equipo ni rol moderador real. |
+| Recuperación alumno | No hay recuperación funcional | Enlaces 15 min/un uso, revocación y formulario local | Integrar acceso visual y entregar al destinatario con correo real antes de producción. |
+| Avisos locales | Avisos de contenido fijado en Community demo | Bandeja de eventos de solicitudes/publicaciones/recuperación | Son conceptos distintos. Integrar bandeja administrativa; configurar entrega de correo aparte. |
+| Google | No existe autenticación Google | Verificador oficial, identidad estable, onboarding y aprobación | Usar cuenta/proyecto de CAI y prueba real; no bloquea integración por contraseña. |
+| Fotografías/galería | Galería avanzada con stock y selección ilustrativa | No hay subida/almacenamiento privado/API de imágenes | Conservar galería; implementar archivos autorizados, permisos, retirada y validación. Primera entrega prevista: imágenes administrativas. |
+| Avisos institucionales/eventos | Existen como tipos/ejemplos en Community | Backend de publicaciones solo admite logro/experiencia | Decidir alcance y conectar creación administrativa si entra en primera entrega. |
+| Comentarios/reacciones | Interacciones demo completas | Sin tablas/API persistentes | Conservar referencia visual; alcance pendiente. No contarlas como integradas. |
+| Retos/logros/insignias | UI y reglas demo avanzadas, incluyendo solicitudes/revisión | Sin persistencia/cuentas reales para estas funciones | Prioridad secundaria del plazo actual; no rehacer ni prometerlas productivas. |
+| Base y auditoría | No hay base real | SQLite, 5 migraciones, sesiones, solicitudes, alumnos, publicaciones y avisos | Conservar migraciones/datos; decidir despliegue compatible al cotizar. No se ha implementado PostgreSQL. |
+| Respaldos | No hay respaldo de datos del producto | Snapshot SQLite y prueba de restauración básica existente | Restauración integral con archivos/configuración en entorno de entrega. |
+| Internet | Prototipo | API bloqueada a localhost y rechaza `NODE_ENV=production` | HTTPS, secretos, orígenes, correo, archivos, operación y despliegue controlado. Presupuesto al final, como acordado. |
+
+## 4. Separaciones y diferencias que deben resolverse
+
+### Tres fuentes de datos
+
+1. `DemoStoreProvider`/`features/admin/state.ts`: registro y panel demo comparten solicitudes, alumnos derivados, publicaciones propias y ajustes. Se conserva entre rutas porque el proveedor está arriba; no sobrevive a recarga.
+2. `CommunityProvider`/`features/community/model.ts`: publicaciones, perfiles, moderación, retos y logros de Community son otro estado en memoria. **Publicar en el panel demo no publica en Community.** Esta separación ya existía en v1.0.
+3. `server/*` y `.local/cai.sqlite`: datos persistentes y permisos locales, usados por `/gestion`, `/alumnos`, `/registro-local` y rutas auxiliares. No alimentan el dashboard/feed oficiales.
+
+El objetivo es que dashboard y Community conectados consulten los mismos servicios, conservando sus vistas. No crear un cuarto conjunto de datos ni copiar fixtures a la base como si fueran alumnos.
+
+### Diferencias concretas
+
+- Admin demo: estados `pendiente/publicada/rechazada`; Community: `pending/approved/rejected`; API: incorpora `retirada`. Definir mapeo explícito sin perder el retiro ni sus restricciones.
+- Tipos: admin demo tiene logro/experiencia/reseña/evento; Community usa categorías en inglés e incluye anuncios/galería/eventos; API solo `achievement/experience`. No inventar soporte de tipos faltantes al renderizar.
+- IDs: alumnado demo usa `AL-*` y solicitudes `CAI-*`; Community usa `alex`, `luna`, etc.; servidor usa expedientes `CAI-*`. Los contratos del feed/directorio real no suministran todavía todos los campos de los perfiles avanzados.
+- `getMember()` devuelve Alex Demo como fallback si no reconoce un ID. Ese comportamiento no debe resolver identidades reales: mostraría un autor ficticio.
+- Privacidad: opciones demo de comunidad amplia no equivalen al feed actual por programa/grupo. Confirmar regla final con CAI; mantener restricción actual hasta entonces.
+- Formularios de contraseña demo aceptan reglas distintas del acceso real; el registro conectado no solicita contraseña antes de aprobar. Unificar textos y validación con el servidor existente.
+- Gráficas: hay series, fechas y cifras ficticias (`sparklines`, `weeklyActivity`, `baseMetrics`, octubre fijo). La API no tiene aún agregaciones completas. Conservar gráficos, obtener datos reales y manejar vacío/división por cero; no rellenar con historia inventada.
+- Ajustes: `AdminSettingsPage` solo cambia estado/vista previa. No configura la API ni las interacciones reales de Community.
+- El backend depende del catálogo ficticio del frontend en `server/validation.ts`; separar el catálogo aprobado del conjunto de alumnos de muestra.
+- La recuperación local permite al administrador preparar un enlace de prueba; no acredita propiedad del correo. No trasladar esa herramienta a producción como recuperación operativa.
+- La interfaz de avisos no es un sistema de correo: no tiene entrega, reintentos de proveedor ni verificación de destinatario. Los avisos fijados del feed son otra función.
+
+## 5. Orden de trabajo con criterios de cierre
+
+No avanzar a nuevas funciones para compensar integraciones sin terminar. Cada bloque requiere revisión de archivos existentes, un cambio acotado, pruebas y actualización de este estado.
+
+### Prioridad operativa acordada: avanzar sin intervención del usuario
+
+El usuario quiere poder dejar tandas de trabajo en marcha sin tener que responder durante su ejecución. Completar primero todo el trabajo independiente autorizado, respetando el orden técnico de integración. Una dependencia humana de una función no bloquea las otras funciones.
+
+- **Trabajo autónomo primero:** contratos y rutas, integración del diseño v1.0, sesiones por contraseña, permisos, dashboard/Community conectados, grupos/ajustes mínimos, formularios y datos locales, preparación de correo/Google, archivos privados con muestras ficticias, pruebas, correcciones, documentación y puntos de retorno en Git conforme a la autorización existente.
+- **Intervención humana al final, agrupada:** registrar/configurar cuentas de CAI y sus verificaciones (Google, correo, dominio y servicios); facilitar contenido definitivo y decisiones de negocio; revisar el uso con el administrador; aprobar presupuestos, contratación y publicación. No solicitar contraseñas ni códigos de verificación para guardarlos en el proyecto.
+- **Mientras falte una respuesta:** conservar datos de muestra identificados como tales, Google desactivado y reglas de privacidad conservadoras ya documentadas. Preparar lo que se pueda y pasar a otra tarea independiente. Una decisión pendiente se registra, no se convierte en un supuesto confirmado ni en una función añadida sin autorización.
+- **Antes de entregar o publicar:** completar las pruebas reales que dependen de esas cuentas y las validaciones humanas. Posponerlas permite avanzar localmente; no permite afirmar que Google, correo, contenido o producción quedaron verificados.
+
+Lista de dependencias humanas a mantener al cerrar tareas:
+
+| Dependencia | Preparación autónoma | Acción final del usuario/CAI |
+| --- | --- | --- |
+| Google | Integración opcional, onboarding y pruebas locales con proveedor ficticio | Cuenta/proyecto de CAI, registro y prueba real autorizada. |
+| Correo | Eventos/avisos, flujos de activación/recuperación y preparación del transporte | Proveedor y cuenta de CAI, verificaciones necesarias y prueba de entrega real. |
+| Contenido y reglas del negocio | Formularios, validaciones, opciones editables dentro del alcance y lista de decisiones | Confirmar textos, contactos, programas/grupos, visibilidad y responsables. |
+| Tutores e imágenes | Controles y pruebas exclusivamente ficticias | Confirmar proceso de autorización y permisos de material real. |
+| Infraestructura | Aplicación local integrada, requisitos de instalación, respaldo y propuesta técnica | Elegir presupuesto, contratar y autorizar despliegue. |
+| Revisión de uso | Recorridos automatizados, móvil/teclado y guía de tareas | Validación final con la persona que administrará CAI. |
+
+La siguiente tabla expresa dependencias técnicas. Sus menciones a confirmaciones del cliente no exigen detener el resto del bloque o el proyecto: separar preparación autónoma de aceptación externa y registrar ambas.
+
+| Orden | Trabajo | Reutilizar | Criterio de cierre |
+| --- | --- | --- | --- |
+| 0, esta auditoría | Fijar inventario, base, pendientes y protocolo | Historial y código existente | Documento de estado y reglas accesibles; sin fusión de aplicación. |
+| 1 | Acordar contratos y destino de rutas. Preparar rama de integración desde el descendiente técnico revisado de v1.0 | `1b84fb3` ya contiene `f3ba46b` | Mapa de estados/IDs/categorías y campos; v1.0 preservada. No requiere fusionar seis ramas otra vez. |
+| 2 | Integrar acceso, registro, activación y protección con diseño oficial | `LoginPage`, `SignupPage`, `SignupForm`, sesiones y API actuales | Solicitud oficial persiste; pendiente no entra; alumno no abre admin; sesión real determina rol. Google puede seguir desactivado. |
+| 3 | Conectar dashboard, solicitudes y alumnos originales | `AdminLayout`, páginas y diálogos existentes; `localApi` | Acción en panel original cambia SQLite, contadores y directorio; reinicio conserva estado; tutor/suspensión se aplican en servidor. Gráficas con datos disponibles/vacío correcto. |
+| 4 | Conectar composición, feed y moderación oficiales | `HomeView`, tarjetas, Composer, historial y `publications.ts` | Envío real aparece pendiente en panel; aprobar aparece en Community autorizado; rechazo informa al autor; retiro y suspensión se reflejan. Dos sesiones independientes, sin Alex ni fixtures. |
+| 5 | Consolidar perfil, catálogo/grupos y ajustes mínimos | Ficha/directorio/ajustes visuales existentes | Asignación real, acceso coherente al cambiar grupo y reglas realmente aplicadas. Funciones sin backend no se presentan como activas. Confirmar necesidades de equipo administrador. |
+| 6 | Incorporar recuperación/avisos al panel/acceso oficiales y resolver contacto institucional | `notices.ts`, `RecoveryPage`, `DemoForm` | Bandeja persistente; contacto guardado/atendible; ningún mensaje afirma correo enviado sin entrega. La recuperación por destinatario sigue condicionada al servicio real. |
+| 7 | Archivos privados e imágenes de administración | Galería y componentes visuales v1.0 | Subida validada, límites, permiso por recurso, autorización de imágenes y retirada. Sin URLs públicas de menores ni reescritura de galería. |
+| 8 | Limpieza controlada de rutas duplicadas y navegación | Rutas oficiales | Recorrido único coherente. `/gestion` y pantallas provisionales se retiran/redirigen solo tras equivalencia comprobada. No borrar datos o ramas como parte de esta limpieza sin autorización. |
+| 9 | Estabilizar y validar contenido/uso con cliente | Pruebas existentes y nuevas de integración | Pruebas de recorrido conjunto en Brave/Opera, móvil/teclado, errores, permisos, respaldo/restauración y tareas sencillas de administración. Contenido y privacidad validados. |
+| 10 | Configuración externa, presupuesto y entrega | Servicios ya probados localmente | Cuenta de CAI para Google/correo/dominio/infraestructura; prueba real de Google y correo antes de admitir usuarios. Despliegue solo después de presupuesto y autorización. |
+
+Los bloques 2–4 son la prioridad inmediata. Los cambios de asignación de grupos del bloque 5 deben mantener el aislamiento del bloque 4. Las funciones secundarias (retos/insignias/comentarios/reacciones) conservan su demo, pero su integración persistente requiere decisión de alcance; no se añaden automáticamente al plazo de tres semanas.
+
+Rutas objetivo: conservar `/`, `/login`, `/registro`, `/admin/*` y `/community` como experiencia principal. Activación/recuperación pueden seguir siendo enlaces auxiliares. Determinar durante el bloque 1 dónde reside la ficha de cuenta; no reemplazar Community por el listado sencillo de `/alumnos/publicaciones`. Ninguna redirección debe abrir rutas protegidas ni hacerse antes de conectar su destino.
+
+El horizonte acordado sigue siendo tres semanas, del 11 de noviembre al 2 de diciembre de 2026: primero integración esencial, después huecos de producto, última semana estabilización. El orden anterior no es una estimación garantizada por tarea. Tras el primer recorrido conjunto se debe revisar capacidad y recortar funciones secundarias si es necesario. Cotizar alojamiento al final no significa posponer permisos, privacidad o diseño de almacenamiento.
+
+## 6. Qué se conserva, adapta y retira después
+
+- **Conservar:** diseño y componentes oficiales v1.0; revisión guiada posterior; servicios, migraciones, validación, cuentas, permisos, auditoría y pruebas útiles.
+- **Adaptar:** conexión de datos, contratos y estados; KPIs/gráficas; identidad real en Community; rutas/login, textos, perfil/directorio y configuración.
+- **Sustituir en la experiencia final tras comprobar equivalencia:** navegación y listas paralelas de `LocalAccessApp`, directorio básico de `StudentArea`, feed/lista simplificada de `local-publications` y formularios de acceso duplicados. Extraer acciones útiles, no descartarlas con sus reglas.
+- **Mantener como referencia histórica:** ramas oficiales y previas. No se propone borrar ninguna rama.
+- **Pendiente de cliente:** contenidos/precios/contacto, grupos y programas, responsable de administración, autorización de tutores/imágenes, visibilidad, interacciones y servicios/cuentas bajo control de CAI.
+
+## 7. Verificación de esta auditoría y límites
+
+Se revisaron refs remotas actualizadas, árbol de commits, relaciones de ancestros, equivalencias de parches y árboles, diferencias v1.0→avance acumulado, rutas, proveedores de estado, formularios, contratos, endpoints, esquema y documentación. Admin-dashboard y auth-pages comparten SHA; Community y pulidos son ancestros de v1.0. El árbol de foundation coincide exactamente con su integración; frontend y landing tienen equivalencia de parche. Las seis mejoras posteriores son descendientes directas en cadena.
+
+Reejecutado sobre `1b84fb3`: lint, typecheck y build correctos; aviso conocido de bundle principal (~658 KB minificado). Suite API: 47 resultados correctos, incluidos cuatro contenedores. Los cinco scripts de modelos Community pasan: 29, 23, 25, 27 y 51 comprobaciones, respectivamente, además de comparaciones de igualdad donde corresponde.
+
+No se reconstruyó ni se recorrió visualmente cada rama histórica por separado. No se repitieron en esta auditoría los recorridos de navegador: sus resultados anteriores siguen documentados como históricos, no como prueba de la futura unión. Google real, correo real, infraestructura, archivos privados y un recorrido completo de dashboard/Community con servidor siguen sin validar. Esto es una auditoría de estado e integración, no una auditoría exhaustiva de seguridad ni garantía de ausencia de errores.
+
+## 8. Registro de continuidad
+
+### Control antes y después de cada cambio lógico
+
+Antes de modificar una función: leer este registro, comprobar rama/estado de Git y localizar su implementación existente. Definir qué pendiente se resolverá y cómo se comprobará. Después de cada avance coherente: registrar resultado, archivos/servicios afectados, comprobación ejecutada y siguiente paso. No esperar al final de una sesión larga para actualizar un avance significativo.
+
+Usar estados explícitos: **pendiente**, **en curso**, **implementado sin comprobar**, **comprobado localmente** y **dependencia externa pendiente**. Conservar incidencias o pruebas fallidas relevantes hasta documentar su corrección y nueva comprobación. No guardar contraseñas, tokens ni información de alumnos en esta bitácora. Un cambio documental no requiere repetir pruebas de aplicación ni se cuenta como una función nueva.
+
+| Hito | Estado actual | Evidencia / punto de retorno | Falta |
+| --- | --- | --- | --- |
+| Auditoría y base oficial | Comprobado | `bd3e606`; v1.0 `f3ba46b`; inventario de esta guía | Mantener fotografía histórica y registro actual diferenciados. |
+| Prioridad de trabajo autónomo | Registrada | `be90193` | Agrupar intervención humana al final; continuar tareas independientes. |
+| Registro, acceso, aprobación, activación y suspensión con diseño v1.0 | Comprobado localmente | `8e205b0`; `v1-connected-access.md`; nuevo recorrido de navegador | Google/correo reales siguen pendientes. |
+| Dashboard, solicitudes y alumnos originales conectados | Comprobado localmente en el alcance descrito | `8e205b0`; 48 resultados Node, 30 comprobaciones por navegador Brave/Opera; contraste de indicadores, vacío y autorización de menor | Grupos/perfil completo/ajustes y demás bloques siguen pendientes; moderación se completó después, en la fila siguiente. |
+| Moderación y Community avanzadas, bloque 4 | Comprobado localmente en `feat/v1-community-connected`, base `cf12d8a` | `f9e60bc` (interfaz) y `4c0af54` (contratos); `v1-connected-community.md`; 48 resultados Node, 39 comprobaciones por navegador Brave/Opera, respaldo antes de migración 6 | Configuración, grupos/perfil completo, archivos e interacciones secundarias siguen pendientes. |
+| Grupos, asignaciones y ajustes mínimos, bloque 5 | Comprobado localmente en `feat/v1-groups-settings`, base `9a5ef81` | `45900a2` y `08ce05d`; `v1-groups-settings.md`; 56 resultados Node, 27 comprobaciones por navegador Brave/Opera; migración 7 respaldada | Catálogo final de CAI, edición completa de expediente/perfil y otras cuentas administrativas no incluidos. Avisos/recuperación/contacto se completaron después, en la fila siguiente. |
+| Recuperación, avisos y contacto oficiales, bloque 6 | Comprobado localmente en `feat/v1-inbox-recovery-contact`, base `e083c8f` | `4a84a05` y `8b81f90`; `v1-inbox-recovery-contact.md`; 63 resultados Node, 37 comprobaciones por navegador Brave/Opera, migración 8 respaldada | Correo real/identidad del destinatario, datos comerciales y entrega al cliente continúan pendientes. |
+| Galería privada e imágenes administrativas, bloque 7 | Comprobado localmente en `feat/v1-private-gallery`, base `db45ac6` | `a703087` (bloqueo de archivos), `d763e94` (servicio), `9bd1c03` (interfaz); `v1-private-gallery.md`; 71 resultados Node, 37 comprobaciones por navegador, cuatro anchuras; respaldo previo a migración 9 y restauración de bytes | Permisos/material real y retención final de CAI; consolidar rutas (8), estabilizar (9), configuración/entrega (10). |
+| Navegación y enlaces anteriores, bloque 8 | Comprobado localmente en `feat/v1-unified-navigation`, base `361e23a` | `5f8bd57` (responsive), `ded8804` (rutas); `v1-unified-navigation.md`; 45 nuevas + 30 acceso + 39 Community + 37 bandejas por navegador Brave/Opera; 71 resultados Node | Estabilización (9), funciones pendientes del inventario y configuración/entrega (10). |
+| Carga, errores y operación, tanda técnica del bloque 9 | Comprobado localmente en `chore/v1-stabilization`, base `5405c1c` | `e648269` y `876aa56`; `v1-stabilization.md`; 168 comprobaciones por navegador en compilación real, 72 resultados Node, verificación de copia y ensayo HTTP aislado | Diez avisos moderados de herramientas, huecos de cuenta/perfil y validación con CAI; configuración/entrega (10). |
+| Contraseña administrativa propia y revocación, cierre de cuenta | Comprobado localmente en `feat/v1-admin-account-security`, base `7daa623` | `1dc3c4a` y `a7465f0`; `v1-admin-account-security.md`; 83 resultados Node y 29 comprobaciones por navegador, exclusivamente en base aislada | Perfil propio; recuperación/otras cuentas administrativas y entrega real aún pendientes. |
+| Perfil visible propio del alumno | Comprobado localmente en `feat/v1-student-profile`, base `34b78b4` | `9388b2c` y `8490701`; `v1-student-profile.md`; 93 resultados Node y 36 comprobaciones por navegador en base aislada | Expediente legal completo, recuperación/otras cuentas administrativas, validación humana y configuración externa. |
+| Recuperación administrativa (punto 1 de los cinco pendientes) | Comprobado localmente con entrega ficticia en `feat/v1-admin-recovery`, base `d8df768` | `2d1ec13` y `874b00a`; `v1-admin-recovery.md`; 108 resultados Node y 45 comprobaciones por navegador, migración 10 respaldada y probada en copia | Correo real, aviso posterior y verificación del responsable al final. Sigue punto 2: otras cuentas administrativas. |
+| Equipo administrativo (punto 2) | Comprobado localmente en `feat/v1-admin-team`, base `88ef627` | `0f0c493` y `f980067`; `v1-admin-team.md`; 121 resultados Node y 37 por navegador, migración 11 en copia y respaldo previo | Verificación/canal de invitación real al final. Siguen 3 expediente, 4 herramientas y 5 revisión final. |
+| Correcciones de expediente (punto 3) | Comprobado localmente en `feat/v1-student-record`, base `7e404a3` | `6817d95` y `0f3e9a7`; `v1-student-record.md`; suite 134 resultados, específico 13/13 y 35 por navegador; migración 12/copia | Correo de acceso y validación de identidad/evidencias al final. Siguen 4 herramientas y 5 revisión final. |
+| Herramientas/alertas (punto 4) | Investigación revisada; corrección pendiente externa en `chore/v1-tooling-audit`, base `c712abb` | `v1-tooling-audit.md`; npm audit 10 moderadas de desarrollo / 0 ejecución; versiones y peers actuales verificados | Publicación compatible de consumidores de minimatch o migración específica. No se considera corregido. Sigue 5 revisión final. |
+
+Lista de comprobación del bloque 4:
+
+- [x] Contrato público con UUID estable compartido entre sesión, grupo y autor de publicación; migración 6 aditiva. API comprobada: 48 resultados correctos, incluida privacidad/aislamiento y persistencia al reiniciar. Adaptación visual comprobada en los recorridos del bloque.
+- [x] Aplicar sesión y permisos a las consultas de Community conectada.
+- [x] Conectar el editor existente con envío persistente y estado del autor.
+- [x] Conectar la bandeja/detalle originales de moderación a las decisiones del servidor.
+- [x] Mostrar aprobadas en el feed avanzado del programa/grupo autorizado.
+- [x] Reflejar rechazo con motivo, retiro y suspensión sin mezclar datos de muestra.
+- [x] Comprobar recorrido entre sesiones, recarga, errores y diseño adaptable en Brave/Opera.
+- [x] Actualizar rutas, documentación y punto de retorno; indicar expresamente lo que siga pendiente.
+
+Última base funcional auditada: `1b84fb3`. Después de la auditoría se completó el primer recorrido conectado en `integration/cai-v1-connected`, desde `be90193`: registro/login oficiales, protección administrativa, solicitudes y alumnos en dashboard original, activación/suspensión e indicadores con datos del servidor. Detalles, archivos y pruebas en `v1-connected-access.md`; identificar su commit con `git log -- docs/v1-connected-access.md`.
+
+Estado de bloques: 1–8 y tanda técnica del 9 comprobados en los alcances descritos; también contraseña/recuperación, perfil, equipo y correcciones privadas del expediente. Consultar `v1-*.md`. **No repetir integraciones ni marcar producción**. De los cinco puntos posteriores: 1–3 desarrollados/probados localmente; 4 investigado con diez alertas de desarrollo todavía pendientes de corrección compatible; sigue 5 revisión final. Configuración/entrega externa al final, incluida verificación de responsables/correos, cambio de correo de acceso, evidencias, invitaciones/correo real y aviso posterior. La tabla de ramas y secciones 2–4 conserva la fotografía histórica, no afirma que falten integraciones posteriores. **No reconstruir galería, administración ni recorridos ya conectados.**
+
+Al cerrar cada tarea añadir: rama/base y commit; archivos de interfaz reutilizados; datos/endpoint conectado; criterio de cierre demostrado; pruebas realmente ejecutadas; pendientes. «Implementado en una rama», «integrado visualmente», «conectado al servidor», «probado localmente» y «listo para producción» son estados distintos y nunca intercambiables.
+
+### Notas cronológicas del bloque 4 (los pendientes intermedios se resolvieron según el cierre)
+
+Avance intermedio del bloque 4: `public-profiles.ts`, migración 6 y DTO públicos comprobados con `npm run test:api` (48/48). El identificador público es opaco y no sustituye el folio privado de administración. Se añadió el proveedor protegido de Community; todavía sin conectar todas sus vistas ni comprobar en navegador.
+
+Avance intermedio de interfaz: proveedor de Community con sesión real y datos del mismo grupo; reutilizados Composer, tarjetas, historial, directorio y diálogos. Bandeja y revisión originales de administración conectadas. Retos/insignias/galería se conservan en código, pero en sesión conectada muestran pendiente; reacciones/comentarios no simulan guardado. Lint, typecheck y build correctos; advertencia conocida de bundle principal ~668 KB. Navegadores y criterio de cierre todavía pendientes.
+
+Incidencia de verificación del bloque 4: el primer recorrido necesitó corregir selectores del propio script (texto accesible repetido y filtro de alumnos suspendidos). Después se detectó desbordamiento real del encabezado de revisión con título largo a 375 px; se añadió min-width/ajuste de palabras al contenedor original. Pendiente repetir recorrido completo tras la corrección; no se cuenta un recorrido incompleto como aprobado.
+
+Verificación intermedia superada: `check-community-connected.browser.mjs`, 39 comprobaciones en Brave y 39 en Opera GX. Cuatro sesiones independientes, pérdida de respuesta y reintento sin duplicación, revisión/privacidad/rechazo/retiro/suspensión y cuatro anchuras (1440/768/375/320). Corregido y vuelto a comprobar el desbordamiento móvil. Cero errores de ejecución de JavaScript en los recorridos; las denegaciones 401 y la red interrumpida intencionalmente son escenarios de prueba. Capturas de escritorio y móvil inspeccionadas en Brave. Cierre documental y Git pendientes.
+
+Cierre del bloque 4: contrato público guardado en `4c0af54`; rama `feat/v1-community-connected`, base `cf12d8a`; alcance, archivos, pruebas y límites en `docs/v1-connected-community.md`. Puntos de retorno: `4c0af54` (identidad pública) y `f9e60bc` (Community/moderación comprobadas). Lint, typecheck, build y API volvieron a pasar al cierre; actualización manual de bandeja comprobada en ambos navegadores. No se fusiona implícitamente a `release/cai-demo-v1.0` ni a la rama de integración.
+
+
+### Notas cronológicas del bloque 5 (los pendientes intermedios se resuelven en el cierre)
+
+Rama `feat/v1-groups-settings`, base `9a5ef81`. Respaldo previo a migración 7 realizado. Reutilizar Configuración y ficha del alumno de v1.0; no abrir un panel paralelo. Alcance: catálogo persistente con alta/archivo/reactivación, asignaciones administrativas y controles reales para pausar solicitudes/envíos. Archivo de grupos impide nuevas selecciones, sin expulsar alumnos actuales; las reglas de privacidad siguen protegidas. Cambiar asignación exigirá confirmación en la interfaz, cerrará sesiones e impedirá que publicaciones antiguas migren de audiencia o se republicuen al volver de grupo.
+
+- En curso: migración 7 y servicios. El primer intento de pruebas detectó una importación de frontend sin extensión compatible con Node; corregida para reutilizar directamente la semilla histórica. No se declara comprobado hasta repetir pruebas.
+- Pendiente: prueba de permisos/concurrencia/aislamiento al reasignar; conectar formulario de registro al catálogo; adaptar Configuración y ficha originales; pruebas de navegador y cierre documental/Git.
+- Perfil completo: en este bloque se consolida la inscripción y su asignación. Edición de nombre legal/edad/consentimiento y gestión de otros administradores no se añade automáticamente al alcance.
+
+Avance del bloque 5: migración 7, catálogo, controles y reasignación comprobados con 56 resultados de servidor y typecheck. La migración conserva incluso registros históricos no interpretables sin modificarlos; se corrigió el supuesto de JSON válido detectado por la prueba de versión 1. Alta/archivo/reactivación, pausas, revisiones obsoletas, permisos, audiencia de historias al cambiar/volver de grupo y reinicio comprobados. Interfaz todavía pendiente.
+
+Avance de interfaz del bloque 5 (todavía sin comprobar en navegador): Configuración original adapta controles reales, reglas protegidas, funciones pendientes y sesión administrativa sin equipo ficticio; alta/archivo/reactivación de grupos; ficha original con reasignación confirmada. Registro y Community consultan catálogo/pausas del servidor. No se afirma cierre hasta comprobar recorridos y móvil.
+
+Verificación de interfaz del bloque 5: el primer recorrido comprobó catálogo dinámico, pausas y archivo/reactivación, pero detectó que las etiquetas de los selectores de asignación incluían las opciones en su nombre accesible. Se separaron etiquetas y selectores para que sean identificables correctamente. Pendiente repetir el recorrido completo y cerrar el bloque.
+
+El segundo recorrido del bloque 5 completó reasignación, revocación, aislamiento entre grupos y vuelta sin republicar, pero encontró desbordamiento móvil por el nombre largo del programa en la ficha. Se limitaron las columnas de la ficha existente y el ajuste de texto; se repetirá el recorrido después de verificar la corrección. No se dan por superados recorridos incompletos.
+
+Verificación del bloque 5 superada: 27 comprobaciones en Brave y 27 en Opera GX, cada recorrido con administrador y tres alumnos en contextos independientes. Alta de catálogo desde Configuración y solicitud desde registro originales, pausas/reapertura, archivo sin expulsar miembros, reasignación con confirmación, nuevo login, audiencia conservada y vuelta sin republicación. Configuración/ficha a 1440/768/375/320 px. Corregidas las etiquetas accesibles y el desbordamiento con programa largo; se repitieron ambos recorridos completos. Cierre documental/Git pendiente.
+
+Cierre del bloque 5: comprobados catálogo persistente, Configuración original, asignación confirmada desde ficha, registro dinámico, pausas y aislamiento al reasignar. Puntos de retorno guardados: `45900a2` (servidor) y `08ce05d` (interfaz/pruebas). Faltan los bloques 6 en adelante y los límites de perfil/equipo indicados en ese documento. No se da por terminado el producto ni se publica el sitio.
+
+Lista de comprobación del bloque 5:
+- [x] Respaldo, migración aditiva y catálogo compartido por registro/asignación.
+- [x] Alta/archivo/reactivación de grupos y controles aplicados en servidor.
+- [x] Ficha original con confirmación, revisiones y nueva entrada del alumno.
+- [x] Historial/audiencia conservados al cambiar y volver de grupo.
+- [x] Configuración coherente con funciones realmente disponibles, sin equipo ficticio.
+- [x] Pruebas de servidor, ambos navegadores, errores, móvil, lint/typecheck/build y documentación.
+
+Siguiente tarea autónoma: reutilizar `notices.ts`, recuperación existente y componentes oficiales para conectar avisos y recuperación en un solo recorrido. Verificar primero lo ya hecho; Google/correo/cuentas/presupuesto siguen para el final. No comenzar otra administración ni reconstruir el contacto sin revisar el formulario existente.
+
+
+### Notas cronológicas del bloque 6 (los pendientes intermedios se resuelven en el cierre)
+
+Rama `feat/v1-inbox-recovery-contact`, base `e083c8f`. Respaldo previo a migración 8 realizado. Se reutilizan `notices.ts`, recuperación/activación existentes, `LocalNotices`, `LoginPage`, el panel original y `DemoForm` de contacto. Alcance: recuperación con diseño oficial; mensajes de contacto persistentes y atendibles en administración; bandeja de avisos administrativa y avisos propios del alumno con lectura independiente. No entrega de correo ni reservas, sin convertir la lista de interés de cursos futuros en un servicio nuevo.
+
+Implementado sin cierre: migración 8, contacto con consentimiento/idempotencia/seguimiento, avisos propios filtrados por sesión. Las 56 regresiones previas pasaron antes de incorporar pruebas nuevas; un error de sintaxis al ampliar la validación de notas se corrigió y se están repitiendo las pruebas. No se da por validada todavía la interfaz.
+
+Cierre previsto: probar permisos, privacidad, concurrencia y persistencia; recorrer contacto → seguimiento y login → recuperación → aviso → cambio → nuevo login con sesiones separadas; verificar lectura propia, móvil, errores, lint/build, documentación y puntos de retorno. Google/correo/datos comerciales siguen para el final.
+
+Avance comprobado del bloque 6: servidor con 63 resultados correctos y typecheck; contacto privado/idempotente, seguimiento con revisiones y notas, avisos por sesión con lectura independiente y persistencia al reiniciar. Implementación de interfaz: marco de acceso original compartido por login/activación/recuperación, mensajes en panel oficial, contacto original persistente y avisos propios en Mi espacio. Falta comprobar recorridos y móvil en navegador.
+
+Verificación del bloque 6 en curso: los primeros intentos de navegador necesitaron llevar al frente la ventana de contacto durante el reintento; el botón respondía al probarlo en la ventana activa. Se ajustó el script para probar las sesiones en primer plano, sin forzar clics ni sustituir interacciones por envíos directos. Se corrigió el espaciado de la casilla de consentimiento. No se cuentan esos intentos incompletos como recorridos aprobados.
+
+El recorrido oficial del bloque 6 comprobó contacto/reintento/seguimiento, avisos propios y solicitud de recuperación. Detectó desbordamiento del correo largo en el texto del diálogo privado a 375 px. Se corrigió el ajuste de palabras del texto en el diálogo original; falta repetir el recorrido completo antes de contarlo como superado.
+
+Verificación del bloque 6 en Brave: 37 comprobaciones completas superadas. Contacto con consentimiento, respuesta perdida y reintento único, seguimiento/nota persistente, avisos propios y separación de lectura/revisión, recuperación desde login oficial, revocación de otra sesión, contraseña larga y enlace de un uso. Cuatro anchuras 1440/768/375/320 para diálogo privado, seguimiento, recuperación y avisos. Corrección móvil repetida y cero errores de ejecución JavaScript. Opera y cierre final pendientes.
+
+Verificación final del bloque 6: Opera GX también superó las 37 comprobaciones completas. En Brave se inspeccionaron además la bandeja de escritorio, bandeja móvil a 320 px, contacto móvil y recuperación móvil. Comprobada activación real desde su formulario compartido y vuelta al login oficial; se corrigió el color del enlace/botón de éxito tras compartir el marco de acceso. Backend: 63 resultados correctos. Lint/typecheck/build correctos, salvo aviso conocido de tamaño del paquete principal (~693 KB). Cierre documental y Git pendiente.
+
+Cierre del bloque 6: contacto original persistente, seguimiento privado en panel oficial, bandeja administrativa reutilizada, avisos propios con lectura independiente y recuperación/activación con diseño oficial comprobados localmente. Rama `feat/v1-inbox-recovery-contact`, base `e083c8f`; puntos de retorno guardados: `4a84a05` (servidor) y `8b81f90` (interfaz/pruebas). No se da por comprobado correo real, reservas, identidad del destinatario ni producción.
+
+Lista de comprobación del bloque 6:
+
+- [x] Respaldo y migración aditiva, contacto idempotente y seguimiento con revisión.
+- [x] Bandeja administrativa dentro del panel original, sin sustituirlo.
+- [x] Avisos propios autorizados por sesión y lectura independiente de revisión administrativa.
+- [x] Recuperación y activación con composición v1.0, sin prometer correo ni auto-login.
+- [x] Cambio de contraseña probado entre sesiones y con más de 64 caracteres.
+- [x] Recorridos completos Brave/Opera, cuatro anchuras, revisión visual, errores y lint/typecheck/build.
+- [x] Registro de archivos/servicios, límites y puntos de retorno; correo y Google reales quedan para el final.
+
+Estado al cierre histórico del bloque 6: bloques 2–6 conectados en los alcances descritos. La continuación de archivos/imágenes privadas se completó después, según el cierre del bloque 7 que sigue. Usar contenido ficticio; las autorizaciones y medios reales del cliente no se inventan.
+
+
+### Notas cronológicas del bloque 7 (pendientes intermedios resueltos en el cierre)
+
+Rama `feat/v1-private-gallery`, base `db45ac6`. Respaldo previo realizado. Reutilizar GalleryView, FeaturedAlbum, AlbumCard, AlbumDialog y GalleryImage; administración conserva el panel original. Primera entrega: imágenes subidas por administración y visibles solo para alumnos activos del programa/grupo elegido. No se amplía a subidas de alumnos ni a vídeos.
+
+Diseño técnico: validar JPEG/PNG con decodificación real, límites de bytes/píxeles, reorientar/reducir y recodificar sin metadatos; almacenar la versión procesada como BLOB privado en SQLite para que el respaldo consistente incluya también imágenes. Ninguna ruta estática ni URL sin autorización. Metadatos públicos mínimos; referencia de autorización privada para administración. Retirada revoca acceso y conserva historial; no implica borrar registros ni originales del usuario. Se incorpora `sharp` por necesidad de decodificación/recodificación, sin nuevo framework.
+
+Pendiente de comprobar: migración/servicio, permisos por recurso, aislamiento al cambiar grupo/suspender, validación y metadatos, retiro, respaldo/restauración con imagen y errores; interfaz original conectada y pruebas entre sesiones, móvil y ambos navegadores. Solo material ficticio; proceso y autorizaciones reales de CAI se validan al final.
+
+Incidencia real del bloque 7: comprobaciones HEAD sin cookies detectaron archivos de `.local` accesibles directamente por Vite (estado 200), aunque la API estuviera protegida. Se añadió exclusión expresa de carpeta privada y Git en `server.fs.deny`, incluidas variantes de mayúsculas para Windows. No se descargaron ni imprimieron credenciales o base de datos; comprobar estado 403 y variantes antes de cerrar. La instalación de sharp informó 10 avisos moderados en herramientas ESLint/minimatch ya presentes; no corresponden a sharp. No aplicar fix --force: requiere cambio incompatible; registrar para estabilización.
+
+Avance comprobado del bloque 7: typecheck y 71 resultados correctos del servidor. Pruebas nuevas de formato/daño/píxeles, recodificación sin EXIF, autorización por recurso, sesión caducada durante procesado, reintento, aislamiento por grupo, suspensión/reasignación, retirada y respaldo/reapertura con bytes de imagen. Siete rutas privadas de Vite bloqueadas con estado 403, incluidas mayúsculas, codificación, query raw y @fs. Interfaz todavía pendiente de integración y prueba.
+
+Avance de interfaz del bloque 7: Galería privada integrada en el panel original (subida/revisión/retiro), GalleryView/FeaturedAlbum/AlbumCard/AlbumDialog reutilizados con datos autorizados del grupo. Typecheck/build correctos. Recorrido completo de Brave superado: 37 comprobaciones, imagen falsa, pérdida de respuesta y reintento único, aislamiento por recurso, datos públicos mínimos, filtros, visor, Escape/foco, retirada y cuatro anchuras 1440/768/375/320. Cero errores de ejecución JavaScript. Opera, inspección visual y cierre documental/Git pendientes.
+
+Cierre del bloque 7: 37 comprobaciones completas también en Opera GX; 71 resultados de servidor, regresión histórica de galería (25 comprobaciones y cuatro igualdades), siete rutas privadas bloqueadas, lint/typecheck/build correctos. Inspección visual de administración escritorio/móvil, galería escritorio/móvil y visor a 320 px en Brave. La muestra visual adicional se retiró; no se borran alumnos ni historial. Puntos de retorno: a703087 (Vite privado), d763e94 (almacenamiento/permisos), 9bd1c03 (interfaz/recorrido). Detalles y archivos en docs/v1-private-gallery.md. Paquete principal ~704 KB; audit sin dependencias de desarrollo devuelve cero avisos. Diez avisos moderados de herramientas de desarrollo quedan para estabilización sin cambios incompatibles forzados.
+
+Lista de comprobación del bloque 7:
+
+- [x] Respaldo previo y migración aditiva; imágenes procesadas privadas incluidas en SQLite.
+- [x] Decodificación JPEG/PNG, límites, reducción y salida sin metadatos; ninguna ruta estática para archivos recibidos.
+- [x] Administración publica/retira con revisión y referencia privada; permisos por sesión/programa/grupo en cada recurso.
+- [x] Galería y visor originales conectados sin mezclar stock ni funciones simuladas.
+- [x] Reintento único, revocación al retirar/suspender/reasignar y respaldo/reapertura con bytes idénticos.
+- [x] Brave/Opera, cuatro anchuras, teclado/foco, revisión visual y controles de calidad.
+- [x] Bloqueo de archivos .local/Git verificado; documentación, instrucciones y README actualizados.
+
+Estado al cierre histórico del bloque 7: bloques 2–7 comprobados localmente en sus alcances. La consolidación de rutas prevista se completó después, según el cierre del bloque 8 que sigue. Se conservan ficha, enlaces privados, permisos, datos y ramas.
+
+### Notas cronológicas del bloque 8 (pendientes intermedios resueltos en el cierre)
+
+Rama feat/v1-unified-navigation, base 361e23a de feat/v1-private-gallery; Git inicialmente limpio. Equivalencia revisada en código: LocalAccessApp (resumen, solicitudes/decisiones/tutor, alumnos/activación/suspensión, publicaciones/revisión y avisos) tiene destinos en AdminLayout y sus páginas conectadas; StudentPublications tiene composición/feed/historial/retiro en Community. SignupPage local ya es el mismo componente en ambas rutas. StudentArea conserva una ficha de inscripción y directorio de grupo útiles: mantener el componente como página auxiliar /mi-inscripcion, sin su feed paralelo. No se borran componentes históricos, datos o ramas.
+
+Mapa previsto: /gestion → /admin; solicitudes/alumnos/publicaciones → sección correspondiente; /gestion/avisos → /admin/mensajes?bandeja=avisos; /registro-local → /registro; /alumnos → /mi-inscripcion; /alumnos/publicaciones → /community. Redirecciones internas fijas con reemplazo de historial, sin aceptar destinos externos. Activación/recuperación y fragmentos privados permanecen intactos. Enlaces vigentes y destinos Google preparados apuntarán al recorrido oficial; Google real sigue pendiente.
+
+Cierre pendiente: verificar en navegador antes/después del acceso, alumno frente a administración, pestaña de avisos, acciones equivalentes y ficha preservada; historial/recarga/rutas desconocidas, cuatro anchuras, regresiones de integración y controles de calidad. La existencia de una redirección sola no se cuenta como equivalencia comprobada.
+
+Avance implementado del bloque 8: alias con reemplazo hacia rutas oficiales; /mi-inscripcion reutiliza StudentArea y conserva su ficha/directorio, sin montar StudentPublications; enlaces vigentes y destinos preparados de Google corregidos. AdminInboxPage usa bandeja=avisos como selección navegable, con recarga/Atrás/Adelante. Typecheck/lint iniciales correctos. Recorrido nuevo Brave: 45 comprobaciones completas, cuatro anchuras y cero errores de ejecución JavaScript. Falta Opera, regresiones de acciones oficiales, inspección visual y cierre documental/Git.
+
+Verificación intermedia del bloque 8: Opera también supera las 45 comprobaciones nuevas; API 71 resultados correctos y build/typecheck correctos (paquete principal ~677 KB). La regresión de acceso detectó desbordamiento real de /admin/alumnos a 768 px: texto accesible posicionado absolutamente escapaba del contenedor desplazable de la tabla. La prueba de diagnóstico confirmó 804 px de página y 753 px tras hacer relativo el contenedor. Se aplica esa corrección mínima, conservando texto accesible y desplazamiento de tabla. El recorrido interrumpido no se cuenta como aprobado; repetir regresiones completas tras corregir.
+
+La repetición encontró también el ancho mínimo del selector de programas a 320 px: sus opciones largas imponían 320 px a la barra de filtros. Se permite encoger selector/barra/búsqueda dentro del ancho disponible y ajustar textos de programa sin recortar contenido. Se conservan controles y diseño. Al encadenar numerosos recorridos rápidamente se activó además el límite global existente de 600 peticiones/minuto; no se modifica ni desactiva. Las siguientes tandas de pruebas se ejecutan separadas, reiniciando solo el servicio local entre tandas para no mezclar contadores de las pruebas; SQLite y sesiones se conservan. No contar la tanda de bandejas interrumpida por 429 como superada.
+
+Regresiones posteriores a la corrección responsive: acceso/dashboard/solicitud/activación/suspensión oficial, 30 comprobaciones completas en Brave; Community/composición/moderación/rechazo/retiro y permisos entre sesiones, 39 comprobaciones completas en Brave. Cuatro anchuras de los recorridos repetidas; cero errores de ejecución JavaScript. Los desbordamientos anteriores quedan corregidos y sus intentos incompletos no se cuentan como resultados aprobados.
+
+Brave: bandejas/contacto/recuperación vuelve a superar sus 37 comprobaciones. Opera: acceso completo supera 30; Community encontró un nombre de autor largo sin ajuste en la tarjeta a 320 px (el diálogo sí cabía). Se ajusta el texto del autor en su contenedor existente, sin ocultar información ni cambiar composición. Falta repetir Community en ambos navegadores tras este ajuste y completar bandejas en Opera.
+
+Verificación ampliada: los recorridos de acciones pasan completos (acceso 30, Community 39 y bandejas/recuperación/contacto 37) en ambos navegadores tras las correcciones; un intento adicional de Community agotó una espera al alternar ventanas, y se llevó al frente cada sesión en el script, con diagnóstico y limpieza de listeners. Se repitió después completo por navegador en tandas separadas, sin ampliar límites de API.
+
+La inspección visual final de /mi-inscripcion detectó además alias largos en la lista de compañeros fuera del ancho a 320 px (338 px de página), aunque los datos propios ya se ajustaban. Se permite encoger/ajustar el nombre en su fila existente y se refuerza el nuevo recorrido con alias de 45 caracteres sin espacios. Falta repetir esa prueba nueva completa en ambos navegadores y verificar visualmente después del ajuste.
+
+Cierre del bloque 8: nuevo recorrido de rutas repetido después de la última corrección, 45 comprobaciones completas en Brave y 45 en Opera, con alias largo sin espacios y cuatro anchuras. Regresiones de acciones completas en ambos: acceso 30, Community 39 y bandejas/recuperación/contacto 37; en total 151 por navegador, repartidas en cuatro recorridos. API 71 resultados correctos, incluidos destinos Google con proveedor controlado. Lint/typecheck/build y revisión de espacios correctos; siete rutas privadas de Vite siguen bloqueadas. Inspección visual de inscripción escritorio/móvil y alumnos a 320 px: sin desbordamiento. Los fallos intermedios se conservan en las notas anteriores y se resolvieron con repetición de las comprobaciones relevantes.
+
+Puntos de retorno: 5f8bd57 (contenedores/nombres largos y script de Community), ded8804 (rutas/enlaces/bandeja/recorrido nuevo). Documento completo: docs/v1-unified-navigation.md. Los componentes históricos se conservan; las rutas oficiales ya no montan LocalAccessApp ni el feed de StudentPublications. StudentArea queda únicamente como ficha /mi-inscripcion. No hay migración, borrado de datos o ramas, nuevas dependencias ni despliegue. El paquete principal baja de ~704 a ~677 KB, pero mantiene el aviso de tamaño.
+
+Lista de comprobación del bloque 8:
+
+- [x] Contrastar acciones y servicios de las pantallas provisionales con destinos oficiales.
+- [x] Redirigir /gestion y secciones, /registro-local y ambos enlaces de alumno sin aceptar destinos externos.
+- [x] Conservar ficha/directorio en /mi-inscripcion y enlaces de activación/recuperación.
+- [x] Avisos abre su pestaña, con recarga/Atrás/Adelante y mismas acciones privadas.
+- [x] Comprobar protección de roles, API, sesión, suspensión, 404 e historial.
+- [x] Repetir acciones oficiales y pruebas responsive en Brave/Opera; resolver nombres/controles largos sin recortar información.
+- [x] Actualizar mapa, instrucciones, README, registro, controles de calidad y puntos de retorno.
+
+Estado al cierre histórico del bloque 8: bloques 2–8 comprobados localmente en sus alcances. La tanda técnica de estabilización prevista se completó después, según el cierre del bloque 9 que sigue. Se mantienen separados los huecos de producto y las dependencias humanas.
+
+### Notas cronológicas de la tanda técnica del bloque 9 (pendientes intermedios resueltos en el cierre)
+
+Rama chore/v1-stabilization, base 5405c1c de feat/v1-unified-navigation; Git inicialmente limpio. Alcance de esta tanda: resolver avisos de herramientas con actualización compatible si existe, dividir carga por áreas/rutas sin modificar el diseño, comprobar errores/reintentos de carga y servicio, guía operativa de administración y procedimiento seguro de respaldo/restauración en copia aislada. No crear otro panel ni añadir servicios externos. Se reutilizan AppRoutes, proveedores y pantallas oficiales, useAdminConnection/ConnectedCommunity y backupLocalDatabase. Google/correo/cuentas/contratación y validaciones del cliente continúan al final.
+
+Auditoría inicial repetida: diez avisos moderados de desarrollo dependen del mismo advisory de minimatch (rango 7–11.0.0). No ejecutar fix --force ni imponer una versión mayor de una dependencia transitiva sin compatibilidad comprobada. Evaluar primero las versiones oficiales disponibles. La carga actual importa todas las áreas y proveedores de demostración desde App; la compilación anterior tiene entrada de ~677 KB. Pendiente medir después, comprobar navegación/carga fallida y mantener permisos.
+
+Evaluación de herramientas: npm confirma ESLint 10.14.0 y typescript-eslint 8.72.2 disponibles, pero mantienen minimatch 10 en su árbol compatible; advisory oficial corrige desde 11.0.1. Las propuestas automáticas implican mayores/downgrades incompatibles con el stack actual. No se instala una actualización que mantendría la alerta ni se impone minimatch 11 fuera de sus rangos. Los diez avisos de desarrollo quedan como dependencia upstream registrada, con revisión al cambiar herramientas; no se consideran resueltos.
+
+Implementado sin cierre: componentes de ruta diferidos con React.lazy/Suspense y pantalla de recuperación ante error de carga/representación. Se retira CommunityProvider de demostración del arranque de rutas conectadas (ConnectedCommunity ya aporta su contexto) y se limita DemoStoreProvider a SignupPage, único consumidor vigente. Sin borrar modelos o proveedores históricos. AdminLayout distingue ahora fallo inicial de conexión al comprobar sesión de una cuenta sin sesión, con reintento explícito. Pendiente compilar, medir rutas descargadas y probar errores/reintentos entre sesiones en la compilación real.
+
+Avance comprobado del bloque 9: compilación con entrada de ~239 KB (antes ~677 KB), sin aviso de chunk superior a 500 KB; las pantallas quedan en archivos diferidos. El primer intento detectó un paréntesis de cierre omitido al acotar DemoStoreProvider, corregido antes de compilar. No se cuenta ese intento como aprobado. Nuevo comando local:verify-backup abre una copia en solo lectura, comprueba SQLite/referencias/esquema, cuentas/registros e imágenes completas (también retiradas), sin migrar ni restaurar. Suite de API: 72 resultados correctos; comprueba copia sin cambios, imagen corrupta rechazada y ruta ausente sin crear archivo. Falta medir la descarga real, errores de módulos/API en navegador, guía y ensayo de CLI con respaldo local.
+
+La compilación real (preview local en 4180, sin publicar) supera 24 comprobaciones nuevas en Brave: la portada no descarga pantallas administrativas/Community/registro; navegación conserva documento e instantánea del panel; módulo fallido y módulo lento muestran recuperación/carga, con cuatro anchuras; recarga conserva destino y sesión. Fallos de sesión/datos privados/Community y envío de publicación permiten reintentar sin identidad de muestra ni pérdida de borrador. Revocación sigue efectiva. El primer intento del script necesitó esperar el formulario administrativo después de navegar desde el acceso de alumnos, al ser ahora diferido; corregido el selector/espera y repetido completo. Falta cierre de Opera, regresiones de áreas conectadas y guía.
+
+Avance de verificación del bloque 9: prueba nueva de estabilización superada también en Opera (24 comprobaciones). En compilación real, acceso 30 y Community 39 pasan en ambos navegadores; galería 37 y bandejas/contacto/recuperación 37 pasan en Brave. Pendiente completar estas dos en Opera. La copia local creada y verificada por CLI tenía esquema 9, 119 solicitudes/alumnos, 104 cuentas, 76 publicaciones y tres imágenes; no se restauró sobre la base activa. La suite añade ensayo HTTP desde una copia separada: login conservado y permisos de alumno/retiro efectivos, sin modificar la original. API 72 resultados correctos. Guías de administración y respaldo/recuperación redactadas según acciones existentes.
+
+Regresiones de compilación completadas: acceso 30, Community 39, galería 37 y bandejas/contacto/recuperación 37 en Brave y Opera. La inspección visual del error de sesión detectó un defecto propio de la pantalla nueva: se había usado el estilo de botón administrativo fuera de su contenedor de tokens y quedaba blanco sobre fondo claro. Se cambia al botón del AccessFrame/login existente y se añade comprobación de fondo opaco y contraste >=4,5 en el recorrido de estabilización. Falta repetir ese recorrido tras corregir y cerrar la revisión visual. Los primeros intentos de inspección visual se hicieron sin sesión administrativa en la pestaña principal y mostraron correctamente login; se corrigió la preparación de la cuenta de prueba antes de inspeccionar el error.
+
+Cierre de la tanda técnica del bloque 9: después de corregir el botón de reintento, el recorrido nuevo supera 25 comprobaciones completas en Brave y 25 en Opera, incluido contraste de texto >=4,5. Se repitieron las comprobaciones relevantes; los cuatro recorridos de áreas ya habían pasado en compilación real en ambos: acceso 30, Community 39, galería 37 y bandejas 37. Total 168 por navegador en cinco recorridos, sin errores de ejecución inesperados. Inspección visual de error de ruta escritorio/móvil oscuro y error de sesión móvil con reintento correcto. API 72 resultados correctos; lint/typecheck/build correctos y siete rutas privadas de Vite bloqueadas.
+
+Puntos de retorno guardados: e648269 (carga diferida/recuperación de páginas y conexión), 876aa56 (verificador de respaldo y ensayo HTTP desde copia). Entrada JavaScript ~239 KB frente a ~677 KB anteriores; portada ~323 KB en 13 scripts, sin descargar pantallas administrativas, Community o SignupPage. Ya no aparece el aviso de archivo mayor de 500 KB. No son medidas de velocidad en una conexión real. Guías de administración y respaldo/recuperación incorporadas y contrastadas con el código/recorridos. No se ha realizado la validación humana con el administrador.
+
+Alertas pendientes explícitas: diez moderadas de desarrollo por minimatch; las versiones compatibles consultadas no las corrigen y las opciones automáticas exigen cambios incompatibles. No se forzó ni ocultó la actualización. Auditoría sin dependencias de desarrollo: cero avisos. Sin cambios de dependencias/lockfile, migraciones, borrado de datos/ramas o despliegue. Se verificó una copia local y se ensayó una API desde otra copia temporal; nunca se reemplazó la base activa.
+
+Lista de comprobación de esta tanda:
+
+- [x] Auditar la cadena de herramientas y registrar la causa/opciones sin forzar cambios incompatibles.
+- [x] Dividir carga por rutas y medir entrada/portada en la compilación, con diseño y permisos conservados.
+- [x] Probar módulos lentos/fallidos, estados accesibles, errores API/sesión y reintento de borradores.
+- [x] Repetir acceso, moderación, imágenes y bandejas en Brave/Opera sobre la compilación real.
+- [x] Crear/verificar copia de pruebas en solo lectura y ensayar acceso HTTP desde copia independiente.
+- [x] Guías, instrucciones, README y registro actualizados; puntos de retorno separados.
+- [ ] Resolver diez avisos de herramientas mediante versión compatible o migración específica futura.
+- [ ] Validación de uso/contenido/privacidad y operación final con CAI, agrupada para el final.
+
+Estado al cierre histórico de estabilización: bloques 2–8 y la tanda técnica del 9 comprobados. La contraseña administrativa propia prevista se completó después, según el cierre que sigue. Se mantienen separados los huecos de producto y las dependencias humanas.
+
+### Notas cronológicas de la cuenta administrativa (pendientes intermedios resueltos en el cierre)
+
+Rama feat/v1-admin-account-security, base 7daa623 de chore/v1-stabilization; Git limpio al empezar. Inventario: Configuración ya tiene cuenta de sesión/equipo; auth.ts ya aporta scrypt, sesión y revocación, pero no cambio de contraseña. Se reutilizan esos componentes/servicios. Alcance: cambiar únicamente la contraseña propia desde Configuración con contraseña actual, confirmación y política existente; cerrar todas sus sesiones y exigir nuevo acceso. Revalidar sesión/credencial después del trabajo asíncrono para no revivir accesos antiguos ni sobrescribir cambios concurrentes. No crear cuentas/roles reales ni recuperación administrativa por correo ficticia.
+
+Pruebas de navegador se harán en una base aislada con cuentas ficticias: no cambiar la contraseña del administrador habitual ni su archivo de acceso inicial. Sin migración prevista. Pendiente comprobar permisos/origen/cuerpos, validaciones, concurrencia/caducidad, revocación y persistencia, errores de respuesta y formulario original en escritorio/móvil. Guía de entrega/custodia se actualiza; Google/correo/alojamiento continúan al final.
+
+Avance de cuenta administrativa: UI implementada dentro de Configuración; servicio reutiliza scrypt y sesión, guarda únicamente el hash, revoca todas las sesiones propias y registra auditoría sin credenciales. Valida contraseña actual/nueva/confirmación, límite de intentos y revalida credencial/sesión después del hash; login relee el hash para no aceptar uno ya sustituido. API inicial: 81 resultados correctos.
+
+Regresión adicional encontró un fallo real previo: una escritura administrativa con cuerpo HTTP retrasado conservaba el usuario leído antes de la revocación y respondió 200 después del cambio de contraseña. La prueba esperaba 401 y falló. Se añade comprobación de sesión vigente después de leer el cuerpo en los bloques de escrituras administrativas y de alumno, manteniendo validación de origen/tamaño. No contar el intento fallido como validado; repetir prueba específica y suite completa. Sin cambiar el administrador habitual ni abrir la base activa en las pruebas.
+
+Comprobación del servidor tras la corrección: 83 resultados correctos, incluidos cuerpo HTTP retrasado administrativo tras cambio de contraseña y envío de alumno suspendido durante la lectura. Typecheck/build correctos. La base habitual y su acceso no se usan para las pruebas de cambio: se creó fixture independiente y frontend local separado que apunta a su puerto. El primer recorrido de navegador completó cambio/revocación, permisos de otras cuentas y rechazo de contraseña vieja, pero agotó una espera al volver a entrar; se añade diagnóstico y se revisa antes de repetir con fixture nueva. No se cuenta como recorrido completo.
+
+La espera fallida del script no era un fallo de acceso: el diagnóstico confirmó sesión iniciada en Configuración. El panel conserva la ruta protegida al volver a entrar, y la prueba esperaba incorrectamente el saludo de Resumen. Se corrige la expectativa, manteniendo la navegación del producto, y se repite con una base ficticia nueva para no reutilizar contraseñas ya cambiadas. El administrador habitual continúa sin cambios.
+
+Recorrido completo de Brave superado con fixture nueva: 29 comprobaciones. Incluye tres campos protegidos/mostrar, validación, bloqueo de doble envío, cuatro anchuras de Configuración y acceso, cierre de otra sesión propia, conservación de otras cuentas/alumno, contraseña larga, respuesta perdida después de guardar y envío que nunca llega (mensaje incierto sin reintento automático), sesión terminada y ausencia de contraseñas en storage. Cero errores de ejecución JavaScript. Falta Opera, inspección visual, cierre documental y puntos de retorno.
+
+Verificación completa de cuenta administrativa: Opera supera también las 29 comprobaciones del recorrido, con fixture separada para cada navegador. Inspección visual de Configuración/formulario en escritorio y a 320 px sin desbordamiento; no se mostraron contraseñas en capturas. Se mantienen el diseño y el panel originales. Typecheck/lint/build y revisión de espacios correctos; suite API 83/83, incluido el fallo de escritura tardía corregido y vuelto a comprobar. Pendiente cierre documental y Git; el cambio real de contraseña del usuario no se ejecutó.
+
+Cierre de cuenta administrativa propia: 83 resultados del servidor correctos, 29 comprobaciones completas en Brave y 29 en Opera, cuatro anchuras, revisión visual de escritorio/móvil, typecheck/lint/build y revisión de espacios correctos. Siete rutas privadas de Vite bloqueadas. Puntos de retorno: 1dc3c4a (servicio y autorización fresca de escrituras), a7465f0 (Configuración/login y pruebas aisladas). Guía de administración, entrega/custodia y README actualizados; detalles en docs/v1-admin-account-security.md. Sin migración, dependencias nuevas o modificación del administrador habitual ni su archivo de acceso.
+
+Lista de comprobación:
+
+- [x] Reutilizar Configuración, acceso, scrypt, sesiones y auditoría existentes.
+- [x] Cambiar solo contraseña propia, validando actual/nueva/confirmación y límite por cuenta.
+- [x] Revocar todas las sesiones propias sin afectar otras cuentas ni alumnos; exigir nuevo acceso.
+- [x] Detectar cambios concurrentes, sesión caducada, credencial sustituida y login antiguo en curso.
+- [x] Corregir y probar escrituras con cuerpo HTTP retrasado después de revocación/suspensión.
+- [x] Respuesta perdida antes/después del guardado sin falsa confirmación ni reintento automático.
+- [x] Navegadores y cambios de contraseña únicamente con base/cuentas ficticias aisladas.
+- [x] Documentación y puntos de retorno; no atribuir creación/recuperación de otros administradores a esta función.
+
+Estado al cierre de cuenta administrativa: contraseña propia comprobada localmente, además de las integraciones anteriores. La revisión del perfil propio continúa en el registro siguiente. Recuperación/gestión de otras cuentas administrativas, expediente completo, diez avisos de herramientas y dependencias humanas siguen pendientes.
+
+### Perfil propio del alumno (notas intermedias y cierre)
+
+Rama `feat/v1-student-profile`, base `34b78b4`; Git limpio al empezar. Inventario contrastado: MemberProfileDialog ya muestra identidad/avisos; public-profiles conserva UUID; student-accounts y publicaciones leen alias/avatar desde el payload, sin edición propia. Se reutilizan estos componentes y reglas de registro. Alcance: nombre visible y color, sin editar expediente, correo, nacimiento, tutor, visibilidad o asignación. Menores conservan las dos abreviaturas existentes, calculadas en servidor; no enviar edad/expediente a perfiles ajenos. Control optimista mediante revisión existente; auditar sin copiar datos personales. Sin migración prevista. Cierre requiere permisos/validación/conflictos/persistencia y recorridos propios/ajenos, errores y móvil en Brave/Opera; pruebas en base ficticia aislada.
+
+Avance de perfil implementado: endpoint propio GET/PATCH, validación estricta y revisión de solicitud/alumno, auditoría mínima, reintento idéntico sin duplicar cambio; formulario integrado y paleta compartida del registro. Primera suite API: 92 resultados correctos; build/typecheck/lint correctos. Se añadió después prueba específica de límite por alumno, aún pendiente de ejecutar. Primer recorrido Brave completó guardado y cuatro anchuras pero se interrumpió por usar isFocused, método inexistente del script de prueba. Se corrige la comprobación con activeElement y se repetirá con fixture nueva; no contar el intento como recorrido completo.
+
+Verificación final de perfil: 93/93 resultados del servidor correctos, incluida prueba de límite separado por alumno. Recorrido completo con fixture nueva: Brave 36 y Opera GX 36 comprobaciones, cuatro anchuras 1440/768/375/320, alias largo, cancelación/guardado, borrador y conflicto, respuesta perdida antes/después de guardar, reintento idéntico, vista de otro alumno, menores, oscuro/Escape/foco y sesión revocada. Cero errores de ejecución JavaScript en esos recorridos. Inspección visual adicional de editor adulto escritorio/320 px, sin desbordamiento; consola de esa revisión sin errores ni advertencias. El método erróneo del script quedó corregido y las pruebas completas se repitieron.
+
+Cierre de perfil visible propio: puntos de retorno 9388b2c (servicio/pruebas) y 8490701 (diálogo/conexión/pruebas). Typecheck/lint/build y revisión de espacios correctos; entrada ~239 KB sin aviso de chunk grande. Sin migración/dependencias nuevas, ni cambios de cuenta habitual/base activa. Datos de prueba bajo .local/tests/profile-browser-*; consolas aisladas detenidas al terminar. Manual, README e instrucciones actualizados; detalle y archivos en docs/v1-student-profile.md. No se confunde edición de alias/color con edición de expediente ni con privacidad aprobada para producción.
+
+Lista de comprobación del perfil:
+
+- [x] Reutilizar diálogo, UUID, payload, reglas de registro y paleta existentes.
+- [x] Editar únicamente nombre visible/color propios; menores con abreviaturas calculadas en servidor.
+- [x] Mantener datos legales, permisos, identidad Google, grupo y otras cuentas intactos.
+- [x] Revisión/conflicto, reintento sin duplicar auditoría, sesión vigente después de leer cuerpo y límite por alumno.
+- [x] Alias actualizado en sesiones/directorio/publicaciones anteriores, persistencia al reiniciar y esquema 9 conservado.
+- [x] Navegadores Brave/Opera, móvil, errores/reintentos, foco/Escape/oscuro y revisión visual.
+- [x] Documentación y puntos de retorno; pruebas exclusivamente con fixture ficticia.
+
+Estado al cierre de perfil visible: comprobado localmente, además de las integraciones anteriores. La recuperación administrativa continúa en el registro siguiente; expediente, otras cuentas, herramientas y dependencias externas siguen pendientes.
+
+### Recuperación administrativa (notas intermedias y cierre)
+
+Rama `feat/v1-admin-recovery`, base `d8df768`; Git inicialmente limpio. Usuario autoriza el primero de cinco puntos: recuperación del administrador, sin avanzar implícitamente gestión de otras cuentas. Inventario: auth.ts ya ofrece scrypt/sesiones/revocación; RecoveryPage y ActivateAccountPage aportan solicitud/enlace/formulario; notices.ts recupera únicamente alumnos. Se reutilizarán pantallas y reglas, con ámbito administrativo separado. Diseño: solicitud uniforme, cola privada sin enlace público, entrega exclusivamente a correo de cuenta ya configurada mediante adaptador de servidor; enlace aleatorio temporal de un uso y ligado a versión de credencial. Sin adaptador real, dejar explícitamente pendiente el envío; no añadir endpoint de previsualización ni recuperación anónima por correo conocido. Pruebas de entrega con buzón ficticio aislado, sin tocar contraseña habitual. Respaldo previo a migración 10 creado bajo .local/backups; no migrar ni restaurar la base habitual durante pruebas. Cierre: permisos/origen/cuerpos, expiración/reutilización/concurrencia/revocación, errores de entrega/respuesta, persistencia/copia, navegador y móvil. Configuración de correo real/verificación humana al final.
+
+Implementado sin cierre: migración 10 aditiva, cola/token privado sin texto del enlace, entrega por adaptador interno (deshabilitado en index habitual), solicitud uniforme y límite IP/cooldown persistente por cuenta. Enlace solo válido tras entrega confirmada, ligado a hash y correo; restablecimiento revalida después de scrypt, revoca sesiones propias y no inicia sesión. UI reutiliza RecoveryPage/ActivateAccountPage y AccessFrame, con rutas administrativas separadas y respuesta incierta que retira campos. Typecheck/lint correctos. Primera suite completa: 103 resultados correctos y dos fallos (caso y contenedor) por expectativa de límite del script tras reiniciar el servidor: se habían enviado ocho solicitudes, no diez; se corrige la preparación y se repetirá. No se cuenta como suite aprobada.
+
+Pruebas específicas corregidas: 12/12 resultados correctos; se añadió después un caso de credencial sustituida durante scrypt y correo cambiado durante entrega, pendiente de la suite final. Build/typecheck/lint correctos. Primer recorrido Brave completó 39 comprobaciones, incluidas recuperación/revocación, enlace de un uso y respuesta perdida. Se interrumpió al esperar login tras un envío que no llegó: el script consultaba si había sesión antes de terminar de cargar la ruta diferida. Se añade espera explícita de panel o acceso antes de decidir cerrar sesión y se repetirá con fixture nueva. No contar el intento incompleto como aprobado.
+
+Recorridos corregidos superados: Brave 43 y Opera GX 43; suite completa 106/106. Revisión posterior refuerza dos bordes: solicitudes recibidas mientras el adaptador entrega otra se procesan en una segunda pasada, y una respuesta 200 con JSON ilegible se trata como resultado incierto en vez de afirmar fracaso. Se añaden pruebas específicas; repetir comprobaciones relevantes antes del cierre. Sin modificar credenciales/base habitual.
+
+Cierre de recuperación local: suite final 108/108 resultados correctos; incluye cola recibida durante entrega, credencial/correo cambiados y sesión distinta conservada cuando se abre el enlace desde otra cuenta. Brave 45 y Opera GX 45 comprobaciones completas tras reforzar cola/JSON ilegible; el último ajuste exclusivo de sesión distinta se comprobó posteriormente en servidor sin repetir los recorridos completos de navegador. Typecheck/lint/build y revisión de espacios correctos. Revisión visual de solicitud en escritorio y formulario vacío a 320 px sin desbordamiento; consola de esa revisión sin errores/advertencias. Migración 10 y copias 9/10 verificadas en bases ficticias; respaldo previo habitual conservado, sin migrar/cambiar contraseña de la base activa durante las pruebas. Sin dependencias nuevas ni despliegue. Los procesos de API/buzón y frontend aislados se detuvieron al terminar.
+
+Puntos de retorno: 2d1ec13 (servicio/migración/pruebas) y 874b00a (pantallas/recorrido). Guías de recuperación, administración y copias, README e instrucciones actualizados. Detalles, archivos, incidencias y límites en docs/v1-admin-recovery.md. La API habitual no tiene adaptador de correo, endpoint de buzón ni preview de enlace administrativo; el buzón ficticio autenticado solo existe en la fixture. No confundir aceptación de transporte con recepción humana o verificación del correo del responsable.
+
+Lista de comprobación del punto 1:
+
+- [x] Reutilizar acceso/recuperación existentes con ámbito administrativo separado.
+- [x] Respuesta uniforme, cuerpo/origen/límites, sin enlace público ni destino elegido por navegador.
+- [x] Enlace aleatorio de 15 minutos, hash privado, uso único y versión de correo/credencial.
+- [x] Entrega pendiente/fallida no autoriza cambio; solicitudes recibidas durante entrega también se procesan.
+- [x] Revalidar después de scrypt, cerrar solo sesiones de la cuenta recuperada y no iniciar sesión automáticamente.
+- [x] Errores de respuesta y JSON ilegible con campos retirados, sin falsas confirmaciones ni reintento automático.
+- [x] Migración aditiva/copias/reinicio, API, Brave/Opera, cuatro anchuras y documentación.
+- [ ] Dependencia externa final: verificar destinatario real, configurar/probar correo y aviso posterior, HTTPS y operación.
+
+Estado vigente: primer punto desarrollado y comprobado localmente con entrega ficticia; su dependencia externa permanece para el final. Siguiente tarea autónoma: punto 2, gestión de otras cuentas administrativas usando Configuración, sin reconstruir panel y verificando alta/desactivación/permisos/protección de última cuenta. Continúan puntos 3 expediente, 4 herramientas y 5 revisión final. Google/correo reales, cuentas definitivas, contenido/autorizaciones, validación con CAI, presupuesto y alojamiento agrupados al final. No admitir usuarios reales ni afirmar producción.
+
+### Equipo administrativo, punto 2 (notas intermedias y cierre)
+
+Rama `feat/v1-admin-team`, base `88ef627`, Git limpio al comenzar. Inventario: AdminSettingsPage ya tiene Equipo administrador (solo sesión); auth.ts gestiona un único rol admin, sin estado de cuenta; recuperación administrativa y formularios compartidos ya existen. Reutilizar sección, sesiones/scrypt, ActivationAccountPage y LocalInvitationDialog. Alcance: directorio privado, alta pendiente con nombre/correo, invitación de activación de un uso, desactivación/reactivación sin borrar; todas las operaciones requieren contraseña actual y confirmación de acceso completo. Sin inventar rol propietario/moderador ni editar correos/contraseñas ajenos. Impedir desactivación propia y de última cuenta activa/activada; pendientes no cuentan como sustituto. Desactivar revoca sesiones, recuperación e invitaciones; login/recuperación/activación deben comprobar estado, también tras tareas asíncronas. Respaldo previo creado en .local/backups antes de migración 11; probar solo en bases/cuentas ficticias. Cierre: permisos, reautenticación, revisiones/idempotencia, enlaces, revocación/concurrencia/última cuenta, migración/persistencia/copias y recorridos navegador/móvil. Enlaces manuales solo de prueba local; verificación de responsables y correo real al final.
+
+Avance implementado: migración 11 aditiva; equipo privado y cambios con reautenticación, revisiones e historial. Login/sesión/inicio de sesión y recuperación filtran cuentas desactivadas o sin activar. Se reutilizan sección, formularios de activación e invitación; altas idempotentes pendientes sin contraseña elegida por otro administrador. Typecheck/lint y las 108 regresiones previas pasan. Primera prueba nueva se interrumpió en un caso de carrera mal preparado: la activación terminaba antes de completar la reautenticación de la desactivación, cambiando correctamente la revisión. Se prepara la transición de fixture sin otra derivación asíncrona para probar revocación durante scrypt; repetir antes de darlo por comprobado. También se añaden límite por cuenta y migración 10→11; navegador pendiente.
+
+Verificación de equipo: suite completa 120/120 resultados correctos, incluidos límites, migración, activación simultánea, revocación durante scrypt y desactivaciones cruzadas que conservan acceso. Recorrido completo Brave 37 y Opera GX 37, cuatro anchuras 1440/768/375/320: sección original, reautenticación, alta idempotente con respuesta perdida, invitación perdida/renovada, activación/acceso propio, cancelación, suspensión/reactivación, revisión antigua y storage sin secretos. Cero errores de ejecución JavaScript. Revisión posterior refuerza login con revisión de cuenta, para rechazar también una desactivación/reactivación ocurrida durante scrypt; prueba nueva añadida y pendiente de suite final. Inspección visual/cierre documental y Git aún pendientes.
+
+Cierre del punto 2: 121/121 resultados de servidor correctos tras añadir login con desactivación/reactivación durante scrypt. Se mantienen 37 comprobaciones completas por navegador; el último refuerzo exclusivo de login se comprobó en servidor sin repetir el recorrido completo de navegador. Typecheck/build/lint y revisión de espacios correctos. Revisión visual de equipo en escritorio y alta vacía a 320 px, sin desbordamiento ni secretos; consola sin errores/advertencias. Puntos de retorno 0f0c493 (servicio/migración) y f980067 (sección/activación). Guías, README y reglas actualizados; detalle de archivos y límites en docs/v1-admin-team.md. Migración 11 probada en copia con cuentas/sesiones conservadas; verificador admite 9/10/11. Sin dependencias nuevas ni despliegue. Cuenta/base habitual no migradas ni modificadas durante pruebas; se conserva respaldo previo. Consolas de API/frontend ficticios detenidas al terminar.
+
+Lista de comprobación del punto 2:
+
+- [x] Reutilizar Equipo administrador de Configuración, invitación y activación originales.
+- [x] Directorio privado, alta pendiente idempotente sin contraseña ajena y rol admin completo explícito.
+- [x] Reautenticación/confirmación, origen/campos/tamaño, límites y revisión tras tareas asíncronas.
+- [x] Invitación de un uso/24 h, hash privado, renovación y activación sin auto-login.
+- [x] Desactivar/reactivar sin borrar, revocando sesiones/recuperación/invitaciones sin revivir accesos antiguos.
+- [x] Proteger propia/última cuenta, pendientes excluidos del conteo y concurrencia entre administradores.
+- [x] Migración/copias/reinicio, API, Brave/Opera, móvil, errores/reintentos, revisión visual y documentación.
+- [ ] Dependencia externa final: responsables/correos definitivos y canal seguro de entrega de invitaciones/recuperación.
+
+Estado al cierre de equipo: puntos 1 y 2 comprobados localmente en sus alcances. El punto 3 continuó después, según el registro siguiente. Dependencias externas reservadas al final; no admitir personas reales ni afirmar producción.
+
+### Correcciones del expediente, punto 3 (notas intermedias y cierre)
+
+Rama `feat/v1-student-record`, base `7e404a3`; Git inicialmente limpio. Inventario: StudentDialog y StudentAssignment ya muestran ficha/asignación/estado; requests.payload conserva nombre/nacimiento/matrícula/tutor, validateSubmission y abbreviatedNames aplican validación/privacidad, consent_confirmations registra autorización. Reutilizar esas reglas y ficha. Alcance: corrección administrativa de nombre, nacimiento, matrícula y tutor con contraseña propia, confirmación, motivo, revisión e historial privado antes/después. Correo y Google quedan de solo lectura, sin cambiar identidad de acceso; su verificación/cambio real se mantiene para el final. Menor nuevo o identidad/nacimiento/tutor de menor modificados requieren nueva referencia de autorización; abreviatura/privacidad se fuerzan en servidor, las historias publicadas vuelven a revisión cuando corresponda. Revocar sesiones/enlaces del alumno al corregir, sin reactivarlo ni alterar grupo. Migración 12 aditiva para historial/idempotencia, respaldo previo creado en .local/backups. Pruebas solo en base/cuentas ficticias. Cierre requiere permisos/validación/consentimiento/privacidad, identidad y audiencia conservadas, conflictos/reintentos, revocación durante operaciones asíncronas, copia/reinicio y ficha original en ambos navegadores/móvil.
+
+Implementado sin cierre: servicio privado GET/PATCH con reautenticación, validador/abreviaturas del registro, revisión/idempotencia e historial protegido; ficha original integra editor e historial de últimas 20 correcciones. Menores con nueva referencia cuando cambia identidad/nacimiento/tutor; historias publicadas vuelven a revisión. Sesiones/enlaces del alumno revocados y login relee hash/revisión para no revivir acceso iniciado antes del cambio. Typecheck/lint iniciales correctos; 11/11 resultados específicos de expediente correctos (sin fallos intermedios). Se añaden migración 11→12 y límite por administrador para suite final. Pendiente navegador, inspección visual y cierre documental/Git. Correo/Google/grupo no editables en este formulario.
+
+Cierre del punto 3: suite completa correcta (134 resultados, incluidos doce contenedores); después se reforzó el caso de recuperación anterior y el recorrido específico volvió a pasar completo 13/13. Brave 35 y Opera GX 35 comprobaciones sobre compilación real: ficha/edición/cancelación, reautenticación, respuesta perdida/doble envío/reintento único, historial antes/después, permisos y sesión, menores/autorización distinta, adulto→menor/privacidad/historias a revisión, conflicto con borrador conservado y carga explícita, almacenamiento sin datos privados. Cuatro anchuras 1440/768/375/320. Cero errores de ejecución JavaScript; revisión visual adicional de ficha/editor escritorio y tutor/referencia/efectos a 320 px, consola sin errores/advertencias. Typecheck/lint/build y revisión de espacios correctos; entrada ~239 KB sin aviso grande. No hubo pruebas fallidas intermedias de este bloque.
+
+Puntos de retorno 6817d95 (servicio/migración) y 0f3e9a7 (ficha/editor). Documentación, instrucciones, README y guías actualizados; alcance/archivos/límites en docs/v1-student-record.md. Migración 12 y copia 11→12 probadas sin alterar expedientes/sesiones; verificador admite 9–12. Base/contraseña habitual no migradas ni cambiadas en pruebas; respaldo previo conservado, fixture en .local/tests/student-record-browser-*. Sin dependencias nuevas o despliegue. Consolas aisladas detenidas al terminar. Correo de acceso sigue protegido: no confundir corrección legal con verificación del destinatario ni vinculación Google. Una referencia no demuestra identidad/evidencia real; revisar manualmente material donde aparezca alguien reclasificado como menor.
+
+Lista de comprobación del punto 3:
+
+- [x] Reutilizar ficha, validación, abreviaturas, autorización y revisiones existentes.
+- [x] Corregir nombre/nacimiento/matrícula/tutor con motivo, reautenticación, confirmación e historial privado antes/después.
+- [x] Nueva referencia para cambios protegidos de menor; alias/privacidad forzados y publicaciones a revisión.
+- [x] Conservar cuenta, Google, correo, grupo y suspensión; revocar sesiones/recuperación/invitaciones y login anterior.
+- [x] Conflictos, reintento idempotente, errores de conexión, permisos, límite por administrador y ausencia de secretos en storage.
+- [x] Migración/copias/reinicio, API, Brave/Opera, móvil, revisión visual y documentación.
+- [ ] Dependencia externa final: cambio verificado de correo/identidad, procedimiento y custodia de autorizaciones, revisión de material real.
+
+Estado al cierre del expediente: puntos 1–3 comprobados localmente en sus alcances. El punto 4 continuó según el registro siguiente. Dependencias externas agrupadas al final; no admitir personas reales ni afirmar producción.
+
+### Herramientas y alertas, punto 4 (revisión terminada; corrección externa pendiente)
+
+Rama `chore/v1-tooling-audit`, base `c712abb`; Git limpio al comenzar. Se reutilizan npm audit/ls/view y la configuración existente, sin instalar herramientas. Auditoría actual completa: diez avisos moderados (ninguno alto/crítico), todos propagaciones del mismo advisory GHSA-g3hv-75wg-m249 de minimatch 10.2.6 en herramientas de desarrollo. Auditoría sin desarrollo: cero avisos. Node 24.22.0/npm 11.19.1 dentro de requisitos.
+
+Versiones oficiales consultadas: ESLint 10.14.0 requiere minimatch ^10.2.6; config-array 0.23.5 requiere ^10.2.4; estree 8.72.2 requiere ^10.2.2; typescript-eslint 8.72.2 admite TypeScript <6.1.0 y ESLint 8/9/10. El parche de minimatch empieza en 11.0.1 (última consultada 11.0.8), fuera de esos rangos. Propuesta automática de typescript-eslint 8.36.0 exige TypeScript <5.9 y ESLint 8/9, incompatible con TS 6/ESLint 10; además su minimatch ^9 continúa dentro del rango afectado. No aplicar force ni override mayor; no instalar versiones que mantienen el problema.
+
+Inspección acotada de árbol y consumidores: dependencia dev, sin uso de minimatch/optimizationLevel en src/server; ESLint/config-array/estree inspeccionados no habilitan nivel 2 y el valor predeterminado es 1. Inferencia limitada de exposición a desarrollo; no se demuestra inexplotabilidad general ni se elimina la alerta. No se ejecutó prueba de agotamiento. No se modificaron paquetes, lockfile, node_modules, configuración, aplicación, datos o sistema.
+
+Resultado: investigación del punto 4 completada, **corrección de diez alertas no completada**; pendiente externo por versión compatible o migración específica. Evidencia/criterio de cierre/archivos en docs/v1-tooling-audit.md. No se repitieron lint/build/API/navegador porque los cambios son exclusivamente documentales; las pruebas del punto 3 siguen históricas. Auditoría completa devuelve código 1 por avisos; auditoría de ejecución devuelve 0. Registro, README, instrucciones y notas de continuidad actualizados.
+
+Estado vigente: siguiente tarea punto 5, revisión final del estado acumulado con fixtures/recorridos existentes. Mantener explícitas las diez alertas y revisar al actualizar herramientas/antes de publicar; no repetir investigación sin cambios de versiones/alcance ni dar el punto 4 por corregido. Correo/Google reales, cambio verificado de correo de acceso, responsables, contenidos/autorizaciones, validación humana, presupuesto y alojamiento siguen al final. No admitir personas reales ni afirmar producción.
+
+### Revisión final local, punto 5 (notas intermedias y cierre)
+
+Rama `chore/v1-final-review`, base `9274dc9`; Git limpio al empezar. Reutilizar recorridos oficiales existentes, fixtures de cuentas/perfil/expediente, suite de servidor y controles de calidad. Se añade únicamente fixture de revisión general con base nueva, cuenta ficticia y una imagen sintética bajo .local/tests/final-review-*, sin abrir la base/credenciales habituales. Primera tanda: API/modelos/lint/build y archivos privados por HEAD. Luego acceso, Community/moderación, grupos, bandejas/contacto, galería, enlaces y estabilización sobre compilación real en Brave/Opera; después recorridos especializados de seguridad/recuperación/equipo/perfil/expediente. Separar tandas/fixtures para no mezclar límites o cambios de contraseña, sin desactivar controles. Corregir fallos reales y repetir comprobaciones relevantes; no contar intentos incompletos. Inspección visual y guías/lista de entrega se contrastan al cierre. Las diez alertas de desarrollo y dependencias humanas/externas permanecen explícitas; no despliegue ni admisión de datos reales.
+
+Primera tanda comprobada: API 134/134; modelos de Community/publicaciones/retos/logros/galería 29/23/27/51/25, con sus comparaciones de igualdad; lint/typecheck/build correctos y siete rutas privadas bloqueadas por HEAD. Acceso oficial 30 comprobaciones por navegador. Community completa en Brave (39); Opera se interrumpió después de 28 al buscar una publicación de prueba móvil para revisión. Se conserva la base ficticia de ese intento y se diagnostica antes de repetir; no se cuenta como aprobado. No hay cambios de aplicación todavía.
+
+Segunda tanda comprobada: la publicación del intento incompleto sí estaba persistida como pendiente; causa de la espera no determinada. Se amplió únicamente el diagnóstico del recorrido (página principal y respuestas HTTP fallidas, sin cuerpos ni secretos). Repetición completa de Community en Opera sobre base nueva: 39, sin errores JavaScript; no se oculta ni suma el intento incompleto. Grupos/configuración 27, contacto/bandejas/recuperación 37, galería privada 37, navegación 45 y estabilización 25, cada uno completo en Brave y Opera sobre compilación real y fixtures separadas. Sin cambios de aplicación. Continúan pruebas especializadas y cierre visual/documental.
+
+Tercera tanda: seguridad administrativa 29, recuperación administrativa 45, equipo 37 y perfil de alumno 36, completos por navegador. Recuperación Opera tuvo antes un intento incompleto en 39, esperando el formulario de acceso después del fallo de envío simulado; diagnóstico ampliado solo con método/ruta/estado y estado visible, nunca enlaces/tokens/cuerpos. Nueva fixture y repetición completa 45 sin errores JavaScript; causa del primer intento no confirmada. No contar intentos incompletos ni afirmar reparación de un defecto de aplicación. Expediente y cierre visual/documental en curso.
+
+Expediente completo: 35 por navegador; 24 recorridos completos, 844 comprobaciones de navegador en total (sin sumar intentos incompletos). Inspección de portada/panel en escritorio y registro/ficha a 375/320 px: sin errores JavaScript/consola, pero ficha de 320 px corta palabras por su columna de etiquetas automática. Se adapta solo `.dialog .details` a una columna hasta 560 px; pendiente repetir compilación/calidad, recorridos de ficha/solicitud e inspección visual sobre este ajuste. Fotografías externas de Unsplash sin terminar de cargar en esta inspección: disponibilidad visual externa no comprobada, conservar como limitación y validar material definitivo con CAI. Dos preparaciones manuales de captura se interrumpieron por selectores incorrectos (etiqueta de otro formulario y enlace oculto en menú móvil); corregidos para la inspección, no cuentan como fallos funcionales ni como pruebas aprobadas.
+
+Cierre técnico del punto 5: ajuste móvil recompilado, tipos/lint correctos; acceso 30 y expediente 35 por navegador repetidos completos después del CSS, sin errores JavaScript. Inspección posterior de ficha a 320/1440 px y solicitud a 320 px: una columna móvil/dos escritorio, sin desbordamiento y sin errores/advertencias de consola. Sintaxis de recorridos y revisión de espacios correctas. Punto de retorno `940573a` guarda CSS, fixture y diagnóstico. Matriz final mantiene 24 recorridos/844 comprobaciones sin sumar repeticiones; API 134/134 y modelos siguen aplicando (sin cambios de lógica de aplicación/servidor). No nuevas dependencias ni cambios de base/credenciales habituales, no merge/despliegue.
+
+Comprobación adicional de archivos privados: siete HEAD 403 en desarrollo. El verificador original, repetido contra preview, se detuvo al recibir 200 en vez de 403. Seis rutas inspeccionadas por HEAD coinciden en tipo HTML/ETag con la portada, coherentes con fallback SPA; inspección de dist sin SQLite/WAL/SHM, acceso inicial, .env, certificados o carpetas privadas. No se descargaron cuerpos privados, no afirmar siete bloqueos 403 en preview ni fuga demostrada. Este límite y los dos intentos Opera incompletos se conservan en el informe.
+
+Informe de resultados, archivos, repetición aislada y siguiente tanda: `docs/v1-final-review.md`. README, AGENTS, plan y guía de administración actualizados para evitar reconstrucciones o repetir auditorías sin motivo. Estado: puntos 1–3 comprobados localmente, punto 4 investigado pero diez alertas sin corregir, punto 5 revisado técnicamente con límites registrados y aceptación humana pendiente. Siguiente trabajo: sesión guiada con administrador ficticio, responsables/contenido/autorizaciones e imágenes finales, Google/correo reales, decisión del cambio verificado de correo; presupuesto/alojamiento después. Comentarios/reacciones/retos/logros/eventos/vídeos no se convierten en alcance productivo por su demo. No inventar decisiones del cliente ni tareas independientes nuevas para evitar pedir la validación que falta.
+
+Consolas propias de API/buzón/preview aislados detenidas al terminar; contextos ficticios cerrados. No se detuvieron los servicios habituales. Evidencia local ignorada por Git, incluidas las bases de intentos incompletos y el resumen final; sin secretos en los cambios versionados.
+
+### Ampliación autorizada de comunidad después del punto 5
+
+El usuario pide incluir y perfeccionar comentarios, reacciones, retos, insignias y vídeos en la entrega final, con interfaz más intuitiva y mejor administración. Respuesta explícita sobre vídeos: solo coordinación sube, el grupo autorizado ve. Sustituye la exclusión anterior de estos módulos. Rama `docs/v1-community-expansion`, base `fee87d1`, Git limpio al iniciar.
+
+Inventario contrastado: EditorialPostCard/PostCard ocultan interacción conectada; Comments usa miembros demo; ConnectedCommunity no gestiona acciones react/comment/answer/badges; CommunityWorkspace muestra marcadores de Retos/Insignias conectados. Las vistas completas, modelos/reglas, arte y solicitudes demo ya existen en v1.0 y se reutilizarán. SQLite esquema 12 sin tablas de interacción/retos educativos/concesiones/vídeo; google_challenges es autenticación. Galería privada actual solo JPEG/PNG, sin servicio de vídeo. Se consultaron las referencias conocidas, sin fetch ni nueva auditoría exhaustiva de todos sus árboles en esta sesión.
+
+Plan concreto en `docs/v1-community-expansion.md`: reacciones/comentarios → retos con administración/calendario → insignias conectadas a progreso/revisión → vídeos privados de coordinación → regresión y validación de uso. Criterios de cierre y archivos existentes identificados por bloque. Propuestas (como premoderación de comentarios, colocación de vídeo y límites de medios) se distinguen de decisiones confirmadas. Preservar v1.0 y las integraciones, no habilitar pantallas demo como si fueran servicios reales. Alojamiento/presupuesto al final y dependencias externas agrupadas; nuevo alcance exige revisar capacidad/calendario, no prometer que encaja automáticamente en el plazo original.
+
+Cambios de esta sesión exclusivamente documentales: plan, registro, AGENTS, README, requisitos y plan local; informe anterior anotado como fotografía del alcance anterior. No cambios de aplicación/base, no instalación, servidores o pruebas funcionales nuevas. Comprobación de diferencias/espacios y coherencia documental al cierre; las pruebas 134/844 siguen históricas del código previo, no acreditan esta ampliación. Siguiente trabajo autónomo autorizado: primer bloque, empezando por reacciones persistentes y experiencia conectada, luego comentarios/moderación; no solicitar nuevamente permiso para incluir los cinco módulos.
+
+### Reacciones conectadas (en curso)
+
+Rama `feat/v1-community-reactions`, base `e1b2a0f`, Git limpio al comenzar. Se reutilizan publicación/autor/audiencia, opciones de reacción, tarjetas/editorial/detalle y Configuración oficiales. Migración 13 aditiva: selección única por alumno/publicación con revisión/tombstone, claves de reintento y pausa global inicialmente desactivada. Cambiar/quitar son destinos explícitos; replay no sobrescribe acciones posteriores. El servidor revalida sesión tras el cuerpo, autor/publicación y grupo actuales; contadores sin identidades privadas, excluyen cuentas suspendidas/fuera de audiencia. Lectura y retirada propia conservadas al pausar. Interfaz compartida con cinco opciones visibles, estado propio, guardado y retirada explícita; comentarios aún no conectados.
+
+Primeras pruebas específicas correctas, 12 resultados incluyendo contenedor; se añade caso de límite para tanda final. Tipos/lint iniciales correctos antes de añadir la prueba. Se adaptan expectativas/fixtures históricas al esquema 13 sin relajar permisos. Pendientes suite completa, build/lint final, fixture/recorrido navegador aislado, revisión visual y documentación/cierre. No abrir/migrar la base habitual ni cambiar acceso real; solo nuevas fixtures y copias ficticias.
+
+Avance comprobado: suite completa 147/147 (13 resultados específicos de reacciones incluido contenedor), tipos/lint/build correctos, entrada ~239.55 KB. Primera suite completa se detuvo por la lista exacta de campos públicos anterior: se añadió engagement y comprobación explícita de estructura/cero identidades, conservando los controles de privacidad. Repetición completa correcta. Fixture exclusiva reactions-browser-server, bases distintas por navegador: Brave 28 y Opera GX 28 completas, sin errores JavaScript; incluye ajuste real, selección propia/ajena, cambio/quitar, teclado/listado/detalle, respuesta perdida con misma clave, doble clic, revisión antigua, pausa, otro grupo, almacenamiento y cuatro anchuras. Revisión visual/regresión Community y cierre aún pendientes; no presentar los comentarios como conectados.
+
+Cierre de reacciones: captura inicial a 320 px partía Felicidades; ancho mínimo de botón ajustado a 128 px, nueva compilación/lint y repetición completa 28/28 por navegador. Inspección final claro/oscuro, escritorio/320 px sin desbordamiento ni errores/advertencias de consola; selección textual/borde, retirada y etiquetas completas. Regresión Community oficial 39 por navegador sobre código final, cero errores JavaScript. Modelos Community 29+4 igualdades y publicaciones 23; un aviso WebSocket al ejecutar ambos en paralelo (salida 0), repetición de publicaciones sola correcta sin aviso. No cambios de dependencias ni auditoría nueva de las diez alertas.
+
+### Comentarios conectados (en curso)
+
+Rama `feat/v1-community-comments`, base `edba92f`, Git limpio al iniciar. Reutilizar Comments/CommentItem, detalle/editorial, Publicaciones/Configuración y comprobación de audiencia de publicaciones. Alcance: comentarios inmutables de hasta 400 caracteres, premoderación, estado/motivo privado, retirada propia/administrativa, historial y páginas de 20 con cursor; pausa global inicialmente desactivada y pausa por historia para nuevos envíos, sin borrar lo existente. Migración 14 aditiva. Cambios de grupo y correcciones protegidas de menores devuelven comentarios publicados del autor a revisión con historial; no reviven silenciosamente. No admitir respuestas anidadas ni publicar automáticamente.
+
+Servicio/rutas e interfaz implementados aún sin cierre: nueva bandeja dentro de Publicaciones y acceso a pendientes, conversación/Mis comentarios separados, reintentos de alta conservan texto/clave. Reutiliza revisión/permisos/sesiones, con revalidación tras cuerpo; no abrir/migrar base o acceso habituales durante pruebas. Tipos iniciales correctos; primer lint detectó actualizaciones síncronas de carga desde efectos y se está corrigiendo el patrón, sin desactivar reglas. Primera regresión de reacciones encontró expectativas/fixtures de esquema 13 pendientes de adaptar a 14; no contar como aprobada todavía. Pendientes pruebas específicas completas, regresiones, navegador aislado, visual y guías/cierre.
+
+Avance de comentarios: casos específicos 16/16 y suite completa 163/163 correctos, con fixtures históricas adaptadas a esquema 14 y comprobación de campos públicos nuevos. Tipos/build correctos; lecturas asíncronas corregidas a callbacks de respuesta y dependencias primitivas, sin desactivar lint. Primeros recorridos Brave incompletos por preparación: 1) historia fuera de la primera página del feed, se añade Ver más historias; 2) tras recarga, esperar al snapshot autenticado antes de buscar la historia. Tercer intento avanzó 20 comprobaciones y se detuvo por selector de etiqueta exacta al conservar un motivo tras conflicto. Reproducción corta confirmó motivo conservado y controles bloqueados correctamente; label envolvente incluía el texto del textarea. Se mejoran etiquetas explícitas htmlFor/id, manteniendo criterios de prueba. Pendiente repetición completa en base nueva, Opera, regresiones/visual y cierre. No contar intentos incompletos como aprobados.
+
+Comprobación final de comentarios: 47 por navegador completos, repetidos sobre el último código con asociación de error al campo y respuesta uniforme 404 para retirada ajena/inexistente. Regresión reacciones 28 y Community 39 por navegador: matriz de 228 comprobaciones, sin sumar repeticiones, cero errores JavaScript. Suite API final 163/163, tipos/build/lint correctos. Inspección claro/oscuro en escritorio/320 px de estado propio/formulario y revisión administrativa con texto de 400 caracteres, sin desbordamiento ni errores/advertencias en esa inspección. Una preparación de captura esperaba Ver más historias aunque la historia ya estaba visible; se corrigió para usar el estado real del feed y acotar texto de muestra. Sin dependencia nueva ni cambios de base/credenciales habituales. Pendiente solo guardar puntos de retorno, guías y cierre de esta rama; siguiente bloque Retos.
+
+Cierre de comentarios: puntos de retorno `baa078f` (servicio/migración/pruebas) y `9024905` (interfaz/recorrido). Alcance, archivos, pruebas/incidencias y repetición aislada en `docs/v1-community-comments.md`; README, AGENTS, plan ampliado y guías de administración/respaldos actualizados. Se conserva diseño v1.0 y reacciones. Base/credenciales habituales no abiertas/migradas/modificadas; fixtures bajo .local/tests/comments-browser-*, evidencia/logs excluidos de Git. Consolas propias y contextos ficticios detenidos/cerrados. Sin paquetes nuevos, merge ni despliegue. Estado: comentarios y reacciones comprobados localmente, no producción. Siguiente desarrollo autorizado: Retos con administración sencilla, calendario y progreso persistente, reutilizando ChallengesView/panel/reglas y sustituyendo solo datos/días/identidad de demo al conectar. Después Insignias y vídeos privados de coordinación; Google/correo reales, aceptación de CAI y alojamiento siguen al final. Mantener diez alertas/intermitencias antiguas según informes, no atribuir reparación en esta tarea.
+
+Caso de copia reforzado para arrancar la API desde el respaldo en otro destino: repite 13/13, conserva sesión/selección/clave; no restaura sobre base habitual. Migración 12→13 comprobada con expedientes/sesiones conservados y reacciones vacías/pausadas. Puntos de retorno `3ceb1ee` servidor/migración/pruebas y `2816175` interfaz/recorrido. Ver `docs/v1-community-reactions.md` para archivos, criterios, límites y repetición. README, instrucciones, guías de administración/respaldos y plan ampliado actualizados. Consolas propias y contextos ficticios detenidos/cerrados; no abrir/migrar base/credenciales habituales, no merge/despliegue. Evidencia local excluida de Git en .local/tests/reactions-*. Siguiente trabajo: comentarios con revisión y retirada desde el panel, conservando este avance; retos/insignias/vídeo después, sin pedir nuevamente permiso de alcance.
+
+
+## Retos — avance comprobado, cierre en curso
+
+Rama feat/v1-community-challenges desde 46466b7. Servicio aditivo esquema 15 con banco de 180 preguntas/45 temas (60 por área), tres preguntas diarias según Ciudad de México, calendario de coordinación, respuestas únicas/puntos/constancia/repaso privados. API 178/178, específicas 15/15; modelos demo 27+igualdad y 29+4 igualdades; build correcto. Brave y Opera: 53 comprobaciones completas por navegador, con cuentas nuevas. HEAD de 13 rutas privadas bloqueado en desarrollo. Se corrigió una carga indefinida al seleccionar el mismo grupo. Revisión visual encontró que la ordenación móvil heredada de demo llevaba el selector de tres preguntas detrás del repaso: CSS específico conectado corregido; falta comprobar este último ajuste, completar guías y puntos de retorno. No contar los intentos incompletos como recorridos aprobados. Insignias/vídeo y dependencias externas no cambiaron de estado. Base/acceso habituales intactos.
+
+
+Cierre de Retos: puntos de retorno fbb1545 (servicio/banco/migración/pruebas) y e14eda7 (pantallas/panel/recorridos). Suite final 179/179, incluidos 16 resultados específicos; tipos/build/lint correctos, modelos demo 27+1 igualdad y 29+4 igualdades. Brave y Opera 53 comprobaciones funcionales cada uno; después de corregir el orden móvil, otras 18 de distribución/temas/teclado por navegador: matriz 142, sin sumar repeticiones. HEAD de 13 rutas privadas en desarrollo y ausencia del banco en dist comprobados. Alcance, archivos, incidencias y repetición en docs/v1-community-challenges.md; README, AGENTS, plan ampliado y guías actualizados. Contextos y servicios propios de prueba cerrados; no abrir/migrar/modificar base o acceso habituales. Sin nuevas dependencias, merge ni despliegue. Retos comprobados localmente, no producción. Siguiente bloque autorizado: Insignias persistentes reutilizando catálogo, arte, colección, solicitudes/reglas y este progreso; después vídeos privados de coordinación para el grupo. Validaciones de CAI/Google/correo y alojamiento/presupuesto conservan su tanda final. Alertas e incidencias históricas no se dan por corregidas aquí.
+
+
+## Insignias — implementación en curso
+
+Rama feat/v1-community-badges desde 980a1ec. Inventario revisado: nueve insignias y colección/arte/formularios/solicitudes/revisión/compartición demo en v1.0. Reutilizarlo; falta servicio real. En implementación esquema 16: concesiones únicas con fecha y catálogo congelado, solicitudes privadas con historial, corrección/revocación, tres automáticas desde respuestas reales y publicaciones voluntarias vinculadas. Primer paso: una respuesta; tres días completos seguidos; cinco días completos en total. Reconocimientos institucionales solo coordinación. Todavía no comprobado. No tocar base/acceso habituales. Pruebas en fixtures nuevas.
+
+
+Avance de insignias comprobado: API 193/193, específicas 14/14; modelos de Logros 51+4 igualdades, Retos 27+1 y Community 29+4. Brave y Opera 46 comprobaciones funcionales cada uno y 18 adicionales de temas/ancho/teclado/formulario privado/revisión por navegador; se inspeccionaron capturas de colección y revisión. Primer intento Brave incompleto tras 12 comprobaciones por selector exacto de texto que incluía prefijo en pantalla; se ajustó el selector y pasó completo en otra base nueva. Se corrigió también la prueba entre navegadores para comprobar únicamente las historias del autor actual, ya que comparten grupo. Lint señaló una variable de prueba sin reasignación; corregida, repetición pendiente. Pendiente regresión final de Retos, puntos de retorno, guías y cierre. No modificar base/acceso habituales.
+
+
+Cierre de Insignias: puntos de retorno bf9cf2e (servicio/migración/pruebas) y c8788bf (colección/panel/recorridos). Esquema 16, nueve definiciones originales con concesiones únicas/históricas y solicitud/corrección/compartición privadas hasta moderación. API 193/193; específicas 14/14; tipos/build/lint correctos; modelos Logros 51+4 igualdades, Retos 27+1 y Community 29+4. Brave y Opera: insignias 46+18 por navegador y regresión Retos 53 por navegador: matriz 234 sin sumar repeticiones. Capturas de colección/claro/oscuro y revisión móvil inspeccionadas, sin errores JavaScript en esos recorridos. Informe docs/v1-community-badges.md registra archivos, reglas, incidencias, repetición y pendientes; guías/README/AGENTS/plan actualizados. No se repite la matriz completa de comentarios/reacciones ni auditoría sin cambios; alertas históricas conservadas. Base/acceso habituales no abiertos/migrados/modificados, sin dependencias nuevas, merge ni despliegue. Siguiente: vídeos privados de coordinación para el grupo; preparar/perfilar límites y validación sin tratar vídeo como JPEG ni instalar sistema/contratar servicios implícitamente. Google/correo reales, material/autorizaciones/aceptación y alojamiento/presupuesto mantienen su tanda final.
+
+Contextos de navegador y servicios propios de pruebas cerrados al terminar; entorno habitual conservado. Evidencias locales ignoradas en .local/tests/badges-* y fixture separada challenges-browser-* de regresión.
+
+
+Planificación actualizada al 12 de noviembre, sin cambios de aplicación: docs/pendientes-2026-11-12.md contrasta HEAD 6e1ee02, informes y límites explícitos de arranque/orígenes/cookies locales. Pendientes: vídeos, preparación de producción, operación de base/medios, pulido/contenido, revisión integral, tanda Google/correo/CAI y presupuesto/alojamiento final. Propone tres semanas hasta aproximadamente el 3 de diciembre, con mejoras opcionales de repaso dirigido, visión educativa para coordinación, biblioteca de vídeos, búsqueda de concesiones y bienvenida. Estas propuestas no se dan por autorizadas ni implementadas. Corregido el siguiente paso obsoleto del plan ampliado: vídeos, no rehacer Retos/Insignias. No nuevas pruebas, migraciones ni acceso a base habitual.
+
+
+Corrección de pantalla en blanco local: rama fix/v1-dev-preview-cache desde bdef066. HTTP 200 y health no bastaban: React recibía tres 504 Outdated Optimize Dep y root quedaba vacío. vite.config.ts ahora usa caché web dedicada por puerto API, separada de verificadores SSR. Portada visible tras cambio y tras ejecutar modelos Retos (27+1 igualdad)/Community (29+4); Brave/Opera anónimos renderizan portada, login y acceso administrativo a 375px sin errores JavaScript o módulos fallidos. Tipos, lint de configuración y HEAD 13 privados correctos. Informe docs/solucion-pantalla-blanca-local.md; no abrir/migrar base/credenciales ni reiniciar API habitual. Web 5173 sigue encendida; recargar pestaña si conservó módulos anteriores. No se repite suite API o acceso autenticado habitual. Preferencia reciente del usuario: vídeos tienen menor importancia y pueden quedar como mejora opcional; no dar por prioritaria su implementación antes de aclarar el siguiente trabajo.

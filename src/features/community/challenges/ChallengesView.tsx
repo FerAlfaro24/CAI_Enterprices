@@ -8,9 +8,11 @@ import { ChallengeQuestionPanel } from './ChallengeQuestionPanel'
 import { ChallengeRewards } from './ChallengeRewards'
 import { selectChallengeProgress } from './progress'
 import s from './challenges.module.css'
+import { ConnectedChallengesView } from './ConnectedChallengesView'
 
 export function ChallengesView() {
-  const { state, dispatch } = useCommunity()
+  const { state, dispatch,connection } = useCommunity()
+  if(connection)return <ConnectedChallengesView connection={connection}/>
   const challenge = challenges.find((item) => item.id === state.challengeId) ?? challenges[0]!
   const progress = selectChallengeProgress(state)
   const openDemo = () => {

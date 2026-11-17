@@ -11,9 +11,11 @@ import { CommunityAchievements } from './CommunityAchievements'
 import { BadgeRequestDialog } from './BadgeRequestForm'
 import type { BadgeGrant } from './types'
 import s from './achievements.module.css'
+import { ConnectedAchievementsView } from './ConnectedAchievementsView'
 
 type Tab = 'mine' | 'community'
-export function AchievementsView() {
+export function AchievementsView(){const {connection}=useCommunity();return connection?<ConnectedAchievementsView connection={connection}/>:<DemoAchievementsView/>}
+function DemoAchievementsView() {
   const { state } = useCommunity()
   const [tab, setTab] = useState<Tab>('mine')
   const [requestBadgeId, setRequestBadgeId] = useState<string | null>(null)

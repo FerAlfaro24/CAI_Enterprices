@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Seguridad de la contraseña administrativa propia
 
 Comprobado localmente el 12 de noviembre de 2026. Rama `feat/v1-admin-account-security`, base `7daa623` de `chore/v1-stabilization`. Puntos de retorno: `1dc3c4a` (servicio/permisos) y `a7465f0` (Configuración y pruebas de navegador). Conserva el panel v1.0 y las integraciones acumulativas; no crea otra administración.

@@ -1,3 +1,7 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI — Tema global, navegación institucional y reto de Inicio
 
 Fecha: 19 de octubre de 2026. Trabajo exclusivo en `.worktrees/cai-demo`, rama `integration/cai-demo`. Se conservaron los cambios de integración existentes en el índice. Sin commits, push, merge, despliegue ni dependencias nuevas.
@@ -78,4 +82,4 @@ No se probaron dispositivos físicos, lectores de pantalla, Firefox ni Safari. B
 | Documentación | Este archivo, `docs/cai-demo-integration.md`, `docs/landing-implementation.md` |
 | Evidencias nuevas | `review/cai-demo-theme-polish/` |
 
-[Resultados detallados](../review/cai-demo-theme-polish/resultados.json) · [Capturas para revisión](../review/cai-demo-theme-polish/README.md).
+Resultados detallados (`../review/cai-demo-theme-polish/resultados.json`) · Capturas para revisión (`../review/cai-demo-theme-polish/README.md`).

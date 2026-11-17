@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Galería privada conectada al diseño oficial
 
 > Cierre histórico del bloque 7. La consolidación de rutas se completó después en `v1-unified-navigation.md`; consultar PROJECT_STATE para la siguiente tarea vigente.

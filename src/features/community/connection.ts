@@ -3,6 +3,11 @@ import type { Member, Post } from './types'
 import type { StudentProfile, StudentProfileDraft } from '../local-access/api'
 
 export interface CommunityConnection {
+  badges:import('../../../server/contracts').BadgeSnapshot
+  requestBadge:(badgeId:string,description:string,key:string)=>Promise<boolean>
+  withdrawBadge:(item:import('../../../server/contracts').BadgeApplication)=>Promise<boolean>
+  challenges: import('../../../server/contracts').ChallengeSnapshot
+  answerChallenge:(question:{id:string;revision:number},answerIndex:number,key:string)=>Promise<boolean>
   user: StudentUser
   profile: StudentProfile
   saveProfile: (draft: StudentProfileDraft) => Promise<boolean>
@@ -12,6 +17,10 @@ export interface CommunityConnection {
   seen: (id: number) => Promise<boolean>
   mine: OwnPost[]
   submissionsOpen: boolean
+  reactionsOpen: boolean
+  commentsOpen: boolean
+  handleFailure: (error:unknown) => void
+  react: (post: Post, reaction: import('./types').Reaction | null, key: string) => Promise<boolean>
   busy: boolean
   error: string
   notice: string
@@ -31,6 +40,7 @@ export function publicMember(profile: GroupMember): Member {
 export function feedPost(post: import('../local-access/api').PublishedPost): Post {
   return { id: post.id, authorId: post.author.id, title: post.title, body: post.body,
     category: post.category, createdAt: post.publishedAt ?? post.createdAt, status: 'approved',
-    pinOrder: null, layout: 'text', photos: [], comments: [], myReaction: null,
-    reactions: { love: 0, wellDone: 0, congrats: 0, amazing: 0, funny: 0 } }
+    recognition:post.recognition,pinOrder: null, layout: 'text', photos: [], comments: [], myReaction: post.engagement?.myReaction ?? null,
+    reactionRevision: post.engagement?.revision ?? 0, commentCount:post.commentCount??0,commentsOpen:post.commentsOpen!==false,
+    reactions: post.engagement?.counts ?? { love: 0, wellDone: 0, congrats: 0, amazing: 0, funny: 0 } }
 }

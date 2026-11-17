@@ -1,4 +1,5 @@
 import { DatabaseSync } from 'node:sqlite'
+import { challengeBank } from './challenge-bank.ts'
 import { mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { accessRequests, students } from '../src/features/admin/data/mockData.ts'
@@ -211,6 +212,93 @@ export function migrateDatabase(db: DatabaseSync) {
       );
       CREATE INDEX student_record_history ON student_record_changes(request_id,id DESC);
       INSERT INTO migrations VALUES (12, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 13').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      ALTER TABLE community_controls ADD COLUMN reactions_open INTEGER NOT NULL DEFAULT 0 CHECK(reactions_open IN (0,1));
+      CREATE TABLE post_reactions (
+        publication_id INTEGER NOT NULL REFERENCES publications(id), student_id INTEGER NOT NULL REFERENCES students(request_id),
+        reaction TEXT CHECK(reaction IS NULL OR reaction IN ('love','wellDone','congrats','amazing','funny')),
+        revision INTEGER NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(publication_id,student_id)
+      );
+      CREATE TABLE reaction_requests (
+        student_id INTEGER NOT NULL REFERENCES students(request_id), request_key TEXT NOT NULL,
+        fingerprint TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY(student_id,request_key)
+      );
+      INSERT INTO migrations VALUES (13, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 14').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      ALTER TABLE community_controls ADD COLUMN comments_open INTEGER NOT NULL DEFAULT 0 CHECK(comments_open IN (0,1));
+      ALTER TABLE publications ADD COLUMN comments_open INTEGER NOT NULL DEFAULT 1 CHECK(comments_open IN (0,1));
+      CREATE TABLE post_comments (
+        id INTEGER PRIMARY KEY, publication_id INTEGER NOT NULL REFERENCES publications(id),
+        author_id INTEGER NOT NULL REFERENCES students(request_id), request_key TEXT NOT NULL,
+        body TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pendiente' CHECK(status IN ('pendiente','publicado','rechazado','retirado')),
+        reason TEXT, revision INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL,
+        UNIQUE(author_id,request_key)
+      );
+      CREATE INDEX comment_conversation ON post_comments(publication_id,status,id);
+      CREATE INDEX comment_review ON post_comments(status,id);
+      CREATE TABLE comment_audit (
+        id INTEGER PRIMARY KEY, comment_id INTEGER NOT NULL REFERENCES post_comments(id),
+        admin_id INTEGER REFERENCES admin_users(id), student_id INTEGER REFERENCES students(request_id),
+        action TEXT NOT NULL, reason TEXT, created_at TEXT NOT NULL
+      );
+      INSERT INTO migrations VALUES (14, strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
+  if (!db.prepare('SELECT version FROM migrations WHERE version = 15').get()) {
+    transaction(db, () => {
+      db.exec(`CREATE TABLE challenge_bank (
+        id TEXT PRIMARY KEY, content_json TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1,
+        status TEXT NOT NULL CHECK(status IN ('draft','ready','archived')), source TEXT NOT NULL CHECK(source IN ('base','custom'))
+      );
+      CREATE TABLE challenge_controls (id INTEGER PRIMARY KEY CHECK(id=1), enabled INTEGER NOT NULL CHECK(enabled IN (0,1)), revision INTEGER NOT NULL DEFAULT 1);
+      INSERT INTO challenge_controls VALUES (1,1,1);
+      CREATE TABLE daily_challenges (
+        id INTEGER PRIMARY KEY, day TEXT NOT NULL, program TEXT NOT NULL, group_name TEXT NOT NULL,
+        slot INTEGER NOT NULL CHECK(slot BETWEEN 0 AND 2), bank_id TEXT NOT NULL REFERENCES challenge_bank(id),
+        content_json TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1,
+        state TEXT NOT NULL CHECK(state IN ('published','archived')), source TEXT NOT NULL CHECK(source IN ('automatic','scheduled')),
+        UNIQUE(day,program,group_name,slot)
+      );
+      CREATE TABLE challenge_attempts (
+        id INTEGER PRIMARY KEY, student_id INTEGER NOT NULL REFERENCES students(request_id),
+        assignment_id INTEGER NOT NULL REFERENCES daily_challenges(id), day TEXT NOT NULL, slot INTEGER NOT NULL CHECK(slot BETWEEN 0 AND 2),
+        answer_index INTEGER NOT NULL, correct INTEGER NOT NULL CHECK(correct IN (0,1)), points INTEGER NOT NULL CHECK(points IN (5,15)),
+        created_at TEXT NOT NULL, request_key TEXT NOT NULL, fingerprint TEXT NOT NULL,
+        UNIQUE(student_id,day,slot), UNIQUE(student_id,request_key)
+      );
+      CREATE INDEX challenge_history ON challenge_attempts(student_id,id DESC);
+      INSERT INTO migrations VALUES (15,strftime('%Y-%m-%dT%H:%M:%fZ','now'));`)
+      const insert=db.prepare("INSERT INTO challenge_bank(id,content_json,status,source) VALUES (?,?,'ready','base')")
+      for(const question of challengeBank)insert.run(question.id,JSON.stringify(question))
+    })
+  }
+  if(!db.prepare('SELECT version FROM migrations WHERE version=16').get()){
+    db.exec(`BEGIN IMMEDIATE;
+      CREATE TABLE badge_requests (
+        id INTEGER PRIMARY KEY,student_id INTEGER NOT NULL REFERENCES students(request_id),badge_id TEXT NOT NULL,
+        description TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected','withdrawn')),
+        revision INTEGER NOT NULL DEFAULT 1,reason TEXT,created_at TEXT NOT NULL,request_key TEXT NOT NULL,UNIQUE(student_id,request_key)
+      );
+      CREATE UNIQUE INDEX badge_pending ON badge_requests(student_id,badge_id) WHERE status='pending';
+      CREATE TABLE badge_grants (
+        id INTEGER PRIMARY KEY,student_id INTEGER NOT NULL REFERENCES students(request_id),badge_id TEXT NOT NULL,
+        badge_json TEXT NOT NULL,source TEXT NOT NULL CHECK(source IN ('automatic','cai')),condition TEXT NOT NULL,awarded_at TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','revoked')),revision INTEGER NOT NULL DEFAULT 1,reason TEXT,
+        source_request INTEGER REFERENCES badge_requests(id),create_key TEXT UNIQUE,fingerprint TEXT,UNIQUE(student_id,badge_id)
+      );
+      CREATE TABLE badge_audit (
+        id INTEGER PRIMARY KEY,request_id INTEGER REFERENCES badge_requests(id),grant_id INTEGER REFERENCES badge_grants(id),
+        admin_id INTEGER REFERENCES admin_users(id),student_id INTEGER REFERENCES students(request_id),action TEXT NOT NULL,reason TEXT,created_at TEXT NOT NULL
+      );
+      ALTER TABLE publications ADD COLUMN badge_grant_id INTEGER REFERENCES badge_grants(id);
+      CREATE UNIQUE INDEX publication_badge_grant ON publications(badge_grant_id) WHERE badge_grant_id IS NOT NULL AND status IN ('pendiente','publicada');
+      INSERT INTO migrations VALUES (16,strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
   return db

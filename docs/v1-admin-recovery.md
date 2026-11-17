@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Recuperación administrativa
 
 **Comprobada localmente con entrega ficticia; correo real pendiente.** Rama `feat/v1-admin-recovery`, base `d8df768`. Puntos de retorno: `2d1ec13` (servicio/migración/pruebas) y `874b00a` (pantallas/recorrido). Resuelve el desarrollo local del primero de los cinco puntos acordados; no incluye otras cuentas, expediente ni publicación.

@@ -1,3 +1,7 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community — Fase 6.3: Retos y Logros
 
 Entrega conjunta de Retos, Mis Logros y La Comunidad **aprobada visual y funcionalmente por el usuario**. Se autoriza su cierre mediante un único commit y push exclusivamente a `origin/feat/community-visual-polish`. No se inicia 6.4; no se realiza merge ni despliegue.
@@ -79,7 +83,7 @@ Mis Logros reduce **570 px (14,8 %) a 375** y **645 px (15,8 %) a 320**. El cat�
 
 En Retos la pregunta empieza a 395,66 px a 375 (antes 400,77) y a 389,22 px a 320 (antes 396,30). A 768 se adelanta de 443,58 a 383,58 px. Se preserva la tipografía y el recorrido nuevo añade controles; no se afirma una reducción de altura en todos los tamaños. El aumento de escritorio responde a títulos e ilustraciones mayores y a la distribución del catálogo en dos columnas a 1024.
 
-Registros completos: [antes](../review/community-phase-6-3/antes.json), [después y contrastes Brave](../review/community-phase-6-3/validacion-conjunta.json), [Opera GX](../review/community-phase-6-3/compatibilidad-opera-gx.json).
+Registros completos: antes (`../review/community-phase-6-3/antes.json`), después y contrastes Brave (`../review/community-phase-6-3/validacion-conjunta.json`), Opera GX (`../review/community-phase-6-3/compatibilidad-opera-gx.json`).
 
 ## Validación ejecutada
 
@@ -125,7 +129,7 @@ La incidencia histórica de **0,03125 px** en el ancho de CTA de Inicio conserva
 
 ## Evidencia para revisar
 
-**[Abrir comparativas y estados](../review/community-phase-6-3/index.html)**. También puede abrirse mediante el servidor local de desarrollo en `/review/community-phase-6-3/index.html`.
+**Abrir comparativas y estados (`../review/community-phase-6-3/index.html`)**. También puede abrirse mediante el servidor local de desarrollo en `/review/community-phase-6-3/index.html`.
 
 Son **18 PNG**: cinco capturas iniciales, ocho finales de vistas principales y cinco de estados. El acierto y la insignia recién desbloqueada comparten una captura; el estado vacío está en Mis Logros. Se incluyen Retos escritorio/móvil claro y oscuro, ambas vistas de Logros escritorio/móvil, solicitud pendiente/aprobada y compositor voluntario.
 
@@ -133,13 +137,13 @@ Comparativas directas:
 
 | Vista | Antes | Después |
 | --- | --- | --- |
-| Retos 1440 | [Antes](../review/community-phase-6-3/antes-retos-1440.png) | [Después](../review/community-phase-6-3/despues-retos-1440-claro.png) |
-| Retos 375 | [Antes](../review/community-phase-6-3/antes-retos-375.png) | [Después](../review/community-phase-6-3/despues-retos-375-claro.png) |
-| Mis Logros 1440 | [Antes](../review/community-phase-6-3/antes-mis-logros-1440.png) | [Después](../review/community-phase-6-3/despues-mis-logros-1440-claro.png) |
-| Mis Logros 375 | [Antes](../review/community-phase-6-3/antes-mis-logros-375.png) | [Después](../review/community-phase-6-3/despues-mis-logros-375-claro.png) |
-| La Comunidad 1440 | [Antes](../review/community-phase-6-3/antes-comunidad-1440.png) | [Después](../review/community-phase-6-3/despues-comunidad-1440-claro.png) |
+| Retos 1440 | Antes (`../review/community-phase-6-3/antes-retos-1440.png`) | Después (`../review/community-phase-6-3/despues-retos-1440-claro.png`) |
+| Retos 375 | Antes (`../review/community-phase-6-3/antes-retos-375.png`) | Después (`../review/community-phase-6-3/despues-retos-375-claro.png`) |
+| Mis Logros 1440 | Antes (`../review/community-phase-6-3/antes-mis-logros-1440.png`) | Después (`../review/community-phase-6-3/despues-mis-logros-1440-claro.png`) |
+| Mis Logros 375 | Antes (`../review/community-phase-6-3/antes-mis-logros-375.png`) | Después (`../review/community-phase-6-3/despues-mis-logros-375-claro.png`) |
+| La Comunidad 1440 | Antes (`../review/community-phase-6-3/antes-comunidad-1440.png`) | Después (`../review/community-phase-6-3/despues-comunidad-1440-claro.png`) |
 
-El [resumen técnico JSON](../review/community-phase-6-3/resultados.json) conserva resultados y auditoría de alcance. Las evidencias de `review/` y los archivos auxiliares de `.playwright-mcp/` son locales; no forman parte del código de producto para un futuro respaldo.
+El resumen técnico JSON (`../review/community-phase-6-3/resultados.json`) conserva resultados y auditoría de alcance. Las evidencias de `review/` y los archivos auxiliares de `.playwright-mcp/` son locales; no forman parte del código de producto para un futuro respaldo.
 
 ## Archivos de la entrega
 

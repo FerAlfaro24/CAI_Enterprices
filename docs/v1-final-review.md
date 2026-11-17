@@ -1,4 +1,8 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Revisión final local de CAI, punto 5
+
+> Decisión posterior a esta revisión: el usuario incluyó comentarios, reacciones, retos, insignias y vídeos en la entrega final; solo coordinación sube vídeos. Ver [comunidad ampliada](v1-community-expansion.md). Las exclusiones y el siguiente paso de este informe describen el alcance anterior; sus resultados de pruebas siguen siendo evidencia de ese código, no de funciones nuevas.
 
 **Revisión técnica realizada; aceptación de CAI y preparación de producción pendientes.** Rama `chore/v1-final-review`, base `9274dc9`, punto de retorno de código `940573a`. Conserva la interfaz oficial de `release/cai-demo-v1.0` (`f3ba46b`) y los avances acumulados hasta expediente `c712abb`. No se fusionaron ramas ni se publicó el sitio.
 

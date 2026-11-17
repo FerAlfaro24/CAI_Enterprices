@@ -1,3 +1,5 @@
+> **Informe técnico de una entrega — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 > Fotografía del bloque 5. Recuperación, avisos y contacto se integraron después: consultar `v1-inbox-recovery-contact.md` y el registro vigente de `PROJECT_STATE.md`.
 
 # Grupos, asignaciones y ajustes mínimos conectados

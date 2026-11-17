@@ -1,3 +1,7 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community — Fase 1: base visual y navegación
 
 Implementación limitada a la fase 1, sobre `feat/community`. Referencia: los cinco PNG aprobados de `design-reference/`. No se implementan el hero editorial, las nuevas tarjetas, álbumes ni el sistema de insignias. Las siguientes fases requieren revisión del usuario.
@@ -50,7 +54,7 @@ Las pruebas se realizaron con Vite local y perfiles de automatización aislados.
 
 ## Revisión visual
 
-Abrir [la página de revisión](../review/community-phase-1/index.html) para ver las capturas reales de Brave, sin necesitar el servidor.
+Abrir la página de revisión (`../review/community-phase-1/index.html`) para ver las capturas reales de Brave, sin necesitar el servidor.
 
 | Captura | Estado |
 | --- | --- |

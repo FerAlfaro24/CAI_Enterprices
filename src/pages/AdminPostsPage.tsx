@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router'
+import { AdminCommentsPanel } from '../features/admin/components/AdminCommentsPanel'
 import s from '../features/admin/admin.module.css'
 import { Icon } from '../features/admin/components/ui'
 import { PostCard, PostDialog } from '../features/admin/components/posts'
@@ -14,6 +16,8 @@ const statusFilters: { value: PostStatus; label: string }[] = [
 
 export function AdminPostsPage() {
   const { state, connection } = useAdmin()
+  const [params,setParams]=useSearchParams()
+  const comments=Boolean(connection&&params.get('bandeja')==='comentarios')
   const [status, setStatus] = useState<PostStatus>('pendiente')
   const [type, setType] = useState<PostType | 'todas'>('todas')
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -31,10 +35,11 @@ export function AdminPostsPage() {
             Revisa el texto y la privacidad antes de publicar. Solo los alumnos del mismo programa y grupo podrán ver cada historia aprobada.
           </p>
         </div>
-        {connection && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={connection.busy} onClick={() => { void connection.refresh() }}><Icon name="refresh" size={16} />Actualizar publicaciones</button>}
+        {connection&&!comments && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={connection.busy} onClick={() => { void connection.refresh() }}><Icon name="refresh" size={16} />Actualizar publicaciones</button>}
       </div>
 
-      <section className={s.stats} aria-label="Resumen de moderación">
+      {connection&&<div className={s.tabs} role="group" aria-label="Tipo de moderación"><button type="button" className={s.tab} aria-pressed={!comments} onClick={()=>setParams({})}>Historias</button><button type="button" className={s.tab} aria-pressed={comments} onClick={()=>setParams({bandeja:'comentarios'})}>Comentarios ({connection.commentCounts.pendiente} en revisión)</button></div>}
+      {comments?<AdminCommentsPanel/>:<><section className={s.stats} aria-label="Resumen de moderación">
         <p><strong>{counts.pendiente}</strong>en revisión</p>
         <p><strong>{flagged}</strong>requieren verificación</p>
         <p><strong>{counts.publicada}</strong>publicadas</p>
@@ -71,6 +76,7 @@ export function AdminPostsPage() {
       </p>
 
       <PostDialog post={state.posts.find((p) => p.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />
+      </>}
     </>
   )
 }

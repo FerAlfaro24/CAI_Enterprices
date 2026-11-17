@@ -1,3 +1,5 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community — Fase 2: Inicio
 
 Implementación limitada a Inicio, en `feat/community`, a partir del PNG aprobado `design-reference/HOME — DESKTOP.png` (1440 × 1730). Se abrió visualmente antes de implementar y se comparó con capturas de la aplicación real. No se utilizó como fondo ni se accedió a capas de Figma: esta fase toma el PNG local como fuente visual. No se modifica `reference/` ni ninguno de los cinco diseños.

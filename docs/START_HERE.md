@@ -1,60 +1,66 @@
-# CAI — Empieza aquí (continuidad independiente del chat)
+# CAI — empieza aquí
 
-**Corte de inventario: 17 de noviembre de 2026.** Este documento es el punto de entrada para una persona o agente que no conoce las conversaciones previas. Describe hechos comprobados en las referencias remotas y separa pendientes de decisiones.
-
-## Qué es CAI
-
-Centro de Asesorías Integrales: sitio público de enseñanza de inglés, comunidad privada de alumnos y administración de solicitudes, alumnos, grupos y contenido. Participan potencialmente menores; **no conectar estudiantes reales ni publicar el sistema** sin consentimiento, infraestructura, privacidad y validación operacional.
+**Corte: 17 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
 
 ## Qué rama abrir
 
-- **Para estudiar el diseño v1.0 congelado:** `release/cai-demo-v1.0` (`f3ba46b`). Referencia visual, no el avance funcional más completo.
-- **Para continuar el trabajo local acumulado:** `chore/v1-final-review` (`fee87d1` al corte). Incluye la integración, los ajustes y la revisión final local documentada. **No es producción**.
-- **Para revisar esta actualización documental:** `docs/continuidad-auditoria-2026-11-17`, nacida de `chore/v1-final-review`; integrar mediante PR tras revisión.
-- **No empezar desde `main` para desarrollar la última versión:** `main` (`a3c2569`) está 59 commits detrás de `chore/v1-final-review` por comparación de GitHub al corte; es antecesora, no el avance funcional completo.
+| Referencia | Uso |
+| --- | --- |
+| `docs/continuidad-auditoria-2026-11-17` | Esta documentación corregida y código funcional completo. PR #9, sin fusión automática. |
+| `fix/v1-dev-preview-cache` / `3971284` | Última base funcional verificada: insignias, retos y corrección de caché. |
+| `feat/v1-community-badges` / `bdef066` | Paso anterior acumulativo; sin la corrección posterior de caché. |
+| `chore/v1-final-review` / `fee87d1` | Revisión anterior, 15 commits detrás; sin las integraciones posteriores de reacciones/comentarios/retos/insignias. |
+| `release/cai-demo-v1.0` / `f3ba46b` | Referencia visual oficial congelada. |
+| `main` / `a3c2569` | Rama predeterminada antigua, 74 commits detrás de la base funcional al corte. |
 
-Ver [inventario y tratamiento de ramas](BRANCHES.md). No fusionar todas las ramas `feat/*`: muchas son pasos acumulativos o versiones superadas de los mismos módulos.
+Esta actualización conserva los siete commits originales de PR #9 e incorpora la línea funcional en su rama de trabajo. La PR se dirige a `fix/v1-dev-preview-cache` y su diferencia debe ser **solo Markdown**. No se mueve main/release ni se fusiona la PR. Ver [BRANCHES](BRANCHES.md).
 
-## Estado funcional en lenguaje preciso
+## Qué hay
 
-| Módulo | Estado en la revisión final | Límite |
-| --- | --- | --- |
-| Sitio institucional | Landing y navegación visual integradas | Información comercial y fotografías definitivas requieren aprobación |
-| Solicitudes y cuentas | Registro, revisión, activación, sesiones, suspensión, expedientes y control de permisos locales | Verificación humana de tutores, Google/correo reales y producción pendientes |
-| Administración | Dashboard oficial conectado, equipo administrador, grupos, bandejas y moderación | Prueba de usabilidad con quien administrará CAI pendiente |
-| Comunidad | Feed autenticado, publicaciones de texto moderadas y galería privada por permisos locales | Retos, insignias, comentarios/reacciones pertenecen a demo o alcance no aprobado para persistencia |
-| Datos y operación | SQLite local, pruebas y herramientas de respaldo/verificación | No existe despliegue apto para estudiantes; restauración productiva y operación pendientes |
+Sitio institucional, comunidad privada y panel. Persistencia/permisos locales para solicitudes/activación, alumnos/tutores, grupos, moderación, comentarios, reacciones, imágenes, perfiles, equipo y recuperación/avisos. Retos e Insignias **ya conectados**: 180 preguntas/45 temas, tres al día y nueve insignias con historial y compartición voluntaria.
 
-**Evidencia histórica:** [revisión final local](v1-final-review.md): 134 pruebas API y 844 comprobaciones de navegador (24 recorridos completos); dos intentos Opera incompletos que pasaron en nueva ejecución sin causa inicial confirmada; fotografías externas no verificadas en inspección. Esto **no** implica que las pruebas se hayan vuelto a ejecutar en esta rama documental.
+SQLite esquema 16. Google real, entrega de correo, contenido/autorizaciones, aceptación de CAI e infraestructura pendientes. **Vídeos opcionales y de menor prioridad**, no implementados; si se retoman, solo coordinación sube y grupo autorizado ve. No ejecutar planes antiguos como tareas abiertas.
 
-## Abrir en VS Code sin tocar datos existentes
+El servidor rechaza NODE_ENV=production y está limitado a localhost. No es un despliegue validado. Pruebas con datos ficticios. Ver [PROJECT_STATE](PROJECT_STATE.md) y [NEXT_STEPS](NEXT_STEPS.md).
 
-```bash
-git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
-cd CAI_Enterprices
-git fetch origin
-git switch --track origin/chore/v1-final-review
-npm ci
-npm run dev:local
+## Recuperar un clon en Windows
+
+```powershell
+git --version
+node --version
+npm.cmd --version
 ```
 
-Requiere Node.js **>=24.12.0** y npm **>=10**. El servidor local está previsto en `http://127.0.0.1:5173`. **Si ya hay una instalación local, no volver a ejecutar `local:setup` ni sustituir su base o credenciales.** Antes de configurar un equipo nuevo, leer [backend local](local-backend.md), [gestión administrativa](guia-administracion.md) y [respaldos](respaldo-recuperacion-local.md). En PowerShell puede usarse `npm.cmd` cuando `npm.ps1` esté bloqueado.
+Node >=24.12.0, npm >=10. Repositorio privado: autentícate con el gestor de GitHub que utilices; no pongas tokens en comandos/archivos. Para un clon nuevo:
 
-Comprobaciones de código, cuando corresponda: `npm run lint`, `npm run typecheck`, `npm run build` y `npm run test:api`. Las pruebas de navegador requieren sus servidores/fixtures aislados descritos en los informes; **no ejecutarlas contra la base habitual**. Esta actualización no ejecutó pruebas: solo inspección documental remota.
+```powershell
+git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
+cd CAI_Enterprices
+git switch --track origin/docs/continuidad-auditoria-2026-11-17
+code .
+npm.cmd ci
+```
 
-## Lecturas obligatorias y orden
+En un clon existente, comprobar estado/cambios, actualizar referencias y elegir rama; no crear el seguimiento otra vez si ya existe. No reset/clean ni reemplazo de datos. No instalar herramientas ni cambiar políticas del sistema implícitamente. Si npm.ps1 está bloqueado, usar npm.cmd.
 
-1. **Esta página** para orientación.
-2. [PROJECT_STATE.md](PROJECT_STATE.md) para decisiones, historial detallado y último punto de retorno.
-3. [BRANCHES.md](BRANCHES.md) para elegir rama y evitar fusiones duplicadas.
-4. [NEXT_STEPS.md](NEXT_STEPS.md) para prioridades, responsables y bloqueos.
-5. [v1-final-review.md](v1-final-review.md) para evidencia, incidencias y límites.
-6. `AGENTS.md` para normas de desarrollo; guías técnicas especializadas según la tarea.
+## Abrir y probar
 
-## Reglas de continuidad
+Seguir [RUN_LOCAL](RUN_LOCAL.md): separa fixture nueva con cuenta ficticia de la instalación que ya tenga datos. No hay contraseña real universal en GitHub. Los servicios deben estar encendidos; un enlace localhost no es un sitio público permanente.
 
-- Documentar **en la misma PR** cada cambio funcional: qué cambió, rama/base, pruebas realmente ejecutadas, riesgos, estado y siguiente paso.
-- No reemplazar diseño oficial con pantallas prototipo antiguas. No dar por completado un producto porque existe una demo.
-- Los documentos de fases `community-phase-*`, `prototype-plan.md`, `frontend-foundation.md`, `landing-implementation.md` y otros informes de funcionalidades terminadas son **bitácoras históricas**, no instrucciones vigentes por sí solos. No borrarlos sin revisión.
-- Nunca introducir secretos, datos de estudiantes, bases de datos o credenciales en Git. No hacer merge, borrar ramas ni desplegar por inferencia.
-- Si esta guía y el código difieren, inspeccionar la rama y registrar la corrección documental antes de trabajar.
+Rutas habituales: `/` portada, `/login` alumno, `/community` comunidad protegida y `/admin` panel/acceso administrativo. El alumno necesita aprobación y activación; administrar no crea una sesión de alumno. Confirmar renderizado en navegador, además de HTTP.
+
+## Orden de lectura
+
+1. Esta página y [PROJECT_STATE](PROJECT_STATE.md): orientación y hechos.
+2. [BRANCHES](BRANCHES.md): cadena y clasificación de ramas.
+3. [NEXT_STEPS](NEXT_STEPS.md): pendientes, propuestas y dependencias.
+4. [RUN_LOCAL](RUN_LOCAL.md), [TESTING](TESTING.md) y [guía del panel](guia-administracion.md).
+5. [DOCUMENTATION_INDEX](DOCUMENTATION_INDEX.md) para cualquier otro documento; [AGENTS](../AGENTS.md) para normas.
+
+Los informes de entregas describen sus propios cortes; sus próximos pasos históricos no prevalecen sobre las guías vigentes. [PROJECT_HISTORY](PROJECT_HISTORY-2026-11-12.md) conserva el registro anterior. No confundir evidencia local ignorada con archivos recuperables tras clonar.
+
+## Continuar
+
+Identificar componente/servicio existente y criterio de cierre. Crear rama desde el avance funcional acordado; no fusionar todas las features ni duplicar pantallas. Cada entrega registra base/commit, alcance, archivos, pruebas realmente ejecutadas/no ejecutadas y siguiente paso. Mantener estas guías junto al código.
+
+Esta auditoría es documental: no reejecuta pruebas de producto ni valida producción. La aplicación no cambia respecto a `3971284`.

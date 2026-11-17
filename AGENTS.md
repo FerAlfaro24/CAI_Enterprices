@@ -1,47 +1,37 @@
-# CAI — Guía para agentes de desarrollo
+# CAI — instrucciones vigentes para agentes
 
-> **Inicio obligatorio de una sesión nueva:** `docs/START_HERE.md` → `docs/BRANCHES.md` → `docs/NEXT_STEPS.md` → `docs/PROJECT_STATE.md` → documentación del módulo. Consultar la rama/ref actual en Git antes de seguir los hitos históricos. Esta nota documental es del 17-11-2026; no implica producción ni pruebas nuevas.
+## Antes de trabajar
 
+1. Leer [START_HERE](docs/START_HERE.md), [PROJECT_STATE](docs/PROJECT_STATE.md), [BRANCHES](docs/BRANCHES.md) y [NEXT_STEPS](docs/NEXT_STEPS.md). Las instrucciones nuevas del usuario prevalecen. [DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md) clasifica el resto.
+2. Comprobar Git y cambios del usuario. Localizar componente/servicio existente, base y criterio de cierre antes de editar. No confundir un informe histórico con trabajo pendiente.
+3. Base funcional: `fix/v1-dev-preview-cache` / `3971284`, esquema 16. `docs/continuidad-auditoria-2026-11-17` incorpora ese código y conserva la historia de PR #9. Main es antigua; `release/cai-demo-v1.0` / `f3ba46b` se conserva como referencia visual.
 
-## Estado vigente: lectura obligatoria antes de trabajar
+## Alcance y prioridad
 
-- Leer primero `docs/PROJECT_STATE.md`: inventario de ramas, componentes existentes y orden de integración. Prevalece sobre descripciones históricas de prototipo; las instrucciones nuevas del usuario tienen prioridad.
-- Base oficial de interfaz: `release/cai-demo-v1.0` (`f3ba46b`). Dashboard y Community avanzada YA existen. No reconstruirlos ni reemplazarlos por las pantallas locales simplificadas.
-- Avance técnico auditado: `feat/local-password-recovery` (`1b84fb3`), descendiente de v1.0 con seis mejoras acumulativas. No fusionarlas como trabajos independientes ni usar `main` por defecto.
-- Integraciones acumulativas de acceso/panel/Community, grupos/ajustes, mensajes, imágenes, navegación y estabilización ya están comprobadas en sus alcances. Continuación vigente: `chore/v1-final-review`, base `9274dc9`, código `940573a`; conserva expediente `c712abb` y añade lectura de detalles en móvil/fixture general/diagnóstico. Leer `docs/v1-final-review.md` y el cierre de PROJECT_STATE. Revisión local: API 134 y matriz de 844 comprobaciones, 24 recorridos Brave/Opera; acceso/expediente repetidos tras CSS. Dos intentos Opera incompletos luego pasaron en bases nuevas, causa no confirmada; no ocultarlos ni afirmar reparación. Fotos externas sin terminar de cargar durante inspección. No rehacer cuentas/panel/integraciones ni fusionar ramas acumulativas como avances independientes.
-- Antes de editar comprobar Git y localizar la función en v1.0 y avances posteriores. Indicar componente reutilizado, servicio a conectar y criterio de cierre. Conectar y adaptar lo existente primero.
-- Prioridad vigente: revisión técnica del punto 5 realizada, aceptación humana pendiente. Siguiente tanda agrupada con CAI: uso del panel/guía, responsables, material/autorizaciones, Google/correo reales y decisión de alcance para cambio verificado de correo; alojamiento/presupuesto después. No inventar trabajo nuevo para eludir dependencias humanas. Punto 4 YA revisado: diez alertas moderadas de desarrollo por minimatch 10.2.6; ESLint 10.14.0/config-array 0.23.5/estree 8.72.2 siguen requiriendo ^10; parche desde 11.0.1 fuera de rango. Auditoría de ejecución: cero avisos. Mantener pendiente externo, sin force/override incompatible ni repetir la investigación sin cambios de versiones/alcance. Punto 3 integrado con migración 12 e historial/tutor; no cambiar correo/Google/grupo desde la corrección. Pruebas solo en fixtures final-review-browser-server, student-record-browser-server, admin-team-browser-server, admin-recovery-browser-server, admin-security-browser-server y student-profile-browser-server según recorrido. Nunca cambiar acceso habitual/archivo inicial. Mantener revocación y revalidación tras tareas asíncronas. HEAD privado: siete 403 comprobados en desarrollo; preview responde fallback HTML y no equivale a esa aserción. No descargar datos privados para probar el bloqueo.
-- Trabajo autónomo: completar primero las tareas autorizadas que no requieren intervención del usuario. Si una subtarea depende de cuentas, verificaciones, pagos, contenido o decisiones del cliente, registrarla en la lista de dependencias y continuar con otra tarea independiente del alcance acordado. Dejar Google, correo real, contratación y validaciones humanas para una tanda final agrupada; no bloquear el desarrollo local por ellas ni simular que se comprobaron. No inventar decisiones del cliente ni ampliar el alcance para mantenerse ocupado.
-- Distinguir interfaz, demo en memoria, persistencia local, integración comprobada y producción. La existencia de archivos o pruebas aisladas no demuestra producto integrado.
-- Al cerrar tareas actualizar el registro de continuidad de `docs/PROJECT_STATE.md`: base/commit, componentes reutilizados, pruebas y pendientes. Ante documentación contradictoria verificar Git/código antes de proponer implementación nueva.
-- Actualizar también después de cada avance lógico significativo durante una sesión larga. Antes del siguiente cambio contrastar el registro con Git y código; usar la lista de comprobación activa y estados explícitos, sin marcar como comprobado lo que solo está implementado. Registrar bloqueos y correcciones relevantes sin secretos.
-- Conservar diseño, ramas, datos e historial. Retirar/redirigir rutas provisionales tras equivalencia comprobada; no borrar datos/ramas ni fusionar a la base oficial implícitamente.
+- Ya conectados: acceso/solicitudes/tutor, panel v1.0, alumnos/expediente, grupos/ajustes, publicaciones, imágenes privadas, comentarios/reacciones, perfiles, equipo, avisos/recuperación local, Retos e Insignias. No recrearlos ni sustituirlos por pantallas simplificadas.
+- Retos: 180 preguntas/45 temas, tres al día según Ciudad de México, calendario/banco, respuesta única y progreso/repaso privado. Insignias: nueve, reglas reales, revisión/correcciones privadas, compartición voluntaria moderada. Ver informes especializados.
+- Vídeos son **opcionales y de menor prioridad**; no iniciarlos por un plan histórico. Si se retoman, coordinación sube y grupo autorizado ve. Repaso dirigido, analítica pedagógica, búsqueda ampliada y bienvenida siguen como propuestas sin implementación ni autorización automática.
+- Priorizar trabajo autónomo autorizado. Agrupar Google/correo reales, material/permisos/validación y responsables de CAI al final; presupuesto/contratación después. Registrar dependencias sin inventar funciones para eludirlas.
+- El servidor es local: bloquea producción, limita hosts/orígenes y usa cookies HTTP locales. Preparación productiva pendiente; no admitir alumnos reales ni presentarlo como desplegado.
 
-## Contexto inicial del prototipo (antecedente)
-CAI (Centro de Asesorías Integrales) tendrá un sitio institucional público, una comunidad privada para alumnos y un panel de administración. La meta inmediata es un prototipo visual navegable para validarlo con el cliente en pocos días; NO es un sistema listo para producción.
+## Desarrollo y seguridad
 
-Antes de implementar, consulta `docs/vision.md`, `docs/requirements.md` y la tarea/Issue asignada.
+- Español claro; explicación breve antes de tareas complejas. Al cerrar: cambios/archivos, pruebas realizadas/no realizadas y pendientes.
+- Usar React/TypeScript/Vite, CSS Modules, Tailwind y Node/SQLite existentes. No añadir dependencias innecesarias. Conservar identidad, arte, composición y componentes de v1.0; priorizar móvil y accesibilidad.
+- Permisos en servidor, snapshots históricos, revisiones, idempotencia y revalidación de sesión tras operaciones asíncronas. La demo nunca sirve como autorización.
+- **Pruebas solo con fixtures nuevas en `.local/tests`. Nunca abrir/migrar/borrar/cambiar `.local/cai.sqlite` o el acceso habitual para probar.** No leer credenciales personales ni usar sesiones personales.
+- Caché web `node_modules/.vite-cai-web-${apiPort}`, separada de verificadores SSR. Ver [pantalla en blanco](docs/solucion-pantalla-blanca-local.md). Antes de dar un enlace comprobar renderizado; HTTP/health no bastan. No reiniciar la API habitual ni borrar cachés/datos implícitamente.
+- Brave principal y Opera GX para compatibilidad, en contextos aislados. Revisar interacción, consola, 1440/768/375/320, teclado y temas cuando corresponda.
+- Ejecutar checks existentes proporcionales al cambio. Resultados históricos no son pruebas nuevas. No repetir auditorías/matrices sin cambio relevante. Las alertas e intermitencias antiguas permanecen con sus límites hasta evidencia nueva.
 
-## Stack propuesto
-React + TypeScript + Vite. Reutilizar la identidad visual del proyecto previo de CAI únicamente cuando los materiales estén disponibles y se haya acordado su adaptación. No agregar librerías sin justificación.
+## Git y continuidad
 
-## Reglas
-- Trabajar en ramas específicas; no modificar `main` directamente.
-- Cambios pequeños, revisables y alineados con una sola tarea.
-- Priorizar diseño responsive, accesibilidad, semántica HTML y componentes reutilizables.
-- Mantener textos/datos de muestra identificados como ficticios.
-- Simular autenticación, publicaciones y moderación SOLO para demostración; jamás presentarlas como seguridad real.
-- No usar imágenes, nombres ni datos reales de estudiantes, especialmente menores, sin autorización y controles adecuados.
-- No subir secretos, credenciales ni archivos `.env` con valores reales.
-- No desplegar el prototipo simulado como comunidad operativa con alumnos reales.
-- No eliminar material existente ni hacer push, merge o despliegue sin aprobación explícita.
-- Cuando exista el tooling, ejecutar los checks disponibles (lint, typecheck, build); reportar los no ejecutados.
+- Ramas específicas, cambios revisables y respeto a modificaciones existentes. Muchas ramas son acumulativas: no fusionar cada feature de nuevo.
+- Respetar autorizaciones de commits/push ya dadas. No fusionar PR, borrar ramas, cambiar main/release, publicar, contratar o ejecutar operaciones destructivas sin autorización específica. No reset/clean ni restauración implícita.
+- Actualizar PROJECT_STATE (hechos), NEXT_STEPS (prioridades), BRANCHES si cambia base y guía especializada en la misma entrega. Registrar avances significativos durante sesiones largas.
+- Nunca subir bases, accesos, secretos o datos de alumnos. Contraseñas de fixtures son ficticias; no convertirlas en credenciales reales.
+- En cambios solo documentales, verificar enlaces, cobertura y diferencia de código. No ejecutar servidores/migraciones/tests de producto solo para adornar un informe Markdown.
 
-## Entrega de cada tarea
-Explicar qué se cambió, archivos afectados, pruebas ejecutadas, decisiones y limitaciones. Actualizar documentación al modificar requisitos o arquitectura.
+## Recuperación del contexto
 
-## Primeras funcionalidades de prototipo
-1. Landing institucional de CAI con contenido de muestra verificable.
-2. Comunidad con feed, logros y perfiles ficticios.
-3. Vista de moderación con solicitudes simuladas.
-4. Navegación visible entre las tres áreas y selector de roles demo.
+START_HERE orienta, PROJECT_STATE describe qué hay, NEXT_STEPS qué sigue y AGENTS cómo trabajar. [PROJECT_HISTORY](docs/PROJECT_HISTORY-2026-11-12.md) conserva íntegra la bitácora anterior, con estados superados y sin prioridad operativa. Ante contradicción, inspeccionar Git/código y corregir documentación antes de desarrollar.

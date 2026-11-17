@@ -4,7 +4,7 @@ export type Section = 'home' | 'achievements' | 'gallery' | 'challenges' | 'memb
 export type FeedFilter = 'recent' | 'achievements' | 'experiences' | 'celebrated'
 export type DemoMode = 'student' | 'moderator'
 export type Category = 'announcement' | 'achievement' | 'experience' | 'gallery' | 'event'
-export type Reaction = 'love' | 'wellDone' | 'congrats' | 'amazing' | 'funny'
+export type Reaction = import('../../../server/contracts').ReactionKind
 export type ReactionCounts = Record<Reaction, number>
 
 export interface Member {
@@ -34,6 +34,7 @@ export interface Comment {
 }
 
 export interface Post {
+  recognition?:{badgeId:string;title:string;awardedAt:string}
   id: string
   authorId: string
   title: string
@@ -49,10 +50,16 @@ export interface Post {
   event?: { day: string; month: string; detail: string }
   reactions: ReactionCounts
   myReaction: Reaction | null
+  reactionRevision?: number
+  commentCount?:number
+  commentsOpen?:boolean
   comments: Comment[]
 }
 
 export interface Challenge {
+  revision?:number
+  instruction?:string
+  example?:string
   id: string
   day: string
   topic: string

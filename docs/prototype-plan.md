@@ -1,7 +1,6 @@
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # Plan corto — prototipo para validación de CAI
-
-> **Documento histórico de la fase de prototipo inicial.** No es el plan de implementación vigente. Para el estado local más reciente y próximas decisiones ver [inicio](START_HERE.md), [estado](PROJECT_STATE.md) y [siguientes pasos](NEXT_STEPS.md). No volver a implementar P0–P3 como si no existieran.
-
 
 ## Objetivo
 Una experiencia visual coherente de landing, comunidad y administración, navegable en un navegador y con datos ficticios.

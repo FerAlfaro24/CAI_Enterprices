@@ -1,38 +1,41 @@
-# CAI — Próximos pasos y decisiones pendientes
+# CAI — próximos pasos vigentes
 
-**Actualizado: 17 de noviembre de 2026.** Derivado de la última revisión local documentada en `chore/v1-final-review`; no constituye un nuevo resultado de pruebas. Para hechos y límites consultar [v1-final-review.md](v1-final-review.md).
+**17 de noviembre de 2026.** Basado en `3971284`, [estado real](PROJECT_STATE.md) y decisiones más recientes del usuario. No es una lista de funciones nuevas autorizadas por existir en una demo.
 
-## Estado de trabajo
+## Orden de trabajo
 
-- **Terminado en alcance local documentado:** conexión del panel/comunidad/acceso, moderación, grupos, mensajes/contacto, archivos privados, perfiles, expediente, equipo y recuperación; revisión técnica con incidencias documentadas.
-- **Investigado pero NO corregido:** diez alertas moderadas de herramientas de desarrollo relacionadas con minimatch; cero alertas de dependencias de ejecución en la auditoría histórica. Volver a evaluar cuando existan versiones compatibles o antes del despliegue, sin forzar cambios incompatibles. Ver [v1-tooling-audit.md](v1-tooling-audit.md).
-- **No terminado:** aceptación humana, servicios de Google/correo reales, contenido autorizado, infraestructura y preparación para producción.
-
-## Lista de trabajo priorizada
-
-| Prioridad | Tarea / decisión | Responsable propuesto | Evidencia de cierre |
+| ID / prioridad | Pendiente | Qué puede avanzar desarrollo solo | Qué necesita CAI/usuario y criterio de cierre |
 | --- | --- | --- | --- |
-| P0 | Sesión con la persona que administrará CAI: solicitudes, activación, moderación, bandejas y retiro de imagen con cuentas ficticias | CAI + desarrollo | Recorrido acompañado, problemas anotados, decisiones y cambios necesarios |
-| P0 | Confirmar responsables del sistema, verificación de tutores, permisos por grupo, privacidad y retención | CAI | Decisiones por escrito y requisitos actualizados; sin datos reales en demo |
-| P0 | Sustituir/validar textos, programas, cifras, precios, contacto y fotografías; revisar carga de imágenes externas | CAI + desarrollo | Material autorizado, procedencia y comprobación visual |
-| P1 | Configurar Google en proyecto controlado por CAI y probar alta, aprobación, inicio, revocación y fallos | CAI (cuenta) + desarrollo | Pruebas documentadas en entorno aislado |
-| P1 | Elegir servicio/remitente de correo y comprobar entrega real, destinatario, expiración, fallos y avisos | CAI (proveedor) + desarrollo | Evidencia de envío y recepción; no solo buzón ficticio |
-| P1 | Decidir alcance del **cambio verificado de correo de acceso** | CAI | Decisión registrada; si entra, issue, diseño, implementación y pruebas |
-| P1 | Investigar intermitencias Opera si vuelven a manifestarse | Desarrollo | Diagnósticos reproducibles; no asumir corrección por reintento satisfactorio |
-| P2 | Revisar actualización compatible de minimatch/herramientas | Desarrollo | Instalación reproducible + auditoría, lint, tipos y build, sin `--force` |
-| P2 | Presupuestar alojamiento, dominio, correo, backups, privacidad y mantenimiento **después** de validar prioridades | CAI + desarrollo | Costes/servicios elegidos, plan de entornos y responsables |
-| P2 | Endurecer, desplegar y realizar aceptación de producción antes de alumnos reales | Desarrollo + CAI | HTTPS, secretos, autorización, restauración, supervisión, permisos, consentimiento, pruebas y acta de aceptación |
+| N1 · alta | Preparación técnica de producción | Diseñar separación de configuración, dominios/orígenes, HTTPS/cookies seguras, secretos, procesos, registros sin datos sensibles y almacenamiento persistente; preparar pruebas aisladas. | Datos finales de entorno y autorización antes de publicar. Cierre: configuración/protecciones comprobadas y repetidas en infraestructura aprobada. El servidor actual es solo local. |
+| N2 · alta | Revisión integral del alcance ampliado y pulido | Preparar/repetir recorridos pertinentes con varias cuentas/grupos, móvil/teclado/temas, red perdida/conflictos, carga representativa y revisión visual. Corregir causas sin cambiar identidad. | Uso y volumen esperados y aceptación. Cierre: resultados por versión y hallazgos abiertos, sin sumar matrices históricas como prueba única. |
+| N3 · alta | Operación de base/medios e instalación | Mantener SQLite salvo motivo contrastado para cambiar; preparar migraciones, separación de datos ficticios, copia consistente y recuperación separada. Copias ya existen: no reconstruirlas. | Custodia, retención, frecuencia, ubicación y responsables. Cierre: instalación y recuperación ensayadas también en el alojamiento definitivo. |
+| N4 · mantenimiento | Alertas y fallos históricos | Revisar versiones compatibles cuando cambien herramientas o antes de publicar; capturar diagnóstico si reaparecen intermitencias Opera. | Cierre: auditoría, instalación reproducible y checks pertinentes, sin force/overrides incompatibles ni afirmar reparación por un reintento. Diez avisos moderados de desarrollo registrados, no auditados hoy. |
+| N5 · tanda final | Google y correo reales | Preparar guías/casos de prueba y configuración sin cuentas personales. La integración Google y los avisos/recuperación local ya están. | Proyecto/cuenta de CAI, remitente/proveedor, orígenes finales y verificación de entrega. Cierre: alta/aprobación/acceso/revocación y entrega/expiración/errores comprobados realmente. |
+| N6 · tanda final | Contenido, permisos y panel intuitivo | Preparar inventario de textos/medios y tareas para validación con cuentas ficticias. Revisar carga de fotos y mensajes/estados. | Material comercial, programas/horarios, imágenes/autorizaciones, tutores, responsables y reglas finales. Cierre: persona administradora completa tareas y se registran/corrigen dificultades. Pruebas automáticas no sustituyen esa sesión. |
+| N7 · último | Presupuesto, contratación y despliegue | Preparar necesidades técnicas y opciones a revisar al acercarse a la entrega. | Cliente aprueba costes/proveedor/dominio/mantenimiento. Después: configurar, comprobar permisos/HTTPS/copias/servicios desde internet y entregar accesos/guías. No contratar ni publicar implícitamente. |
 
-**Fuera del alcance acordado para entrega local**, salvo nueva decisión: pagos, chat privado, videos, cursos completos, comentarios/reacciones persistentes, retos/insignias persistentes y nuevas funciones añadidas solo por aparecer en la demo.
+No rehacer comentarios, reacciones, retos, insignias, panel, grupos o recuperación local: ya están conectados. Tener una dependencia externa no autoriza inventar módulos nuevos para mantenerse ocupado.
 
-## Condiciones de no avanzar indebidamente
+## Vídeos: opcionales y de menor prioridad
 
-- No publicar un backend local como producto apto para estudiantes. No usar identidades/fotos/datos reales de menores.
-- No afirmar corrección de las alertas o de las intermitencias sin evidencia nueva.
-- No fusionar ramas, borrar historial, contratar servicios ni comprometer dinero automáticamente.
-- No crear funcionalidades adicionales para eludir una decisión de CAI.
-- Cuando una dependencia humana bloquee una tarea, registrar su estado y continuar solo con otra tarea **autorizada** e independiente.
+Se incluyeron inicialmente y después el usuario señaló que no eran tan importantes. Se retiran del camino obligatorio de entrega; no se da por cancelada para siempre la posibilidad. Reconfirmar prioridad antes de desarrollarlos. Si se retoman: **solo coordinación sube**, grupo autorizado ve; validar formato/tamaño/duración/cuota, reproducción/rangos autorizados, apoyo textual, retirada y copia consistente. No hay ese servicio actualmente y no se presenta la galería de imágenes como vídeo.
 
-## Plantilla para la siguiente actualización
+## Propuestas por elegir, sin implementación
 
-En cada PR añadir: fecha y rama/base/HEAD; objetivo; archivos/módulos reutilizados; cambios; pruebas **ejecutadas en esa PR** (y las no ejecutadas); efectos sobre datos/permisos; riesgos; bloqueos; decisiones del cliente; próximo paso. Actualizar este archivo y [PROJECT_STATE.md](PROJECT_STATE.md) cuando cambie el estado real. Si una fecha o un objetivo del plan histórico vence, registrarlo, no reescribirlo como si nunca hubiera existido.
+| Propuesta | Diferencia frente a lo existente |
+| --- | --- |
+| Repaso personalizado de errores/temas | Ya hay historial con explicaciones; falta seleccionar práctica dirigida, separada de puntos diarios. |
+| Vista pedagógica de coordinación | Ya hay puntos/días/concesiones privados; falta resumen autorizado de actividad y temas a reforzar, sin ranking público. |
+| Buscar concesiones por alumno/grupo/fecha | Ya existen revisión, estados, historial y páginas; sería ampliación de filtros. |
+| Bienvenida breve opcional | Registro/activación ya funcionan; sería orientación de primera entrada, omisible. |
+| Biblioteca de vídeos con búsqueda/continuación | Depende de que se elija implementar vídeos; no empezar como tarea independiente. |
+
+Cambio verificado de correo de acceso y vinculación de cuentas Google/contraseña siguen siendo decisiones de alcance; no enlazar identidades por coincidencia de correo ni ampliar esas funciones silenciosamente. Pagos, chat privado y cursos completos no se incluyen automáticamente.
+
+## Calendario
+
+El 12 de noviembre se habló de tres semanas. Los documentos de planificación registran 2 de diciembre como objetivo inicial y una propuesta posterior hasta el 3. **Fecha exacta de entrega por confirmar; la auditoría del día 17 no reinicia otras tres semanas.** Preservar esos planes como históricos y reservar margen para validación/servicios externos en la última tanda. No prometer plazos a partir del número de commits o la velocidad de escritura.
+
+## Siguiente movimiento
+
+Resolver primero incidencias reportadas al probar, y después elegir una tarea autónoma del alcance de entrega —preparación de producción o revisión integral— con criterio de cierre. Esta auditoría documental no inicia esas implementaciones ni vídeos. Mantener Google/correo/CAI agrupados al final y alojamiento después, salvo nueva instrucción del usuario.

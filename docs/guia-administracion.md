@@ -1,3 +1,5 @@
+> **Guía operativa local — revisada documentalmente el 17-11-2026.** Estado completo en [PROJECT_STATE](PROJECT_STATE.md); arranque/aislamiento en [RUN_LOCAL](RUN_LOCAL.md). No es un despliegue ni una validación con usuarios reales.
+
 # Guía sencilla de administración de CAI
 
 **Versión de pruebas locales, con datos ficticios.** Las tareas siguientes ya están conectadas al guardado local. El uso con alumnos reales, permisos del material y entrega de correo se revisan con CAI antes de publicar. Esta guía no presupone que el sitio esté alojado en internet.
@@ -11,9 +13,12 @@
 | Preparar acceso, revisar una ficha o suspender un alumno | Alumnos |
 | Corregir nombre, nacimiento, matrícula o tutor | Alumnos → Ficha → Corregir expediente |
 | Aprobar o rechazar una historia | Publicaciones |
+| Revisar comentarios de los alumnos | Publicaciones → Comentarios |
+| Pausar nuevos comentarios | Configuración → Comentarios de las historias |
 | Compartir o retirar una imagen de un grupo | Galería privada |
 | Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
 | Mantener grupos o pausar solicitudes/envíos | Configuración |
+| Activar o pausar reacciones a historias | Configuración → Reacciones a las historias |
 | Cambiar mi contraseña | Configuración → Seguridad de mi cuenta |
 | Recuperar acceso si olvidé mi contraseña | Acceso de administración → Olvidé mi contraseña |
 | Agregar, desactivar o reactivar un administrador | Configuración → Equipo administrador |
@@ -49,7 +54,7 @@ El alumno puede cambiar por sí mismo su **nombre visible y color del avatar** d
 
 En Alumnos, abrir la **Ficha** de la persona correcta y pulsar **Corregir expediente**. Modificar los datos necesarios, indicar el motivo y confirmar con la contraseña propia y la casilla de verificación. Cancelar no guarda. El historial privado muestra quién corrigió, cuándo, por qué y los valores anteriores/nuevos.
 
-Si la corrección afecta nombre, nacimiento o tutor de un menor, registrar una nueva referencia de autorización comprobada, distinta de la anterior. Un adulto corregido a menor también necesita tutor y autorización. Se ajusta el alias a una abreviatura privada y sus historias publicadas vuelven a revisión. Corregir solo matrícula no exige esa renovación. Revisar también imágenes donde aparezca: la galería no identifica automáticamente personas dentro de una foto.
+Si la corrección afecta nombre, nacimiento o tutor de un menor, registrar una nueva referencia de autorización comprobada, distinta de la anterior. Un adulto corregido a menor también necesita tutor y autorización. Se ajusta el alias a una abreviatura privada y sus historias y comentarios publicados vuelven a revisión. Corregir solo matrícula no exige esa renovación. Revisar también imágenes donde aparezca: la galería no identifica automáticamente personas dentro de una foto.
 
 Al guardar se cierran las sesiones del alumno y se invalidan sus enlaces anteriores; conserva cuenta, correo y grupo. Un alumno suspendido sigue suspendido. Corregir edad a adulto no abre su privacidad ni cambia su alias automáticamente. La referencia o casilla no sustituye comprobar y custodiar la autorización real.
 
@@ -60,6 +65,18 @@ Si la información cambió en otra ventana, el borrador se conserva hasta elegir
 En Publicaciones, abrir **Revisar** sobre la historia correspondiente. Leer el contenido y comprobar su privacidad. Para publicar, confirmar la revisión. Para rechazar, elegir un motivo; lo verá su autor, no todo el grupo.
 
 Una publicación aprobada se muestra únicamente al programa y grupo autorizados. Devolverla a revisión la oculta hasta otra aprobación. Si el autor la retira, se conserva el historial y no se puede republicar desde la bandeja de retiradas.
+
+## Revisar comentarios
+
+En **Publicaciones → Comentarios**, abrir un comentario En revisión y comprobar su texto, autor, historia y grupo. Elegir **Publicar comentario** o **No aprobar**, confirmar la revisión y guardar. Para no aprobar, escribir una indicación útil: solo la verá su autor y coordinación.
+
+El alumno consulta el estado en **Mis comentarios**, dentro de la historia. Sus envíos pendientes/no aprobados no aparecen al grupo. Publicar una historia y aprobar sus comentarios son decisiones distintas.
+
+Se puede devolver un comentario publicado/no aprobado a revisión, o retirar uno publicado, indicando motivo. Los retirados conservan historial y no se pueden republicar. El alumno también puede retirar su propio comentario, incluso estando pausados los nuevos envíos.
+
+**Configuración → Recibir nuevos comentarios** controla todos los grupos; inicialmente está pausado. **Recibir comentarios en esta historia**, dentro de la revisión, permite pausar solo esa historia. Se conservan comentarios existentes, revisión de pendientes y retirada propia. Para nuevos envíos deben estar activos ambos permisos.
+
+Si otra ventana revisó primero o se perdió la respuesta, cargar el estado actual antes de decidir otra vez. El panel explica que cargarlo descarta la decisión y el motivo que estabas preparando. Las listas tienen **Ver anteriores** cuando hay más registros. El [informe de comentarios](v1-community-comments.md) detalla pruebas y límites.
 
 ## Publicar una imagen
 
@@ -83,6 +100,12 @@ La recuperación real requiere configurar correo y comprobar la entrega. Una cue
 En Configuración, mantener el catálogo de programas/grupos y los controles disponibles. Archivar un grupo impide nuevas selecciones, pero sus alumnos actuales conservan la lectura. Se puede reactivar sin borrar su historial.
 
 Pausar solicitudes de ingreso no borra solicitudes recibidas. Pausar nuevos envíos tampoco elimina publicaciones aprobadas ni impide retirarlas. Las opciones marcadas como pendientes no deben tratarse como funciones operativas.
+
+## Reacciones a las historias
+
+En Configuración → **Reacciones a las historias**, activar **Permitir reacciones** para que los alumnos celebren las historias aprobadas de su grupo. Inicialmente están pausadas. Pausar nuevas publicaciones y pausar reacciones son controles distintos.
+
+Cada alumno tiene una elección por historia y puede cambiarla o usar **Quitar mi reacción**. Al pausar, los contadores se conservan y cada persona puede quitar la suya. Listado y detalle muestran la misma elección; no se publica una lista de quién reaccionó. Los comentarios tienen su propio permiso y revisión; activar reacciones no los activa. La [guía de reacciones](v1-community-reactions.md) detalla pruebas y límites.
 
 ## Gestionar el equipo administrador
 
@@ -131,3 +154,29 @@ La [revisión técnica local](v1-final-review.md) ya se realizó. Sigue pendient
 Registrar por tarea si pudo terminar sin ayuda, dónde se detuvo y qué texto/acción no entendió. No marcar esta validación como completada por haber pasado pruebas automáticas. Confirmar también programas, permisos, responsables y procedimiento de respaldo. La contratación de servidor se resuelve después, como se acordó; las cuentas y servicios externos se agrupan con esta revisión final.
 
 Para las operaciones técnicas de copia y recuperación, consultar [respaldos y recuperación local](respaldo-recuperacion-local.md). El administrador no necesita ejecutar restauraciones durante su rutina diaria.
+
+
+## Retos de inglés: preparar sin hacerlo cada día
+
+En **Retos de inglés**, el calendario automático sirve tres preguntas diarias: gramática, vocabulario y vida diaria. Cambian a medianoche de Ciudad de México. El banco inicial tiene 180 preguntas y 45 temas, con explicación y ejemplo. No hace falta subir retos todos los días.
+
+1. En **Calendario**, elige fecha y grupo. Abre Revisar pregunta y explicación. Para sustituir una, escoge otra del área y pulsa Usar esta pregunta. Puedes programar desde hoy hasta 90 días después.
+2. Si ya hay respuestas, el contenido queda conservado: puedes pausar la pregunta o programar otra para otro día. Pausar todos los retos conserva resultados y permite repasar.
+3. En **Banco de preguntas**, busca por tema y filtra área/disponibilidad. Crear pregunta permite escribir la instrucción, tres o cuatro opciones, marcar una sola correcta y añadir explicación/ejemplo. Revisa Vista previa con solución antes de guardar.
+4. Borrador queda solo en administración. Lista entra en futuras rotaciones. Archivada se conserva sin entrar en nuevas selecciones. Editar el banco no reescribe preguntas ya servidas/programadas; para sustituir una del calendario elige otra entrada.
+5. Si otra ventana cambió la pregunta/calendario, actualiza y revisa antes de guardar; evita confirmar a ciegas con datos viejos.
+
+El alumno tiene un intento por pregunta, cinco puntos por participar y diez más por acertar. Completar tres preguntas suma un día de constancia, incluso con errores. Puede repasar sus respuestas anteriores; no es una calificación. Las insignias persistentes se integrarán en el siguiente módulo. Añadir a la validación final con CAI: revisar un reto, preparar un borrador, programarlo para el grupo correcto y explicar la pausa sin borrar resultados.
+
+
+## Insignias y reconocimientos
+
+En **Insignias** aparecen solicitudes pendientes y concesiones registradas. El número de pendientes también se muestra en el menú y en Resumen.
+
+1. En Solicitudes, abre Revisar solicitud, comprueba alumno, grupo y lo aprendido. Elige aprobar o no aprobar, escribe un motivo claro de 8–280 caracteres y confirma. La declaración y el motivo son privados; aprobar no publica una historia. Si no se aprueba, el alumno puede reforzar lo indicado y solicitar otra vez.
+2. Las automáticas no requieren revisión: primera respuesta, tres días completos seguidos y cinco días completos de retos. No se exige acertar todas las respuestas. Las aventuras de películas, canciones y lectura sí las revisa CAI.
+3. Dar reconocimiento permite elegir alumno activo y una distinción institucional: Sin miedo al inglés, Buen compañero o Constancia. Comprueba al alumno, escribe el motivo privado y confirma. Las demás insignias siguen sus propios recorridos.
+4. En Concesiones e historial, abre Ver concesión. Si hubo un error, puedes retirar/restaurar con motivo y confirmación. Se conserva la fecha y la historia original. Una retirada no borra puntos ni respuestas; las historias públicas vinculadas vuelven a revisión. Restaurar no las publica otra vez: revisa la historia por separado.
+5. Si aparece conflicto o se pierde la conexión durante una decisión, carga el estado actual antes de repetirla. El alumno conserva el texto de una solicitud que no pudo confirmar y puede reintentar sin duplicarla.
+
+El alumno decide si comparte su insignia. El formulario de publicación usa un texto nuevo editable, sin copiar la solicitud ni los motivos. No hay reconocimiento público automático ni acceso a colecciones privadas de compañeros. Añadir a la validación final con CAI: revisar una solicitud, explicar una indicación, conceder un reconocimiento al alumno correcto y corregir una concesión sin republicar una historia por accidente.

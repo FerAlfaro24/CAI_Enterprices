@@ -6,7 +6,7 @@ import { publicationLimits, validatePublication } from '../publicationValidation
 import s from '../community.module.css'
 import { CommunityIcon } from './ui'
 
-export function Composer({ onClose, initialCategory = 'experience', badgeShare }: { onClose: () => void; initialCategory?: Category; badgeShare?: { badgeId: string; title: string } }) {
+export function Composer({ onClose, initialCategory = 'experience', badgeShare }: { onClose: () => void; initialCategory?: Category; badgeShare?: { badgeId: string; title: string;grantId?:string } }) {
   const { state, dispatch, connection } = useCommunity()
   const dialog = useRef<HTMLDialogElement>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -14,14 +14,14 @@ export function Composer({ onClose, initialCategory = 'experience', badgeShare }
   const attempt = useRef({ fingerprint: '', key: crypto.randomUUID() })
   const sending = useRef(false)
   const [title, setTitle] = useState(badgeShare ? `¡Conseguí ${badgeShare.title}!` : '')
-  const [body, setBody] = useState(badgeShare ? `Hoy quiero celebrar este pequeño paso: ${badgeShare.title}. Esta es una historia ficticia para compartir con la comunidad.` : '')
+  const [body, setBody] = useState(badgeShare ? connection?`Hoy quiero celebrar este pequeño paso: ${badgeShare.title}. Sigo practicando y aprendiendo inglés.`:`Hoy quiero celebrar este pequeño paso: ${badgeShare.title}. Esta es una historia ficticia para compartir con la comunidad.` : '')
   const [category, setCategory] = useState<Category>(badgeShare ? 'achievement' : initialCategory)
   const [photoIds, setPhotoIds] = useState<string[]>([])
   const [validationStarted, setValidationStarted] = useState(false)
   const draft = { title, body, category, photoIds }
   const errors = validationStarted ? validatePublication(draft) : {}
   const id = useId()
-  const categories = Object.entries(categoryLabels).filter(([value]) => connection ? ['achievement', 'experience'].includes(value) : badgeShare ? value === 'achievement' : state.mode === 'moderator' || value !== 'announcement') as [Category, string][]
+  const categories = Object.entries(categoryLabels).filter(([value]) => badgeShare?value==='achievement':connection ? ['achievement', 'experience'].includes(value) : state.mode === 'moderator' || value !== 'announcement') as [Category, string][]
 
   useEffect(() => {
     const element = dialog.current
@@ -48,10 +48,10 @@ export function Composer({ onClose, initialCategory = 'experience', badgeShare }
     if (connection) {
       if (sending.current || (category !== 'achievement' && category !== 'experience')) return
       sending.current = true; setSubmitting(true); setSubmitError('')
-      const fingerprint = JSON.stringify({ title, body, category })
+      const fingerprint = JSON.stringify({ title, body, category,badgeGrantId:badgeShare?.grantId })
       if (attempt.current.fingerprint !== fingerprint) attempt.current = { fingerprint, key: crypto.randomUUID() }
       try {
-        if (await connection.submit({ title, body, category }, attempt.current.key)) onClose()
+        if (await connection.submit({ title, body, category,...(badgeShare?.grantId?{badgeGrantId:badgeShare.grantId}:{}) }, attempt.current.key)) onClose()
         else setSubmitError('No se pudo enviar. Revisa el aviso e inténtalo otra vez; tu texto sigue aquí.')
       } finally { sending.current = false; setSubmitting(false) }
       return

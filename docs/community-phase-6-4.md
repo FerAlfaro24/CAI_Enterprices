@@ -1,3 +1,7 @@
+> **Evidencia local no versionada:** las rutas de capturas/JSON/HTML de revisión que se conservan como texto en este informe no están en Git; no se recuperan al clonar. No se han inventado ni vuelto a generar esas evidencias. El informe escrito conserva el resultado histórico.
+
+> **Antecedente histórico — lectura contextual.** Describe su fase/rama original: sus cifras, rutas, limitaciones y próximos pasos no son el estado global de hoy. Para continuar: [START_HERE](START_HERE.md), [estado vigente](PROJECT_STATE.md) y [prioridades](NEXT_STEPS.md). Los resultados aquí citados no se reejecutaron en la auditoría del 17-11-2026.
+
 # CAI Community — Fase 6.4 final
 
 ## 1. Resumen y veredicto
@@ -182,9 +186,9 @@ Quedan pendientes: pruebas con lector de pantalla/dispositivos físicos, motores
 
 ## 12. Evidencias y cierre
 
-**[Abrir las cuatro evidencias](../review/community-phase-6-4/index.html)** · [Resumen exacto de pruebas](../review/community-phase-6-4/resultados.json) · [Brave](../review/community-phase-6-4/auditoria-final-brave.json) · [Opera GX](../review/community-phase-6-4/auditoria-final-opera-gx.json) · [Auditoría de archivos](../review/community-phase-6-4/source-comparison.json).
+**Abrir las cuatro evidencias (`../review/community-phase-6-4/index.html`)** · Resumen exacto de pruebas (`../review/community-phase-6-4/resultados.json`) · Brave (`../review/community-phase-6-4/auditoria-final-brave.json`) · Opera GX (`../review/community-phase-6-4/auditoria-final-opera-gx.json`) · Auditoría de archivos (`../review/community-phase-6-4/source-comparison.json`).
 
-La discrepancia histórica y la comparación con la base recompilada permanecen en [fase 6.2](community-phase-6-2.md); la [comparación diagnóstica actual](../review/community-phase-6-4/comparacion-subpixel-inicio.json) no altera sus registros.
+La discrepancia histórica y la comparación con la base recompilada permanecen en [fase 6.2](community-phase-6-2.md); la comparación diagnóstica actual (`../review/community-phase-6-4/comparacion-subpixel-inicio.json`) no altera sus registros.
 
 El cierre parte del HEAD aprobado `a526ffdec27acf3a3d9c95427411924ef1f8f36f`. El respaldo autorizado incluye únicamente `docs/community-phase-6-4.md` y `scripts/check-community-final-audit.browser.mjs`; las evidencias enlazadas en este informe permanecen locales y se excluyen del commit, al igual que capturas, resultados temporales y referencias.
 
