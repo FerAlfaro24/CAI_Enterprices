@@ -1,5 +1,8 @@
 # CAI — Guía para agentes de desarrollo
 
+> **Inicio obligatorio de una sesión nueva:** `docs/START_HERE.md` → `docs/BRANCHES.md` → `docs/NEXT_STEPS.md` → `docs/PROJECT_STATE.md` → documentación del módulo. Consultar la rama/ref actual en Git antes de seguir los hitos históricos. Esta nota documental es del 17-11-2026; no implica producción ni pruebas nuevas.
+
+
 ## Estado vigente: lectura obligatoria antes de trabajar
 
 - Leer primero `docs/PROJECT_STATE.md`: inventario de ramas, componentes existentes y orden de integración. Prevalece sobre descripciones históricas de prototipo; las instrucciones nuevas del usuario tienen prioridad.
