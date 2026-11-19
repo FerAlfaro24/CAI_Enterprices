@@ -16,6 +16,8 @@
 
 **Observación siguiente atendida:** [cabecera y novedades](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), sin franjas de demostración/gestión, cuenta reubicada y avisos con fotos en un carrusel; 122 comprobaciones nuevas. Mantener identidad de CAI y separación real de datos/entornos. Revisar visualmente con el usuario antes de ampliar el acabado.
 
+**Prioridad nueva por preparar:** [Mis aventuras en inglés](COMMUNITY_DESIGN.md#propuesta-mis-aventuras-en-inglés). Diseño guiado para lecturas/películas/música, imágenes privadas y prácticas repetibles. Es propuesta documentada: A1 interfaz, A2 datos/archivos, A3 revisión/insignias, A4 compartición/colección. No está implementada ni autoriza abrir la galería general a alumnos.
+
 ## Orden de trabajo general posterior
 
 | ID / prioridad | Pendiente | Qué puede avanzar desarrollo solo | Qué necesita CAI/usuario y criterio de cierre |

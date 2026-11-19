@@ -8,6 +8,8 @@
 
 ## Alcance y prioridad
 
+- Nueva prioridad de diseño: [aventuras de aprendizaje](docs/COMMUNITY_DESIGN.md#propuesta-mis-aventuras-en-inglés), todavía propuesta. El usuario pidió actividades guiadas de libros/películas/música, personalización, imágenes y compartición. Los adjuntos privados de estas actividades son una ampliación solicitada; no habilitar carga general de alumnos a Galería. Separar prácticas repetibles de concesiones únicas y reutilizar revisión/publicaciones. No afirmar que fotos/aventuras están implementadas: el formulario y el esquema siguen como antes.
+
 - Cabecera conectada: sin las franjas anteriores ni rótulos de demostración. Campana para notificaciones privadas; grupo/inscripción/actualizar/logout en Mi espacio. Avisos institucionales fijados y momentos fotográficos comparten carrusel; avisos primero y pausa inicial, etiquetas claras, mensajes privados siempre separados. No volver a duplicar la banda de avisos ni las opciones de cuenta en Inicio.
 
 - Publicaciones: cinco emojis sin nombres visibles; nombres accesibles conservados. Tocar de nuevo retira. No volver a tarjetas conectadas estrechas, portadas editoriales o instrucciones redundantes. Pausa/errores/moderación siguen funcionando.

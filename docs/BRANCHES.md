@@ -19,6 +19,8 @@
 
 ## Ramas añadidas después del corte
 
+`docs/v1-learning-adventures-plan` parte de `3b368e8`, PR #18. Solo documenta la propuesta de actividades guiadas con imágenes, prácticas repetibles y compartición; conserva el código funcional de cabecera. No habilita imágenes de alumnos ni cambia esquema/reglas. No confundir el plan con una función implementada.
+
 `feat/v1-community-header-highlights` parte de `ffb323d`, PR #17. Elimina franjas, reubica cuenta/notificaciones y unifica avisos/momentos; corrige actualización posterior al cierre de sesión. 122 comprobaciones nuevas Brave/Opera y tipos/lint/build. Sin cambios de API/esquema/permisos, sin fusión ni sustitución de datos o copia remota.
 
 `feat/v1-community-social-feed` parte de `d6e66fd`, PR #16. Feed conectado de una columna, reacciones solo con emojis/contadores y detalle/comentarios simplificados. 124 comprobaciones nuevas Brave/Opera y tipos/lint/build; sin cambios de esquema/API/reglas ni actualización de la copia remota compilada.

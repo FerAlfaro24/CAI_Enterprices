@@ -2,7 +2,7 @@
 
 **19-11-2026 · `feat/v1-community-playful-design`, desde `4cdae44` de PR #15.** Prioridad nueva autorizada: hacer más atractiva la comunidad, con identidad propia, fondo sutil, respuestas visuales y celebraciones. El usuario amplió expresamente a perfil, notificaciones y Retos, con colores/puntuación/confeti inspirados en experiencias de aprendizaje lúdicas. La muestra conserva las reglas, puntos y autorizaciones reales existentes.
 
-**Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d` de PR #17. La primera muestra y la revisión social se conservan como cortes anteriores; la limpieza de cabecera y las novedades unificadas figuran al final.
+**Continuación de documentación:** `docs/v1-learning-adventures-plan`, desde `3b368e8` de PR #18. Código funcional acumulado: `feat/v1-community-header-highlights` / `927b744`. El plan de aventuras con imágenes figura al final y todavía no está implementado. Los resultados de las entregas previas conservan sus propios cortes.
 
 ## Plan de trabajo y criterio de cierre
 
@@ -90,3 +90,43 @@ Ambos temas a 1440/768/375/320: sin desbordamiento, controles de cabecera dentro
 La muestra del usuario de 4194 conserva datos/accesos y recibe el código de interfaz actualizado. No se reinició ni sustituyó su base. Las fixtures de QA no se convierten en la muestra. Capturas y datos privados permanecen fuera de Git en `.local/tests/header-highlights-*`; la copia remota compilada anterior no se reemplazó.
 
 Archivos principales: `CommunityShell`, `MemberProfileDialog`, `StudentNotices`, `LoginPage`, `HomeView`, `ConnectedHomeHero`, proyección `highlights.ts`, estilos y opción de actualización en `ConnectedCommunity`. Sin dependencias nuevas, migraciones, cambios de permisos ni nuevas reglas de negocio. Queda pendiente la aceptación visual y continuar refinamientos del plan. Retirar rótulos de pruebas no acredita por sí solo dominio, correo/Google, infraestructura o aceptación productiva.
+
+## Propuesta: mis aventuras en inglés
+
+**19-11-2026 · `docs/v1-learning-adventures-plan`, desde `3b368e8` de PR #18. Estado: análisis y propuesta, sin cambios de producto, migraciones ni nuevas pruebas de sistema.** El usuario pidió transformar la solicitud de insignia en una experiencia visual, personalizada y guiada: que los alumnos elijan cómo practicar, hablen de libros/películas u otras experiencias, adjunten imágenes y puedan compartir lo aprendido. Esto amplía el alcance de fotos: se solicita adjuntar imágenes del alumno específicamente a estas aventuras; no se autoriza una carga general de alumnos a la galería institucional.
+
+### Qué existe y qué limita la propuesta
+
+- Tres reconocimientos solicitables: Explorador de películas, Music Catcher y Book Buddy; nueve insignias en total. Solicitud/revisión/motivos/historial, concesión, celebración y compartición voluntaria ya conectados. No reconstruirlos.
+- `ConnectedBadgeRequestForm` envía badgeId y texto libre de hasta 600 caracteres, con historia privada. La API `badges.apply` bloquea otra petición del mismo reconocimiento cuando ya hay una concesión, incluso retirada, o una solicitud pendiente. Esta regla protege las concesiones existentes y no debe eliminarse sin separar el registro de prácticas.
+- Existe procesamiento de imágenes con Sharp y carga autorizada de coordinación. Las imágenes de solicitudes de alumnos aún no están implementadas. Reutilizar validación/conversión donde corresponda, manteniendo autorización específica por recurso; no habilitar sin más el endpoint administrativo de galería para alumnos.
+
+### Experiencia propuesta
+
+Nombre de la zona: **Mis aventuras en inglés**. Presentar tarjetas visuales de actividades y una colección de experiencias personales. La insignia es el reconocimiento asociado; cada aventura registra una práctica concreta.
+
+1. **Elige cómo practicar.** Tres tarjetas iniciales, coherentes con el catálogo: Lectura (capítulo/cuento/artículo), Cine y series (escena/episodio/película) y Música (una canción). Cada tarjeta propone pequeños puntos de partida y muestra qué se puede practicar, sin imponer una obra o un ritmo único.
+2. **Dale identidad a tu aventura.** Título del libro/película/canción, qué hiciste y una imagen opcional —por ejemplo portada, cartel o foto de la actividad— con vista previa, cambio y retirada. Propuesta inicial: hasta tres imágenes JPEG/PNG, 3 MB por archivo, reutilizando el formato ya admitido; confirmar límites mediante pruebas al implementar. No incluir vídeo o audio por esta propuesta.
+3. **Cuenta lo que te llevas.** Preguntas breves adaptadas a la tarjeta: qué parte practicaste, una palabra/expresión descubierta y una frase o reflexión propia. Ayudas y ejemplos visibles; permitir explicar en español e intentar ejemplos en inglés. Ofrecer pistas sencillas/ampliación opcional, sin examen de nivel ni evaluación automática de inglés.
+4. **Mira cómo quedó.** Vista previa con imagen, título y aprendizaje; guardar borrador o enviar a revisión. Estado legible y orientación de coordinación cuando falte algo. La primera entrega se centra en estas tres rutas, no en crear decenas de nuevas insignias o actividades sin acordar.
+
+### Repetición, revisión y compartición
+
+- Cada obra/experiencia puede ser una aventura nueva, aunque el alumno ya tenga la insignia de esa categoría. **Una concesión por insignia; muchas aventuras de práctica.** Repetir actividades no repite puntos de Retos, insignias o concesiones. Las reglas anteriores y los datos históricos se conservan.
+- Criterio propuesto, coherente con lo existente: borrador/solicitud e imágenes en privado para autor y coordinación; después el alumno decide compartir. Aprobar o ganar una insignia no publica automáticamente el relato.
+- Compartir debe reutilizar publicaciones, audiencia de grupo, revisión, comentarios y reacciones existentes. Una imagen acompaña a su aventura/publicación; no entra automáticamente en la Galería institucional ni se comparte con todos los aprobados. Ampliar la audiencia requeriría otra decisión explícita.
+- Mantener estados claros: Borrador, En revisión, Necesita un ajuste, Aprobada. El estado de publicación es independiente: privada, pendiente de publicación, compartida o retirada. Retirar una historia no borra el aprendizaje privado ni inventa una retirada de insignia.
+- Coordinación recibe una tarjeta con obra, actividad, aprendizajes e imágenes y las acciones de revisión existentes ampliadas. Evitar que tenga que buscar evidencias en distintas pantallas; motivos y auditoría permanecen privados.
+
+### Implementación por entregas
+
+| Paso | Trabajo | Criterio de cierre |
+| --- | --- | --- |
+| A1 · interfaz | Tarjetas de elección, pasos guiados, ayudas y vista previa usando identidad/componentes actuales. | Recorrido claro en escritorio/móvil y teclado; revisión visual. No presentar un selector de archivos sin persistencia como carga ya funcional. |
+| A2 · datos y archivos | Modelo de aventura repetible, campos propios, borradores, revisión y adjuntos privados ligados al propietario. Migración versionada desde el esquema vigente, sin convertir textos antiguos en datos inventados. | Persistencia/recarga y compatibilidad histórica; tamaño/formato/contenido validados, EXIF retirado al convertir, previews autorizados y rechazo de acceso ajeno. Reintentos/revisiones sin duplicar. |
+| A3 · coordinación e insignias | Extender revisión y reutilizar concesiones/celebraciones actuales. Las prácticas de quien ya tiene la insignia siguen revisándose. | Primera concesión única, repetición sin duplicados, ajustes/retirada/concurrencia e historial comprobados. La UI no concede reconocimientos por su cuenta. |
+| A4 · compartir y colección | Publicación voluntaria y colección de aventuras con sus estados, fotos e historial; reutilizar el feed y conversación ya hechos. | Sin publicación automática, sin fuga de imágenes pendientes, retirada y límites de grupo comprobados; comentarios/reacciones funcionan sobre una historia canónica. |
+
+Pruebas de cada entrega con fixtures nuevas; no migrar ni usar `.local/cai.sqlite` o la muestra del usuario para probar. Mantener la copia remota anterior estable. Sin servicios externos de IA, extracción automática de portadas o nuevas dependencias salvo necesidad concreta. Guardar cada entrega en su rama y actualizar esta guía con hechos, resultados y límites reales.
+
+**Pendiente:** implementar A1–A4 y validar la experiencia con usuario/coordinación. Esta propuesta no significa que se hayan habilitado imágenes de alumnos, aventuras repetibles o nuevas concesiones. La revisión realizada fue de código/documentación; no se ejecutaron pruebas de producto por este cambio solo documental.

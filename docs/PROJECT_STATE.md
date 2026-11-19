@@ -12,6 +12,8 @@
 
 **Cabecera/novedades:** identidad oficial sin franjas de gestión; campana junto al perfil, cuenta en Mi espacio y carrusel único de avisos/momentos. 122 comprobaciones nuevas (61 por navegador), tipos/lint/build. Corregida consulta posterior al logout; no se cambió la API ni la separación de fixtures. [Detalle](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar).
 
+**Propuesta posterior, sin implementación:** [aventuras en inglés](COMMUNITY_DESIGN.md#propuesta-mis-aventuras-en-inglés), para prácticas guiadas repetibles con imágenes y compartición voluntaria. Rama documental `docs/v1-learning-adventures-plan`, desde `3b368e8`; el código funcional sigue en la entrega de cabecera. No hay nuevas funciones, migración ni pruebas de producto en este corte documental.
+
 ## Referencias de continuación
 
 - **Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d` de `feat/v1-community-social-feed`.
