@@ -1,12 +1,14 @@
 # CAI — próximos pasos vigentes
 
-**19 de noviembre de 2026.** Continuación `fix/v1-gallery-all-photos`, [estado real](PROJECT_STATE.md) y decisiones del usuario. La prioridad inmediata autorizada fue la [presentación y el Inicio conectado](COMMUNITY_HOME_STORIES.md), ya implementados; el orden N1–N7 conserva las tareas generales posteriores.
+**19 de noviembre de 2026.** Continuación `feat/v1-remote-demo`, [estado real](PROJECT_STATE.md) y decisiones del usuario. La prioridad inmediata autorizada fue la [presentación y el Inicio conectado](COMMUNITY_HOME_STORIES.md), ya implementados; el orden N1–N7 conserva las tareas generales posteriores.
 
 **Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
 
 **Presentación preparada:** ocho publicaciones y 24 comentarios ficticios, dos álbumes con fotos oficiales y reacciones interactivas en una base nueva. Inicio, carrusel, avisos, publicaciones con fotos y conversación compartida ya funcionan. No repetir esta implementación ni sembrar ejemplos en la instalación real. Recoger observaciones del cliente y de coordinación; operación/recuperación N3 sigue como siguiente trabajo técnico general.
 
 **Observación de presentación corregida:** Galería mostraba dos portadas y ocultaba a primera vista las seis fotos agrupadas. Ahora Fotos es la vista inicial, Álbumes es opcional y los filtros incluyen categorías interiores. No rehacer ni duplicar archivos/conversaciones. 32 comprobaciones nuevas de navegador; [detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).
+
+**Presentación desde otra ubicación:** [demo remota temporal](REMOTE_DEMO.md) autorizada por Cloudflare, máximo 24 horas. Mantener PC conectada; compartir claves solo por canal privado. No confundir con Vercel antiguo ni con infraestructura final.
 
 ## Orden de trabajo
 

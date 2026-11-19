@@ -4,9 +4,12 @@
 
 **Corrección posterior de Galería:** seis fotos visibles individualmente por defecto; Álbumes opcional y filtros por todas las categorías interiores. 32 comprobaciones nuevas (16 Brave/16 Opera), lint/tipos/build correctos. La suite API anterior no se repitió: no hubo cambios de servidor o datos. [Detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).
 
+**Presentación remota autorizada:** [demo temporal protegida](REMOTE_DEMO.md) por Cloudflare sobre copia ficticia separada. Frontend compilado y política HTTPS del backend; credenciales y metadatos fuera de Git. Vercel público conserva el prototipo anterior. Comprobados 11 resultados de protección y 54 de navegador HTTPS (27 por navegador), con fotos, interacción, panel, consola y móvil/escritorio. No equivale a la entrega productiva final.
+
 ## Referencias de continuación
 
-- **Continuación actual:** `fix/v1-gallery-all-photos`, desde `f9c3c1a` de `feat/v1-community-home-stories`.
+- **Continuación actual:** `feat/v1-remote-demo`, desde `d7ef781` de `fix/v1-gallery-all-photos`.
+- **Corrección de Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a` de `feat/v1-community-home-stories`.
 - **Inicio conectado anterior:** `feat/v1-community-home-stories`, desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias, álbumes y demo](COMMUNITY_HOME_STORIES.md). Esquema 18; base habitual intacta y sin despliegue.
 - **Fotografías oficiales anteriores:** `feat/v1-official-media`, desde `d410247` de `feat/v1-production-preparation`; código `cfea458`. [Fotos oficiales](OFFICIAL_MEDIA.md), esquema 17 y seis imágenes para todos los alumnos aprobados; no carga sobre la instalación habitual ni despliegue.
 - **Preparación productiva anterior:** `feat/v1-production-preparation`, código `9be8081`. [Preparación y límites](PRODUCTION_PREPARATION.md).

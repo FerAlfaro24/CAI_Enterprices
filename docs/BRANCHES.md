@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `fix/v1-gallery-all-photos`, desde `f9c3c1a`. Restaura las seis fotos como vista inicial; Álbumes opcional, filtros corregidos.
+- **Continuación actual:** `feat/v1-remote-demo`, desde `d7ef781`. [Presentación remota temporal](REMOTE_DEMO.md), copia ficticia protegida; Vercel sin actualizar.
+- **Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a`. Restaura las seis fotos como vista inicial; Álbumes opcional, filtros corregidos.
 - **Inicio conectado anterior:** `feat/v1-community-home-stories`, desde `422b4d2` de PR #12. Inicio conectado, publicaciones oficiales/álbumes y demo independiente, esquema 18. [Guía](COMMUNITY_HOME_STORIES.md).
 - Fotografías anteriores: `feat/v1-official-media`, desde `d410247` de la preparación productiva. Fotos oficiales, galería para todos los aprobados y esquema 17. [Guía](OFFICIAL_MEDIA.md).
 - Revisión integral anterior: `test/v1-integral-review-2026-11-17`, desde b55cd50.
@@ -14,6 +15,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-remote-demo` parte de `d7ef781`, PR #14. Entrada protegida, lanzador de copia/túnel y comprobaciones. El usuario autorizó Cloudflare por máximo 24 horas, las seis fotos y datos ficticios. Accesos y datos fuera de Git; ninguna fusión ni alojamiento definitivo.
 
 `fix/v1-gallery-all-photos` parte de `f9c3c1a` de PR #13. Ajuste de interfaz: ninguna foto eliminada, todas visibles por defecto, apertura directa y categorías interiores. 32 comprobaciones nuevas (16 por navegador), sin volver a ejecutar API. No se mueve main/release ni se fusiona ninguna PR.
 

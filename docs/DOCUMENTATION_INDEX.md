@@ -1,6 +1,6 @@
 # CAI — índice y clasificación de toda la documentación
 
-**Actualizado: 19-11-2026, tras renovar Inicio y preparar la presentación.** 64 archivos Markdown: los 63 del corte de fotografías y la guía de Inicio/historias/álbumes. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.
+**Actualizado: 19-11-2026, tras renovar Inicio y preparar la presentación.** 65 archivos Markdown: los 64 del corte de Inicio y la guía de presentación remota protegida. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.
 
 ## Cómo leer
 
@@ -23,6 +23,7 @@ Empezar por [START_HERE](START_HERE.md), [PROJECT_STATE](PROJECT_STATE.md) y [NE
 | `docs/NEXT_STEPS.md` | Vigente | [CAI — próximos pasos vigentes](NEXT_STEPS.md) |
 | `docs/RUN_LOCAL.md` | Vigente | [CAI — abrir y probar localmente](RUN_LOCAL.md) |
 | `docs/TESTING.md` | Vigente | [CAI — pruebas y lectura de evidencia](TESTING.md) |
+| `docs/REMOTE_DEMO.md` | Guía operativa de presentación | [Acceso remoto temporal protegido, autorización, pruebas y límites](REMOTE_DEMO.md) |
 | `docs/COMMUNITY_HOME_STORIES.md` | Vigente | [Inicio visual, historias, álbumes, avisos y presentación ficticia](COMMUNITY_HOME_STORIES.md) |
 | `docs/OFFICIAL_MEDIA.md` | Vigente | [Fotos oficiales, audiencias, carga, pruebas y límites](OFFICIAL_MEDIA.md) |
 | `docs/PRODUCTION_PREPARATION.md` | Vigente | [Preparación productiva, configuración, ensayos y límites](PRODUCTION_PREPARATION.md) |

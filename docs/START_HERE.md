@@ -6,7 +6,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `fix/v1-gallery-all-photos` / base `f9c3c1a` | **Continuación actual:** todas las fotos visibles por defecto; Álbumes opcional. Incluye el Inicio conectado y las entregas anteriores. [Guía](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería). |
+| `feat/v1-remote-demo` / base `d7ef781` | **Continuación actual:** presentación remota protegida y temporal, copia ficticia y frontend compilado. [Guía](REMOTE_DEMO.md). |
+| `fix/v1-gallery-all-photos` / base `f9c3c1a` | Entrega anterior: todas las fotos visibles por defecto; Álbumes opcional. Incluye el Inicio conectado y las entregas anteriores. [Guía](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería). |
 | `feat/v1-community-home-stories` / base `422b4d2` | Entrega anterior: Inicio visual, publicaciones oficiales, álbumes/avisos y demo para el cliente; esquema 18. [Guía](COMMUNITY_HOME_STORIES.md). |
 | `feat/v1-official-media` / base `d410247` | Paso anterior: fotografías oficiales, audiencia común y esquema 17; incluye las ramas anteriores. [Guía](OFFICIAL_MEDIA.md). |
 | `feat/v1-production-preparation` / código `9be8081` | Preparación anterior: desde 95e53e2, añade configuración/sesiones/operación inicial de producción ensayadas; no desplegada. |
@@ -26,7 +27,7 @@ Sitio institucional, comunidad privada y panel. Persistencia/permisos locales pa
 
 SQLite esquema 18; fotos oficiales públicas y para todos los alumnos aprobados integradas. Google real, entrega de correo, contenido comercial/validaciones finales, aceptación de CAI e infraestructura pendientes. **Vídeos opcionales y de menor prioridad**, no implementados; si se retoman, solo coordinación sube y grupo autorizado ve. No ejecutar planes antiguos como tareas abiertas.
 
-El modo local sigue limitado a localhost. Producción exige configuración explícita, datos privados separados y proxy HTTPS loopback; se comprobó en simulación, **sin despliegue real**. Ver [guía productiva](PRODUCTION_PREPARATION.md), [PROJECT_STATE](PROJECT_STATE.md) y [NEXT_STEPS](NEXT_STEPS.md).
+El modo local sigue limitado a localhost. Producción exige configuración explícita, datos privados separados y proxy HTTPS loopback; se comprobó en simulación, **sin alojamiento definitivo**. Ver [guía productiva](PRODUCTION_PREPARATION.md), [PROJECT_STATE](PROJECT_STATE.md) y [NEXT_STEPS](NEXT_STEPS.md).
 
 ## Recuperar un clon en Windows
 
@@ -41,7 +42,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/fix/v1-gallery-all-photos
+git switch --track origin/feat/v1-remote-demo
 code .
 npm.cmd ci
 ```
