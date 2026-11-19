@@ -15,7 +15,7 @@
 | Aprobar o rechazar una historia | Publicaciones |
 | Revisar comentarios de los alumnos | Publicaciones → Comentarios |
 | Pausar nuevos comentarios | Configuración → Comentarios de las historias |
-| Compartir o retirar una imagen de un grupo | Galería privada |
+| Compartir o retirar imágenes de grupo o comunidad | Galería privada |
 | Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
 | Mantener grupos o pausar solicitudes/envíos | Configuración |
 | Activar o pausar reacciones a historias | Configuración → Reacciones a las historias |
@@ -180,3 +180,8 @@ En **Insignias** aparecen solicitudes pendientes y concesiones registradas. El n
 5. Si aparece conflicto o se pierde la conexión durante una decisión, carga el estado actual antes de repetirla. El alumno conserva el texto de una solicitud que no pudo confirmar y puede reintentar sin duplicarla.
 
 El alumno decide si comparte su insignia. El formulario de publicación usa un texto nuevo editable, sin copiar la solicitud ni los motivos. No hay reconocimiento público automático ni acceso a colecciones privadas de compañeros. Añadir a la validación final con CAI: revisar una solicitud, explicar una indicación, conceder un reconocimiento al alumno correcto y corregir una concesión sin republicar una historia por accidente.
+
+
+## Fotografías oficiales y destinatarios
+
+En **Galería privada**, el bloque **Fotos oficiales de CAI** permite cargar las seis imágenes ya preparadas. Marcar que se compartirán con todos los alumnos aprobados y pulsar **Cargar fotos oficiales**. Se puede reintentar sin duplicar ni recuperar fotos retiradas. Para nuevas imágenes, elegir **Un grupo específico** o **Todos los alumnos aprobados** antes de revisar permisos y publicar. Las imágenes antiguas conservan su grupo. Ver [guía de material oficial](OFFICIAL_MEDIA.md).

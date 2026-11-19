@@ -4,15 +4,16 @@
 
 1. Leer [START_HERE](docs/START_HERE.md), [PROJECT_STATE](docs/PROJECT_STATE.md), [BRANCHES](docs/BRANCHES.md) y [NEXT_STEPS](docs/NEXT_STEPS.md). Las instrucciones nuevas del usuario prevalecen. [DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md) clasifica el resto.
 2. Comprobar Git y cambios del usuario. Localizar componente/servicio existente, base y criterio de cierre antes de editar. No confundir un informe histórico con trabajo pendiente.
-3. Continuación actual: `feat/v1-production-preparation`, desde `95e53e2`; código `9be8081`. Leer también [PRODUCTION_PREPARATION](docs/PRODUCTION_PREPARATION.md): 217 API/104 navegador seleccionadas en esta tanda; TLS/proveedor reales pendientes. El [informe integral](docs/v1-integral-review-2026-11-17.md) de 193 API/1,314 navegador es el corte anterior y no se suma. Esquema 16, sin nuevas migraciones. Main antigua; v1.0/f3ba46b sigue como referencia visual.
+3. Continuación actual: `feat/v1-official-media`, desde `d410247` de `feat/v1-production-preparation`; código `cfea458`. Leer [OFFICIAL_MEDIA](docs/OFFICIAL_MEDIA.md): 4 imágenes públicas/6 de comunidad, audiencia de todos los alumnos aprobados autorizada, migración 17. 225 API y revisión manual en navegador integrado; Brave/Opera no disponibles en esta sesión. Resultados anteriores de 217 API/104 navegador y 193 API/1,314 corresponden a sus cortes y no se suman. Main antigua; v1.0/f3ba46b sigue como referencia visual.
 
 ## Alcance y prioridad
 
 - Ya conectados: acceso/solicitudes/tutor, panel v1.0, alumnos/expediente, grupos/ajustes, publicaciones, imágenes privadas, comentarios/reacciones, perfiles, equipo, avisos/recuperación local, Retos e Insignias. No recrearlos ni sustituirlos por pantallas simplificadas.
 - Retos: 180 preguntas/45 temas, tres al día según Ciudad de México, calendario/banco, respuesta única y progreso/repaso privado. Insignias: nueve, reglas reales, revisión/correcciones privadas, compartición voluntaria moderada. Ver informes especializados.
+- Fotos oficiales ya integradas; las seis convivencias/cumpleaños son para todos los alumnos aprobados, también sin grupo. No convertirlas en recursos públicos ni ampliar la audiencia de imágenes antiguas. Repetir la carga no duplica ni restaura retiradas; conservar CAI_DATA_DIR/official-media (producción) o .local/official-media (local) en el backend privado. No pedir otra vez esta decisión ni sustituir personas reales con imágenes generadas.
 - Vídeos son **opcionales y de menor prioridad**; no iniciarlos por un plan histórico. Si se retoman, coordinación sube y grupo autorizado ve. Repaso dirigido, analítica pedagógica, búsqueda ampliada y bienvenida siguen como propuestas sin implementación ni autorización automática.
 - Priorizar trabajo autónomo autorizado. Agrupar Google/correo reales, material/permisos/validación y responsables de CAI al final; presupuesto/contratación después. Registrar dependencias sin inventar funciones para eludirlas.
-- Modo local conservado. Producción requiere origen HTTPS canónico, proxy loopback que sobrescriba cabeceras, datos privados fuera del código y base esquema 16 ya preparada. Cookies __Host/Secure por aplicación; no relajar orígenes, red o confianza para superar una prueba. No presentarlo como desplegado o apto para alumnos reales antes de validar entorno/servicios/CAI.
+- Modo local conservado. Producción requiere origen HTTPS canónico, proxy loopback que sobrescriba cabeceras, datos privados fuera del código y base esquema 17 ya preparada. Cookies __Host/Secure por aplicación; no relajar orígenes, red o confianza para superar una prueba. No presentarlo como desplegado o apto para alumnos reales antes de validar entorno/servicios/CAI.
 
 ## Desarrollo y seguridad
 

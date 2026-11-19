@@ -4,7 +4,7 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-production-preparation`, desde 95e53e2 de la revisión integral; código 9be8081. Ver sección siguiente.
+- **Continuación actual:** `feat/v1-official-media`, desde `d410247` de la preparación productiva. Fotos oficiales, galería para todos los aprobados y esquema 17. [Guía](OFFICIAL_MEDIA.md).
 - Revisión integral anterior: `test/v1-integral-review-2026-11-17`, desde b55cd50.
 - Auditoría documental inicial y código completo: `docs/continuidad-auditoria-2026-11-17`.
 - Base funcional de la PR: `fix/v1-dev-preview-cache` / `3971284`.
@@ -13,7 +13,9 @@
 
 ## Ramas añadidas después del corte
 
-`feat/v1-production-preparation` parte de 95e53e2, punta de PR #10. [9be8081](https://github.com/FerAlfaro24/CAI_Enterprices/commit/9be8081c6f790e0be4e507154d622ed0a76077e9) prepara configuración, transporte/cookies, operación inicial y pruebas productivas; las guías se actualizan después. 217 API y 104 navegador seleccionadas, sin desplegar. Es la continuación actual y su revisión se dirige a la rama de PR #10; no fusiona esa PR ni mueve main/release. [Guía](PRODUCTION_PREPARATION.md).
+`feat/v1-official-media` parte de `d410247`, punta de PR #11 (`feat/v1-production-preparation`). Integra cuatro imágenes públicas y la carga privada de seis fotos oficiales (archivos privados fuera de Git), audiencia común explícita sin ampliar las fotos antiguas de grupo, importación recuperable e idempotente, y migración 17. 225 API y revisión manual de las vistas afectadas en navegador integrado; Brave/Opera no disponibles en esta sesión. Revisión dirigida a la rama de PR #11; no fusiona las PR anteriores ni cambia main/release. [Guía y límites](OFFICIAL_MEDIA.md).
+
+`feat/v1-production-preparation` parte de 95e53e2, punta de PR #10. [9be8081](https://github.com/FerAlfaro24/CAI_Enterprices/commit/9be8081c6f790e0be4e507154d622ed0a76077e9) prepara configuración, transporte/cookies, operación inicial y pruebas productivas; las guías se actualizan después. 217 API y 104 navegador seleccionadas, sin desplegar. Es el paso productivo anterior y su revisión se dirige a la rama de PR #10; no fusiona esa PR ni mueve main/release. [Guía](PRODUCTION_PREPARATION.md).
 
 `test/v1-integral-review-2026-11-17` parte de b55cd50, punta corregida de PR #9. [8c515de](https://github.com/FerAlfaro24/CAI_Enterprices/commit/8c515ded7a7e60349fff458e629c0d6a5f02a30e) guarda cuatro cambios de pruebas; un commit posterior actualiza las guías y el [informe integral](v1-integral-review-2026-11-17.md). Código de aplicación idéntico a 3971284, con 193 API/1,314 navegador recién comprobados. La revisión se propone hacia la rama documental, conservando ambas historias; no fusiona PR #9 ni mueve main/release. Esta rama es posterior a las 37 referencias de la fotografía siguiente y no altera sus recuentos históricos.
 

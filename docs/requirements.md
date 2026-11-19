@@ -1,6 +1,6 @@
 # CAI — requisitos y estado de alcance
 
-**Reconciliado al 17-11-2026.** Confirmaciones del usuario distinguidas de aceptación final de CAI. No describe una aplicación ya productiva. [PROJECT_STATE](PROJECT_STATE.md) tiene la evidencia; [NEXT_STEPS](NEXT_STEPS.md) concentra prioridades. Las propuestas iniciales se conservan en el historial de Git y los documentos clasificados como antecedentes.
+**Reconciliado al 19-11-2026.** Confirmaciones del usuario distinguidas de aceptación final de CAI. No describe una aplicación ya productiva. [PROJECT_STATE](PROJECT_STATE.md) tiene la evidencia; [NEXT_STEPS](NEXT_STEPS.md) concentra prioridades. Las propuestas iniciales se conservan en el historial de Git y los documentos clasificados como antecedentes.
 
 ## Requisitos funcionales
 
@@ -9,7 +9,7 @@ Se conservan los identificadores RF de los documentos anteriores para poder rast
 | ID | Requisito / alcance | Estado real |
 | --- | --- | --- |
 | RF-01 | Sitio público, presentación/programas y contacto | Interfaz y consulta persistente locales; contenido comercial final pendiente. |
-| RF-02 | Comunidad privada de logros/experiencias y medios autorizados | Texto e imágenes conectados; vídeo opcional no implementado. |
+| RF-02 | Comunidad privada de logros/experiencias y medios autorizados | Texto e imágenes conectados; fotos oficiales públicas y privadas integradas. Galería común para todos los aprobados o privada por grupo. Vídeo opcional no implementado. |
 | RF-03 | Visitante, alumno y administrador con permisos | Roles/sesiones en servidor; un selector de demo no concede acceso. |
 | RF-04 | Solicitud, revisión y aprobación de acceso | Persistente; verificar inscripción/tutor con CAI. |
 | RF-05 | Creación/revisión de publicaciones | Persistente por grupo, con retirada y motivo privado. |

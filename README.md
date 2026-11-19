@@ -2,28 +2,28 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 17 de noviembre de 2026:** aplicación integrada, esquema SQLite 16. **Continuar en `feat/v1-production-preparation`**, desde la revisión integral `95e53e2`. Código de preparación productiva comprobado: `9be8081`; incorpora las guías de [PR #9](https://github.com/FerAlfaro24/CAI_Enterprices/pull/9) y la revisión de PR #10. Hay configuración explícita de producción, sesiones seguras y operación inicial ensayadas; **no hay despliegue real validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
+**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 17. **Continuar en `feat/v1-official-media`**, desde `d410247` de `feat/v1-production-preparation`; código `cfea458`. Incluye la preparación productiva y la revisión integral anteriores, más [fotografías oficiales](docs/OFFICIAL_MEDIA.md): cuatro públicas y carga privada de seis para todos los alumnos aprobados. Los archivos privados se entregan fuera de GitHub. **No hay despliegue real validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
 
 ## Qué funciona localmente
 
 - Sitio institucional y contacto persistente; material comercial definitivo por validar.
 - Solicitud, tutor, revisión, activación, contraseña, suspensión, perfiles y expediente.
 - Panel v1.0 conectado: alumnos, grupos, ajustes, equipo, bandejas y moderación.
-- Comunidad por grupo: publicaciones, comentarios revisados, reacciones e imágenes privadas.
+- Comunidad por grupo: publicaciones, comentarios revisados y reacciones; galería privada para un grupo o todos los alumnos aprobados.
 - Retos: **180 preguntas/45 temas**, tres al día, explicaciones, puntos, constancia y repaso.
 - Insignias: **nueve**, automáticas o concedidas por CAI, solicitudes/correcciones privadas y compartición voluntaria moderada.
 - SQLite, migraciones, copias/verificación, avisos y recuperación locales.
 
-Google real, entrega real de correo, contenido/autorizaciones, aceptación de CAI y validación del alojamiento siguen pendientes. La base técnica del servidor está [preparada y comprobada en simulación](docs/PRODUCTION_PREPARATION.md). **Vídeos: menor prioridad y opcionales; no implementados.** Si se retoman, solo coordinación sube y el grupo autorizado ve.
+Google real, entrega real de correo, contenido comercial y validaciones finales, aceptación de CAI y validación del alojamiento siguen pendientes. La base técnica del servidor está [preparada y comprobada en simulación](docs/PRODUCTION_PREPARATION.md). **Vídeos: menor prioridad y opcionales; no implementados.** Si se retoman, solo coordinación sube y el grupo autorizado ve.
 
 ## Recuperar el proyecto
 
-Repositorio privado: autentícate mediante el gestor de credenciales de GitHub que utilices; no pongas tokens en comandos o archivos. En un clon nuevo, PowerShell:
+GitHub muestra este repositorio como público al 19-11-2026. Para operaciones autenticadas, utiliza el gestor de credenciales de GitHub; no pongas tokens en comandos o archivos. En un clon nuevo, PowerShell:
 
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-production-preparation
+git switch --track origin/feat/v1-official-media
 code .
 npm.cmd ci
 ```
