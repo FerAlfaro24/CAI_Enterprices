@@ -2,14 +2,14 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 17. **Continuar en `feat/v1-official-media`**, desde `d410247` de `feat/v1-production-preparation`; código `cfea458`. Incluye la preparación productiva y la revisión integral anteriores, más [fotografías oficiales](docs/OFFICIAL_MEDIA.md): cuatro públicas y carga privada de seis para todos los alumnos aprobados. Los archivos privados se entregan fuera de GitHub. **No hay despliegue real validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
+**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 18. **Continuar en `feat/v1-community-home-stories`**, desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias y álbumes](docs/COMMUNITY_HOME_STORIES.md): fotos autorizadas en Inicio, publicaciones oficiales con fotos, avisos/destacados/vencimiento y conversación compartida con Galería. La presentación al cliente usa una base ficticia independiente. Incluye las [fotos oficiales](docs/OFFICIAL_MEDIA.md) de la rama anterior; sus archivos privados se entregan fuera de GitHub. **Sin despliegue real validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
 
 ## Qué funciona localmente
 
 - Sitio institucional y contacto persistente; material comercial definitivo por validar.
 - Solicitud, tutor, revisión, activación, contraseña, suspensión, perfiles y expediente.
 - Panel v1.0 conectado: alumnos, grupos, ajustes, equipo, bandejas y moderación.
-- Comunidad por grupo: publicaciones, comentarios revisados y reacciones; galería privada para un grupo o todos los alumnos aprobados.
+- Comunidad: historias de alumnos por grupo y publicaciones de Equipo CAI con fotos/álbumes, avisos y destacados para grupo o todos los aprobados; comentarios/reacciones compartidos entre vistas.
 - Retos: **180 preguntas/45 temas**, tres al día, explicaciones, puntos, constancia y repaso.
 - Insignias: **nueve**, automáticas o concedidas por CAI, solicitudes/correcciones privadas y compartición voluntaria moderada.
 - SQLite, migraciones, copias/verificación, avisos y recuperación locales.
@@ -23,7 +23,7 @@ GitHub muestra este repositorio como público al 19-11-2026. Para operaciones au
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-official-media
+git switch --track origin/feat/v1-community-home-stories
 code .
 npm.cmd ci
 ```

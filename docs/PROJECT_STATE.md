@@ -1,10 +1,11 @@
 # CAI — estado vigente
 
-**Actualizado: 19 de noviembre de 2026, integración de fotografías oficiales.** Última suite: 225 API correctas; revisión manual de las vistas afectadas en navegador aislado integrado. Brave/Opera no disponibles en esta sesión. Resultados de 217 API/104 navegador y 193 API/1,314 navegador pertenecen a cortes anteriores y no se suman. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice documental](DOCUMENTATION_INDEX.md).
+**Actualizado: 19 de noviembre de 2026, Inicio visual y presentación al cliente.** Última suite: **233 API correctas** y **76 comprobaciones en navegador (38 Brave/38 Opera)**, con perfiles aislados; lint/tipos/build. Los cortes anteriores de 225, 217/104 y 193/1,314 no se suman ni se declaran repetidos. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice documental](DOCUMENTATION_INDEX.md).
 
 ## Referencias de continuación
 
-- **Continuación actual:** `feat/v1-official-media`, desde `d410247` de `feat/v1-production-preparation`; código `cfea458`. [Fotos oficiales](OFFICIAL_MEDIA.md), esquema 17 y seis imágenes para todos los alumnos aprobados; no carga sobre la instalación habitual ni despliegue.
+- **Continuación actual:** `feat/v1-community-home-stories`, desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias, álbumes y demo](COMMUNITY_HOME_STORIES.md). Esquema 18; base habitual intacta y sin despliegue.
+- **Fotografías oficiales anteriores:** `feat/v1-official-media`, desde `d410247` de `feat/v1-production-preparation`; código `cfea458`. [Fotos oficiales](OFFICIAL_MEDIA.md), esquema 17 y seis imágenes para todos los alumnos aprobados; no carga sobre la instalación habitual ni despliegue.
 - **Preparación productiva anterior:** `feat/v1-production-preparation`, código `9be8081`. [Preparación y límites](PRODUCTION_PREPARATION.md).
 - **Base funcional anterior:** `fix/v1-dev-preview-cache`, `3971284f30110eb054f0d3616899ddafe97e3683`.
 - **Revisión integral anterior:** `test/v1-integral-review-2026-11-17`, desde b55cd50; pruebas `8c515de` y cierre `95e53e2`, sin cambios de aplicación en esa tarea. [Informe y límites](v1-integral-review-2026-11-17.md).
@@ -12,9 +13,9 @@
 - **Base visual:** `release/cai-demo-v1.0`, `f3ba46b`, preservada. Panel/Community avanzados ya existían y se conectaron; no reconstruirlos.
 - **Main:** `a3c2569`, antigua, 74 commits detrás de la base funcional al corte.
 - **Revisión anterior:** `chore/v1-final-review`, `fee87d1`, 15 commits detrás. No es la última línea funcional.
-- **Persistencia:** SQLite esquema 17. No hay despliegue productivo validado.
+- **Persistencia:** SQLite esquema 18. No hay despliegue productivo validado.
 
-Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BRANCHES. Esta PR conserva su historia documental previa y añade el código funcional acumulado en su rama de trabajo; no modifica main/release ni fusiona funcionalidades otra vez en ellas.
+Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BRANCHES. Las ramas posteriores conservan el trabajo acumulado. La nueva rama añade historias oficiales, medios vinculados y el Inicio renovado; no modifica main/release ni vuelve a fusionar funcionalidades históricas.
 
 ## Inventario funcional
 
@@ -26,11 +27,11 @@ Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BR
 | Google | Integración opcional y datos del alumno obligatorios preparados | `server/google-auth.ts`; proyecto de CAI y prueba real pendientes, botón desactivado sin configuración. |
 | Panel v1.0 | Datos/acciones conectados, pendientes, alumnos y moderación | `src/layouts/AdminLayout.tsx`, `src/features/admin/`; no es otro dashboard de demo. |
 | Grupos/ajustes | Catálogo, asignación, archivo y pausas persistentes | `server/administration.ts`; catálogo/material final por confirmar con CAI. |
-| Comunidad | Cuenta, miembros y feed del grupo, perfil propio y avisos privados | `src/features/community/ConnectedCommunity.tsx`, `server/public-profiles.ts`; sin expedientes ajenos públicos. |
-| Publicaciones | Texto, revisión, motivo privado, retirada e historial | `server/publications.ts`; [informe](v1-connected-community.md). |
+| Comunidad | Inicio con fotos autorizadas, avisos destacados, historias, perfiles y notificaciones privadas | `src/features/community/ConnectedCommunity.tsx`, `server/public-profiles.ts`; sin expedientes ajenos públicos. |
+| Publicaciones | Alumnos: texto/logros moderados por grupo. Equipo CAI: historia/aviso/álbum, hasta 12 fotos, destinatarios, destacado, vencimiento y retirada | `server/publications.ts`, `server/institutional-posts.ts`; [guía vigente](COMMUNITY_HOME_STORIES.md). |
 | Reacciones | Cinco opciones, selección propia, contadores, pausa y reintentos | `server/reactions.ts`; [147 API/134 navegador en su entrega](v1-community-reactions.md). |
 | Comentarios | Premoderación, paginación, motivos privados, retirada y pausas global/por historia | `server/comments.ts`; [163 API/228 navegador en su entrega](v1-community-comments.md). |
-| Imágenes | Cuatro fotos públicas y seis privadas oficiales; subida de coordinación para grupo o todos los aprobados, retirada e importación sin duplicados | `server/gallery.ts`, `server/official-media.ts`; [guía vigente](OFFICIAL_MEDIA.md). El [informe original](v1-private-gallery.md) corresponde al alcance anterior por grupo. No es vídeo. |
+| Imágenes | Cuatro públicas y seis privadas oficiales; fotos nuevas en borrador, álbumes vinculados y una conversación; Galería respeta grupo/comunidad, retirada y vencimiento | `server/gallery.ts`, `server/official-media.ts`; [guía vigente](OFFICIAL_MEDIA.md). El [informe original](v1-private-gallery.md) corresponde al alcance anterior por grupo. No es vídeo. |
 | Retos | 180 preguntas/45 temas; tres diarias, calendario/banco administrable, respuesta única, puntos/constancia y repaso privados | `server/challenge-bank.ts`, `server/challenges.ts`; [179 API/142 navegador en su entrega](v1-community-challenges.md). Fecha America/Mexico_City. |
 | Insignias | Nueve, automáticas/revisadas/institucionales; concesión única, historial/corrección y compartición voluntaria moderada | `server/badges.ts`, `shared/badges.ts`; [193 API y matriz 234 en su entrega](v1-community-badges.md). |
 | Administración de cuentas | Contraseña propia, recuperación local, equipo e invitaciones | `server/auth.ts`, `server/admin-team.ts`, `server/admin-recovery.ts`; entrega de correo real pendiente. |
@@ -42,7 +43,9 @@ Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BR
 
 ## Evidencia y límites
 
-**Última suite: 225/225**, con las pruebas de fotografías oficiales, migración, privacidad, reintentos y carga parcial. [Resultados y límites actuales](OFFICIAL_MEDIA.md).
+**Última suite: 233/233 y 76 navegador**. [Resultados actuales](COMMUNITY_HOME_STORIES.md).
+
+Corte anterior de fotografías: **225/225**, con las pruebas de fotografías oficiales, migración, privacidad, reintentos y carga parcial. [Resultados y límites actuales](OFFICIAL_MEDIA.md).
 
 Preparación productiva anterior: **217/217**, incluida regresión y 24 resultados de preparación productiva. Navegador: 27 de transporte productivo simulado y 25 locales en Brave/Opera, **104 en cuatro recorridos**; flujo de menor nuevo y sesiones seguras. Lint/tipos/build correctos. Ensayo CLI en copia desechable, sin base habitual. [Guía/resultados](PRODUCTION_PREPARATION.md). No valida TLS, certificado, DNS o proceso de un proveedor real.
 
@@ -50,7 +53,7 @@ Revisión integral anterior: 193/193 y **1,314 en 38 recorridos completos**, con
 
 La matriz de Insignias de 234 y la revisión antigua de 134 API/844 navegador siguen como evidencia de sus propios cortes; no se agregan a la revisión nueva. Ver [TESTING](TESTING.md).
 
-Esquemas posteriores a la revisión antigua: 13 reacciones, 14 comentarios, 15 retos y 16 insignias y 17 audiencia de galería. La presencia de tablas, rutas y pruebas contrasta las integraciones; no se deducen de nombres de ramas o botones. La demostración en memoria se conserva como referencia separada, no como seguridad.
+Esquemas posteriores a la revisión antigua: 13 reacciones, 14 comentarios, 15 retos y 16 insignias y 17 audiencia de galería y 18 publicaciones institucionales/medios vinculados. La presencia de tablas, rutas y pruebas contrasta las integraciones; no se deducen de nombres de ramas o botones. La demostración en memoria se conserva como referencia separada, no como seguridad.
 
 Incidencias: diez avisos moderados de herramientas/cero de ejecución en la auditoría anterior, no repetida hoy. Las dos intermitencias Opera antiguas no se reprodujeron; su causa sigue sin confirmar. En la revisión integral hubo un error route.fulfill del simulador de reacciones; pasó al repetir y tras mejorar la espera, sin causa exacta confirmada. La prueba visual de insignias se hizo independiente del recorrido funcional. Las trece imágenes de portada cargaron en aquella inspección Brave; las fotos oficiales se integraron después; textos comerciales definitivos siguen pendientes. No se ha probado producción real, correo/Google reales, datos reales o aceptación humana.
 

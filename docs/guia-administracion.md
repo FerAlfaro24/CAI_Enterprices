@@ -185,3 +185,12 @@ El alumno decide si comparte su insignia. El formulario de publicación usa un t
 ## Fotografías oficiales y destinatarios
 
 En **Galería privada**, el bloque **Fotos oficiales de CAI** permite cargar las seis imágenes ya preparadas. Marcar que se compartirán con todos los alumnos aprobados y pulsar **Cargar fotos oficiales**. Se puede reintentar sin duplicar ni recuperar fotos retiradas. Para nuevas imágenes, elegir **Un grupo específico** o **Todos los alumnos aprobados** antes de revisar permisos y publicar. Las imágenes antiguas conservan su grupo. Ver [guía de material oficial](OFFICIAL_MEDIA.md).
+
+
+## Publicar una historia, un aviso o un álbum de CAI
+
+En **Publicaciones → Crear publicación de CAI**, elegir el tipo, escribir título/texto y seleccionar destinatarios. Añadir fotos nuevas (con descripción y autorización) o fotografías disponibles de Galería. **Guardar también las fotos en Galería** crea el archivo visual; en un álbum se activa automáticamente. **Destacar en Inicio** lo incluye en la selección principal; un aviso destacado aparece encima del carrusel. La fecha opcional indica cuándo dejará de mostrarse la publicación. Revisar permisos y confirmar.
+
+Inicio y Galería abren la misma historia y conversación. En **Publicaciones de coordinación** se puede quitar/poner destacado o retirar con confirmación. La retirada afecta la historia, las fotos y el álbum asociados. En Galería, **Borradores** muestra archivos de cargas que todavía no se publicaron; el acceso de alumnos permanece bloqueado. **Agregar una fotografía solo a Galería** conserva el uso de foto independiente, sin crear una historia.
+
+Las historias de alumnos siguen en la bandeja de moderación y sus comentarios se revisan con las herramientas existentes. **Mis notificaciones** es privado para cada alumno; no se convierte en un aviso compartido de coordinación. Ver [guía y presentación](COMMUNITY_HOME_STORIES.md).

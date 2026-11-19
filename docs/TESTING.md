@@ -1,6 +1,6 @@
 # CAI — pruebas y lectura de evidencia
 
-**Actualizado: 19-11-2026.** [Material oficial](OFFICIAL_MEDIA.md): **225 API correctas**, lint/tipos/build y revisión manual en navegador integrado de las vistas afectadas. Sin herramientas Brave/Opera disponibles en esta sesión; sus matrices anteriores no se repitieron ni se suman. Pruebas únicamente en fixtures nuevas de `.local/tests`.
+**Actualizado: 19-11-2026, Inicio visual y presentación.** [Última entrega](COMMUNITY_HOME_STORIES.md): **233 API y 76 comprobaciones de navegador (38 Brave/38 Opera)**, lint/tipos/build. Contextos aislados y bases nuevas de `.local/tests`; sin datos/acceso habitual. Los resultados de fotografías y producción anteriores corresponden a sus cortes.
 
 ## Evidencia histórica por corte
 
@@ -15,6 +15,7 @@
 | Revisión integral posterior, base `b55cd50`, pruebas `8c515de` | **193 aprobados de nuevo** | **1,314: 19 recorridos/657 por navegador**, módulos acumulados y menor nuevo de extremo a extremo | [Informe nuevo, intentos y límites](v1-integral-review-2026-11-17.md) |
 | Preparación productiva, base `95e53e2`, código `9be8081` | **217 aprobados** | **104: 27 de producción simulada +25 locales por navegador**, cuatro recorridos seleccionados | [Guía/resultados y límites](PRODUCTION_PREPARATION.md) |
 | Fotografías oficiales, base `d410247` | **225 aprobados** | Revisión manual en navegador integrado; móvil/escritorio, temas, carga/reintento, audiencia, álbumes y consola. Sin nueva matriz Brave/Opera. | [Guía/resultados y límites](OFFICIAL_MEDIA.md) |
+| Inicio conectado, historias/álbumes y presentación, base `422b4d2` | **233 aprobados** | **76: 28 de Inicio/conversación/avisos y 10 de subida de fotos por navegador**, con temas y tamaños | [Guía y límites](COMMUNITY_HOME_STORIES.md) |
 
 No sumar estas matrices como pruebas únicas de una sola versión ni deducir menor cobertura del total inferior de una tanda: cada una tiene alcance propio y regresiones seleccionadas. No se volvió a ejecutar la matriz antigua completa al conectar cada módulo. Las cifras son resultados, no garantías de producción.
 

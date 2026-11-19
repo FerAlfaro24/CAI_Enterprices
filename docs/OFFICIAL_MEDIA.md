@@ -1,5 +1,7 @@
 # Fotografías oficiales de CAI
 
+> Continuación del mismo día: [Inicio, historias y álbumes](COMMUNITY_HOME_STORIES.md), esquema 18. Las fotos se pueden vincular a publicaciones de Equipo CAI desde un único formulario; las conversaciones se comparten entre Inicio y Galería. Esta guía conserva la selección y evidencia del corte de fotografías. El preflight actual exige 1–18.
+
 **19-11-2026 · código `cfea458`, rama `feat/v1-official-media`, desde `d410247` de `feat/v1-production-preparation`.** Integración autorizada por el usuario: página pública con materiales/aula/práctica en línea; convivencias y cumpleaños visibles para **todos los alumnos aprobados**. No es un despliegue ni una carga sobre la instalación habitual.
 
 ## Selección y preparación
@@ -37,7 +39,7 @@ La fecha mostrada es **Publicada el…**, fecha de carga, sin atribuir al evento
 - Los seis JPEG privados están fuera de Git: `.local/official-media` en local y `CAI_DATA_DIR/official-media` en producción. Vite bloquea `.local`, también con variantes de mayúsculas, escape, @fs, ?raw y ?url comprobadas. El paquete público dist contiene solo las cuatro fotos públicas. Servir únicamente dist en el alojamiento.
 - La API guarda la versión WebP procesada en SQLite y sirve sus bytes a través del recurso autenticado existente, con no-store. La copia consistente conserva también las imágenes y sus audiencias.
 - Al entregar, copiar el paquete de medios por un canal privado a la carpeta de datos anterior, fuera del código publicado. El runtime determina el directorio; el cliente no puede enviar rutas. Sin paquete instalado, la carga muestra un error útil y permite reintentar después; no busca archivos públicos alternativos. Las fotos ya guardadas en SQLite siguen disponibles aunque se retire el paquete original.
-- Preflight productivo exige historial completo **1–17**; backups compatibles 9–17. Arranque productivo no migra bases. Antes de actualizar una instalación: copia consistente, ensayo en una copia separada y procedimiento explícito; no usar setup para sustituir datos/accesos existentes. Esta sesión no abrió ni migró la base habitual.
+- Preflight productivo actual exige historial completo **1–18**; backups compatibles 9–18. Arranque productivo no migra bases. Antes de actualizar una instalación: copia consistente, ensayo en una copia separada y procedimiento explícito; no usar setup para sustituir datos/accesos existentes. Esta sesión no abrió ni migró la base habitual.
 
 ## Comprobaciones y límites
 
