@@ -1,3 +1,4 @@
+import { institutionalPosts } from './institutional-posts.ts'
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { openDatabase } from './database.ts'
 import { accessRepository } from './access-repository.ts'
@@ -48,8 +49,9 @@ function json(response: ServerResponse, status: number, data: unknown) {
   response.end(JSON.stringify(data))
 }
 
-export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date;runtime?:RequestPolicy;log?:OperationalLog;officialMediaDirectory?:string} = {}) {
+export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date;runtime?:RequestPolicy;log?:OperationalLog;officialMediaDirectory?:string;demonstration?:boolean} = {}) {
   const policy = validateRequestPolicy(options.runtime ?? localPolicy)
+  if(options.demonstration&&policy.mode!=='local')throw Error('La demostración de comunidad solo puede ejecutarse en local.')
   const cookies = { secure: policy.mode === 'production' }
   const log = options.log ?? (policy.mode === 'production' ? event => console.info(JSON.stringify(event)) : undefined)
   const db = openDatabase(databasePath)
@@ -58,6 +60,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const studentAuth = studentAccounts(db, cookies)
   const google = googleAccounts(db, googleOptions, cookies)
   const posts = publications(db)
+  const institutional = institutionalPosts(db)
   const mail = notices(db)
   const config = administration(db)
   const contacts = contactRepository(db)
@@ -266,7 +269,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
         return json(response, 200, { ok: true })
       }
       if (path === '/api/local/student/group' && method === 'GET') return json(response, 200, { members: studentAuth.group(user) })
-      if (path === '/api/local/student/posts' && method === 'GET') return json(response, 200, { posts: posts.feed(user).map(post=>({...post,commentCount:comments.count(post.id)})), mine: posts.mine(user) })
+      if (path === '/api/local/student/posts' && method === 'GET') return json(response, 200, { demonstration:options.demonstration===true, posts: posts.feed(user).map(post=>({...post,commentCount:comments.count(post.id)})), mine: posts.mine(user) })
       const conversation=path.match(/^\/api\/local\/student\/posts\/(PUB-\d+)\/comments(\/mine)?$/)
       if(conversation&&method==='GET')return json(response,200,conversation[2]?comments.mine(user,conversation[1]!,commentCursor(url.searchParams.get('before'))):comments.list(user,conversation[1]!,commentCursor(url.searchParams.get('before'))))
       if(conversation&&!conversation[2]&&method==='POST'){
@@ -420,6 +423,15 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       mail.acknowledge(id)
       return json(response, 200, { ok: true })
     }
+    if(path==='/api/local/institutional-posts'&&method==='GET')return json(response,200,{posts:posts.institutional()})
+    if(path==='/api/local/institutional-posts'&&method==='POST'){
+      limit(`institutional:${user.id}`,30,60*60_000)
+      const key=request.headers['idempotency-key']
+      if(typeof key!=='string'||!/^[a-f0-9-]{36}$/i.test(key))throw new HttpError(400,'Falta el identificador del envío.')
+      const data=await protectedBody();return json(response,201,{id:institutional.create(data,key,user.id)})
+    }
+    const officialPost=path.match(/^\/api\/local\/institutional-posts\/PUB-(\d{4,})$/)
+    if(officialPost&&method==='PATCH'){institutional.update(Number(officialPost[1]),await protectedBody(),user.id);return json(response,200,{ok:true})}
     if (path === '/api/local/posts' && method === 'GET') return json(response, 200, { posts: posts.review() })
     if(path==='/api/local/comment-counts'&&method==='GET')return json(response,200,{counts:comments.counts()})
     if(path==='/api/local/comments'&&method==='GET')return json(response,200,{...comments.reviews(commentStatus(url.searchParams.get('status')??'pendiente'),commentCursor(url.searchParams.get('before'))),counts:comments.counts()})
