@@ -28,7 +28,7 @@ export function ReactionsBar({ post }: { post: Post }) {
   }
   return <section className={s.bar} aria-label={`Celebraciones de ${post.title}`} aria-busy={pending}>
     <div className={s.heading}><strong>Celebra esta historia</strong><span>{celebrationCount(post)} {celebrationCount(post) === 1 ? 'reacción' : 'reacciones'}</span></div>
-    <p id={`${id}-help`} className={s.help}>{connection.reactionsOpen ? chosen ? `Tu reacción: ${chosen.label}. Puedes cambiarla o quitarla.` : 'Elige una reacción para acompañar a tu grupo.' : 'CAI pausó las nuevas reacciones. Puedes consultar y quitar la tuya.'}</p>
+    <p id={`${id}-help`} className={s.help}>{connection.reactionsOpen ? chosen ? `Tu reacción: ${chosen.label}. Puedes cambiarla o quitarla.` : 'Elige una reacción para acompañar a la comunidad.' : 'CAI pausó las nuevas reacciones. Puedes consultar y quitar la tuya.'}</p>
     <div className={s.options} role="group" aria-label={`Reacciones a ${post.title}`} aria-describedby={`${id}-help`}>
       {reactionOptions.map(option => <button key={option.id} type="button" aria-label={`${option.label}: ${post.reactions[option.id]}`} aria-pressed={post.myReaction === option.id} disabled={pending || connection.busy || !connection.reactionsOpen} onClick={() => { void choose(option.id) }}><span aria-hidden="true">{option.emoji}</span><span>{option.label}</span><b>{post.reactions[option.id]}</b></button>)}
     </div>

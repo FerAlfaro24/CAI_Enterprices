@@ -9,6 +9,7 @@ export type AlbumSort = 'editorial' | 'recent' | 'oldest' | 'celebrated'
 
 export interface Album {
   private?: boolean
+  standalone?: boolean
   id: string
   postId: Post['id']
   title: string
@@ -69,10 +70,15 @@ export function selectAlbums(posts: readonly Post[], filter: AlbumFilter = 'all'
 }
 
 export function privateAlbums(images: readonly GalleryItem[]): Album[] {
-  return images.map(image => {
-    const photo: Photo = {id:image.id,src:image.imagePath,alt:image.alt,caption:image.description}
-    return {id:image.id,postId:`gallery:${image.id}`,title:image.title,description:image.description,category:image.category,cover:photo,photos:[photo],author:{id:'cai-team',alias:'Equipo CAI'},provenance:'Imagen compartida por coordinación con tu cuenta de la comunidad.',createdAt:image.createdAt,status:'approved',celebrations:0,private:true}
-  })
+  const albums=new Map<string,Album>()
+  for(const image of images){
+    const photo:Photo={id:image.id,src:image.imagePath,alt:image.alt,caption:image.description}
+    const linked=image.publication,id=linked?.id??image.id
+    const previous=albums.get(id)
+    if(previous){previous.photos=[...previous.photos,photo];continue}
+    albums.set(id,{standalone:!linked,id,postId:linked?.id??`gallery:${image.id}`,title:linked?.title??image.title,description:linked?.description??image.description,category:image.category,cover:photo,photos:[photo],author:{id:'cai-team',alias:'Equipo CAI'},provenance:'Fotografías compartidas por coordinación con tu cuenta de la comunidad.',createdAt:linked?.createdAt??image.createdAt,status:'approved',celebrations:0,private:true})
+  }
+  return [...albums.values()]
 }
 
 export function selectAlbumRecords(albums: readonly Album[], filter: AlbumFilter = 'all', sort: AlbumSort = 'recent'): Album[] {

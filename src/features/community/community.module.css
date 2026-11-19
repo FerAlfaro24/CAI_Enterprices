@@ -515,3 +515,7 @@
   .storyDialogHeading { padding: 12px 16px; }
   .storyDialog > .post { padding: 16px; }
 }
+
+.showcaseLabel {max-width:1296px;margin:16px auto 0;padding:10px 16px;background:var(--blue-soft);border:1px solid var(--line);border-radius:10px;color:var(--text-secondary);font-size:12px;}
+
+.postAudience{font-size:12px;color:var(--muted);margin:8px 0;}

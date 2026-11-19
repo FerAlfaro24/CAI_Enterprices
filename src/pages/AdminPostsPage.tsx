@@ -1,3 +1,4 @@
+import { OfficialPublisher } from '../features/admin/components/OfficialPublisher'
 import { useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { AdminCommentsPanel } from '../features/admin/components/AdminCommentsPanel'
@@ -38,6 +39,7 @@ export function AdminPostsPage() {
         {connection&&!comments && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={connection.busy} onClick={() => { void connection.refresh() }}><Icon name="refresh" size={16} />Actualizar publicaciones</button>}
       </div>
 
+      {connection?.configuration&&<OfficialPublisher groups={connection.configuration.groups} onAccessLost={()=>{void connection.refresh()}}/>}
       {connection&&<div className={s.tabs} role="group" aria-label="Tipo de moderación"><button type="button" className={s.tab} aria-pressed={!comments} onClick={()=>setParams({})}>Historias</button><button type="button" className={s.tab} aria-pressed={comments} onClick={()=>setParams({bandeja:'comentarios'})}>Comentarios ({connection.commentCounts.pendiente} en revisión)</button></div>}
       {comments?<AdminCommentsPanel/>:<><section className={s.stats} aria-label="Resumen de moderación">
         <p><strong>{counts.pendiente}</strong>en revisión</p>

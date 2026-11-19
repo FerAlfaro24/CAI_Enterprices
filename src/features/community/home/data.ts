@@ -16,5 +16,5 @@ export const heroSlides: HeroSlide[] = [
   { id: 'celebrate', category: 'LOGROS · GRANDES INTENTOS', title: 'Aquí celebramos el camino 👏', description: 'No hace falta hacerlo perfecto para compartirlo. Cada pequeño avance merece su momento.', cards: ['FIRST', 'SMALL STEPS', 'BIG SMILES'] },
 ]
 
-export const homeInitialPostCount = 3
+export const homeInitialPostCount = 6
 export const homePageSize = 4

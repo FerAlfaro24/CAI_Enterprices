@@ -34,6 +34,9 @@ export interface Comment {
 }
 
 export interface Post {
+  audience?:'group'|'community'
+  highlighted?:boolean
+  expiresAt?:string|null
   recognition?:{badgeId:string;title:string;awardedAt:string}
   id: string
   authorId: string

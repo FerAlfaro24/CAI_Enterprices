@@ -60,7 +60,7 @@ export function ConnectedComments({post,autoFocus=false}:{post:Post;autoFocus?:b
  }
  return <section className={base.comments} aria-label={'Comentarios de '+post.title} aria-busy={loading||busy}>
   <div className={s.heading}><h3 ref={heading} tabIndex={-1} className={base.smallHeading}>La conversación</h3><button type="button" className={s.link} disabled={loading||busy} onClick={()=>{setLoading(true);void read()}}>Actualizar conversación</button></div>
-  <p className={s.help}>Comparte una palabra de ánimo. CAI revisa los comentarios antes de mostrarlos al grupo.</p>
+  <p className={s.help}>Comparte una palabra de ánimo. CAI revisa los comentarios antes de compartirlos en esta historia.</p>
   <div className={s.tabs} role="group" aria-label="Vistas de comentarios"><button type="button" aria-pressed={tab==='conversation'} onClick={()=>setTab('conversation')}>Conversación ({post.commentCount??0})</button><button type="button" aria-pressed={tab==='mine'} onClick={()=>setTab('mine')}>Mis comentarios</button></div>
   {loading&&<p role="status" className={s.help}>Actualizando comentarios…</p>}
   {error&&<p id={id+'-error'} role="alert" className={base.fieldError}>{error}</p>}

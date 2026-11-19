@@ -3,6 +3,7 @@ import type { Member, Post } from './types'
 import type { StudentProfile, StudentProfileDraft } from '../local-access/api'
 
 export interface CommunityConnection {
+  demonstration?:boolean
   badges:import('../../../server/contracts').BadgeSnapshot
   requestBadge:(badgeId:string,description:string,key:string)=>Promise<boolean>
   withdrawBadge:(item:import('../../../server/contracts').BadgeApplication)=>Promise<boolean>
@@ -32,15 +33,15 @@ export interface CommunityConnection {
 }
 
 export function publicMember(profile: GroupMember): Member {
-  return { id: profile.id, alias: profile.displayName,
+  return { id: profile.id, alias: profile.displayName, institution:profile.id==='cai-team',
     initials: profile.displayName.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('').toUpperCase(),
     color: 'blue', avatarColor: profile.avatarColor, joinedAt: '', badge: '', bio: '' }
 }
 
 export function feedPost(post: import('../local-access/api').PublishedPost): Post {
   return { id: post.id, authorId: post.author.id, title: post.title, body: post.body,
-    category: post.category, createdAt: post.publishedAt ?? post.createdAt, status: 'approved',
-    recognition:post.recognition,pinOrder: null, layout: 'text', photos: [], comments: [], myReaction: post.engagement?.myReaction ?? null,
+    category: post.kind==='notice'?'announcement':post.kind==='album'?'gallery':post.category, createdAt: post.publishedAt ?? post.createdAt, status: 'approved',
+    recognition:post.recognition,audience:post.audience??'group',pinOrder: post.kind==='notice'&&post.highlighted?0:null, highlighted:post.highlighted,expiresAt:post.expiresAt, layout: post.photos?.length?'gallery':'text', photos: (post.photos??[]).map(image=>({id:image.id,src:image.imagePath,alt:image.alt,caption:image.description})), comments: [], myReaction: post.engagement?.myReaction ?? null,
     reactionRevision: post.engagement?.revision ?? 0, commentCount:post.commentCount??0,commentsOpen:post.commentsOpen!==false,
     reactions: post.engagement?.counts ?? { love: 0, wellDone: 0, congrats: 0, amazing: 0, funny: 0 } }
 }

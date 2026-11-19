@@ -1,4 +1,6 @@
-import { useEffect, useId, useState, useSyncExternalStore } from 'react'
+import { useReducedMotionPreference } from '../useReducedMotionPreference'
+import { ConnectedHomeHero } from './ConnectedHomeHero'
+import { useEffect, useId, useState } from 'react'
 import { m } from 'motion/react'
 import { useCommunity } from '../context'
 import { CommunityIcon } from '../components/ui'
@@ -7,14 +9,9 @@ import { heroSlides } from './data'
 import { homeMedia } from './media'
 import s from './home.module.css'
 
-const reducedMotionSnapshot = () => matchMedia('(prefers-reduced-motion: reduce)').matches
-const subscribeReducedMotion = (notify: () => void) => {
-  const media = matchMedia('(prefers-reduced-motion: reduce)')
-  media.addEventListener('change', notify)
-  return () => media.removeEventListener('change', notify)
-}
+export function HomeHero(){const {connection}=useCommunity();return connection?<ConnectedHomeHero/>:<IllustrativeHomeHero/>}
 
-export function HomeHero() {
+function IllustrativeHomeHero() {
   const { dispatch, connection } = useCommunity()
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -22,7 +19,7 @@ export function HomeHero() {
   const [focused, setFocused] = useState(false)
   // Read again when subscribing: a preference change between render and effect
   // must not leave the carousel in its previous reduced-motion state.
-  const reducedMotion = useSyncExternalStore(subscribeReducedMotion, reducedMotionSnapshot, () => true)
+  const reducedMotion = useReducedMotionPreference()
   const [hidden, setHidden] = useState(() => document.hidden)
   const [failedSource, setFailedSource] = useState<string | null>(null)
   const id = useId()
@@ -55,7 +52,7 @@ export function HomeHero() {
       <span className={s.heroEyebrow}><span aria-hidden="true">✦</span> TU COMUNIDAD, TU MOMENTO</span>
       <h1 id="community-title" tabIndex={-1}>Aquí pasan cosas<br />que vale la pena<br /><em>contar.</em></h1>
       <p>El inglés nos conecta. Comparte un pequeño avance, encuentra inspiración y celebra el camino en comunidad.</p>
-      <div className={s.heroActions}><MotionButton type="button" className={s.yellowButton} onClick={explore}>Explorar el feed <CommunityIcon name="arrow" size={18} /></MotionButton><MotionButton type="button" className={s.heroSecondary} onClick={() => dispatch({ type: 'section', section: 'challenges' })}>{connection ? 'Retos · Próximamente' : 'Jugar reto de hoy'} <CommunityIcon name="spark" size={16} /></MotionButton></div>
+      <div className={s.heroActions}><MotionButton type="button" className={s.yellowButton} onClick={explore}>Explorar el feed <CommunityIcon name="arrow" size={18} /></MotionButton><MotionButton type="button" className={s.heroSecondary} onClick={() => dispatch({ type: 'section', section: 'challenges' })}>{connection ? 'Practicar inglés' : 'Jugar reto de hoy'} <CommunityIcon name="spark" size={16} /></MotionButton></div>
       <div className={s.heroNote}><span aria-hidden="true">EN</span><span>Aprender. Compartir. Volver a intentarlo.</span></div>
     </m.div>
     <div className={s.carousel} role="region" aria-roledescription="carrusel" aria-label="Historias ilustrativas de CAI" data-slide={slide.id}>
