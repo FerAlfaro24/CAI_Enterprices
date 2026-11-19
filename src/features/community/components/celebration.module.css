@@ -1,0 +1,6 @@
+.burst { position:absolute; inset:0; display:block; overflow:hidden; pointer-events:none; border-radius:inherit; }
+.particle { position:absolute; top:50%; left:50%; width:7px; height:11px; border-radius:2px; background:#ffcd1f; }
+.particle[data-tone='1'] { background:#5993ff; }
+.particle[data-tone='2'] { background:#55d6a0; border-radius:50%; }
+.particle[data-tone='3'] { background:#bd8cff; }
+@media(prefers-reduced-motion:reduce) { .burst { display:none; } }

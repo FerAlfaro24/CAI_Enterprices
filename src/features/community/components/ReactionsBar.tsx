@@ -1,4 +1,6 @@
 import { useId, useRef, useState } from 'react'
+import { m } from 'motion/react'
+import { useCommunityReducedMotion } from './useCommunityReducedMotion'
 import { useCommunity } from '../context'
 import { reactionOptions } from '../data/fixtures'
 import { celebrationCount } from '../model'
@@ -13,6 +15,8 @@ export function ReactionsBar({ post }: { post: Post }) {
   const sending = useRef(false)
   const [pending, setPending] = useState(false)
   const [message, setMessage] = useState('')
+  const [celebrated, setCelebrated] = useState<{ reaction: Reaction; sequence: number } | null>(null)
+  const reduced = useCommunityReducedMotion()
   if (!connection) return null
   const chosen = reactionOptions.find(option => option.id === post.myReaction)
   const choose = async (reaction: Reaction | null) => {
@@ -22,7 +26,11 @@ export function ReactionsBar({ post }: { post: Post }) {
     sending.current = true; setPending(true); setMessage('')
     try {
       const saved = await connection.react(post, reaction, attempt.current.key)
-      if (saved) { attempt.current = null; setMessage(reaction === null ? 'Quitaste tu reacción.' : 'Reacción guardada.') }
+      if (saved) {
+        attempt.current = null; setMessage(reaction === null ? 'Quitaste tu reacción.' : 'Reacción guardada.')
+        if (reaction) setCelebrated(previous => ({ reaction, sequence: (previous?.sequence ?? 0) + 1 }))
+        else setCelebrated(null)
+      }
       else setMessage('No confirmamos el cambio. Revisa la historia actualizada o vuelve a elegir para reintentar.')
     } finally { sending.current = false; setPending(false) }
   }
@@ -30,7 +38,7 @@ export function ReactionsBar({ post }: { post: Post }) {
     <div className={s.heading}><strong>Celebra esta historia</strong><span>{celebrationCount(post)} {celebrationCount(post) === 1 ? 'reacción' : 'reacciones'}</span></div>
     <p id={`${id}-help`} className={s.help}>{connection.reactionsOpen ? chosen ? `Tu reacción: ${chosen.label}. Puedes cambiarla o quitarla.` : 'Elige una reacción para acompañar a la comunidad.' : 'CAI pausó las nuevas reacciones. Puedes consultar y quitar la tuya.'}</p>
     <div className={s.options} role="group" aria-label={`Reacciones a ${post.title}`} aria-describedby={`${id}-help`}>
-      {reactionOptions.map(option => <button key={option.id} type="button" aria-label={`${option.label}: ${post.reactions[option.id]}`} aria-pressed={post.myReaction === option.id} disabled={pending || connection.busy || !connection.reactionsOpen} onClick={() => { void choose(option.id) }}><span aria-hidden="true">{option.emoji}</span><span>{option.label}</span><b>{post.reactions[option.id]}</b></button>)}
+      {reactionOptions.map(option => <m.button key={option.id} type="button" aria-label={`${option.label}: ${post.reactions[option.id]}`} aria-pressed={post.myReaction === option.id} disabled={pending || connection.busy || !connection.reactionsOpen} whileTap={reduced ? undefined : { scale: .95 }} onClick={() => { void choose(option.id) }}><span aria-hidden="true">{option.emoji}</span><span>{option.label}</span><b>{post.reactions[option.id]}</b>{celebrated?.reaction === option.id && !reduced && <m.i key={celebrated.sequence} className={s.reactionPop} aria-hidden="true" data-reaction-celebration="true" initial={{ y: 0, opacity: 1, scale: .7 }} animate={{ y: -42, opacity: 0, scale: 1.6 }} transition={{ duration: .8, ease: 'easeOut' }}>{option.emoji}</m.i>}</m.button>)}
     </div>
     {chosen && <button type="button" className={s.remove} disabled={pending || connection.busy} onClick={() => { void choose(null) }}>Quitar mi reacción</button>}
     <p role="status" className={s.help}>{pending ? 'Guardando tu reacción…' : message}</p>

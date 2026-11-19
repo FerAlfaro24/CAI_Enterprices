@@ -86,6 +86,6 @@ const vite=await createServer({cacheDir:`node_modules/.vite-cai-web-${apiPort}`,
 await vite.listen()
 const metadata={url:`http://127.0.0.1:${port}`,admin:'admin@example.test',student:'bob@example.test',password,directory,posts:shared.length,comments:replies.flat().length,demonstration:true}
 await writeFile(join(directory,'presentation.json'),JSON.stringify(metadata,null,2),{flag:'wx'})
-await writeFile(join(root,'community-showcase-latest.json'),JSON.stringify(metadata,null,2))
+if(!process.argv.includes('--no-latest'))await writeFile(join(root,'community-showcase-latest.json'),JSON.stringify(metadata,null,2))
 console.log(`Presentación CAI lista: ${metadata.url} — ${directory}`)
 process.on('SIGINT',()=>{void vite.close().then(()=>app.server.close(()=>process.exit(0)))})

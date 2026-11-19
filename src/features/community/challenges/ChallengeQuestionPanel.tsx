@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { m } from 'motion/react'
 import { MotionButton } from '../components/CommunityMotion'
 import { useCommunityReducedMotion } from '../components/useCommunityReducedMotion'
@@ -7,6 +7,7 @@ import { CommunityIcon } from '../components/ui'
 import { useChallengeAnswer } from './useChallengeAnswer'
 import s from './challenges.module.css'
 import { useCommunity } from '../context'
+import { CelebrationBurst } from '../components/CelebrationBurst'
 
 export function ChallengeQuestionPanel({ challenge, attempt }: { challenge: Challenge; attempt: Attempt | undefined }) {
   const { connection }=useCommunity()
@@ -15,6 +16,7 @@ export function ChallengeQuestionPanel({ challenge, attempt }: { challenge: Chal
   const reduced = useCommunityReducedMotion()
   const result = useRef<HTMLDivElement>(null)
   const submittedHere = useRef(false)
+  const [alreadyAnswered] = useState(Boolean(attempt))
   useEffect(() => {
     if (attempt && submittedHere.current) result.current?.focus()
   }, [attempt])
@@ -45,6 +47,7 @@ export function ChallengeQuestionPanel({ challenge, attempt }: { challenge: Chal
         <p id={`${id}-help`}>Sin reloj. Sin castigos. Solo aprender.</p>
       </div>
       {attempt && <m.div ref={result} className={s.result} data-result={attempt.correct ? 'correct' : 'incorrect'} tabIndex={-1} role="status" aria-live="polite" aria-atomic="true" initial={{ opacity: reduced ? 1 : .65 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : .2 }}>
+        {attempt.correct && !alreadyAnswered && <CelebrationBurst />}
         <strong>{attempt.correct ? '✓ ¡Respuesta correcta!' : '✕ Respuesta incorrecta. ¡Gracias por intentarlo!'}</strong>
         {!attempt.correct && <p>La respuesta correcta es: <b>{challenge.options[challenge.correctIndex]}</b></p>}
         <p>{challenge.explanation}</p>

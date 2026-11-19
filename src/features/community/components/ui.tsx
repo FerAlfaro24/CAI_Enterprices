@@ -1,11 +1,11 @@
-import { ArrowRight, Award, BookOpen, Check, House, Image, MessageCircle, Moon, Pin, Plus, RotateCcw, ShieldCheck, Sparkles, Sun, Users, X } from 'lucide-react'
+import { ArrowRight, Award, Bell, BookOpen, Check, House, Image, MessageCircle, Moon, Pin, Plus, RotateCcw, ShieldCheck, Sparkles, Sun, Users, X } from 'lucide-react'
 import emblem from '../../../assets/cai/logo-cai-emblema.svg'
 import type { Member } from '../types'
 import s from '../community.module.css'
 
-type IconName = 'home' | 'award' | 'gallery' | 'spark' | 'users' | 'arrow' | 'comment' | 'pin' | 'plus' | 'close' | 'check' | 'reset' | 'shield' | 'book' | 'sun' | 'moon'
+type IconName = 'home' | 'award' | 'gallery' | 'spark' | 'users' | 'arrow' | 'comment' | 'pin' | 'plus' | 'close' | 'check' | 'reset' | 'shield' | 'book' | 'sun' | 'moon' | 'bell'
 
-const icons = { home: House, award: Award, gallery: Image, spark: Sparkles, users: Users, arrow: ArrowRight, comment: MessageCircle, pin: Pin, plus: Plus, close: X, check: Check, reset: RotateCcw, shield: ShieldCheck, book: BookOpen, sun: Sun, moon: Moon } satisfies Record<IconName, typeof House>
+const icons = { home: House, award: Award, gallery: Image, spark: Sparkles, users: Users, arrow: ArrowRight, comment: MessageCircle, pin: Pin, plus: Plus, close: X, check: Check, reset: RotateCcw, shield: ShieldCheck, book: BookOpen, sun: Sun, moon: Moon, bell: Bell } satisfies Record<IconName, typeof House>
 
 export function CommunityIcon({ name, size = 20 }: { name: IconName; size?: number }) {
   const Icon = icons[name]

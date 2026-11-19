@@ -1,41 +1,46 @@
-import { useEffect, useState } from 'react'
+import { useId, useState } from 'react'
 import { m } from 'motion/react'
 import { useCommunity } from '../context'
 import { CommunityIcon } from '../components/ui'
 import { useCommunityReducedMotion } from '../components/useCommunityReducedMotion'
+import { useCommunityDialog } from '../useCommunityDialog'
+import { CelebrationBurst } from '../components/CelebrationBurst'
 import { selectBadgeGrants } from './model'
 import { findBadge } from './catalog'
 import { BadgeArtwork } from './BadgeArtwork'
-import s from './achievements.module.css'
 import { connectedGrants } from './connectedBadges'
+import type { BadgeDefinition, BadgeGrant } from './types'
+import s from './achievements.module.css'
 
-/** Celebrate only a new derived grant while this view is mounted. Returning to
- * a section initializes from current grants, so it never replays old awards.
- * Nothing is persisted, published, awarded or dispatched by this presentation.
- */
+function BadgeCelebration({ badge, grant, remaining, onClose, onCollection }: {
+  badge: BadgeDefinition; grant: BadgeGrant; remaining: number; onClose: () => void; onCollection: () => void
+}) {
+  const dialog = useCommunityDialog(), id = useId(), reduced = useCommunityReducedMotion()
+  return <m.dialog ref={dialog} className={s.celebrationDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-reason`} onCancel={event => { event.preventDefault(); onClose() }} initial={{ opacity: reduced ? 1 : 0 }} animate={{ opacity: 1 }}>
+    <CelebrationBurst />
+    <button type="button" className={s.celebrationClose} aria-label="Cerrar celebración de insignia" onClick={onClose}><CommunityIcon name="close" size={21} /></button>
+    <span className={s.celebrationEyebrow}>UN PASO QUE YA ES TUYO</span>
+    <m.div className={s.celebrationMedal} initial={{ scale: reduced ? 1 : .6, rotate: reduced ? 0 : -12 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', duration: .7, bounce: .3 }}><BadgeArtwork badgeId={badge.id} symbol={badge.symbol} className={s.celebrationArtwork} /></m.div>
+    <p className={s.celebrationLabel}>¡Nueva insignia!</p><h2 id={`${id}-title`}>{badge.title}</h2>
+    <p id={`${id}-reason`}>{grant.condition || badge.description}</p>
+    <p className={s.celebrationPrivacy}><CommunityIcon name="shield" size={15} /> Es tuya y es privada. Tú decides si compartirla.</p>
+    <div className={s.celebrationActions}><button type="button" onClick={onClose}>{remaining > 1 ? `Siguiente insignia (${remaining - 1})` : '¡A seguir aprendiendo!'}</button><button type="button" onClick={onCollection}>Ver mis insignias <CommunityIcon name="arrow" size={17} /></button></div>
+  </m.dialog>
+}
+
+/** Only new confirmed grants while mounted. Existing grants never replay on reload. */
 export function BadgeUnlockNotice() {
-  const { state,connection } = useCommunity()
-  const grants = connection?connectedGrants(connection):selectBadgeGrants(state)
-  const signature = grants.map((grant) => grant.id).join('|')
+  const { state, connection, dispatch } = useCommunity()
+  const grants = connection ? connectedGrants(connection) : selectBadgeGrants(state)
+  const signature = grants.map(grant => grant.id).join('|')
   const [seen, setSeen] = useState(signature)
-  const [badgeId, setBadgeId] = useState<string | null>(null)
-  const reduced = useCommunityReducedMotion()
+  const [queue, setQueue] = useState<BadgeGrant[]>([])
   if (signature !== seen) {
-    const previous = new Set(seen.split('|'))
-    const added = grants.find((grant) => !previous.has(grant.id))
+    const previous = new Set(seen.split('|')), active = new Set(grants.map(grant => grant.id))
     setSeen(signature)
-    setBadgeId(added?.badgeId ?? null)
+    setQueue(current => [...current.filter(grant => active.has(grant.id)), ...grants.filter(grant => !previous.has(grant.id))])
   }
-  useEffect(() => {
-    if (!badgeId) return
-    const timer = window.setTimeout(() => setBadgeId(null), 4800)
-    return () => window.clearTimeout(timer)
-  }, [badgeId])
-  const badge = badgeId ? findBadge(badgeId) : undefined
-  if (!badge) return null
-  return <m.aside key={badge.id} className={s.unlockNotice} aria-label="Insignia recién desbloqueada" initial={{ opacity: reduced ? 1 : 0, y: reduced ? 0 : 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? 0 : .22 }}>
-    <m.div initial={{ rotate: reduced ? 0 : -8 }} animate={{ rotate: 0 }} transition={{ duration: reduced ? 0 : .35 }}><BadgeArtwork badgeId={badge.id} symbol={badge.symbol} className={s.unlockArtwork} /></m.div>
-    <div role="status" aria-live="polite" aria-atomic="true"><span>UN PASO QUE YA ES TUYO</span><strong>{badge.title}</strong><small>Insignia conseguida · Sigue siendo privada.</small></div>
-    <button type="button" aria-label="Cerrar celebración de insignia" onClick={() => setBadgeId(null)}><CommunityIcon name="close" size={18} /></button>
-  </m.aside>
+  const grant = queue[0], badge = grant ? findBadge(grant.badgeId) : undefined
+  if (!grant || !badge) return null
+  return <BadgeCelebration key={grant.id} badge={badge} grant={grant} remaining={queue.length} onClose={() => setQueue(current => current.slice(1))} onCollection={() => { setQueue([]); dispatch({ type: 'section', section: 'achievements' }) }} />
 }

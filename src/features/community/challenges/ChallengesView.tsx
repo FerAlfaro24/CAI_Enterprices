@@ -12,7 +12,7 @@ import { ConnectedChallengesView } from './ConnectedChallengesView'
 
 export function ChallengesView() {
   const { state, dispatch,connection } = useCommunity()
-  if(connection)return <ConnectedChallengesView connection={connection}/>
+  if(connection)return <ConnectedChallengesView key={connection.challenges.day} connection={connection}/>
   const challenge = challenges.find((item) => item.id === state.challengeId) ?? challenges[0]!
   const progress = selectChallengeProgress(state)
   const openDemo = () => {
