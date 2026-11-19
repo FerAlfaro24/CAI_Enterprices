@@ -49,7 +49,7 @@ export function HomeView() {
   }
 
   return <div className={s.home}>
-    <PinnedNotices />
+    {!connection && <PinnedNotices />}
     <HomeHero />
     <HomeActivityStrip />
     <div className={s.homeGrid}>

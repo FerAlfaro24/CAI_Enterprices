@@ -44,10 +44,10 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
     window.addEventListener('focus', visible); document.addEventListener('visibilitychange', visible)
     return () => { sequence.current++; clearInterval(timer); window.removeEventListener('focus', visible); document.removeEventListener('visibilitychange', visible) }
   }, [refresh])
-  const write = async (operation: () => Promise<unknown>, message: string) => {
+  const write = async (operation: () => Promise<unknown>, message: string, options: { refresh?: boolean } = {}) => {
     if (writing.current) return false
     writing.current = true; generation.current++; setBusy(true); setError(''); setNotice('')
-    try { await operation(); setNotice(message); await refresh(); return true }
+    try { await operation(); setNotice(message); if (options.refresh !== false) await refresh(); return true }
     catch (error) {
       failure(error)
       if (error instanceof ApiError && error.status === 409) { await refresh(); setError(error.message) }
@@ -86,7 +86,7 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
     resolveMember: id => publicMembers.find(member => member.id === id) ?? publicMember({ id, displayName: 'Miembro no disponible', avatarColor: '#1f56d6' }),
     submit: (draft, key) => write(() => studentApi.createPost(draft, key), 'Tu publicación se guardó y está pendiente de revisión.'),
     withdraw: post => write(() => studentApi.withdrawPost(post), 'Publicación retirada. Ya no aparece en el feed.'),
-    logout: async () => { await write(async () => { await studentApi.logout(); setSnapshot(null); setAnonymous(true); setProfileId(null); setDetail(null) }, 'Sesión cerrada.') },
+    logout: async () => { await write(async () => { await studentApi.logout(); setSnapshot(null); setAnonymous(true); setProfileId(null); setDetail(null) }, 'Sesión cerrada.', { refresh: false }) },
   }
   const dispatch = (action: CommunityAction) => {
     if (action.type === 'section') setUi(state => ({ ...state, section: action.section, focusRequest: state.focusRequest + 1 }))

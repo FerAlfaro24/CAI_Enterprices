@@ -1,4 +1,5 @@
 import { useId, useState } from 'react'
+import { Link } from 'react-router'
 import { useCommunity } from '../context'
 import { getMember } from '../data/members'
 import { useCommunityDialog } from '../useCommunityDialog'
@@ -8,11 +9,12 @@ import { OwnProfileForm } from './OwnProfileForm'
 import { Avatar, CommunityIcon } from './ui'
 import { selectBadgeGrants } from '../achievements/model'
 
-export function MemberProfileDialog({ memberId, onClose }: { memberId: string; onClose: () => void }) {
+export function MemberProfileDialog({ memberId, onClose, onOpenNotifications }: { memberId: string; onClose: () => void; onOpenNotifications?: () => void }) {
   const dialog = useCommunityDialog()
   const id = useId()
   const { state, connection } = useCommunity()
   const [activityVisible, setActivityVisible] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const member = connection ? connection.resolveMember(memberId) : getMember(memberId)
   const own = member.id === 'alex'
   const earned = own ? selectBadgeGrants(state) : []
@@ -27,6 +29,7 @@ export function MemberProfileDialog({ memberId, onClose }: { memberId: string; o
       <section className={s.profileStats} aria-label="Mi progreso privado"><div><b>{connection.challenges.progress.points.toLocaleString('es-MX')}</b><span>puntos</span></div><div><b>{connection.badges.grants.filter(grant => grant.status === 'active').length}</b><span>insignias</span></div><div><b>{connection.challenges.progress.currentStreak}</b><span>días seguidos</span></div></section>
       <section className={s.profileCollection} aria-label="Mis insignias recientes"><h3>Pequeños grandes logros</h3><div>{connection.badges.grants.filter(grant => grant.status === 'active').slice(-3).map(grant => <span key={grant.id}><BadgeArtwork badgeId={grant.badge.id} symbol={grant.badge.symbol} className={s.profileBadgeArtwork} /><strong>{grant.badge.title}</strong></span>)}</div>{!connection.badges.grants.some(grant => grant.status === 'active') && <p>Tu primera insignia empieza con un intento. Practica en Retos y ve construyendo tu colección.</p>}</section>
       {connection.notice && <p role="status">{connection.notice}</p>}<OwnProfileForm connection={connection} />
+      <section className={s.accountActions} aria-label="Opciones de mi cuenta"><h3>Mi cuenta</h3><Link to="/mi-inscripcion" onClick={onClose}><CommunityIcon name="book" size={18} /> Mi inscripción <CommunityIcon name="arrow" size={16} /></Link>{onOpenNotifications && <button type="button" onClick={onOpenNotifications}><CommunityIcon name="bell" size={18} /> Mis notificaciones ({connection.notices.filter(item => !item.read).length}) <CommunityIcon name="arrow" size={16} /></button>}<button type="button" disabled={connection.busy || refreshing} onClick={async () => { setRefreshing(true); try { await connection.refresh() } finally { setRefreshing(false) } }}><CommunityIcon name="reset" size={18} /> {refreshing ? 'Actualizando…' : 'Actualizar comunidad'}</button><button type="button" disabled={connection.busy} className={s.logoutAction} onClick={() => { void connection.logout() }}>Cerrar sesión <CommunityIcon name="arrow" size={16} /></button>{connection.error && <p role="alert">{connection.error}</p>}</section>
     </>}
   </dialog>
   return (
