@@ -10,3 +10,8 @@
 .options button[aria-pressed='true'] { box-shadow: inset 0 0 0 1px var(--primary); font-weight: 700; }
 .options button:disabled { opacity: .65; }
 .remove { min-height: 44px; margin-top: 4px; padding: 8px 0; border: 0; background: transparent; color: var(--primary); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+
+.options button { position:relative; border-width:1px; box-shadow:0 3px 0 var(--line); transition:background .18s, border-color .18s, box-shadow .18s; }
+.options button[aria-pressed='true'] { border-color:var(--primary); box-shadow:0 3px 0 var(--selected-border); }
+.reactionPop { position:absolute; left:12px; top:4px; pointer-events:none; font-size:23px; font-style:normal; z-index:2; }
+@media(prefers-reduced-motion:reduce) { .options button { transition:none; }.reactionPop { display:none; } }

@@ -6,6 +6,8 @@
 
 **Presentación remota:** 11 resultados nuevos del verificador de entrada/proxy (10 subcasos y contenedor), **54 comprobaciones HTTPS reales (27 Brave/27 Opera)**, tipos/lint/build. No se repitió la suite API anterior. [Guía y resultados HTTPS](REMOTE_DEMO.md). No sumar a las suites anteriores.
 
+**Primera muestra de diseño:** 130 comprobaciones nuevas, 65 Brave/65 Opera (50 de recorrido y 15 de modales/contraste/privacidad por navegador), tipos/lint/build. Ver [plan, intentos y límites](COMMUNITY_DESIGN.md). API/esquema/reglas sin cambios; no se repitió la suite antigua.
+
 ## Evidencia histórica por corte
 
 | Entrega / código | Suite API registrada | Navegador registrado | Fuente |

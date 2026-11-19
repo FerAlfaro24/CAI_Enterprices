@@ -515,3 +515,17 @@
 .sharedArtwork { display:block; width:48px; height:48px; flex:none; }
 .sharedArtwork img { width:100%;height:100%; }
 .sharedBadge small { display:block; margin-top:4px; font-size:11px; }
+
+.celebrationDialog { position:fixed; inset:0; margin:auto; width:min(480px,calc(100% - 32px)); max-height:calc(100dvh - 32px); overflow:auto; padding:36px; border:1px solid var(--line); border-radius:30px; background:var(--paper); color:var(--navy); text-align:center; box-shadow:var(--shadow-dialog); }
+.celebrationDialog::backdrop { background:#06132cb3; backdrop-filter:blur(5px); }
+.celebrationDialog>*:not([data-celebration]) { position:relative; }
+.celebrationClose { position:absolute!important; top:12px; right:12px; display:grid; place-items:center; width:44px; height:44px; border:0; border-radius:50%; background:var(--surface-soft); color:var(--navy); }
+.celebrationEyebrow { display:block; margin-top:12px; font-size:10px; font-weight:800; letter-spacing:1.3px; color:var(--primary); }
+.celebrationMedal { display:grid; place-items:center; width:184px; height:184px; margin:24px auto 16px; border-radius:50%; background:radial-gradient(circle,var(--warm-bg),var(--paper)); }
+.celebrationArtwork { display:block; width:150px; height:150px; filter:drop-shadow(0 9px 12px #a47a1430); }.celebrationArtwork img { display:block; width:100%; height:100%; object-fit:contain; }
+.celebrationLabel { color:var(--primary); font-weight:800; font-size:14px; }.celebrationDialog h2 { margin:10px 0 12px; font-size:34px; line-height:1.1; letter-spacing:-1px; }.celebrationDialog p { font-size:14px; line-height:1.65; color:var(--text-secondary); }.celebrationDialog .celebrationLabel { color:var(--primary); }
+.celebrationDialog .celebrationPrivacy { display:flex; justify-content:center; gap:7px; margin-top:18px; font-size:11px; }.celebrationPrivacy svg { flex:none; margin-top:2px; }
+.celebrationActions { display:grid; gap:10px; margin-top:24px; }.celebrationActions button { min-height:48px; padding:12px 16px; border:1px solid var(--line); border-radius:14px; background:var(--paper); color:var(--primary); font-size:13px; font-weight:750; }.celebrationActions button:first-child { background:#ffcd1f; color:#102552; border-color:#cfaa23; box-shadow:0 4px 0 #cfaa23; }.celebrationActions button:last-child { display:flex; align-items:center; justify-content:center; gap:8px; }
+@media(max-width:480px) { .celebrationDialog { padding:26px 20px; }.celebrationMedal { width:150px; height:150px; margin:18px auto 10px; }.celebrationArtwork { width:126px; height:126px; }.celebrationDialog h2 { font-size:29px; } }
+
+.celebrationDialog h2 { font-weight:850; }

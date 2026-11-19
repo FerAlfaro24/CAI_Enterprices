@@ -1,4 +1,5 @@
 import { RecentAlbums } from './RecentAlbums'
+import { HomeActivityStrip } from './HomeActivityStrip'
 import { useEffect, useState } from 'react'
 import { m, useReducedMotion } from 'motion/react'
 import { useCommunity } from '../context'
@@ -50,6 +51,7 @@ export function HomeView() {
   return <div className={s.home}>
     <PinnedNotices />
     <HomeHero />
+    <HomeActivityStrip />
     <div className={s.homeGrid}>
 
       <div className={s.challengeArea}><HomeChallengePreview /></div>

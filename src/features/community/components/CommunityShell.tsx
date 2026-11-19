@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router'
 import { useCommunity } from '../context'
 import { demoMember } from '../data/members'
@@ -13,12 +13,14 @@ import { useCommunityDialogs } from '../dialogContext'
 import { Avatar, CommunityIcon } from './ui'
 import { ChallengeDemoSelector } from '../challenges/ChallengeDemoSelector'
 import { CommunityMotion, MotionButton } from './CommunityMotion'
+import { NotificationsDialog } from './NotificationsDialog'
 
 export function CommunityShell({ children }: { children: ReactNode }) {
   const { state, dispatch, connection } = useCommunity()
   const connected = Boolean(connection)
   const { theme, setTheme } = useCommunityTheme()
   const { profileId, setProfileId, detail, setDetail } = useCommunityDialogs()
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
   useEffect(() => {
     const frame = requestAnimationFrame(() => { setProfileId(null); setDetail(null) })
     return () => cancelAnimationFrame(frame)
@@ -46,7 +48,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
       </header>
       <div className={s.demoToolbar}>
         {connection?.demonstration&&<p className={s.showcaseLabel} role="note">Demostración para CAI · Historias, perfiles, comentarios y reacciones ficticios. Fotografías oficiales.</p>}
-        {connection ? <div className={s.demoNoticeRow}><aside className={s.prototypeNotice}><CommunityIcon name="shield" size={16} /><p><strong>{connection.user.program}</strong> · {connection.user.group} · Prueba local con datos ficticios.</p></aside><div className={s.demoTools}><button type="button" disabled={connection.busy} onClick={() => { void connection.refresh() }}>Actualizar comunidad</button><button type="button" onClick={()=>setProfileId(connection.user.publicId)}>Mis notificaciones ({connection.notices.filter(item=>!item.read).length})</button><Link to="/mi-inscripcion">Mi inscripción</Link><button type="button" disabled={connection.busy} onClick={() => { void connection.logout() }}>Cerrar sesión</button></div></div> : <div className={s.demoNoticeRow}>
+        {connection ? <div className={s.demoNoticeRow}><aside className={s.prototypeNotice}><CommunityIcon name="shield" size={16} /><p><strong>{connection.user.program}</strong> · {connection.user.group} · Prueba local con datos ficticios.</p></aside><div className={s.demoTools}><button type="button" disabled={connection.busy} onClick={() => { void connection.refresh() }}>Actualizar comunidad</button><button type="button" className={s.notificationButton} aria-haspopup="dialog" onClick={() => setNotificationsOpen(true)}><CommunityIcon name="bell" size={17} /> Mis notificaciones ({connection.notices.filter(item=>!item.read).length})</button><Link to="/mi-inscripcion">Mi inscripción</Link><button type="button" disabled={connection.busy} onClick={() => { void connection.logout() }}>Cerrar sesión</button></div></div> : <div className={s.demoNoticeRow}>
         <aside className={s.prototypeNotice} aria-label="Aviso de prototipo"><CommunityIcon name="spark" size={16} /><p><strong>Prototipo CAI.</strong> Perfiles e interacciones ficticios. Sin autenticación ni envíos reales.</p></aside>
         <details className={s.demoControls} id="community-demo-controls">
           <summary>Opciones de demostración</summary>
@@ -67,6 +69,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
       <footer className={s.communityFooter}>{connection ? <><span>CAI Community · Historias de tu grupo, revisadas por CAI.</span><span>Prueba local · <Link to="/">Sitio institucional ↗</Link></span></> : <><span>CAI Community · Un prototipo para imaginar lo que podemos construir juntos.</span><span>Sin cuentas reales ni datos de alumnos. <Link to="/">Sitio institucional ↗</Link></span></>}</footer>
       {detail && <PostDetailDialog key={`${detail.postId}-${state.resetKey}`} />}
       {profileId && <MemberProfileDialog key={profileId} memberId={profileId} onClose={() => setProfileId(null)} />}
+      {connection && notificationsOpen && <NotificationsDialog onClose={() => setNotificationsOpen(false)} />}
     </div></CommunityMotion>
   )
 }

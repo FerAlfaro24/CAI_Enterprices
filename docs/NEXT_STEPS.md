@@ -1,6 +1,6 @@
 # CAI — próximos pasos vigentes
 
-**19 de noviembre de 2026.** Continuación `feat/v1-remote-demo`, [estado real](PROJECT_STATE.md) y decisiones del usuario. La prioridad inmediata autorizada fue la [presentación y el Inicio conectado](COMMUNITY_HOME_STORIES.md), ya implementados; el orden N1–N7 conserva las tareas generales posteriores.
+**19 de noviembre de 2026.** Continuación `feat/v1-community-playful-design`, [estado real](PROJECT_STATE.md) y decisiones del usuario. La prioridad inmediata autorizada fue la [presentación y el Inicio conectado](COMMUNITY_HOME_STORIES.md), ya implementados; el orden N1–N7 conserva las tareas generales posteriores.
 
 **Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
 
@@ -10,7 +10,9 @@
 
 **Presentación desde otra ubicación:** [demo remota temporal](REMOTE_DEMO.md) autorizada por Cloudflare, máximo 24 horas. Mantener PC conectada; compartir claves solo por canal privado. No confundir con Vercel antiguo ni con infraestructura final.
 
-## Orden de trabajo
+**Prioridad nueva del usuario: diseño de toda la comunidad.** [Plan y primera muestra](COMMUNITY_DESIGN.md) de Inicio/Retos, fondo, puntos, reacciones, insignias grandes, perfil y notificaciones independientes ya comprobados con 130 casos. Recoger observaciones y refinar la muestra; continuar después con Galería/Logros/estados y coherencia de interacciones según la tabla. No tratar toda la comunidad como terminada ni reconstruir sus funciones. La copia remota anterior se conserva; N3 vuelve a continuación del bloque visual.
+
+## Orden de trabajo general posterior
 
 | ID / prioridad | Pendiente | Qué puede avanzar desarrollo solo | Qué necesita CAI/usuario y criterio de cierre |
 | --- | --- | --- | --- |
@@ -46,4 +48,4 @@ El 12 de noviembre se habló de tres semanas. Los documentos de planificación r
 
 ## Siguiente movimiento
 
-La revisión integral y la base técnica autónoma de producción quedaron comprobadas con sus límites. **Siguiente trabajo: N3, operación y recuperación**, con fixtures/copias nuevas y sin tocar datos habituales. Resolver primero incidencias reproducibles y reutilizar las herramientas existentes. Google/correo/CAI continúan agrupados al final y alojamiento después. No reiniciar estas tareas completas ni desarrollar vídeos por un plan histórico.
+La revisión integral y la base técnica autónoma de producción quedaron comprobadas con sus límites. **Siguiente trabajo: refinamiento visual de COMMUNITY_DESIGN; después N3, operación y recuperación**, con fixtures/copias nuevas y sin tocar datos habituales. Resolver primero incidencias reproducibles y reutilizar las herramientas existentes. Google/correo/CAI continúan agrupados al final y alojamiento después. No reiniciar estas tareas completas ni desarrollar vídeos por un plan histórico.

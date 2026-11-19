@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <g transform="translate(34 38) rotate(-12)"><path d="M0 0h42a7 7 0 0 1 7 7v20a7 7 0 0 1-7 7H20L9 44V34H7a7 7 0 0 1-7-7Z"/><path d="M11 11h26M11 21h17"/></g>
+  <g transform="translate(192 29) rotate(10)"><path d="m0 0 13 3L3 51l-9 11-2-14Z"/><path d="m-8 48 11 3M-1 8l11 3"/></g>
+  <g transform="translate(284 94) rotate(-8)"><path d="M0 0q16-7 32 1 16-8 32-1v43q-16-7-32 1-16-8-32-1Z"/><path d="M32 1v43M9 11q8-2 15 1M40 12q8-3 15-1M9 22q8-2 15 1M40 23q8-3 15-1"/></g>
+  <g transform="translate(78 213) rotate(8)"><path d="m0-22 6 15 16 2-12 11 3 16-13-8-14 8 3-16-12-11 17-2Z"/></g>
+  <g transform="translate(195 222) rotate(-10)"><path d="M0 0h37v26H15L4 36V26H0Z"/><path d="m8 12 6 6 15-13"/></g>
+  <g transform="translate(308 285) rotate(13)"><circle r="21"/><path d="m-9 0 6 7L10-7M-13 20l-4 22 17-8 15 8-4-22"/></g>
+  <g transform="translate(34 329) rotate(-12)"><path d="M14 3Q0-4 0 12t14 10M23 24 33 0l10 24M27 15h12M53 0v24"/></g>
+  <path d="M135 112v13m-6-6h13M348 33v11m-5-5h10M119 302v10m-5-5h10M250 355v12m-6-6h12"/>
+  <circle cx="19" cy="157" r="3"/><circle cx="248" cy="151" r="3"/><circle cx="157" cy="376" r="3"/><path d="m355 198 5 5-5 5-5-5Z"/>
+</svg>

@@ -398,3 +398,24 @@
 .home>.pinned {min-height:64px;padding-top:10px;padding-bottom:10px;}
 
 .audienceLabel{display:block;color:var(--muted);font-size:10px;line-height:1.5;}
+
+/* Primera muestra: fotos y comunidad, con superficies más ligeras. */
+.liveFeature { border-radius:28px; border:1px solid var(--line); box-shadow:var(--shadow-rest); background:var(--paper); }
+.liveCaption { background:var(--paper); color:var(--navy); border-top:4px solid var(--cai-yellow); }
+.liveCaption>span { display:inline-flex; padding:5px 9px; border-radius:999px; background:var(--warm-bg); color:var(--warm-ink); }
+.liveCaption h2 { color:var(--navy); }
+.liveCaption>p { color:var(--text-secondary); }
+.liveControls button { color:var(--navy); border-color:var(--line); background:var(--surface-soft); }
+.liveControls button:hover { color:var(--primary); border-color:var(--primary); }
+.activityStrip { display:grid; grid-template-columns:1.1fr repeat(3,1fr); gap:12px; align-items:center; margin:22px 0 30px; padding:20px; border:1px solid var(--line); border-radius:22px; background:var(--paper); box-shadow:var(--shadow-rest); }
+.activityStrip>div>strong { display:block; margin-top:7px; color:var(--navy); font-size:20px; line-height:1.15; letter-spacing:-.5px; }
+.activityStrip>button { display:flex; align-items:center; gap:12px; min-width:0; min-height:75px; padding:12px; border:1px solid transparent; border-radius:16px; text-align:left; background:var(--warm-bg); color:var(--warm-ink); }
+.activityStrip>button:nth-of-type(2) { background:var(--success-bg); color:var(--success-ink); }
+.activityStrip>button:nth-of-type(3) { background:var(--purple-bg); color:var(--purple-ink); }
+.activityStrip>button:hover { border-color:currentColor; }
+.activityStrip b { display:block; font-size:27px; line-height:1.15; font-weight:850; }
+.activityStrip small { display:block; margin-top:4px; font-size:11px; line-height:1.4; }
+.activitySymbol { display:grid; place-items:center; flex:none; width:38px; height:38px; font-size:30px; }
+.home>.pinned { border-radius:18px; }
+@media(max-width:850px) { .activityStrip { grid-template-columns:repeat(3,minmax(0,1fr)); padding:16px; }.activityStrip>div { grid-column:1/-1; }.activityStrip>div>strong br { display:none; }.activityStrip>button { padding:12px 8px; gap:8px; }.activitySymbol { width:26px; } }
+@media(max-width:480px) { .activityStrip { gap:8px; padding:14px; }.activityStrip>button { display:block; min-height:106px; padding:10px; }.activitySymbol { margin-bottom:8px; height:24px; font-size:25px; }.activityStrip b { font-size:23px; }.activityStrip small { font-size:10px; }.liveFeature { border-radius:22px; } }

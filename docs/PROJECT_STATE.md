@@ -6,9 +6,12 @@
 
 **Presentación remota autorizada:** [demo temporal protegida](REMOTE_DEMO.md) por Cloudflare sobre copia ficticia separada. Frontend compilado y política HTTPS del backend; credenciales y metadatos fuera de Git. Vercel público conserva el prototipo anterior. Comprobados 11 resultados de protección y 54 de navegador HTTPS (27 por navegador), con fotos, interacción, panel, consola y móvil/escritorio. No equivale a la entrega productiva final.
 
+**Primera muestra visual:** [diseño de comunidad](COMMUNITY_DESIGN.md), con patrón propio, superficies más ligeras, progreso real en Inicio, misión/puntos/celebraciones de Retos, perfil privado y bandeja independiente. 130 comprobaciones (65 Brave/65 Opera), tipos/lint/build. Sin cambios de esquema/reglas/API ni repetición de suites anteriores. Aceptación visual pendiente; el plan conserva los siguientes refinamientos.
+
 ## Referencias de continuación
 
-- **Continuación actual:** `feat/v1-remote-demo`, desde `d7ef781` de `fix/v1-gallery-all-photos`.
+- **Continuación actual:** `feat/v1-community-playful-design`, desde `4cdae44` de `feat/v1-remote-demo`.
+- **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781` de `fix/v1-gallery-all-photos`.
 - **Corrección de Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a` de `feat/v1-community-home-stories`.
 - **Inicio conectado anterior:** `feat/v1-community-home-stories`, desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias, álbumes y demo](COMMUNITY_HOME_STORIES.md). Esquema 18; base habitual intacta y sin despliegue.
 - **Fotografías oficiales anteriores:** `feat/v1-official-media`, desde `d410247` de `feat/v1-production-preparation`; código `cfea458`. [Fotos oficiales](OFFICIAL_MEDIA.md), esquema 17 y seis imágenes para todos los alumnos aprobados; no carga sobre la instalación habitual ni despliegue.

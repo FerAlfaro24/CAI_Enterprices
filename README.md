@@ -2,7 +2,7 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 18. **Continuar en `feat/v1-remote-demo`**, desde `d7ef781`. [Presentación remota protegida](docs/REMOTE_DEMO.md) con copia ficticia, separada del Vercel antiguo y del alojamiento definitivo. Galería anterior desde `f9c3c1a` de la entrega anterior. Galería muestra todas las fotos por defecto y mantiene Álbumes como opción. Inicio anterior desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias y álbumes](docs/COMMUNITY_HOME_STORIES.md): fotos autorizadas en Inicio, publicaciones oficiales con fotos, avisos/destacados/vencimiento y conversación compartida con Galería. La presentación al cliente usa una base ficticia independiente. Incluye las [fotos oficiales](docs/OFFICIAL_MEDIA.md) de la rama anterior; sus archivos privados se entregan fuera de GitHub. **Sin alojamiento definitivo validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
+**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 18. **Continuar en `feat/v1-community-playful-design`**, desde `4cdae44`. [Primera muestra de diseño y plan](docs/COMMUNITY_DESIGN.md): Inicio, Retos lúdicos, perfil, bandeja de notificaciones y celebraciones. La preparación remota anterior parte de `d7ef781`. [Presentación remota protegida](docs/REMOTE_DEMO.md) con copia ficticia, separada del Vercel antiguo y del alojamiento definitivo. Galería anterior desde `f9c3c1a` de la entrega anterior. Galería muestra todas las fotos por defecto y mantiene Álbumes como opción. Inicio anterior desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias y álbumes](docs/COMMUNITY_HOME_STORIES.md): fotos autorizadas en Inicio, publicaciones oficiales con fotos, avisos/destacados/vencimiento y conversación compartida con Galería. La presentación al cliente usa una base ficticia independiente. Incluye las [fotos oficiales](docs/OFFICIAL_MEDIA.md) de la rama anterior; sus archivos privados se entregan fuera de GitHub. **Sin alojamiento definitivo validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
 
 ## Qué funciona localmente
 
@@ -23,7 +23,7 @@ GitHub muestra este repositorio como público al 19-11-2026. Para operaciones au
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-remote-demo
+git switch --track origin/feat/v1-community-playful-design
 code .
 npm.cmd ci
 ```

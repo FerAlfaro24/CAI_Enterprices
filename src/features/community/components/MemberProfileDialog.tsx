@@ -3,7 +3,7 @@ import { useCommunity } from '../context'
 import { getMember } from '../data/members'
 import { useCommunityDialog } from '../useCommunityDialog'
 import s from '../community.module.css'
-import { StudentNotices } from './StudentNotices'
+import { BadgeArtwork } from '../achievements/BadgeArtwork'
 import { OwnProfileForm } from './OwnProfileForm'
 import { Avatar, CommunityIcon } from './ui'
 import { selectBadgeGrants } from '../achievements/model'
@@ -23,7 +23,11 @@ export function MemberProfileDialog({ memberId, onClose }: { memberId: string; o
     <div className={s.dialogHeading}><div><span className={s.eyebrow}>{member.id === connection.user.publicId ? 'MI ESPACIO' : 'MIEMBRO DEL GRUPO'}</span><h2 id={`${id}-title`}>{member.alias}</h2></div><button className={s.iconButton} disabled={connection.busy} type="button" onClick={onClose} aria-label="Cerrar perfil"><CommunityIcon name="close" /></button></div>
     <div className={s.profileIdentity}><Avatar member={member} /><span>Nombre visible en la comunidad</span></div>
     <p id={`${id}-description`}>{member.id === connection.user.publicId ? `${connection.user.program} · ${connection.user.group}` : 'Este perfil muestra únicamente el alias del alumno.'}</p>
-    {member.id === connection.user.publicId && <>{connection.notice && <p role="status">{connection.notice}</p>}<OwnProfileForm connection={connection} /><StudentNotices /></>}
+    {member.id === connection.user.publicId && <>
+      <section className={s.profileStats} aria-label="Mi progreso privado"><div><b>{connection.challenges.progress.points.toLocaleString('es-MX')}</b><span>puntos</span></div><div><b>{connection.badges.grants.filter(grant => grant.status === 'active').length}</b><span>insignias</span></div><div><b>{connection.challenges.progress.currentStreak}</b><span>días seguidos</span></div></section>
+      <section className={s.profileCollection} aria-label="Mis insignias recientes"><h3>Pequeños grandes logros</h3><div>{connection.badges.grants.filter(grant => grant.status === 'active').slice(-3).map(grant => <span key={grant.id}><BadgeArtwork badgeId={grant.badge.id} symbol={grant.badge.symbol} className={s.profileBadgeArtwork} /><strong>{grant.badge.title}</strong></span>)}</div>{!connection.badges.grants.some(grant => grant.status === 'active') && <p>Tu primera insignia empieza con un intento. Practica en Retos y ve construyendo tu colección.</p>}</section>
+      {connection.notice && <p role="status">{connection.notice}</p>}<OwnProfileForm connection={connection} />
+    </>}
   </dialog>
   return (
     <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); onClose() }}>

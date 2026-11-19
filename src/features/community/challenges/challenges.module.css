@@ -208,3 +208,47 @@
   .connected .challengeGrid { display:grid; grid-template-columns:minmax(0,1fr); gap:20px; }
   .connected .questionPanel { margin-top:0; }
 }
+
+/* Retos: recorrido diario, puntuación protagonista y controles táctiles. */
+.mission { padding:24px; min-width:0; border:1px solid #dfb844; border-radius:26px; background:linear-gradient(135deg,#fff5c9,#ffe69b); color:#14284a; box-shadow:0 5px 0 #dfb844, 0 12px 24px #10255210; }
+.missionTop { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.mission .sectionKicker { color:#71571a; margin:0; }
+.streakPill { display:flex; align-items:center; gap:5px; padding:6px 10px; border-radius:999px; background:#14284a; color:#fff; font-size:11px; font-weight:750; }
+.score { display:flex; align-items:center; gap:15px; margin:20px 0; }
+.scoreStar { display:grid; place-items:center; flex:none; height:68px; width:68px; font-size:56px; color:#896008; text-shadow:0 2px 0 #fff9; transform:rotate(-10deg); }
+.score strong { display:block; color:#14284a; font-size:clamp(40px,4vw,62px); line-height:1; letter-spacing:-2px; font-weight:850; }
+.score>div>span { display:block; margin-top:7px; font-size:11px; color:#5e501e; }
+.missionProgress { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:12px; }
+.missionProgress>span { font-weight:750; }
+.progressTrack { height:12px; padding:2px; margin-top:9px; background:#b58c2e30; border:1px solid #b58c2e50; border-radius:999px; overflow:hidden; }
+.progressTrack>span { display:block; height:100%; min-width:0; border-radius:999px; background:#18784b; transition:width .35s ease; }
+.missionPath { position:relative; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:22px 0 14px; }
+.missionPath::before { content:''; position:absolute; left:15%; right:15%; top:25px; height:3px; background:#cfad58; }
+.missionPath>button { position:relative; display:flex; flex-direction:column; align-items:center; gap:10px; padding:0; border:0; min-width:0; background:transparent; color:#14284a; font-size:16px; font-weight:800; }
+.missionPath>button>span { display:grid; place-items:center; width:52px; height:52px; border:2px solid #fff9; border-radius:18px; background:#fff9; box-shadow:0 4px 0 #cfad58; }
+.missionPath>button[aria-current]>span { background:#1f56d6; color:white; box-shadow:0 4px 0 #103a9a; }
+.missionPath>button[data-completed='true']>span { background:#18784b; color:#fff; box-shadow:0 4px 0 #105334; }
+.missionPath small { font-size:10px; line-height:1.35; }
+.mission>p { font-size:11px; color:#65501c; text-align:center; }
+.connected .questionPanel { border-top:1px solid var(--line); border-radius:26px; box-shadow:0 5px 0 var(--line),var(--shadow-rest); }
+.connected .option { border-width:2px; border-radius:16px; box-shadow:0 3px 0 var(--line); }
+.connected .selected { border-color:#ad820e; box-shadow:0 3px 0 #ad820e; }
+.connected .correct { box-shadow:0 3px 0 #2d7655; }
+.connected .incorrect { box-shadow:0 3px 0 #bd6553; }
+.connected .checkButton { justify-content:center; min-height:50px; border-radius:14px; box-shadow:0 4px 0 #123a96; }
+.connected .checkButton:active:not(:disabled) { translate:0 2px; box-shadow:0 2px 0 #123a96; }
+.result { position:relative; overflow:hidden; }
+.result>*:not([data-celebration]) { position:relative; }
+.finished { position:relative; overflow:hidden; align-items:center; padding:24px; border-radius:22px; background:var(--success-bg); }
+.finishMedal { flex:none; font-size:45px; color:var(--success-ink); }
+.finished strong { display:block; margin-top:10px; font-size:14px; }
+.connected .rewardCard { border-radius:24px; border-color:var(--line); background:var(--purple-bg); color:var(--purple-ink); }
+.connected .rewardCard h2,.connected .rewardCard .eyebrow,.connected .rewardStrip { color:var(--purple-ink); }
+.connected .rewardStrip { border-color:var(--purple-ink); }
+.connected .collection { padding:20px; border:1px solid var(--line); border-radius:22px; background:var(--paper); }
+.connected .learnCard { border-left-width:1px; border:1px solid var(--line); border-radius:22px; }
+@keyframes scoreArrives { 0% { transform:scale(.93); filter:brightness(1.2); } 65% { transform:scale(1.04); } 100% { transform:scale(1); filter:none; } }
+@media(prefers-reduced-motion:no-preference) { .score strong { transform-origin:left center; animation:scoreArrives .55s ease-out; }.scoreStar { animation:scoreArrives .65s ease-out; } }
+@media(max-width:850px) { .mission { padding:22px; }.score { margin:16px 0; }.score strong { font-size:52px; }.missionPath { max-width:440px; margin-inline:auto; }.connected .pageHeading { gap:22px; } }
+@media(max-width:480px) { .mission { padding:18px; border-radius:22px; }.scoreStar { width:52px; height:52px; font-size:46px; }.score strong { font-size:46px; }.missionPath>button>span { width:48px; height:48px; }.finished { align-items:flex-start; padding:18px; gap:10px; }.finishMedal { font-size:30px; } }
+@media(prefers-reduced-motion:reduce) { .progressTrack>span { transition:none; } }

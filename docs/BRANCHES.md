@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-remote-demo`, desde `d7ef781`. [Presentación remota temporal](REMOTE_DEMO.md), copia ficticia protegida; Vercel sin actualizar.
+- **Continuación actual:** `feat/v1-community-playful-design`, desde `4cdae44`. [Muestra visual y plan](COMMUNITY_DESIGN.md), 130 comprobaciones Brave/Opera; copia remota anterior estable.
+- **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781`. [Presentación remota temporal](REMOTE_DEMO.md), copia ficticia protegida; Vercel sin actualizar.
 - **Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a`. Restaura las seis fotos como vista inicial; Álbumes opcional, filtros corregidos.
 - **Inicio conectado anterior:** `feat/v1-community-home-stories`, desde `422b4d2` de PR #12. Inicio conectado, publicaciones oficiales/álbumes y demo independiente, esquema 18. [Guía](COMMUNITY_HOME_STORIES.md).
 - Fotografías anteriores: `feat/v1-official-media`, desde `d410247` de la preparación productiva. Fotos oficiales, galería para todos los aprobados y esquema 17. [Guía](OFFICIAL_MEDIA.md).
@@ -15,6 +16,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-community-playful-design` parte de `4cdae44`, PR #15. Primera muestra visual autorizada de Inicio/Retos/perfil/notificaciones y celebraciones; reutiliza APIs/reglas/ilustraciones existentes. 130 comprobaciones de navegador y tipos/lint/build; suites API antiguas no repetidas. No cambia main/release ni el frontend compilado de la demo remota ya entregada.
 
 `feat/v1-remote-demo` parte de `d7ef781`, PR #14. Entrada protegida, lanzador de copia/túnel y comprobaciones. El usuario autorizó Cloudflare por máximo 24 horas, las seis fotos y datos ficticios. Accesos y datos fuera de Git; ninguna fusión ni alojamiento definitivo.
 
