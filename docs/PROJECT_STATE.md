@@ -1,6 +1,6 @@
 # CAI — estado vigente
 
-**Actualizado: 19 de noviembre de 2026, Inicio visual y presentación al cliente.** Última suite: **233 API correctas** y **76 comprobaciones en navegador (38 Brave/38 Opera)**, con perfiles aislados; lint/tipos/build. Los cortes anteriores de 225, 217/104 y 193/1,314 no se suman ni se declaran repetidos. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice documental](DOCUMENTATION_INDEX.md).
+**Actualizado: 19 de noviembre de 2026, Logros, insignias progresivas y perfiles.** Suite completa: **261 API correctas**; navegador seleccionado: **108 comprobaciones (54 Brave/54 Opera)**. Tras el ajuste final del contador, 42 pruebas API pertinentes correctas; no se suman tandas. Tipos/lint/build y tipos estrictos de los nuevos servicios correctos. Los resultados anteriores conservan sus cortes. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice](DOCUMENTATION_INDEX.md).
 
 **Corrección posterior de Galería:** seis fotos visibles individualmente por defecto; Álbumes opcional y filtros por todas las categorías interiores. 32 comprobaciones nuevas (16 Brave/16 Opera), lint/tipos/build correctos. La suite API anterior no se repitió: no hubo cambios de servidor o datos. [Detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).
 
@@ -12,11 +12,12 @@
 
 **Cabecera/novedades:** identidad oficial sin franjas de gestión; campana junto al perfil, cuenta en Mi espacio y carrusel único de avisos/momentos. 122 comprobaciones nuevas (61 por navegador), tipos/lint/build. Corregida consulta posterior al logout; no se cambió la API ni la separación de fixtures. [Detalle](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar).
 
-**Diseño corregido, sin implementación:** [Logros e insignias](COMMUNITY_DESIGN.md#logros-e-insignias-modelo-acordado). El usuario mantiene Logros como apartado: prácticas repetibles privadas o compartidas tras revisión; insignias obtenidas por condiciones progresivas y perfiles de compañeros con contenido compartido/colección. Sustituye el nombre Mis aventuras y pedir insignias. Rama documental `docs/v1-learning-adventures-plan`, desde `3b368e8`; código funcional aún de cabecera. Sin nuevas funciones, catálogo, migración ni pruebas de producto. Niveles concretos y validación privada siguen como propuestas.
+**Logros implementados:** [entrega](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), código `5349283`, en `feat/v1-achievements-progressive-badges`. Tres actividades guiadas con imágenes, borrador/completado privado, validación privada/publicación opcional, 21 insignias obtenidas progresivamente y perfiles sociales. Esquema 19 aditivo; se conserva historial. Aceptación humana y adopción en instalaciones existentes pendientes; datos habituales y copia remota anterior sin actualizar.
 
 ## Referencias de continuación
 
-- **Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d` de `feat/v1-community-social-feed`.
+- **Continuación actual:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`, código `5349283`.
+- **Cabecera anterior:** `feat/v1-community-header-highlights`, desde `ffb323d`.
 - **Revisión social anterior:** `feat/v1-community-social-feed`, desde `d6e66fd` de `feat/v1-community-playful-design`.
 - **Primera muestra visual anterior:** `feat/v1-community-playful-design`, desde `4cdae44` de `feat/v1-remote-demo`.
 - **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781` de `fix/v1-gallery-all-photos`.
@@ -30,7 +31,7 @@
 - **Base visual:** `release/cai-demo-v1.0`, `f3ba46b`, preservada. Panel/Community avanzados ya existían y se conectaron; no reconstruirlos.
 - **Main:** `a3c2569`, antigua, 74 commits detrás de la base funcional al corte.
 - **Revisión anterior:** `chore/v1-final-review`, `fee87d1`, 15 commits detrás. No es la última línea funcional.
-- **Persistencia:** SQLite esquema 18. No hay despliegue productivo validado.
+- **Persistencia:** SQLite esquema 19. No hay despliegue productivo validado.
 
 Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BRANCHES. Las ramas posteriores conservan el trabajo acumulado. La nueva rama añade historias oficiales, medios vinculados y el Inicio renovado; no modifica main/release ni vuelve a fusionar funcionalidades históricas.
 
@@ -50,7 +51,7 @@ Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BR
 | Comentarios | Premoderación, paginación, motivos privados, retirada y pausas global/por historia | `server/comments.ts`; [163 API/228 navegador en su entrega](v1-community-comments.md). |
 | Imágenes | Cuatro públicas y seis privadas oficiales; fotos nuevas en borrador, álbumes vinculados y una conversación; Galería respeta grupo/comunidad, retirada y vencimiento | `server/gallery.ts`, `server/official-media.ts`; [guía vigente](OFFICIAL_MEDIA.md). El [informe original](v1-private-gallery.md) corresponde al alcance anterior por grupo. No es vídeo. |
 | Retos | 180 preguntas/45 temas; tres diarias, calendario/banco administrable, respuesta única, puntos/constancia y repaso privados | `server/challenge-bank.ts`, `server/challenges.ts`; [179 API/142 navegador en su entrega](v1-community-challenges.md). Fecha America/Mexico_City. |
-| Insignias | Nueve, automáticas/revisadas/institucionales; concesión única, historial/corrección y compartición voluntaria moderada | `server/badges.ts`, `shared/badges.ts`; [193 API y matriz 234 en su entrega](v1-community-badges.md). |
+| Insignias | 21; condiciones progresivas de logros/Retos/publicaciones, concesiones históricas y correcciones conservadas | `server/badges.ts`, `shared/badges.ts`; [193 API y matriz 234 en su entrega](v1-community-badges.md). |
 | Administración de cuentas | Contraseña propia, recuperación local, equipo e invitaciones | `server/auth.ts`, `server/admin-team.ts`, `server/admin-recovery.ts`; entrega de correo real pendiente. |
 | Perfil/expediente | Alias/color, restricciones de menores, correcciones con reautenticación e historial | `server/student-records.ts`; [informe](v1-student-record.md). No verifica identidad real. |
 | Copias | Copia consistente/verificación local y comando productivo con destino privado | `server/backup.ts`, `server/production-backup.ts`, `server/verify-backup.ts`; [guía](respaldo-recuperacion-local.md). Ensayos en destinos separados, sin restaurar sobre la base habitual. |

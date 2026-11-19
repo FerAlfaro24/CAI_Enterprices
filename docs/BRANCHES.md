@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d`. [Cabecera/carrusel](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), 122 comprobaciones nuevas.
+- **Continuación actual:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`; código `5349283`. [Logros/insignias/perfiles](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), esquema 19, 261 API/108 navegador y ajuste final con 42 API pertinentes.
+- **Cabecera anterior:** `feat/v1-community-header-highlights`, desde `ffb323d`. [Cabecera/carrusel](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), 122 comprobaciones nuevas.
 - **Revisión social anterior:** `feat/v1-community-social-feed`, desde `d6e66fd`. [Publicaciones y conversación](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas), 124 comprobaciones nuevas.
 - **Primera muestra visual anterior:** `feat/v1-community-playful-design`, desde `4cdae44`. [Muestra visual y plan](COMMUNITY_DESIGN.md), 130 comprobaciones Brave/Opera; copia remota anterior estable.
 - **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781`. [Presentación remota temporal](REMOTE_DEMO.md), copia ficticia protegida; Vercel sin actualizar.
@@ -18,6 +19,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-achievements-progressive-badges` parte de `0729cc5`, el plan corregido. Primera implementación conectada de L1–L5, código `5349283`: registros personales, imágenes privadas, revisión/publicación, catálogo progresivo de 21 insignias y perfiles sociales. Aditiva, esquema 19; sin actualizar bases habituales, fusionar PR ni sustituir la copia remota.
 
 `docs/v1-learning-adventures-plan` parte de `3b368e8`, PR #18. Solo documentación: propuesta inicial en `d794fa1`, corregida después por el usuario. Mantener Logros, separar prácticas privadas/publicación de insignias obtenidas progresivamente y ampliar perfiles sociales (L1–L5). El nombre de rama no renombra la interfaz. Sin nuevas funciones, esquema ni carga de imágenes de alumnos; código funcional de cabecera conservado.
 

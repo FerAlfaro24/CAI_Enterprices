@@ -1,6 +1,6 @@
 # CAI — próximos pasos vigentes
 
-**19 de noviembre de 2026.** Continuación `feat/v1-community-header-highlights`, [estado real](PROJECT_STATE.md) y decisiones del usuario. La prioridad inmediata autorizada fue la [presentación y el Inicio conectado](COMMUNITY_HOME_STORIES.md), ya implementados; el orden N1–N7 conserva las tareas generales posteriores.
+**19 de noviembre de 2026.** Continuación `feat/v1-achievements-progressive-badges`, [estado real](PROJECT_STATE.md). La prioridad nueva de Logros/insignias/perfiles tiene primera implementación conectada; revisar la experiencia con el usuario. N1–N7 conserva el trabajo general posterior.
 
 **Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
 
@@ -16,7 +16,7 @@
 
 **Observación siguiente atendida:** [cabecera y novedades](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), sin franjas de demostración/gestión, cuenta reubicada y avisos con fotos en un carrusel; 122 comprobaciones nuevas. Mantener identidad de CAI y separación real de datos/entornos. Revisar visualmente con el usuario antes de ampliar el acabado.
 
-**Prioridad corregida por el usuario:** [Logros e insignias](COMMUNITY_DESIGN.md#logros-e-insignias-modelo-acordado). Mantener Logros; actividades repetibles guardables en privado o publicables tras revisión. Las insignias se obtienen por requisitos progresivos, no se piden. Perfil social con publicaciones/logros compartidos e insignias. L1 modelo/reglas, L2 registro/imágenes, L3 revisión/publicación, L4 insignias, L5 perfiles. Sustituye A1–A4 y el nombre Mis aventuras. Solo diseño; umbrales y validación privada por concretar, sin implementación ni apertura general de Galería.
+**Modelo de Logros implementado:** [L1–L5 conectados](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), código `5349283`; ya no es propuesta pendiente. Logros personales e imágenes, validación privada/publicación independientes, 21 insignias obtenidas y perfiles sociales. Revisar pantallas/niveles con el usuario y corregir observaciones concretas; después N3, sin reconstruirlo. Adopción/migración de instalaciones existentes y servicios externos siguen pendientes.
 
 ## Orden de trabajo general posterior
 

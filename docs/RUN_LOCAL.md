@@ -2,6 +2,9 @@
 
 **Guía operativa al 17-11-2026**, para la línea de [START_HERE](START_HERE.md). Node >=24.12.0, npm >=10 y Git. Solo datos ficticios. La documentación no mantiene encendido ningún servidor: los enlaces localhost funcionan mientras se ejecutan los procesos en ese equipo.
 
+
+**Entrega de Logros/insignias/perfiles (19-11):** usar la rama actual de START_HERE con API de esquema 19. Para una presentación nueva independiente con medios oficiales privados instalados: `node server/tests/community-showcase-server.ts 4216 3226 --no-latest`, eligiendo otros puertos si ya están ocupados. Cada ejecución crea otra base; no reiniciar la muestra para actualizar contenido. La muestra de esta entrega se comprobó en 4216, con accesos ficticios de la guía de presentación. No usar el frontend nuevo contra la API antigua de 4194 ni migrar la base habitual para probar. [Funciones y límites](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados).
+
 ## Elegir entorno antes de arrancar
 
 - **Quiero explorar Retos/Logros:** usar la fixture nueva separada siguiente. No necesita leer, preparar o migrar la base habitual.
