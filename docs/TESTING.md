@@ -4,6 +4,8 @@
 
 **Corrección posterior de visibilidad:** 32 comprobaciones nuevas (16 Brave/16 Opera) en Galería, lint/tipos/build. Sin cambios de servidor ni nueva ejecución API; no sumar a las 76 anteriores. [Detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).
 
+**Presentación remota:** 11 resultados nuevos del verificador de entrada/proxy (10 subcasos y contenedor), **54 comprobaciones HTTPS reales (27 Brave/27 Opera)**, tipos/lint/build. No se repitió la suite API anterior. [Guía y resultados HTTPS](REMOTE_DEMO.md). No sumar a las suites anteriores.
+
 ## Evidencia histórica por corte
 
 | Entrega / código | Suite API registrada | Navegador registrado | Fuente |
