@@ -25,10 +25,10 @@ function text(value:unknown,min:number,max:number,label:string) {
  if(typeof value!=='string'||value.trim().length<min||value.trim().length>max||[...value].some(char=>(char.charCodeAt(0)<32&&![9,10,13].includes(char.charCodeAt(0)))||char.charCodeAt(0)===127))throw new HttpError(400,`Revisa ${label}: usa de ${min} a ${max} caracteres.`)
  return value.trim()
 }
-type Row={id:number;publication_id:number;author_id:number;body:string;status:CommentStatus;reason:string|null;revision:number;created_at:string;payload:string;student_status:string;request_status:string;program:string;group_name:string;publication_status:CommentReview['publication']['status'];title:string;post_revision:number;comments_open:number}
-const select=`SELECT c.*,r.payload,s.status AS student_status,r.status AS request_status,p.program,p.group_name,p.title,p.status AS publication_status,p.revision AS post_revision,p.comments_open
+type Row={id:number;publication_id:number;author_id:number;body:string;status:CommentStatus;reason:string|null;revision:number;created_at:string;payload:string;student_status:string;request_status:string;program:string;group_name:string;publication_status:CommentReview['publication']['status'];title:string;post_revision:number;comments_open:number;audience:'group'|'community'}
+const select=`SELECT c.*,r.payload,s.status AS student_status,r.status AS request_status,p.program,p.group_name,p.title,p.status AS publication_status,p.revision AS post_revision,p.comments_open,p.audience
  FROM post_comments c JOIN requests r ON r.id=c.author_id JOIN students s ON s.request_id=c.author_id JOIN publications p ON p.id=c.publication_id`
-const eligible=`r.status='aprobada' AND s.status='activo' AND json_extract(r.payload,'$.program')=p.program AND json_extract(r.payload,'$.group')=p.group_name`
+const eligible=`r.status='aprobada' AND s.status='activo' AND (p.audience='community' OR (json_extract(r.payload,'$.program')=p.program AND json_extract(r.payload,'$.group')=p.group_name))`
 /** Caller already owns the assignment/record transaction. Never revive old public text silently. */
 export function holdAuthorComments(db:Database,author:number,admin:number,reason:string) {
  db.prepare("INSERT INTO comment_audit(comment_id,admin_id,action,reason,created_at) SELECT id,?,'comment.held',?,? FROM post_comments WHERE author_id=? AND status='publicado'").run(admin,reason,new Date().toISOString(),author)
@@ -41,7 +41,7 @@ export function commentsRepository(db:Database) {
  const own=(row:Row):OwnComment=>({...publicComment(row),status:row.status,reason:row.reason,revision:row.revision})
  const get=(id:string)=>{const row=db.prepare(select+' WHERE c.id=?').get(numberId(id)) as Row|undefined;if(!row)throw new HttpError(404,'No se encontró el comentario.');return row}
  const audit=(id:number,action:string,admin:number|null,student:number|null,reason:string|null=null)=>db.prepare('INSERT INTO comment_audit(comment_id,admin_id,student_id,action,reason,created_at) VALUES (?,?,?,?,?,?)').run(id,admin,student,action,reason,new Date().toISOString())
- const active=(row:Row)=>{const profile=JSON.parse(row.payload) as Submission;return row.request_status==='aprobada'&&row.student_status==='activo'&&profile.program===row.program&&profile.group===row.group_name}
+ const active=(row:Row)=>{const profile=JSON.parse(row.payload) as Submission;return row.request_status==='aprobada'&&row.student_status==='activo'&&(row.audience==='community'||(profile.program===row.program&&profile.group===row.group_name))}
  const review=(row:Row):CommentReview=>({...own(row),authorActive:active(row),publication:{id:'PUB-'+String(row.publication_id).padStart(4,'0'),title:row.title,status:row.publication_status,program:row.program,group:row.group_name,revision:row.post_revision,commentsOpen:row.comments_open===1}})
  return {
   count(postId:string) {return Number(db.prepare(`SELECT COUNT(*) AS n FROM post_comments c JOIN requests r ON r.id=c.author_id JOIN students s ON s.request_id=c.author_id JOIN publications p ON p.id=c.publication_id WHERE c.publication_id=? AND c.status='publicado' AND ${eligible}`).get(numberId(postId,'PUB'))!.n)},

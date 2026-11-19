@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-official-media`, desde `d410247` de la preparación productiva. Fotos oficiales, galería para todos los aprobados y esquema 17. [Guía](OFFICIAL_MEDIA.md).
+- **Continuación actual:** `feat/v1-community-home-stories`, desde `422b4d2` de PR #12. Inicio conectado, publicaciones oficiales/álbumes y demo independiente, esquema 18. [Guía](COMMUNITY_HOME_STORIES.md).
+- Fotografías anteriores: `feat/v1-official-media`, desde `d410247` de la preparación productiva. Fotos oficiales, galería para todos los aprobados y esquema 17. [Guía](OFFICIAL_MEDIA.md).
 - Revisión integral anterior: `test/v1-integral-review-2026-11-17`, desde b55cd50.
 - Auditoría documental inicial y código completo: `docs/continuidad-auditoria-2026-11-17`.
 - Base funcional de la PR: `fix/v1-dev-preview-cache` / `3971284`.
@@ -12,6 +13,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-community-home-stories` parte de `422b4d2`, punta de PR #12. Backend `4e60bcd` e interfaz `86df7f6`. Une el Inicio con fotos autorizadas, publicaciones institucionales, álbumes y conversación; crea una demo local con contenido ficticio para la presentación. Esquema 18, 233 API y 76 comprobaciones Brave/Opera. La revisión se dirige a `feat/v1-official-media`, sin fusionar PR anteriores ni mover main/release. [Guía](COMMUNITY_HOME_STORIES.md).
 
 `feat/v1-official-media` parte de `d410247`, punta de PR #11 (`feat/v1-production-preparation`). Integra cuatro imágenes públicas y la carga privada de seis fotos oficiales (archivos privados fuera de Git), audiencia común explícita sin ampliar las fotos antiguas de grupo, importación recuperable e idempotente, y migración 17. 225 API y revisión manual de las vistas afectadas en navegador integrado; Brave/Opera no disponibles en esta sesión. Revisión dirigida a la rama de PR #11; no fusiona las PR anteriores ni cambia main/release. [Guía y límites](OFFICIAL_MEDIA.md).
 

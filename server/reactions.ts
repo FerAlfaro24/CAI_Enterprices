@@ -2,12 +2,12 @@ import { reactionKinds, type ReactionKind, type ReactionSummary } from './contra
 import type { Database } from './database.ts'
 import { HttpError, record } from './validation.ts'
 
-export function reactionSummary(db: Database, publication: number, student: number, program: string, group: string): ReactionSummary {
+export function reactionSummary(db: Database, publication: number, student: number, program: string, group: string, community = false): ReactionSummary {
   const counts: ReactionSummary['counts'] = { love: 0, wellDone: 0, congrats: 0, amazing: 0, funny: 0 }
   const rows = db.prepare(`SELECT x.reaction, COUNT(*) AS n FROM post_reactions x
     JOIN students s ON s.request_id=x.student_id JOIN requests r ON r.id=s.request_id
     WHERE x.publication_id=? AND x.reaction IS NOT NULL AND s.status='activo' AND r.status='aprobada'
-      AND json_extract(r.payload,'$.program')=? AND json_extract(r.payload,'$.group')=? GROUP BY x.reaction`).all(publication, program, group)
+      AND (?=1 OR (json_extract(r.payload,'$.program')=? AND json_extract(r.payload,'$.group')=?)) GROUP BY x.reaction`).all(publication, Number(community), program, group)
   for (const row of rows) counts[row.reaction as ReactionKind] = Number(row.n)
   const own = db.prepare('SELECT reaction,revision FROM post_reactions WHERE publication_id=? AND student_id=?').get(publication, student)
   return { counts, myReaction: own?.reaction as ReactionKind | null ?? null, revision: Number(own?.revision ?? 0) }

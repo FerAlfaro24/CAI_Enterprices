@@ -9,11 +9,11 @@ Se conservan los identificadores RF de los documentos anteriores para poder rast
 | ID | Requisito / alcance | Estado real |
 | --- | --- | --- |
 | RF-01 | Sitio público, presentación/programas y contacto | Interfaz y consulta persistente locales; contenido comercial final pendiente. |
-| RF-02 | Comunidad privada de logros/experiencias y medios autorizados | Texto e imágenes conectados; fotos oficiales públicas y privadas integradas. Galería común para todos los aprobados o privada por grupo. Vídeo opcional no implementado. |
+| RF-02 | Comunidad privada de logros/experiencias y medios autorizados | Texto e imágenes conectados; fotos oficiales públicas y privadas integradas. Historias oficiales con fotos, álbumes vinculados e Inicio visual; Galería común para todos los aprobados o privada por grupo. Vídeo opcional no implementado. |
 | RF-03 | Visitante, alumno y administrador con permisos | Roles/sesiones en servidor; un selector de demo no concede acceso. |
 | RF-04 | Solicitud, revisión y aprobación de acceso | Persistente; verificar inscripción/tutor con CAI. |
-| RF-05 | Creación/revisión de publicaciones | Persistente por grupo, con retirada y motivo privado. |
-| RF-06 | Feed y perfiles de compañeros autorizados | Conectado por grupo con alias/avatar; no expone expedientes ajenos. |
+| RF-05 | Creación/revisión de publicaciones | Alumnos por grupo con moderación; coordinación puede publicar historia/aviso/álbum con fotos para grupo o toda la comunidad, destacado y vencimiento. |
+| RF-06 | Feed y perfiles de compañeros autorizados | Historias por grupo y contenido institucional autorizado en Inicio; perfiles por grupo con alias/avatar. No expone expedientes ajenos. |
 | RF-07 | Panel intuitivo con pendientes | Panel v1.0 conectado; falta sesión de uso con su responsable real. |
 | RF-08 | Selector de roles para demostración | Solo antecedente visual en memoria; no reemplaza sesiones/permisos. |
 | RF-09 | Comentarios y reacciones persistentes | Incluidos por el usuario e implementados/probados localmente; premoderación de comentarios y controles de pausa. |

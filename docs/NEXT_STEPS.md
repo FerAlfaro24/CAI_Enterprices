@@ -1,8 +1,10 @@
 # CAI — próximos pasos vigentes
 
-**17 de noviembre de 2026.** Continuación `feat/v1-production-preparation`, código `9be8081`, [estado real](PROJECT_STATE.md) y decisiones del usuario. No es una lista de funciones nuevas autorizadas por existir en una demo.
+**19 de noviembre de 2026.** Continuación `feat/v1-community-home-stories`, [estado real](PROJECT_STATE.md) y decisiones del usuario. La prioridad inmediata autorizada fue la [presentación y el Inicio conectado](COMMUNITY_HOME_STORIES.md), ya implementados; el orden N1–N7 conserva las tareas generales posteriores.
 
 **Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
+
+**Presentación preparada:** ocho publicaciones y 24 comentarios ficticios, dos álbumes con fotos oficiales y reacciones interactivas en una base nueva. Inicio, carrusel, avisos, publicaciones con fotos y conversación compartida ya funcionan. No repetir esta implementación ni sembrar ejemplos en la instalación real. Recoger observaciones del cliente y de coordinación; operación/recuperación N3 sigue como siguiente trabajo técnico general.
 
 ## Orden de trabajo
 

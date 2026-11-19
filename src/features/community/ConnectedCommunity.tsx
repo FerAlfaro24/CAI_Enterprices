@@ -10,7 +10,7 @@ import type { StudentProfile } from '../local-access/api'
 import { challengesApi,badgesApi,type BadgeSnapshot, type ChallengeSnapshot } from '../local-access/api'
 
 const emptyState: CommunityState = { posts: [], mode: 'student', section: 'home', filter: 'recent', challengeId: '', attempts: {}, badgeRequests: [], notice: '', sequence: 0, resetKey: 0, focusedPostId: null, focusRequest: 0 }
-type Snapshot = { badges:BadgeSnapshot;challenges:ChallengeSnapshot;profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean; reactionsOpen: boolean;commentsOpen:boolean }
+type Snapshot = { demonstration?:boolean; badges:BadgeSnapshot;challenges:ChallengeSnapshot;profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean; reactionsOpen: boolean;commentsOpen:boolean }
 
 /** Usa las vistas de v1.0 con una instantánea autorizada, sin inicializar fixtures. */
 export function ConnectedCommunity({ children }: { children: ReactNode }) {
@@ -62,6 +62,7 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const members = snapshot.members.map(publicMember)
   const publicMembers = [own, ...members, ...snapshot.posts.map(post => publicMember(post.author))]
   const connection: CommunityConnection = {
+    demonstration:snapshot.demonstration===true,
     badges:snapshot.badges,
     requestBadge:(badgeId,description,key)=>write(()=>badgesApi.apply(badgeId,description,key),'Solicitud guardada. CAI la revisará en privado.'),
     withdrawBadge:item=>write(()=>badgesApi.withdraw(item),'Solicitud retirada. Se conserva su historial.'),

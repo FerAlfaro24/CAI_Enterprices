@@ -1,3 +1,4 @@
+import { migrateCommunityContent } from './community-content-migration.ts'
 import { DatabaseSync } from 'node:sqlite'
 import { challengeBank } from './challenge-bank.ts'
 import { mkdirSync } from 'node:fs'
@@ -308,6 +309,7 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (17,strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  migrateCommunityContent(db)
   return db
 }
 

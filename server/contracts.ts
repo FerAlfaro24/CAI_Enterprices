@@ -10,9 +10,9 @@ export type ContactReceipt = { id: string; createdAt: string }
 export type StudentNotice = { id: number; subject: string; message: string; kind: string; createdAt: string; read: boolean }
 export const galleryCategories = { activities: 'Actividades', achievements: 'Logros', events: 'Eventos', backstage: 'Detrás de cámaras' } as const
 export const galleryLimits = { uploadBytes: 3 * 1024 * 1024, inputPixels: 12_000_000, outputSide: 1600, totalBytes: 128 * 1024 * 1024 } as const
-export type GalleryItem = { id: string; title: string; description: string; category: keyof typeof galleryCategories; alt: string; width: number; height: number; byteSize: number; createdAt: string; imagePath: string }
-export type GalleryReview = GalleryItem & { audience: 'group' | 'community'; program: string; group: string; authorizationReference: string; revision: number; status: 'publicada' | 'retirada' }
-export type GalleryUpload = { title: string; description: string; category: keyof typeof galleryCategories; alt: string; audience?: 'group' | 'community'; program: string; group: string; authorizationReference: string; confirmed: boolean; imageBase64: string }
+export type GalleryItem = { publication?: {id:string;title:string;description:string;createdAt:string}; id: string; title: string; description: string; category: keyof typeof galleryCategories; alt: string; width: number; height: number; byteSize: number; createdAt: string; imagePath: string }
+export type GalleryReview = GalleryItem & { linkedPostId?:string; audience: 'group' | 'community'; program: string; group: string; authorizationReference: string; revision: number; status: 'publicada' | 'retirada' | 'borrador' }
+export type GalleryUpload = { title: string; description: string; category: keyof typeof galleryCategories; alt: string; audience?: 'group' | 'community'; draft?:boolean; program: string; group: string; authorizationReference: string; confirmed: boolean; imageBase64: string }
 
 export interface Submission {
   firstName: string
@@ -111,6 +111,7 @@ export const reactionKinds = ['love', 'wellDone', 'congrats', 'amazing', 'funny'
 export type ReactionKind = typeof reactionKinds[number]
 export type ReactionSummary = { counts: Record<ReactionKind, number>; myReaction: ReactionKind | null; revision: number }
 export type PublishedPost = PublicationDraft & {
+  institutional?:boolean; kind?:'story'|'notice'|'album'; audience?:'group'|'community'; highlighted?:boolean; expiresAt?:string|null; photos?:GalleryItem[]; showInGallery?:boolean;
   recognition?:{badgeId:string;title:string;awardedAt:string}
   id: string; author: GroupMember; createdAt: string; publishedAt: string | null; engagement?: ReactionSummary; commentCount?:number; commentsOpen?:boolean
 }
@@ -146,3 +147,5 @@ export type BadgeSnapshot={catalog:(BadgeSpec&{progress:number;target:number})[]
 export type BadgeReview=BadgeApplication&{studentId:string;studentName:string;program:string;group:string;active:boolean;badgeTitle:string}
 export type BadgeGrantReview=EarnedBadge&{studentId:string;studentName:string;program:string;group:string;active:boolean}
 export type BadgeAudit={action:string;reason:string|null;actor:string;createdAt:string}
+
+export type InstitutionalDraft = {title:string;body:string;kind:'story'|'notice'|'album';audience:'group'|'community';program:string;group:string;imageIds:string[];showInGallery:boolean;highlighted:boolean;expiresAt:string|null;confirmed:boolean}

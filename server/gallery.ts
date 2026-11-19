@@ -1,3 +1,4 @@
+import { galleryItem, imageVisible, imageAudience, livePublication, publicationAudience } from './community-media.ts'
 import sharp, { type OutputInfo } from 'sharp'
 import { createHash, randomUUID } from 'node:crypto'
 import { administration, administrationAudit } from './administration.ts'
@@ -6,19 +7,20 @@ import { galleryCategories, galleryLimits, type GalleryItem, type GalleryReview,
 import { HttpError, record, revisionOf } from './validation.ts'
 
 type Row = {
-  id: string; title: string; description: string; category: GalleryItem['category']; alt: string; program: string; group_name: string; audience: 'group' | 'community'
+  linked_post?:number; hidden_by_publication?:number; id: string; title: string; description: string; category: GalleryItem['category']; alt: string; program: string; group_name: string; draft:number; audience: 'group' | 'community'
   authorization_reference: string; revision: number; withdrawn_at: string | null; created_at: string; width: number; height: number; byte_size: number; fingerprint: string
 }
-const columns = 'id,title,description,category,alt,program,group_name,audience,authorization_reference,revision,withdrawn_at,created_at,width,height,byte_size,fingerprint'
+const columns = 'id,title,description,category,alt,program,group_name,audience,draft,authorization_reference,revision,withdrawn_at,created_at,width,height,byte_size,fingerprint'
 const dto = (row: Row): GalleryItem => ({ id: row.id, title: row.title, description: row.description, category: row.category, alt: row.alt, width: row.width, height: row.height, byteSize: row.byte_size, createdAt: row.created_at, imagePath: `/api/local/gallery/${row.id}/image` })
-const review = (row: Row): GalleryReview => ({ ...dto(row), audience: row.audience, program: row.program, group: row.group_name, authorizationReference: row.authorization_reference, revision: row.revision, status: row.withdrawn_at ? 'retirada' : 'publicada' })
+const review = (row: Row): GalleryReview => ({ ...dto(row), ...(row.linked_post?{linkedPostId:`PUB-${String(row.linked_post).padStart(4,'0')}`} : {}), audience: row.audience, program: row.program, group: row.group_name, authorizationReference: row.authorization_reference, revision: row.revision, status: row.withdrawn_at || row.hidden_by_publication ? 'retirada' : row.draft ? 'borrador' : 'publicada' })
 function text(value: unknown, name: string, min: number, max: number) {
   if (typeof value !== 'string' || value.trim().length < min || value.trim().length > max || [...value].some(char => char.charCodeAt(0) < 32)) throw new HttpError(400, `Revisa ${name}: de ${min} a ${max} caracteres.`)
   return value.trim()
 }
 function draft(value: unknown) {
   const data = record(value)
-  if (Object.keys(data).some(key => !['title','description','category','alt','program','group','audience','authorizationReference','confirmed','imageBase64'].includes(key))) throw new HttpError(400, 'La imagen contiene datos no admitidos.')
+  if (Object.keys(data).some(key => !['title','description','category','alt','program','group','audience','authorizationReference','confirmed','imageBase64','draft'].includes(key))) throw new HttpError(400, 'La imagen contiene datos no admitidos.')
+  if (data.draft !== undefined && typeof data.draft !== 'boolean') throw new HttpError(400, 'Revisa el estado del archivo.')
   const audience = data.audience ?? 'group'
   if (audience !== 'group' && audience !== 'community') throw new HttpError(400, 'Elige un grupo o todos los alumnos aprobados.')
   if (audience === 'community' && (data.program !== '' || data.group !== '')) throw new HttpError(400, 'Una imagen de toda la comunidad no debe indicar un grupo.')
@@ -29,8 +31,8 @@ function draft(value: unknown) {
   if (!bytes.length || bytes.length > galleryLimits.uploadBytes || bytes.toString('base64') !== data.imageBase64) throw new HttpError(400, 'No se pudo leer el archivo. El límite es 3 MB.')
   const metadata = { title: text(data.title,'el título',4,100), description: text(data.description,'la descripción',10,500), category: data.category as GalleryUpload['category'], alt: text(data.alt,'el texto alternativo',5,240), program: audience === 'community' ? '' : text(data.program,'el programa',2,100), group: audience === 'community' ? '' : text(data.group,'el grupo',2,100), authorizationReference: text(data.authorizationReference,'la referencia de autorización',8,240) }
   // Conservar las huellas de envíos anteriores a la migración 17.
-  const fingerprint = createHash('sha256').update(JSON.stringify(metadata)).update(audience === 'community' ? '\0community' : '').update(bytes).digest('hex')
-  return { metadata: { ...metadata, audience }, bytes, fingerprint }
+  const fingerprint = createHash('sha256').update(JSON.stringify(metadata)).update(audience === 'community' ? '\0community' : '').update(data.draft ? '\0draft' : '').update(bytes).digest('hex')
+  return { metadata: { ...metadata, audience, draft: data.draft === true }, bytes, fingerprint }
 }
 
 /** Guarda solo la versión procesada: sin rutas públicas, originales ni metadatos EXIF. */
@@ -67,19 +69,22 @@ export function galleryRepository(db: Database) {
           const used = Number(db.prepare('SELECT COALESCE(SUM(byte_size),0) AS n FROM gallery_images').get()!.n)
           if (used + output.data.length > galleryLimits.totalBytes) throw new HttpError(409, 'Se alcanzó el límite de almacenamiento local de imágenes. Consulta la configuración de entrega antes de añadir más.')
           const id = randomUUID(), created = new Date().toISOString()
-          db.prepare('INSERT INTO gallery_images(id,idempotency_key,fingerprint,title,description,category,alt,program,group_name,authorization_reference,created_by,created_at,bytes,width,height,byte_size,audience) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').run(id,key,fingerprint,metadata.title,metadata.description,metadata.category,metadata.alt,metadata.program,metadata.group,metadata.authorizationReference,admin,created,output.data,output.info.width,output.info.height,output.data.length,metadata.audience)
+          db.prepare('INSERT INTO gallery_images(id,idempotency_key,fingerprint,title,description,category,alt,program,group_name,authorization_reference,created_by,created_at,bytes,width,height,byte_size,audience,draft) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').run(id,key,fingerprint,metadata.title,metadata.description,metadata.category,metadata.alt,metadata.program,metadata.group,metadata.authorizationReference,admin,created,output.data,output.info.width,output.info.height,output.data.length,metadata.audience,Number(metadata.draft))
           administrationAudit(db,admin,'gallery.published',{id,program:metadata.program,group:metadata.group,audience:metadata.audience})
           return review(current(id)!)
         })
       } finally { inFlight-- }
     },
-    list(): GalleryReview[] { return (db.prepare(`SELECT ${columns} FROM gallery_images ORDER BY created_at DESC,id DESC`).all() as Row[]).map(review) },
+    list(): GalleryReview[] { return (db.prepare(`SELECT ${columns},(SELECT publication_id FROM publication_images WHERE image_id=gallery_images.id) AS linked_post,(SELECT CASE WHEN p.status<>'publicada' OR (p.expires_at IS NOT NULL AND p.expires_at<=strftime('%Y-%m-%dT%H:%M:%fZ','now')) THEN 1 ELSE 0 END FROM publication_images x JOIN publications p ON p.id=x.publication_id WHERE x.image_id=gallery_images.id) AS hidden_by_publication FROM gallery_images ORDER BY created_at DESC,id DESC`).all() as Row[]).map(review) },
     forStudent(user: StudentUser): GalleryItem[] {
-      return (db.prepare(`SELECT ${columns} FROM gallery_images WHERE withdrawn_at IS NULL AND (audience = 'community' OR (audience = 'group' AND program = ? AND group_name = ? AND group_name <> 'Por asignar')) ORDER BY created_at DESC,id DESC`).all(user.program,user.group) as Row[]).map(dto)
+      return db.prepare(`SELECT g.*,p.id AS post_id,p.title AS post_title,p.body AS post_body,p.published_at AS post_date FROM gallery_images g
+        LEFT JOIN publication_images x ON x.image_id=g.id LEFT JOIN publications p ON p.id=x.publication_id
+        WHERE g.withdrawn_at IS NULL AND ${imageAudience} AND ((x.publication_id IS NULL AND g.draft=0) OR
+        (p.show_in_gallery=1 AND ${livePublication} AND ${publicationAudience})) ORDER BY COALESCE(p.published_at,g.created_at) DESC,x.position,g.id`).all(user.program,user.group,user.program,user.group).map(galleryItem)
     },
     image(id: string, user: StudentUser | null, admin: boolean) {
       const row = current(id)
-      if (!row || row.withdrawn_at || (!admin && (!user || (row.audience === 'group' && (user.group === 'Por asignar' || row.program !== user.program || row.group_name !== user.group))))) throw new HttpError(404, 'No se encontró la imagen o no está disponible para tu cuenta.')
+      if (!row || row.withdrawn_at || (!admin && (!user || !imageVisible(db,id,user)))) throw new HttpError(404, 'No se encontró la imagen o no está disponible para tu cuenta.')
       return (db.prepare('SELECT bytes FROM gallery_images WHERE id = ?').get(id) as { bytes: Uint8Array }).bytes
     },
     withdraw(id: string, value: unknown, admin: number) {

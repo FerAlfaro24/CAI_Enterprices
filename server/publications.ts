@@ -1,3 +1,4 @@
+import { publicationPhotos } from './community-media.ts'
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError, record } from './validation.ts'
 import { queueNotice } from './notices.ts'
@@ -7,12 +8,12 @@ import { reactionSummary, saveReaction } from './reactions.ts'
 import { publicationCategories, publicationLimits, type OwnPost, type PublicationDecision, type PublicationDraft, type PublicationStatus, type PublishedPost, type ReviewPost, type StudentUser, type Submission } from './contracts.ts'
 
 type Row = {
-  id: number; author_id: number; title: string; body: string; category: PublicationDraft['category']; status: PublicationStatus
+  id: number; author_id: number; admin_author_id:number|null; audience:'group'|'community'; kind:'story'|'notice'|'album';show_in_gallery:number;highlighted:number;expires_at:string|null; title: string; body: string; category: PublicationDraft['category']; status: PublicationStatus
   program: string; group_name: string; created_at: string; published_at: string | null; reason: string | null; revision: number
   payload: string; student_status: string | null; request_status: string; comments_open:number;badge_grant_id:number|null
 }
 const select = `SELECT p.*, r.payload, r.status AS request_status, s.status AS student_status FROM publications p
-  JOIN requests r ON r.id = p.author_id LEFT JOIN students s ON s.request_id = p.author_id`
+  LEFT JOIN requests r ON r.id = p.author_id LEFT JOIN students s ON s.request_id = p.author_id`
 const folio = (id: number) => `PUB-${String(id).padStart(4, '0')}`
 function idOf(id: string, prefix: string) {
   if (!new RegExp(`^${prefix}-\\d{4,}$`).test(id) || !Number.isSafeInteger(Number(id.slice(4)))) throw new HttpError(404, 'No se encontró la publicación.')
@@ -31,11 +32,12 @@ export function validatePublication(value: unknown): PublicationDraft {
     body: field(data.body, 'el texto', publicationLimits.bodyMin, publicationLimits.bodyMax), category: data.category as PublicationDraft['category'],...(data.badgeGrantId?{badgeGrantId:data.badgeGrantId as string}:{}) }
 }
 function publicPost(db: Database, row: Row): PublishedPost {
-  const profile = JSON.parse(row.payload) as Submission
+  const institutional=row.admin_author_id!==null
+  const profile = institutional ? null : JSON.parse(row.payload) as Submission
   const grant=row.badge_grant_id?db.prepare("SELECT badge_json,awarded_at FROM badge_grants WHERE id=? AND student_id=? AND status='active'").get(row.badge_grant_id,row.author_id):undefined
   const badge=grant?JSON.parse(String(grant.badge_json)) as {id:string;title:string}:null
   return { id: folio(row.id), title: row.title, body: row.body, category: row.category,
-    author: { id: publicProfileId(db, row.author_id), displayName: profile.displayName, avatarColor: profile.avatarColor }, createdAt: row.created_at, publishedAt: row.published_at, commentsOpen:row.comments_open===1,...(grant&&badge?{recognition:{badgeId:badge.id,title:badge.title,awardedAt:String(grant.awarded_at)}}:{}) }
+    author: institutional ? {id:'cai-team',displayName:'Equipo CAI',avatarColor:'#1f56d6'} : { id: publicProfileId(db, row.author_id), displayName: profile!.displayName, avatarColor: profile!.avatarColor }, ...(institutional?{institutional:true,kind:row.kind,audience:row.audience,highlighted:row.highlighted===1,expiresAt:row.expires_at,showInGallery:row.show_in_gallery===1,photos:publicationPhotos(db,row.id)}:{}), createdAt: row.created_at, publishedAt: row.published_at, commentsOpen:row.comments_open===1,...(grant&&badge?{recognition:{badgeId:badge.id,title:badge.title,awardedAt:String(grant.awarded_at)}}:{}) }
 }
 
 export function publications(db: Database) {
@@ -47,17 +49,19 @@ export function publications(db: Database) {
     return JSON.parse(row.payload) as Submission
   }
   const available = (row: Row) => {
+    if(row.admin_author_id!==null)return true
     const profile = JSON.parse(row.payload) as Submission
     return row.request_status === 'aprobada' && row.student_status === 'activo' && profile.group !== 'Por asignar' && profile.program === row.program && profile.group === row.group_name
   }
   const visible = (user:StudentUser,id:string) => {
     const profile = activeProfile(user)
     const row = db.prepare(`${select} WHERE p.id = ?`).get(idOf(id, 'PUB')) as Row | undefined
-    if (!row || row.status !== 'publicada' || !available(row) || profile.group === 'Por asignar' || row.program !== profile.program || row.group_name !== profile.group) throw new HttpError(404, 'Esta publicación ya no está disponible para tu grupo.')
+    if (!row || row.status !== 'publicada' || !available(row) || (row.expires_at && row.expires_at<=new Date().toISOString()) || (row.audience!=='community' && (profile.group === 'Por asignar' || row.program !== profile.program || row.group_name !== profile.group))) throw new HttpError(404, 'Esta publicación ya no está disponible para tu cuenta.')
     return row
   }
   return {
     visible,
+    institutional():ReviewPost[]{return (db.prepare(`${select} WHERE p.admin_author_id IS NOT NULL ORDER BY p.id DESC`).all() as Row[]).map(row=>({...ownPost(row),studentId:'',studentName:'Equipo CAI',program:row.program,group:row.group_name,authorActive:true,authorIsMinor:false}))},
     create(user: StudentUser, draft: PublicationDraft, key: string): OwnPost {
       return transaction(db, () => {
         const profile = activeProfile(user)
@@ -82,8 +86,7 @@ export function publications(db: Database) {
     },
     feed(user: StudentUser): PublishedPost[] {
       const profile = activeProfile(user)
-      if (profile.group === 'Por asignar') return []
-      return (db.prepare(`${select} WHERE p.status = 'publicada' AND p.program = ? AND p.group_name = ? ORDER BY p.published_at DESC, p.id DESC`).all(profile.program, profile.group) as Row[]).filter(available).map(row => ({ ...publicPost(db, row), engagement: reactionSummary(db, row.id, idOf(user.id, 'CAI'), profile.program, profile.group) }))
+      return (db.prepare(`${select} WHERE p.status = 'publicada' AND (p.expires_at IS NULL OR p.expires_at>?) AND (p.audience='community' OR (p.program=? AND p.group_name=? AND p.group_name<>'Por asignar')) ORDER BY p.published_at DESC,p.id DESC`).all(new Date().toISOString(),profile.program,profile.group) as Row[]).filter(available).map(row=>({...publicPost(db,row),engagement:reactionSummary(db,row.id,idOf(user.id,'CAI'),row.program,row.group_name,row.audience==='community')}))
     },
     react(user: StudentUser, id: string, value: unknown, key: string) {
       transaction(db, () => {
@@ -107,7 +110,7 @@ export function publications(db: Database) {
       })
     },
     review(): ReviewPost[] {
-      return (db.prepare(`${select} ORDER BY p.id DESC`).all() as Row[]).map((row) => {
+      return (db.prepare(`${select} WHERE p.admin_author_id IS NULL ORDER BY p.id DESC`).all() as Row[]).map((row) => {
         const profile = JSON.parse(row.payload) as Submission
         return { ...ownPost(row), studentId: `CAI-${String(row.author_id).padStart(4, '0')}`, studentName: `${profile.firstName} ${profile.lastName}`,
           program: row.program, group: row.group_name, authorActive: available(row), authorIsMinor: ageAt(profile.birthDate) < 18 }

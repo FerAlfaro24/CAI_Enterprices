@@ -486,3 +486,12 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 :global([data-theme='dark']) .admin :is(.eyebrow, .card-link, .kpi-icon) { color: var(--app-link); }
 :global([data-theme='dark']) .admin .btn--approve { background: #0b6d48; }
 :global([data-theme='dark']) .admin .btn--primary:hover { background: #1745b2; }
+
+.officialPhotoChoices {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px 0;}
+.officialPhotoChoices label {display:flex;align-items:center;gap:10px;cursor:pointer;min-width:0;}
+.officialPhotoChoices img {width:64px;height:64px;object-fit:cover;border-radius:8px;}
+.officialPhotoChoices small {display:block;font-weight:400;}
+.officialRecords {margin-top:24px;}
+.officialRecords summary {cursor:pointer;font-weight:700;margin-bottom:16px;}
+
+.officialComposer>summary {display:list-item;cursor:pointer;font-weight:700;color:var(--primary);padding:12px 4px;}

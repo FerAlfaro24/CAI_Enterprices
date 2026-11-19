@@ -132,7 +132,7 @@ export const studentApi = {
   logout: () => call('/student/logout', 'POST', {}),
   me: () => call<{ user: StudentUser }>('/student/me'),
   group: () => call<{ members: GroupMember[] }>('/student/group'),
-  posts: () => call<{ posts: PublishedPost[]; mine: OwnPost[] }>('/student/posts'),
+  posts: () => call<{ demonstration?:boolean; posts: PublishedPost[]; mine: OwnPost[] }>('/student/posts'),
   createPost: (draft: PublicationDraft, key: string) => call<{ post: OwnPost }>('/student/posts', 'POST', draft, { 'Idempotency-Key': key }),
   withdrawPost: (post: OwnPost) => call(`/student/posts/${post.id}/withdraw`, 'POST', { revision: post.revision }),
 }
@@ -155,3 +155,9 @@ export const googleApi = {
 }
 
 export type { GalleryItem, GalleryReview, GalleryUpload, ContactInquiry, ContactReceipt, ContactSubmission, ContactStatus, StudentNotice, CatalogGroup, CommunityControls, PublicCatalog, ActivationInvitation, GroupMember, LocalRequest, LocalStudent, LocalUser, OwnPost, PublicationDecision, PublicationDraft, PublishedPost, RequestDecision, ReviewPost, StudentUser, Submission }
+
+export const institutionalApi={
+ list:()=>call<{posts:ReviewPost[]}>('/institutional-posts'),
+ create:(draft:import('../../../server/contracts').InstitutionalDraft,key:string)=>call<{id:number}>('/institutional-posts','POST',draft,{'Idempotency-Key':key}),
+ update:(post:ReviewPost,withdraw=false)=>call(`/institutional-posts/${post.id}`,'PATCH',{revision:post.revision,confirmed:true,withdraw,highlighted:withdraw?false:!post.highlighted,expiresAt:post.expiresAt??null}),
+}
