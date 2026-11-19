@@ -1,5 +1,6 @@
+import { photos } from '../data/photos'
 import emblem from '../../../assets/cai/logo-cai-emblema.svg'
-import { milestones, photos } from '../data/content'
+import { milestones } from '../data/content'
 import s from '../landing.module.css'
 import { cx } from '../utils'
 import { ButtonLink, ContentNote } from './ui'
@@ -18,7 +19,7 @@ export function HistorySection() {
         </div>
         <div className={s.feature__media} data-reveal>
           <div className={cx(s['media-card'], s['media-card--blue'])}>
-            <img src={photos.meeting} alt="Adultos compartiendo ideas en una reunión; fotografía ilustrativa ajena a CAI" width="1000" height="750" loading="lazy" decoding="async" />
+            <img src={photos.meeting} alt="Personas trabajando con sus materiales en el aula de CAI." width="1080" height="720" loading="lazy" decoding="async" />
             <div className={s.seal}><img src={emblem} alt="CAI" width="150" height="140" /><span>2010 · Ejemplo</span></div>
           </div>
         </div>

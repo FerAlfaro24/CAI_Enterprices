@@ -1,0 +1,196 @@
+{
+  "source": "Material oficial facilitado por CAI, lotes WhatsApp 2026-11-17",
+  "authorized": "2026-11-19: público y comunidad; comunidad para todos los alumnos aprobados",
+  "images": [
+    {
+      "id": "CAI-17",
+      "name": "materiales",
+      "audience": "public",
+      "crop": [
+        0,
+        148,
+        1080,
+        1080
+      ],
+      "path": "src/assets/official/materiales.webp",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.21.17 PM.jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.21 PM.zip",
+      "sourceSha256": "83122865dc2ffcf307c3bcff3869359f9ff0fb8e039081786a11af3ae33a2988",
+      "sha256": "c7e31259b0a20c757fbd3cfbfa29e2e5b0a551c2007bd755d065b2b9d5a6cb7a",
+      "width": 1080,
+      "height": 1080,
+      "bytes": 186588
+    },
+    {
+      "id": "CAI-09",
+      "name": "aula",
+      "audience": "public",
+      "crop": [
+        0,
+        420,
+        1080,
+        720
+      ],
+      "path": "src/assets/official/aula.webp",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.44.41 PM (2).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.26 PM.zip",
+      "sourceSha256": "3b5eb6768a3009545f38c2e0d6b5200913a67d99f31bff591be49c91e67e35c2",
+      "sha256": "7b12c0ac96ef45dededcec9b997f20217325d5dda5eedfd2a064cbeb03ce31da",
+      "width": 1080,
+      "height": 720,
+      "bytes": 50168
+    },
+    {
+      "id": "CAI-08",
+      "name": "practica-online",
+      "audience": "public",
+      "crop": [
+        0,
+        460,
+        972,
+        720
+      ],
+      "path": "src/assets/official/practica-online.webp",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.44.41 PM (1).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.26 PM.zip",
+      "sourceSha256": "3d6e09b7c21a220696e385d02154ac1b5c0f345f4a4d69143dc98623f4e1c0b4",
+      "sha256": "b9b450932b31b5911a8d73e2dc7e16a9e4c50f9f4eb5b33d6f30ee5e44f13d86",
+      "width": 972,
+      "height": 720,
+      "bytes": 46036
+    },
+    {
+      "id": "CAI-02",
+      "name": "actividad-aula",
+      "audience": "public",
+      "crop": [
+        0,
+        142,
+        1080,
+        950
+      ],
+      "path": "src/assets/official/actividad-aula.webp",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.44.39 PM (1).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.26 PM.zip",
+      "sourceSha256": "540f0e1fa406ec587e0cc51906f525e7b3d70fde46bb5fd5e5daa7af8fc77941",
+      "sha256": "a29337e172605eb332018918d8b6922988f15812a37083fa3398febfe0fef841",
+      "width": 1080,
+      "height": 950,
+      "bytes": 57122
+    },
+    {
+      "id": "CAI-12",
+      "name": "cumpleanos-en-grupo",
+      "audience": "community",
+      "crop": [
+        0,
+        0,
+        1080,
+        950
+      ],
+      "path": ".local/official-media/cumpleanos-en-grupo.jpg",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.44.42 PM (2).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.26 PM.zip",
+      "sourceSha256": "2da84cf8038271f8b9c1d51f38cffc9e81b274aa7f1170d5e4afded6eafb8962",
+      "sha256": "06e6fad673dc7ea5cd1e1b3ba8f6326a72a8e898fc32c6fe434655b40b29d1fd",
+      "width": 1080,
+      "height": 950,
+      "bytes": 119672
+    },
+    {
+      "id": "CAI-14",
+      "name": "momento-de-celebracion",
+      "audience": "community",
+      "crop": [
+        0,
+        162,
+        738,
+        765
+      ],
+      "path": ".local/official-media/momento-de-celebracion.jpg",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.44.42 PM (4).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.26 PM.zip",
+      "sourceSha256": "73412fb5997964d68239d727f4fb55ff2b4174f8cc8aee94c844cbf8b5960e85",
+      "sha256": "4f65686fecbe899a23abdbd3c1e2551284ad7391a46fe618a6f9a067ab808543",
+      "width": 738,
+      "height": 765,
+      "bytes": 78078
+    },
+    {
+      "id": "CAI-16",
+      "name": "convivencia-pizza",
+      "audience": "community",
+      "crop": [
+        0,
+        400,
+        1080,
+        550
+      ],
+      "path": ".local/official-media/convivencia-pizza.jpg",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.44.42 PM (6).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.26 PM.zip",
+      "sourceSha256": "ece9e5eb9a9d33aed048bbe4d814526fa31251f4f4b8456c6a2ee6151615affb",
+      "sha256": "10a0f855ad80f6f2c573d24a63b28db509fbe8e4db03d21a1fb672069867c27f",
+      "width": 1080,
+      "height": 550,
+      "bytes": 70539
+    },
+    {
+      "id": "CAI-25",
+      "name": "celebracion-compartida",
+      "audience": "community",
+      "crop": [
+        0,
+        280,
+        1080,
+        670
+      ],
+      "path": ".local/official-media/celebracion-compartida.jpg",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.21.19 PM (3).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.21 PM.zip",
+      "sourceSha256": "558fc0d3f42bc8e5dadcab7fe001d42e2871030549a4648fd296daafdec294a8",
+      "sha256": "a34695fb8b662c5344bc3406ea75a3e4d6c3f342ae37f0bcdf754fb8184f5892",
+      "width": 1080,
+      "height": 670,
+      "bytes": 137531
+    },
+    {
+      "id": "CAI-26",
+      "name": "mesa-de-convivencia",
+      "audience": "community",
+      "crop": [
+        0,
+        0,
+        1080,
+        1073
+      ],
+      "path": ".local/official-media/mesa-de-convivencia.jpg",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.21.19 PM (4).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.21 PM.zip",
+      "sourceSha256": "453fd9b0d3a13e6859182a2a624b8290690e69c3b7f5059550735fd40dca30e8",
+      "sha256": "f5ceeeb4dd3cf8e19270ea732428951e36ed651e06ac18f339c13a6a2d2a9020",
+      "width": 1080,
+      "height": 1073,
+      "bytes": 127134
+    },
+    {
+      "id": "CAI-27",
+      "name": "recuerdo-de-cumpleanos",
+      "audience": "community",
+      "crop": [
+        0,
+        130,
+        1080,
+        1080
+      ],
+      "path": ".local/official-media/recuerdo-de-cumpleanos.jpg",
+      "sourceFile": "WhatsApp Image 2026-11-17 at 5.21.19 PM (5).jpeg",
+      "sourceArchive": "WhatsApp Unknown 2026-11-17 at 6.48.21 PM.zip",
+      "sourceSha256": "62eee4763ce46eb6146b5e5b321d7e434f7c615c4ff180f40a92e046512afe71",
+      "sha256": "854e0aba951ede23b8f25c9256a77a4b11758096de9fc12e7fcf1e7cd0567c0e",
+      "width": 1080,
+      "height": 1080,
+      "bytes": 163468
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import { notices } from './notices.ts'
 import { administration } from './administration.ts'
 import { contactRepository, validateContact } from './contact.ts'
 import { galleryRepository } from './gallery.ts'
+import { importOfficialMedia } from './official-media.ts'
 import { studentProfiles } from './public-profiles.ts'
 import { adminRecovery, adminRecoveryMessage, type AdminRecoveryDelivery } from './admin-recovery.ts'
 import { adminTeam } from './admin-team.ts'
@@ -20,7 +21,8 @@ import { galleryLimits } from './contracts.ts'
 import { HttpError, record, revisionOf, validateSubmission } from './validation.ts'
 import type { PublicationDecision, RequestDecision } from './contracts.ts'
 import { randomUUID } from 'node:crypto'
-import { localPolicy, type RequestPolicy } from './runtime-config.ts'
+import { localPolicy, projectDirectory, type RequestPolicy } from './runtime-config.ts'
+import { join } from 'node:path'
 import { requestContext, validateRequestPolicy } from './request-policy.ts'
 import { requestLogFields, writeOperationalLog, type OperationalLog } from './operational-log.ts'
 
@@ -46,7 +48,7 @@ function json(response: ServerResponse, status: number, data: unknown) {
   response.end(JSON.stringify(data))
 }
 
-export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date;runtime?:RequestPolicy;log?:OperationalLog} = {}) {
+export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date;runtime?:RequestPolicy;log?:OperationalLog;officialMediaDirectory?:string} = {}) {
   const policy = validateRequestPolicy(options.runtime ?? localPolicy)
   const cookies = { secure: policy.mode === 'production' }
   const log = options.log ?? (policy.mode === 'production' ? event => console.info(JSON.stringify(event)) : undefined)
@@ -354,6 +356,12 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       return teamAccount[2]?json(response,200,await team.invite(request,id,data)):json(response,200,{account:await team.setActive(request,id,data)})
     }
     if (path === '/api/local/gallery' && method === 'GET') return json(response, 200, { images: gallery.list() })
+    if (path === '/api/local/gallery/official/import' && method === 'POST') {
+      limit(`gallery-official:${user.id}`, 10, 60 * 60_000)
+      const data = await protectedBody()
+      const directory = options.officialMediaDirectory ?? (policy.mode === 'local' ? join(projectDirectory, '.local', 'official-media') : undefined)
+      return json(response, 200, await importOfficialMedia(gallery, data, () => auth.session(request)?.id ?? null, directory))
+    }
     if (path === '/api/local/gallery' && method === 'POST') {
       limit(`gallery:${user.id}`, 30, 60 * 60_000)
       const key = request.headers['idempotency-key']

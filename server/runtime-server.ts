@@ -8,7 +8,7 @@ import { join } from 'node:path'
 export async function startRuntime(config: RuntimeConfig, options: { log?: OperationalLog; shutdownMilliseconds?: number } = {}) {
   if (config.policy.mode === 'production') checkProductionDatabase(config)
   const clientId = config.policy.mode === 'production' ? config.googleClientId : readGoogleClientId(join(config.dataDirectory, 'google.json'))
-  const app = createApplication(config.databasePath, { clientId }, { runtime: config.policy, log: options.log })
+  const app = createApplication(config.databasePath, { clientId }, { runtime: config.policy, log: options.log, officialMediaDirectory: join(config.dataDirectory, 'official-media') })
   await new Promise<void>((resolve, reject) => {
     app.server.once('error', reject)
     app.server.listen(config.port, config.host, () => { app.server.off('error', reject); resolve() })

@@ -2,22 +2,6 @@
 export const commercialNotice =
   'Contenido comercial de muestra. Programas, resultados y condiciones pendientes de validación con CAI.'
 
-const photo = (id: string, width: number, height?: number) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}${height ? `&h=${height}` : ''}&q=80`
-
-/** Fotografías ilustrativas de stock, sin relación con alumnos de CAI. */
-export const photos = {
-  hero: photo('photo-1543269865-cbf427effbad', 1920),
-  meeting: photo('photo-1531545514256-b1400bc00f31', 1000),
-  online: photo('photo-1516321318423-f06f85e504b3', 1000),
-}
-
-export const portraits = [
-  'photo-1494790108377-be9c29b29330',
-  'photo-1507003211169-0a1dd7228f2d',
-  'photo-1438761681033-6461ffad8d80',
-].map((id) => ({ thumbnail: photo(id, 80, 80), image: photo(id, 600, 420) }))
-
 export const certifications = ['TOEFL', 'Cambridge English', 'IELTS', 'MCER A1–C1', 'Business English']
 
 export const statistics = [
@@ -40,12 +24,6 @@ export const services = [
   { icon: 'briefcase', title: 'Inglés para empresas', text: 'Capacitación in-company con diagnóstico de nivel y reportes de avance.' },
   { icon: 'pencil', title: 'Asesorías personalizadas', text: 'Clases 1 a 1 y regularización escolar para reforzar justo lo que necesitas.' },
 ] as const
-
-export const testimonials = [
-  { name: 'Mariana G.', detail: 'Nivel B1 · Personaje ficticio', quote: 'Entré sin saber casi nada y en un año ya podía mantener conversaciones completas. Los maestros te hacen sentir en confianza desde el primer día.', portrait: portraits[0]!.image },
-  { name: 'Carlos R.', detail: 'Preparación TOEFL · Personaje ficticio', quote: 'Gracias a la preparación de CAI aprobé el TOEFL con el puntaje que necesitaba para mi maestría. Los simulacros fueron clave.', portrait: portraits[1]!.image },
-  { name: 'Sofía L.', detail: 'Programa empresarial · Personaje ficticio', quote: 'Mi equipo tomó el programa empresarial y ahora atendemos a clientes internacionales sin problema. Muy recomendable.', portrait: portraits[2]!.image },
-]
 
 export const audiences = [
   { icon: 'smile', title: 'Niños', range: '6–12 años', text: 'Aprender jugando para perder el miedo al idioma desde pequeños.' },
@@ -91,6 +69,6 @@ export const faqs = [
 export const footerGroups = [
   { title: 'Sobre CAI', links: [{ label: 'Nuestra historia', href: '#trayectoria' }, { label: 'Metodología', href: '#servicios' }, { label: 'Contacto', href: '#contacto' }] },
   { title: 'Programas', links: programs.map(({ title }) => ({ label: title, href: '#programas' })) },
-  { title: 'Alumnos', links: [{ label: 'Testimonios de muestra', href: '#alumnos' }, { label: 'Comunidad demo', href: '/community' }, { label: 'Cursos: propuesta futura', href: '#plataforma' }] },
+  { title: 'Alumnos', links: [{ label: 'Vida en CAI', href: '#alumnos' }, { label: 'Comunidad demo', href: '/community' }, { label: 'Cursos: propuesta futura', href: '#plataforma' }] },
   { title: 'Recursos', links: [{ label: 'Preguntas frecuentes', href: '#faq' }, { label: 'Revisar el prototipo', href: '#contacto' }] },
 ]

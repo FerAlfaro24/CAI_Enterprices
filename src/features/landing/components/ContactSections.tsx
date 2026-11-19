@@ -1,5 +1,6 @@
+import { photos } from '../data/photos'
 import { Link } from 'react-router'
-import { faqs, photos } from '../data/content'
+import { faqs } from '../data/content'
 import s from '../landing.module.css'
 import { cx } from '../utils'
 import { DemoForm } from './DemoForm'
@@ -19,7 +20,7 @@ export function PlatformPreviewSection() {
           <DemoForm variant="waitlist" />
         </div>
         <div className={s.feature__media} data-reveal><div className={s['media-card']}>
-          <img src={photos.online} alt="Detalle de un ordenador portátil en una mesa de trabajo; imagen ilustrativa" width="1000" height="667" loading="lazy" decoding="async" />
+          <img src={photos.online} alt="Práctica en línea en CAI con computadora, videollamada y materiales de estudio." width="972" height="720" loading="lazy" decoding="async" />
           <svg className={cx(s.doodle, s['doodle--tl'])} viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="12" strokeLinecap="round" aria-hidden="true"><path d="M20 20l60 70M45 15l55 60" /></svg>
         </div></div>
       </div>

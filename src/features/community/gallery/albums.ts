@@ -71,7 +71,7 @@ export function selectAlbums(posts: readonly Post[], filter: AlbumFilter = 'all'
 export function privateAlbums(images: readonly GalleryItem[]): Album[] {
   return images.map(image => {
     const photo: Photo = {id:image.id,src:image.imagePath,alt:image.alt,caption:image.description}
-    return {id:image.id,postId:`gallery:${image.id}`,title:image.title,description:image.description,category:image.category,cover:photo,photos:[photo],author:{id:'cai-team',alias:'Equipo CAI'},provenance:'Imagen publicada por coordinación para tu programa y grupo.',createdAt:image.createdAt,status:'approved',celebrations:0,private:true}
+    return {id:image.id,postId:`gallery:${image.id}`,title:image.title,description:image.description,category:image.category,cover:photo,photos:[photo],author:{id:'cai-team',alias:'Equipo CAI'},provenance:'Imagen compartida por coordinación con tu cuenta de la comunidad.',createdAt:image.createdAt,status:'approved',celebrations:0,private:true}
   })
 }
 

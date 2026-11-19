@@ -105,6 +105,7 @@ export const localApi = {
 }
 
 export const galleryApi = {
+  importOfficial: () => call<{added:number;retained:number}>('/gallery/official/import','POST',{confirmed:true}),
   list: () => call<{images: GalleryReview[]}>('/gallery'),
   upload: (draft: GalleryUpload, key: string) => call<{image: GalleryReview}>('/gallery','POST',draft,{'Idempotency-Key':key}),
   withdraw: (image: GalleryReview) => call(`/gallery/${image.id}/withdraw`,'POST',{revision:image.revision,confirmed:true}),
