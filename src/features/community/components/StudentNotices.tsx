@@ -20,6 +20,5 @@ export function StudentNotices() {
     {!visible.length && <div className={s.noticesEmpty}><CommunityIcon name="check" size={34} /><h3>{filter === 'unread' ? '¡Estás al día!' : 'Tu bandeja está tranquila.'}</h3><p>{filter === 'unread' ? 'Ya leíste todos tus mensajes. Puedes consultar los anteriores en Todas.' : 'Cuando CAI tenga un mensaje para ti, aparecerá aquí.'}</p></div>}
     {message && <p role="status">{message}</p>}
     {connection.error && <p role="alert">{connection.error}</p>}
-    <small>Durante estas pruebas los mensajes se guardan aquí; no se envían por correo.</small>
   </section>
 }

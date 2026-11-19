@@ -1,3 +1,11 @@
+async function refreshCommunity(page) {
+  await page.getByRole('button', { name: /^Abrir mi perfil:/ }).click()
+  const profile = page.getByRole('dialog')
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click()
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).waitFor()
+  await profile.getByRole('button', { name: 'Cerrar perfil', exact: true }).click()
+}
+
 /** Ejecutar desde un navegador de automatización aislado contra la fixture de presentación. */
 export async function checkCommunityHome(page,{baseURL,screenshotDir,browserLabel='browser',password='Frase ficticia para fotos oficiales 2026'}){
   const checks=[]
@@ -8,15 +16,16 @@ export async function checkCommunityHome(page,{baseURL,screenshotDir,browserLabe
     await page.getByRole('textbox',{name:'Correo electrónico',exact:true}).fill(admin?'admin@example.test':'bob@example.test')
     await page.getByRole('textbox',{name:'Contraseña',exact:true}).fill(password)
     await page.getByRole('button',{name:admin?'Entrar al panel':'Entrar a mi espacio',exact:true}).click()
-    await page.getByRole(admin?'link':'heading',{name:admin?'Publicaciones':'Tu comunidad, en imágenes.',exact:true}).waitFor()
+    await page.getByRole(admin?'link':'heading',{name:admin?'Publicaciones':'Tu comunidad, al día.',exact:true}).waitFor()
   }
   await page.emulateMedia({reducedMotion:'no-preference'})
   await login()
-  check((await page.getByRole('note').innerText()).includes('ficticios'),'Demostración identificada')
+  check(await page.getByRole('heading',{name:'Tu comunidad, al día.',exact:true}).isVisible(),'Comunidad identificada sin rótulos de demostración')
+  await page.getByRole('group', { name: 'Contenido destacado' }).getByRole('button', { name: /^Momentos/ }).click()
   const hero=page.getByRole('region',{name:'Destacados de la comunidad',exact:true})
   await hero.locator('img').last().waitFor()
   check(await hero.locator('img').last().evaluate(i=>i.complete&&i.naturalWidth>0),'Fotografía real cargada en Inicio')
-  await page.getByRole('button',{name:'Pausar avance automático',exact:true}).click()
+  await page.getByRole('button',{name:'Activar avance automático',exact:true}).waitFor()
   const originalTitle=await hero.getByRole('heading').innerText()
   await page.getByRole('button',{name:'Siguiente destacado',exact:true}).click()
   check(await hero.getByRole('heading').innerText()!==originalTitle,'Carrusel cambia de historia')
@@ -104,7 +113,7 @@ export async function checkCommunityImagePost(page,{baseURL,files,browserLabel='
     await page.getByLabel('Correo electrónico',{exact:true}).fill(admin?'admin@example.test':'bob@example.test')
     await page.getByLabel('Contraseña',{exact:true}).fill(password)
     await page.getByRole('button',{name:admin?'Entrar al panel':'Entrar a mi espacio',exact:true}).click()
-    await page.getByRole(admin?'link':'heading',{name:admin?'Publicaciones':'Tu comunidad, en imágenes.',exact:true}).waitFor()
+    await page.getByRole(admin?'link':'heading',{name:admin?'Publicaciones':'Tu comunidad, al día.',exact:true}).waitFor()
   }
   await login(true);await page.getByRole('link',{name:'Publicaciones',exact:true}).click()
   await page.getByText('Crear publicación de CAI',{exact:true}).click()

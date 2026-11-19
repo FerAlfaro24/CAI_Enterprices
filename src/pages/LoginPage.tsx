@@ -35,7 +35,7 @@ export function LoginPage({ admin=false,onAdminLogin,message }: {admin?:boolean;
           <span className={s.kicker}>{admin?'ADMINISTRACIÓN CAI':'TU ESPACIO CAI'}</span>
           <h1 ref={heading} tabIndex={-1}>Qué gusto verte<br />de nuevo.</h1>
           <p className={s.lead}>Entra y sigue compartiendo tu camino.</p>
-          <p className={s.notice} id="login-demo-notice"><ShieldCheck size={20} aria-hidden="true" /><span><strong>Acceso local · Pruebas</strong>Usa cuentas ficticias activadas. La autorización se comprueba en el servidor.</span></p>
+          <p className={s.notice} id="login-demo-notice"><ShieldCheck size={20} aria-hidden="true" /><span><strong>{admin ? 'Administración CAI' : 'Comunidad CAI'}</strong>{admin ? 'Acceso para el equipo de coordinación.' : 'Entra con tu cuenta aprobada para seguir aprendiendo y compartiendo.'}</span></p>
           {!admin && <GoogleSignInButton />}
           {message && <p role="status">{message}</p>}
           <form ref={form} onSubmit={(event)=>{void submit(event)}} aria-busy={busy} aria-label={admin?'Acceso de administración':'Acceso de alumnos'} aria-describedby="login-demo-notice">
@@ -43,7 +43,7 @@ export function LoginPage({ admin=false,onAdminLogin,message }: {admin?:boolean;
             <input id="login-email" name="email" type="email" placeholder="tu.nombre@example.com" autoComplete="off" required maxLength={160} />
             <label htmlFor="login-password">Contraseña</label>
             <div className={s.password}>
-              <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="off" placeholder="Usa una contraseña ficticia" required maxLength={128} />
+              <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="off" placeholder="Tu contraseña" required maxLength={128} />
               <button type="button" className={s.reveal} onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={showPassword} aria-controls="login-password">{showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}</button>
             </div>
             {error && <p role="alert">{error}</p>}

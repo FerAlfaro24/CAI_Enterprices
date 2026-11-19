@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-community-social-feed`, desde `d6e66fd`. [Publicaciones y conversación](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas), 124 comprobaciones nuevas.
+- **Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d`. [Cabecera/carrusel](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), 122 comprobaciones nuevas.
+- **Revisión social anterior:** `feat/v1-community-social-feed`, desde `d6e66fd`. [Publicaciones y conversación](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas), 124 comprobaciones nuevas.
 - **Primera muestra visual anterior:** `feat/v1-community-playful-design`, desde `4cdae44`. [Muestra visual y plan](COMMUNITY_DESIGN.md), 130 comprobaciones Brave/Opera; copia remota anterior estable.
 - **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781`. [Presentación remota temporal](REMOTE_DEMO.md), copia ficticia protegida; Vercel sin actualizar.
 - **Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a`. Restaura las seis fotos como vista inicial; Álbumes opcional, filtros corregidos.
@@ -17,6 +18,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-community-header-highlights` parte de `ffb323d`, PR #17. Elimina franjas, reubica cuenta/notificaciones y unifica avisos/momentos; corrige actualización posterior al cierre de sesión. 122 comprobaciones nuevas Brave/Opera y tipos/lint/build. Sin cambios de API/esquema/permisos, sin fusión ni sustitución de datos o copia remota.
 
 `feat/v1-community-social-feed` parte de `d6e66fd`, PR #16. Feed conectado de una columna, reacciones solo con emojis/contadores y detalle/comentarios simplificados. 124 comprobaciones nuevas Brave/Opera y tipos/lint/build; sin cambios de esquema/API/reglas ni actualización de la copia remota compilada.
 

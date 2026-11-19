@@ -1,3 +1,11 @@
+async function refreshCommunity(page) {
+  await page.getByRole('button', { name: /^Abrir mi perfil:/ }).click()
+  const profile = page.getByRole('dialog')
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click()
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).waitFor()
+  await profile.getByRole('button', { name: 'Cerrar perfil', exact: true }).click()
+}
+
 /** Recorrido por HTTPS real; recibe accesos privados fuera del repositorio. */
 export async function checkRemoteDemo(browser, { access, screenshotDir, browserLabel }) {
   const results = [], errors = [], check = (value, label) => { if (!value) throw Error(label); results.push(label) }
@@ -17,16 +25,17 @@ export async function checkRemoteDemo(browser, { access, screenshotDir, browserL
     await page.getByLabel('Correo electrónico', { exact: true }).fill(access.student.email)
     await page.getByLabel('Contraseña', { exact: true }).fill(access.student.password)
     await page.getByRole('button', { name: 'Entrar a mi espacio', exact: true }).click()
-    await page.getByRole('heading', { name: 'Tu comunidad, en imágenes.', exact: true }).waitFor()
+    await page.getByRole('heading', { name: 'Tu comunidad, al día.', exact: true }).waitFor()
     check(page.url() === base + '/community', 'Alumno entra a la comunidad conectada')
-    check((await page.getByRole('note').allTextContents()).some(text => text.includes('ficticias')), 'Aviso de presentación ficticia visible')
+    check(await page.getByRole('heading', { name: 'Tu comunidad, al día.', exact: true }).isVisible(), 'Identidad de comunidad visible')
     const cookies = await student.cookies(base)
     check(cookies.some(cookie => cookie.name.startsWith('__Host-') && cookie.secure && cookie.httpOnly && cookie.sameSite === 'Strict'), 'Sesión real usa cookie segura de producción')
-    const hero = page.getByRole('region', { name: 'Destacados de la comunidad', exact: true })
+    await page.getByRole('group', { name: 'Contenido destacado' }).getByRole('button', { name: /^Momentos/ }).click()
+  const hero = page.getByRole('region', { name: 'Destacados de la comunidad', exact: true })
     await hero.locator('img').last().waitFor()
     await page.waitForFunction(() => Array.from(document.querySelectorAll('[aria-label="Destacados de la comunidad"] img')).some(i => i.complete && i.naturalWidth > 0))
     check(true, 'Foto oficial de Inicio cargada a través del túnel')
-    await page.getByRole('button', { name: 'Pausar avance automático', exact: true }).click()
+    await page.getByRole('button', { name: 'Activar avance automático', exact: true }).waitFor()
     await page.getByRole('button', { name: 'Ver historia y fotos', exact: true }).click()
     const dialog = page.getByRole('dialog')
     await dialog.getByRole('button', { name: 'Conversación (3)', exact: true }).waitFor()
@@ -55,7 +64,7 @@ export async function checkRemoteDemo(browser, { access, screenshotDir, browserL
       await page.screenshot({ path: `${screenshotDir}/${browserLabel}-remote-gallery-${width}.png`, fullPage: true })
     }
     await page.reload()
-    await page.getByRole('heading', { name: 'Tu comunidad, en imágenes.', exact: true }).waitFor()
+    await page.getByRole('heading', { name: 'Tu comunidad, al día.', exact: true }).waitFor()
     check(true, 'Recargar /community mantiene la sesión y resuelve la ruta')
     check((await student.request.get(base + '/api/local/health')).status() === 200, 'API protegida disponible en el mismo origen')
     for (const path of ['/.git/config', '/src/app.tsx', '/.local/cai.sqlite']) check((await student.request.get(base + path)).status() === 404, `Fuentes y datos no publicados: ${path}`)

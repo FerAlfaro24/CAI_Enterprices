@@ -10,6 +10,8 @@
 
 **Revisión social posterior:** 124 comprobaciones nuevas (62 Brave/62 Opera) de publicaciones/reacciones/comentarios y tamaño/tema/accesibilidad, tipos/lint/build. [Detalle](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). API y matrices anteriores no repetidas; cuatro verificadores previos adaptados y comprobados solo en sintaxis.
 
+**Cabecera y novedades:** 122 comprobaciones nuevas (61 Brave/61 Opera) de cuenta/notificaciones/carrusel, grupo, retiro, vacíos, tema/tamaño, pausa/avance y logout real; tipos/lint/build. [Hallazgo corregido y límites](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar). API/matrices anteriores no repetidas; cuatro verificadores recientes adaptados y revisados en sintaxis.
+
 ## Evidencia histórica por corte
 
 | Entrega / código | Suite API registrada | Navegador registrado | Fuente |
