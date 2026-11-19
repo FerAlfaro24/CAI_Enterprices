@@ -547,3 +547,29 @@
 .noticeFilters button { transition:none; }
 .demoTools>a { display:inline-flex; align-items:center; min-height:44px; padding:7px 10px; border:1px solid var(--line); border-radius:8px; color:var(--navy); background:var(--surface-soft); font-size:12px; text-decoration:none; }
 @media(max-width:560px) { .demoNoticeRow>.demoTools { width:100%; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:8px; }.demoNoticeRow .demoTools>button,.demoNoticeRow .demoTools>a { justify-content:center; text-align:center; min-height:44px; padding:8px; font-size:11px; line-height:1.4; }.demoNoticeRow .prototypeNotice { justify-content:flex-start; padding-inline:0; } }
+
+/* Detalle social: contenido primero, cierre discreto y conversación legible. */
+.socialDialog { width:min(680px,calc(100% - 32px)); }
+.socialDialog .storyDialogHeading { position:sticky; top:0; z-index:3; height:0; padding:0; border:0; background:transparent; pointer-events:none; }
+.socialDialog .storyDialogHeading>button { position:absolute; top:12px; right:12px; pointer-events:auto; border-radius:50%; background:var(--surface-soft); }
+.socialDialog>.post { padding:26px; }
+.socialDialog .postHeader { padding-right:44px; flex-wrap:nowrap; }
+.socialDialog .postHeader>.category { display:none; }
+.socialDialog .postHeader strong { font-size:15px; font-weight:800; }
+.socialDialog .authorInfo time { display:inline; font-size:11px; }
+.compactAudience { color:var(--muted); font-size:11px; }
+.socialDialog .postTitle { margin-top:20px!important; font-size:27px; font-weight:800; line-height:1.2; letter-spacing:-.65px; }
+.socialDialog .postBody { font-size:16px; line-height:1.65; color:var(--text); margin-top:12px!important; }
+.socialDialog .postMedia .imageFrame { border-radius:18px; }
+.socialDialog .comments { margin-top:20px; padding-top:16px; gap:14px; }
+.socialDialog [aria-label='Comentarios publicados'] { display:grid; gap:14px; }
+.socialDialog .comment { gap:10px; }
+.socialDialog .commentBubble { border-radius:4px 18px 18px; padding:12px 14px; background:var(--surface-soft); }
+.socialDialog .commentMeta strong { color:var(--navy); font-size:13px; font-weight:750; }
+.socialDialog .commentMeta time { font-size:10px; }
+.socialDialog .commentBubble p { color:var(--text); font-size:14px; line-height:1.6; }
+.socialDialog .commentForm { padding:12px 0 0; border-top:1px solid var(--line); }
+.socialDialog .commentForm textarea { min-height:68px; padding:12px 14px; border-radius:16px; background:var(--surface-soft); color:var(--text); font-size:14px; }
+.socialDialog .commentFormFooter small { font-size:10px; }
+.socialDialog .commentFormFooter button { display:flex; align-items:center; justify-content:center; gap:7px; border-radius:999px; min-height:44px; padding-inline:16px; }
+@media(max-width:480px) { .socialDialog { width:calc(100% - 20px); }.socialDialog>.post { padding:20px 16px; }.socialDialog .postTitle { font-size:24px; }.socialDialog .postBody { font-size:15px; line-height:1.65; }.socialDialog .commentBubble { padding:10px 12px; }.socialDialog .commentMeta time { margin-left:0; width:100%; }.socialDialog .commentBubble p { font-size:14px; }.socialDialog .commentFormFooter { align-items:flex-start; flex-wrap:nowrap; }.socialDialog .commentFormFooter small { max-width:150px; line-height:1.5; } }

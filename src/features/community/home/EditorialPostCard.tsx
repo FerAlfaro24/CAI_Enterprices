@@ -12,8 +12,14 @@ import { StockImage } from '../components/PostMedia'
 import { MotionButton, MotionCard, MotionFeedback } from '../components/CommunityMotion'
 import { ReactionsBar } from '../components/ReactionsBar'
 import s from './home.module.css'
+import { ConnectedPostCard } from './ConnectedPostCard'
 
 export function EditorialPostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
+  const { connection } = useCommunity()
+  return connection ? <ConnectedPostCard post={post} /> : <DemoEditorialPostCard post={post} featured={featured} />
+}
+
+function DemoEditorialPostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
   const { dispatch, connection } = useCommunity()
   const { setDetail } = useCommunityDialogs()
   const [reactionsOpen, setReactionsOpen] = useState(false)

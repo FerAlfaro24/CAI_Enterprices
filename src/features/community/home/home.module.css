@@ -419,3 +419,7 @@
 .home>.pinned { border-radius:18px; }
 @media(max-width:850px) { .activityStrip { grid-template-columns:repeat(3,minmax(0,1fr)); padding:16px; }.activityStrip>div { grid-column:1/-1; }.activityStrip>div>strong br { display:none; }.activityStrip>button { padding:12px 8px; gap:8px; }.activitySymbol { width:26px; } }
 @media(max-width:480px) { .activityStrip { gap:8px; padding:14px; }.activityStrip>button { display:block; min-height:106px; padding:10px; }.activitySymbol { margin-bottom:8px; height:24px; font-size:25px; }.activityStrip b { font-size:23px; }.activityStrip small { font-size:10px; }.liveFeature { border-radius:22px; } }
+
+/* La comunidad conectada usa un solo hilo, sin tarjetas editoriales estrechas. */
+.socialFeed { display:block; padding:8px 24px; border:1px solid var(--line); border-radius:24px; background:var(--paper); box-shadow:var(--shadow-rest); }
+@media(max-width:560px) { .socialFeed { padding:6px 16px; border-radius:20px; } }

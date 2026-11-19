@@ -8,9 +8,12 @@
 
 **Primera muestra visual:** [diseño de comunidad](COMMUNITY_DESIGN.md), con patrón propio, superficies más ligeras, progreso real en Inicio, misión/puntos/celebraciones de Retos, perfil privado y bandeja independiente. 130 comprobaciones (65 Brave/65 Opera), tipos/lint/build. Sin cambios de esquema/reglas/API ni repetición de suites anteriores. Aceptación visual pendiente; el plan conserva los siguientes refinamientos.
 
+**Revisión de publicaciones:** feed conectado de una columna, emoji/contador y retirada al tocar de nuevo; detalle social y comentarios simplificados. 124 comprobaciones nuevas (62 por navegador), tipos/lint/build. [Decisiones y límites](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). Conserva reglas, fotos y moderación; aceptación visual pendiente.
+
 ## Referencias de continuación
 
-- **Continuación actual:** `feat/v1-community-playful-design`, desde `4cdae44` de `feat/v1-remote-demo`.
+- **Continuación actual:** `feat/v1-community-social-feed`, desde `d6e66fd` de `feat/v1-community-playful-design`.
+- **Primera muestra visual anterior:** `feat/v1-community-playful-design`, desde `4cdae44` de `feat/v1-remote-demo`.
 - **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781` de `fix/v1-gallery-all-photos`.
 - **Corrección de Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a` de `feat/v1-community-home-stories`.
 - **Inicio conectado anterior:** `feat/v1-community-home-stories`, desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias, álbumes y demo](COMMUNITY_HOME_STORIES.md). Esquema 18; base habitual intacta y sin despliegue.

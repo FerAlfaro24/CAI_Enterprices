@@ -5,6 +5,7 @@ import { publicMember } from '../connection'
 import type { Post } from '../types'
 import type { CommentPage, OwnComment, PublicComment } from '../../../../server/contracts'
 import { CommentItem } from './CommentItem'
+import { CommunityIcon } from './ui'
 import base from '../community.module.css'
 import s from './connected-comments.module.css'
 
@@ -59,9 +60,7 @@ export function ConnectedComments({post,autoFocus=false}:{post:Post;autoFocus?:b
   finally{sending.current=false;if(mounted.current)setBusy(false)}
  }
  return <section className={base.comments} aria-label={'Comentarios de '+post.title} aria-busy={loading||busy}>
-  <div className={s.heading}><h3 ref={heading} tabIndex={-1} className={base.smallHeading}>La conversación</h3><button type="button" className={s.link} disabled={loading||busy} onClick={()=>{setLoading(true);void read()}}>Actualizar conversación</button></div>
-  <p className={s.help}>Comparte una palabra de ánimo. CAI revisa los comentarios antes de compartirlos en esta historia.</p>
-  <div className={s.tabs} role="group" aria-label="Vistas de comentarios"><button type="button" aria-pressed={tab==='conversation'} onClick={()=>setTab('conversation')}>Conversación ({post.commentCount??0})</button><button type="button" aria-pressed={tab==='mine'} onClick={()=>setTab('mine')}>Mis comentarios</button></div>
+  <div className={s.toolbar}><h3 ref={heading} tabIndex={-1} className={s.srOnly}>La conversación</h3><div className={s.tabs} role="group" aria-label="Vistas de comentarios"><button type="button" aria-label={`Conversación (${post.commentCount??0})`} aria-pressed={tab==='conversation'} onClick={()=>setTab('conversation')}>{post.commentCount??0} {post.commentCount===1?'comentario':'comentarios'}</button><button type="button" aria-label="Mis comentarios" aria-pressed={tab==='mine'} onClick={()=>setTab('mine')}>Mis envíos</button></div><button type="button" className={s.refresh} aria-label="Actualizar conversación" title="Actualizar conversación" disabled={loading||busy} onClick={()=>{setLoading(true);void read()}}><CommunityIcon name="reset" size={17}/></button></div>
   {loading&&<p role="status" className={s.help}>Actualizando comentarios…</p>}
   {error&&<p id={id+'-error'} role="alert" className={base.fieldError}>{error}</p>}
   {notice&&<p role="status" className={s.receipt}>{notice}</p>}
@@ -69,9 +68,9 @@ export function ConnectedComments({post,autoFocus=false}:{post:Post;autoFocus?:b
   {loaded&&tab==='mine'&&<div role="region" aria-label="Mis comentarios enviados">{mine.items.length?mine.items.map(item=><article className={s.own} key={item.id} aria-label={item.id}><div className={s.heading}><strong>{labels[item.status]}</strong><time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString('es-MX')}</time></div><p className={s.body}>{item.body}</p>{item.reason&&<p className={s.help}>Indicación de CAI: {item.reason}</p>}{item.status!=='retirado'&&(confirm===item.id?<div className={s.confirm}><span>¿Retirar este comentario?</span><button type="button" className={s.link} disabled={busy} onClick={()=>{void withdraw(item)}}>Confirmar retirada</button><button type="button" className={s.link} disabled={busy} onClick={()=>setConfirm(null)}>Cancelar</button></div>:<button type="button" className={s.link} disabled={busy||loading} onClick={()=>setConfirm(item.id)}>Retirar mi comentario</button>)}</article>):<p className={s.help}>Todavía no has enviado comentarios en esta historia.</p>}{mine.nextCursor!==null&&<button type="button" className={s.link} disabled={loading||busy} onClick={()=>{setLoading(true);void read('mine',mine.nextCursor!)}}>Ver envíos anteriores</button>}</div>}
   {loaded&&!allowed&&<p role="status" className={s.receipt}>Los nuevos comentarios están pausados. Puedes leer y retirar los tuyos.</p>}
   {loaded&&<form className={base.commentForm} aria-label={'Comentar en '+post.title} noValidate onSubmit={event=>{void submit(event)}}>
-   <label htmlFor={id}>Comenta como {connection!.user.displayName}</label>
-   <textarea id={id} rows={3} value={body} maxLength={400} disabled={busy||!allowed} onChange={event=>setBody(event.target.value)} aria-invalid={Boolean(error&&!body.trim())} aria-describedby={id+'-help'+(error?' '+id+'-error':'')} placeholder="Acompaña esta historia con un comentario respetuoso…"/>
-   <div className={base.commentFormFooter}><small id={id+'-help'}>{body.length}/400 · Se enviará a revisión</small><button className={base.smallPrimary} type="submit" disabled={busy||loading||!allowed}>{busy?'Guardando…':'Enviar a revisión'}</button></div>
+   <label htmlFor={id} className={s.srOnly}>Comenta como {connection!.user.displayName}</label>
+   <textarea id={id} rows={2} value={body} maxLength={400} disabled={busy||!allowed} onChange={event=>setBody(event.target.value)} aria-invalid={Boolean(error&&!body.trim())} aria-describedby={id+'-help'+(error?' '+id+'-error':'')} placeholder="Escribe un comentario…"/>
+   <div className={base.commentFormFooter}><small id={id+'-help'}>{body.length>0?`${body.length}/400 · `:''}CAI lo revisa antes de publicarlo.</small><button className={base.smallPrimary} type="submit" aria-label={busy?'Guardando…':'Enviar a revisión'} disabled={busy||loading||!allowed}>{busy?'Enviando…':<>Enviar <CommunityIcon name="arrow" size={15}/></>}</button></div>
   </form>}
  </section>
 }

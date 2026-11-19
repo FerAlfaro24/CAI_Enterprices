@@ -23,10 +23,9 @@ export function PostCard({ post, initialCommentsOpen = false }: { post: Post; in
       {post.pinOrder !== null && <div className={s.pinLabel}><CommunityIcon name="pin" size={13} /> Fijado por CAI</div>}
       <header className={s.postHeader}>
         <MemberLink member={author} avatar />
-        <div className={s.authorInfo}><div><strong><MemberLink member={author} /></strong>{author.institution && <span className={s.officialBadge}>{connection&&!connection.demonstration?'Equipo CAI':'CAI · Demo'}</span>}</div><time dateTime={post.createdAt}>{formatPostDate(post.createdAt)}</time></div>
+        <div className={s.authorInfo}><div><strong><MemberLink member={author} /></strong>{author.institution && !connection && <span className={s.officialBadge}>CAI · Demo</span>}</div><time dateTime={post.createdAt}>{formatPostDate(post.createdAt)}</time>{connection && <span className={s.compactAudience}> · {post.audience === 'community' ? 'Comunidad CAI' : 'Tu grupo'}</span>}</div>
         <span className={[s.category, s[post.category]].join(' ')}>{connection&&post.category==='gallery'?'Álbum':categoryLabels[post.category]}</span>
       </header>
-      {connection&&<p className={s.postAudience}>Compartido con {post.audience==='community'?'todos los alumnos aprobados':'tu grupo'}.</p>}
       <h2 id={`post-title-${post.id}`} className={s.postTitle}>{post.title}</h2>
       <p className={s.postBody}>{post.body}</p>
       <SharedBadge post={post}/>
