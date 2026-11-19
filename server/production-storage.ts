@@ -13,10 +13,10 @@ export function checkProductionDatabase(config: RuntimeConfig) {
     try {
       if (db.prepare('PRAGMA quick_check').get()?.quick_check !== 'ok' || db.prepare('PRAGMA foreign_key_check').all().length) throw Error('integrity')
       const history = db.prepare('SELECT version FROM migrations ORDER BY version').all()
-      if (history.length !== 16 || history.some((row, index) => row.version !== index + 1)) throw Error('schema')
+      if (history.length !== 17 || history.some((row, index) => row.version !== index + 1)) throw Error('schema')
       if (!db.prepare("SELECT id FROM admin_users WHERE role='admin' AND active=1 AND activated=1 LIMIT 1").get()) throw Error('administrator')
     } finally { db.close() }
-  } catch { throw Error('La base de producción debe existir, ser íntegra, tener esquema 16 y un administrador activo. No se migró ni creó ninguna base.') }
+  } catch { throw Error('La base de producción debe existir, ser íntegra, tener esquema 17 y un administrador activo. No se migró ni creó ninguna base.') }
 }
 
 /** Preparación explícita y solo para una base nueva; jamás sobrescribe una existente. */

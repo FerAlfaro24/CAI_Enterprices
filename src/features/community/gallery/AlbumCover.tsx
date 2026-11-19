@@ -15,6 +15,6 @@ export function AlbumCover({ album, mode }: { album: Album; mode?: 'illustration
       : <img src={artwork.src} alt={artwork.alt} width="600" height="400" onError={() => setFailedSource(artwork.src)} />
       : <GalleryImage key={album.cover.src} photo={album.cover} />}
     <span className={s.coverCount}><CommunityIcon name="gallery" size={13} />{album.photos.length}<span className={s.srOnly}> {album.photos.length === 1 ? 'foto en el álbum' : 'fotos en el álbum'}</span></span>
-    <span className={s.coverFlag}>{album.private ? 'Imagen de tu grupo' : artwork ? 'Ilustración original' : 'Foto ilustrativa · Unsplash'}</span>
+    <span className={s.coverFlag}>{album.private ? 'Galería privada' : artwork ? 'Ilustración original' : 'Foto ilustrativa · Unsplash'}</span>
   </div>
 }

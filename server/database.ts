@@ -301,6 +301,13 @@ export function migrateDatabase(db: DatabaseSync) {
       INSERT INTO migrations VALUES (16,strftime('%Y-%m-%dT%H:%M:%fZ','now'));
       COMMIT;`)
   }
+  if (!db.prepare('SELECT version FROM migrations WHERE version=17').get()) {
+    db.exec(`BEGIN IMMEDIATE;
+      ALTER TABLE gallery_images ADD COLUMN audience TEXT NOT NULL DEFAULT 'group' CHECK(audience IN ('group','community'));
+      CREATE INDEX gallery_community_audience ON gallery_images(audience,withdrawn_at,created_at);
+      INSERT INTO migrations VALUES (17,strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+      COMMIT;`)
+  }
   return db
 }
 

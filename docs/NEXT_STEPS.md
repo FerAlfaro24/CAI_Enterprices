@@ -2,6 +2,8 @@
 
 **17 de noviembre de 2026.** Continuación `feat/v1-production-preparation`, código `9be8081`, [estado real](PROJECT_STATE.md) y decisiones del usuario. No es una lista de funciones nuevas autorizadas por existir en una demo.
 
+**Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
+
 ## Orden de trabajo
 
 | ID / prioridad | Pendiente | Qué puede avanzar desarrollo solo | Qué necesita CAI/usuario y criterio de cierre |
@@ -11,7 +13,7 @@
 | N3 · siguiente | Operación de base/medios e instalación | Mantener SQLite; ampliar ensayo/procedimiento de actualización y recuperación separada. Bootstrap/preflight productivos y copia consistente/verificación ya funcionan; reutilizarlos. Preparar separación de datos ficticios y pasos de entrega sin tocar la base habitual. | Custodia, retención, frecuencia, ubicación y responsables. Cierre: recuperación completa y actualización repetidas también en el alojamiento definitivo. |
 | N4 · mantenimiento | Alertas y fallos históricos | Revisar versiones compatibles cuando cambien herramientas o antes de publicar; capturar diagnóstico si reaparecen intermitencias Opera. | Cierre: auditoría, instalación reproducible y checks pertinentes, sin force/overrides incompatibles ni afirmar reparación por un reintento. Diez avisos moderados de desarrollo registrados, no auditados hoy. |
 | N5 · tanda final | Google y correo reales | Preparar guías/casos de prueba y configuración sin cuentas personales. La integración Google y los avisos/recuperación local ya están. | Proyecto/cuenta de CAI, remitente/proveedor, orígenes finales y verificación de entrega. Cierre: alta/aprobación/acceso/revocación y entrega/expiración/errores comprobados realmente. |
-| N6 · tanda final | Contenido, permisos y panel intuitivo | Preparar inventario de textos/medios y tareas para validación con cuentas ficticias. Revisar carga de fotos y mensajes/estados. | Material comercial, programas/horarios, imágenes/autorizaciones, tutores, responsables y reglas finales. Cierre: persona administradora completa tareas y se registran/corrigen dificultades. Pruebas automáticas no sustituyen esa sesión. |
+| N6 · tanda final | Contenido, permisos y panel intuitivo | Fotos recibidas e integradas; importación y audiencias comprobadas. Continuar con textos comerciales y tareas de aceptación del panel; reutilizar la carga existente. | Material comercial, programas/horarios, imágenes/autorizaciones, tutores, responsables y reglas finales. Cierre: persona administradora completa tareas y se registran/corrigen dificultades. Pruebas automáticas no sustituyen esa sesión. |
 | N7 · último | Presupuesto, contratación y despliegue | Preparar necesidades técnicas y opciones a revisar al acercarse a la entrega. | Cliente aprueba costes/proveedor/dominio/mantenimiento. Después: configurar, comprobar permisos/HTTPS/copias/servicios desde internet y entregar accesos/guías. No contratar ni publicar implícitamente. |
 
 No rehacer comentarios, reacciones, retos, insignias, panel, grupos o recuperación local: ya están conectados. Tener una dependencia externa no autoriza inventar módulos nuevos para mantenerse ocupado.

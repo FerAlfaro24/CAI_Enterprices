@@ -790,3 +790,9 @@
 @media (min-width: 1101px) { .nav__inner { gap: 20px; } .nav__links { gap: 18px; } .nav__actions .btn--ghost { padding-inline: 6px; font-size: .85rem; } }
 
 .contact .demo-link { display: block; width: fit-content; margin-top: 10px; }
+
+/* Fotografías reales con pies descriptivos, sin comillas de testimonio. */
+.life .t-card__body::before { content: none; }
+.life .t-card figcaption { color: var(--heading); font-weight: 700; font-size: 1.05rem; }
+.life .t-card small { color: var(--muted); line-height: 1.6; }
+.life .t-card:last-child img { object-position: center 30%; }

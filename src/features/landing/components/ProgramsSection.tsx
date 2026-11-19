@@ -1,19 +1,20 @@
-import { audiences, programs, testimonials } from '../data/content'
+import { audiences, programs } from '../data/content'
+import { caiLife } from '../data/photos'
 import s from '../landing.module.css'
 import { cx } from '../utils'
 import { CardCarousel } from './CardCarousel'
 import { ButtonLink, ContentNote, Icon } from './ui'
 
-export function TestimonialsSection() {
+export function CaiLifeSection() {
   return (
-    <section className={s.testimonials} id="alumnos" aria-labelledby="testimonials-title">
+    <section className={cx(s.testimonials, s.life)} id="alumnos" aria-labelledby="cai-life-title">
       <div className={s.container}>
-        <h2 className={s['section-title']} id="testimonials-title" data-reveal>Lo que podrían contar nuestros alumnos</h2>
-        <ContentNote>Testimonios ficticios de la propuesta original. Los retratos son fotografías ilustrativas y no corresponden a alumnos de CAI.</ContentNote>
-        <CardCarousel label="Testimonios de muestra" kind="testimonials">
-          {testimonials.map(({ name, detail, quote, portrait }) => <figure className={s['t-card']} key={name} data-reveal>
-            <img src={portrait} alt="Retrato de stock de una persona adulta; imagen ilustrativa" width="600" height="420" loading="lazy" decoding="async" />
-            <div className={s['t-card__body']}><blockquote><p>“{quote}”</p></blockquote><figcaption>{name}<small>{detail}</small></figcaption></div>
+        <h2 className={s['section-title']} id="cai-life-title" data-reveal>Así se aprende en CAI</h2>
+        <ContentNote>Fotografías oficiales del aula y la práctica en línea. Las convivencias y celebraciones están en la comunidad privada.</ContentNote>
+        <CardCarousel label="Vida en CAI" kind="testimonials">
+          {caiLife.map(({ title, text, image, alt, width, height }) => <figure className={s['t-card']} key={title} data-reveal>
+            <img src={image} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+            <div className={s['t-card__body']}><figcaption>{title}<small>{text}</small></figcaption></div>
           </figure>)}
         </CardCarousel>
       </div>
@@ -29,7 +30,7 @@ export function AudienceSection() {
           <span className={s.eyebrow}>Para cada etapa</span>
           <h2 id="audience-title">De la primaria a la oficina: inglés para cada etapa</h2>
           <p>Aprender jugando, prepararse para el futuro académico o dar el siguiente paso profesional. La propuesta de CAI contempla una ruta para cada etapa y cada objetivo.</p>
-          <ContentNote>Públicos y modalidades de muestra. No se utilizan fotografías de alumnos menores.</ContentNote>
+          <ContentNote>Públicos y modalidades de muestra, pendientes de validación con CAI.</ContentNote>
           <ButtonLink href="#programas">Ver programas</ButtonLink>
         </div>
         <ul className={s.audiences} data-reveal>

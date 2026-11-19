@@ -1,6 +1,6 @@
 # CAI — pruebas y lectura de evidencia
 
-**Actualizado: 17-11-2026, después de preparar producción.** [Último resultado](PRODUCTION_PREPARATION.md): **217 API y 104 comprobaciones de navegador seleccionadas**, con lint/tipos/build y ensayo de comandos. La [revisión integral anterior](v1-integral-review-2026-11-17.md) de 193 API/1,314 navegador no se repitió completa ni se suma. No probar contra la base/acceso habitual.
+**Actualizado: 19-11-2026.** [Material oficial](OFFICIAL_MEDIA.md): **225 API correctas**, lint/tipos/build y revisión manual en navegador integrado de las vistas afectadas. Sin herramientas Brave/Opera disponibles en esta sesión; sus matrices anteriores no se repitieron ni se suman. Pruebas únicamente en fixtures nuevas de `.local/tests`.
 
 ## Evidencia histórica por corte
 
@@ -14,6 +14,7 @@
 | Caché, `3971284` | No repetida | Portada/login/admin anónimos en Brave/Opera; modelos, tipos, lint de configuración y HEAD privados | [Informe](solucion-pantalla-blanca-local.md) |
 | Revisión integral posterior, base `b55cd50`, pruebas `8c515de` | **193 aprobados de nuevo** | **1,314: 19 recorridos/657 por navegador**, módulos acumulados y menor nuevo de extremo a extremo | [Informe nuevo, intentos y límites](v1-integral-review-2026-11-17.md) |
 | Preparación productiva, base `95e53e2`, código `9be8081` | **217 aprobados** | **104: 27 de producción simulada +25 locales por navegador**, cuatro recorridos seleccionados | [Guía/resultados y límites](PRODUCTION_PREPARATION.md) |
+| Fotografías oficiales, base `d410247` | **225 aprobados** | Revisión manual en navegador integrado; móvil/escritorio, temas, carga/reintento, audiencia, álbumes y consola. Sin nueva matriz Brave/Opera. | [Guía/resultados y límites](OFFICIAL_MEDIA.md) |
 
 No sumar estas matrices como pruebas únicas de una sola versión ni deducir menor cobertura del total inferior de una tanda: cada una tiene alcance propio y regresiones seleccionadas. No se volvió a ejecutar la matriz antigua completa al conectar cada módulo. Las cifras son resultados, no garantías de producción.
 

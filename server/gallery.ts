@@ -6,27 +6,31 @@ import { galleryCategories, galleryLimits, type GalleryItem, type GalleryReview,
 import { HttpError, record, revisionOf } from './validation.ts'
 
 type Row = {
-  id: string; title: string; description: string; category: GalleryItem['category']; alt: string; program: string; group_name: string
+  id: string; title: string; description: string; category: GalleryItem['category']; alt: string; program: string; group_name: string; audience: 'group' | 'community'
   authorization_reference: string; revision: number; withdrawn_at: string | null; created_at: string; width: number; height: number; byte_size: number; fingerprint: string
 }
-const columns = 'id,title,description,category,alt,program,group_name,authorization_reference,revision,withdrawn_at,created_at,width,height,byte_size,fingerprint'
+const columns = 'id,title,description,category,alt,program,group_name,audience,authorization_reference,revision,withdrawn_at,created_at,width,height,byte_size,fingerprint'
 const dto = (row: Row): GalleryItem => ({ id: row.id, title: row.title, description: row.description, category: row.category, alt: row.alt, width: row.width, height: row.height, byteSize: row.byte_size, createdAt: row.created_at, imagePath: `/api/local/gallery/${row.id}/image` })
-const review = (row: Row): GalleryReview => ({ ...dto(row), program: row.program, group: row.group_name, authorizationReference: row.authorization_reference, revision: row.revision, status: row.withdrawn_at ? 'retirada' : 'publicada' })
+const review = (row: Row): GalleryReview => ({ ...dto(row), audience: row.audience, program: row.program, group: row.group_name, authorizationReference: row.authorization_reference, revision: row.revision, status: row.withdrawn_at ? 'retirada' : 'publicada' })
 function text(value: unknown, name: string, min: number, max: number) {
   if (typeof value !== 'string' || value.trim().length < min || value.trim().length > max || [...value].some(char => char.charCodeAt(0) < 32)) throw new HttpError(400, `Revisa ${name}: de ${min} a ${max} caracteres.`)
   return value.trim()
 }
 function draft(value: unknown) {
   const data = record(value)
-  if (Object.keys(data).some(key => !['title','description','category','alt','program','group','authorizationReference','confirmed','imageBase64'].includes(key))) throw new HttpError(400, 'La imagen contiene datos no admitidos.')
-  if (data.confirmed !== true) throw new HttpError(400, 'Confirma que revisaste la imagen, sus permisos y el grupo destinatario.')
+  if (Object.keys(data).some(key => !['title','description','category','alt','program','group','audience','authorizationReference','confirmed','imageBase64'].includes(key))) throw new HttpError(400, 'La imagen contiene datos no admitidos.')
+  const audience = data.audience ?? 'group'
+  if (audience !== 'group' && audience !== 'community') throw new HttpError(400, 'Elige un grupo o todos los alumnos aprobados.')
+  if (audience === 'community' && (data.program !== '' || data.group !== '')) throw new HttpError(400, 'Una imagen de toda la comunidad no debe indicar un grupo.')
+  if (data.confirmed !== true) throw new HttpError(400, 'Confirma que revisaste la imagen, sus permisos y sus destinatarios.')
   if (typeof data.category !== 'string' || !Object.hasOwn(galleryCategories, data.category)) throw new HttpError(400, 'Elige una categoría de galería.')
   if (typeof data.imageBase64 !== 'string' || !data.imageBase64.length || data.imageBase64.length % 4 !== 0 || data.imageBase64.length > Math.ceil(galleryLimits.uploadBytes / 3) * 4 || !/^[A-Za-z0-9+/]*={0,2}$/.test(data.imageBase64)) throw new HttpError(400, 'El archivo debe ser JPEG o PNG de hasta 3 MB.')
   const bytes = Buffer.from(data.imageBase64, 'base64')
   if (!bytes.length || bytes.length > galleryLimits.uploadBytes || bytes.toString('base64') !== data.imageBase64) throw new HttpError(400, 'No se pudo leer el archivo. El límite es 3 MB.')
-  const metadata = { title: text(data.title,'el título',4,100), description: text(data.description,'la descripción',10,500), category: data.category as GalleryUpload['category'], alt: text(data.alt,'el texto alternativo',5,240), program: text(data.program,'el programa',2,100), group: text(data.group,'el grupo',2,100), authorizationReference: text(data.authorizationReference,'la referencia de autorización',8,240) }
-  const fingerprint = createHash('sha256').update(JSON.stringify(metadata)).update(bytes).digest('hex')
-  return { metadata, bytes, fingerprint }
+  const metadata = { title: text(data.title,'el título',4,100), description: text(data.description,'la descripción',10,500), category: data.category as GalleryUpload['category'], alt: text(data.alt,'el texto alternativo',5,240), program: audience === 'community' ? '' : text(data.program,'el programa',2,100), group: audience === 'community' ? '' : text(data.group,'el grupo',2,100), authorizationReference: text(data.authorizationReference,'la referencia de autorización',8,240) }
+  // Conservar las huellas de envíos anteriores a la migración 17.
+  const fingerprint = createHash('sha256').update(JSON.stringify(metadata)).update(audience === 'community' ? '\0community' : '').update(bytes).digest('hex')
+  return { metadata: { ...metadata, audience }, bytes, fingerprint }
 }
 
 /** Guarda solo la versión procesada: sin rutas públicas, originales ni metadatos EXIF. */
@@ -59,24 +63,23 @@ export function galleryRepository(db: Database) {
           if (!admin) throw new HttpError(401, 'Tu sesión terminó mientras se procesaba la imagen. Vuelve a entrar.')
           const repeated = existing(key, fingerprint)
           if (repeated) return review(repeated)
-          if (metadata.group === 'Por asignar' || !administration(db).groups().some(group => group.active && group.program === metadata.program && group.name === metadata.group)) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
+          if (metadata.audience === 'group' && (metadata.group === 'Por asignar' || !administration(db).groups().some(group => group.active && group.program === metadata.program && group.name === metadata.group))) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
           const used = Number(db.prepare('SELECT COALESCE(SUM(byte_size),0) AS n FROM gallery_images').get()!.n)
           if (used + output.data.length > galleryLimits.totalBytes) throw new HttpError(409, 'Se alcanzó el límite de almacenamiento local de imágenes. Consulta la configuración de entrega antes de añadir más.')
           const id = randomUUID(), created = new Date().toISOString()
-          db.prepare('INSERT INTO gallery_images(id,idempotency_key,fingerprint,title,description,category,alt,program,group_name,authorization_reference,created_by,created_at,bytes,width,height,byte_size) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').run(id,key,fingerprint,metadata.title,metadata.description,metadata.category,metadata.alt,metadata.program,metadata.group,metadata.authorizationReference,admin,created,output.data,output.info.width,output.info.height,output.data.length)
-          administrationAudit(db,admin,'gallery.published',{id,program:metadata.program,group:metadata.group})
+          db.prepare('INSERT INTO gallery_images(id,idempotency_key,fingerprint,title,description,category,alt,program,group_name,authorization_reference,created_by,created_at,bytes,width,height,byte_size,audience) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').run(id,key,fingerprint,metadata.title,metadata.description,metadata.category,metadata.alt,metadata.program,metadata.group,metadata.authorizationReference,admin,created,output.data,output.info.width,output.info.height,output.data.length,metadata.audience)
+          administrationAudit(db,admin,'gallery.published',{id,program:metadata.program,group:metadata.group,audience:metadata.audience})
           return review(current(id)!)
         })
       } finally { inFlight-- }
     },
     list(): GalleryReview[] { return (db.prepare(`SELECT ${columns} FROM gallery_images ORDER BY created_at DESC,id DESC`).all() as Row[]).map(review) },
     forStudent(user: StudentUser): GalleryItem[] {
-      if (user.group === 'Por asignar') return []
-      return (db.prepare(`SELECT ${columns} FROM gallery_images WHERE withdrawn_at IS NULL AND program = ? AND group_name = ? ORDER BY created_at DESC,id DESC`).all(user.program,user.group) as Row[]).map(dto)
+      return (db.prepare(`SELECT ${columns} FROM gallery_images WHERE withdrawn_at IS NULL AND (audience = 'community' OR (audience = 'group' AND program = ? AND group_name = ? AND group_name <> 'Por asignar')) ORDER BY created_at DESC,id DESC`).all(user.program,user.group) as Row[]).map(dto)
     },
     image(id: string, user: StudentUser | null, admin: boolean) {
       const row = current(id)
-      if (!row || row.withdrawn_at || (!admin && (!user || user.group === 'Por asignar' || row.program !== user.program || row.group_name !== user.group))) throw new HttpError(404, 'No se encontró la imagen o no está disponible para tu grupo.')
+      if (!row || row.withdrawn_at || (!admin && (!user || (row.audience === 'group' && (user.group === 'Por asignar' || row.program !== user.program || row.group_name !== user.group))))) throw new HttpError(404, 'No se encontró la imagen o no está disponible para tu cuenta.')
       return (db.prepare('SELECT bytes FROM gallery_images WHERE id = ?').get(id) as { bytes: Uint8Array }).bytes
     },
     withdraw(id: string, value: unknown, admin: number) {
