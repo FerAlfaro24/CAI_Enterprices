@@ -8,6 +8,7 @@ export type AlbumFilter = 'all' | AlbumCategory
 export type AlbumSort = 'editorial' | 'recent' | 'oldest' | 'celebrated'
 
 export interface Album {
+  categories?:readonly AlbumCategory[]
   private?: boolean
   standalone?: boolean
   id: string
@@ -75,15 +76,15 @@ export function privateAlbums(images: readonly GalleryItem[]): Album[] {
     const photo:Photo={id:image.id,src:image.imagePath,alt:image.alt,caption:image.description}
     const linked=image.publication,id=linked?.id??image.id
     const previous=albums.get(id)
-    if(previous){previous.photos=[...previous.photos,photo];continue}
-    albums.set(id,{standalone:!linked,id,postId:linked?.id??`gallery:${image.id}`,title:linked?.title??image.title,description:linked?.description??image.description,category:image.category,cover:photo,photos:[photo],author:{id:'cai-team',alias:'Equipo CAI'},provenance:'Fotografías compartidas por coordinación con tu cuenta de la comunidad.',createdAt:linked?.createdAt??image.createdAt,status:'approved',celebrations:0,private:true})
+    if(previous){previous.photos=[...previous.photos,photo];previous.categories=[...new Set([...(previous.categories??[]),image.category])];continue}
+    albums.set(id,{standalone:!linked,id,postId:linked?.id??`gallery:${image.id}`,title:linked?.title??image.title,description:linked?.description??image.description,category:image.category,categories:[image.category],cover:photo,photos:[photo],author:{id:'cai-team',alias:'Equipo CAI'},provenance:'Fotografías compartidas por coordinación con tu cuenta de la comunidad.',createdAt:linked?.createdAt??image.createdAt,status:'approved',celebrations:0,private:true})
   }
   return [...albums.values()]
 }
 
 export function selectAlbumRecords(albums: readonly Album[], filter: AlbumFilter = 'all', sort: AlbumSort = 'recent'): Album[] {
   return albums
-    .filter((album) => album.status === 'approved' && (filter === 'all' || album.category === filter))
+    .filter((album) => album.status === 'approved' && (filter === 'all' || album.category === filter || album.categories?.includes(filter)))
     .sort((a, b) => {
       const byDate = Date.parse(b.createdAt) - Date.parse(a.createdAt)
       if (sort === 'editorial') {

@@ -45,3 +45,13 @@ Backend: `server/community-content-migration.ts`, `community-media.ts`, `institu
 ## Presentación final comprobada
 
 Se dejó en `http://127.0.0.1:4187/community`, iniciada con el script de presentación y sin datos de las pruebas de navegador. Lectura de solo consulta de esa fixture: esquema 18, ocho publicaciones, 24 comentarios publicados, 76 reacciones y seis fotos vinculadas; quick_check correcto. Acceso/renderizado completo y consola sin errores comprobados también en el navegador integrado. Las fixtures temporales de comprobación de 4188/4190 se detuvieron; sus archivos se conservaron. La API habitual y su acceso permanecieron intactos.
+
+## Corrección de visibilidad en Galería
+
+**19-11-2026 · `fix/v1-gallery-all-photos`, desde `f9c3c1a` de PR #13.** El usuario observó que habían desaparecido las fotos. Los seis archivos seguían disponibles, pero al agruparlos la interfaz mostraba únicamente dos portadas. Además, el filtro solo consideraba la categoría de la portada y podía excluir un álbum con fotos interiores de otra categoría.
+
+Galería conectada abre ahora en **Fotos**, con una tarjeta por fotografía, sus datos originales y la imagen completa sin recorte adicional. **Álbumes** se conserva como vista opcional. Elegir una miniatura abre esa foto concreta dentro de su álbum y mantiene la misma conversación de Inicio. Las categorías se aplican a cada foto; los álbumes coinciden también por sus fotos interiores. El destacado respeta el filtro. No se han borrado, duplicado, republicado ni cambiado permisos de fotografías, comentarios o reacciones. La demo histórica en memoria conserva su composición anterior.
+
+**32 comprobaciones nuevas: 16 Brave y 16 Opera GX**, en contextos aislados: vista inicial, seis tarjetas e imágenes cargadas, tres categorías, apertura de la foto elegida, conversación compartida, vista de dos álbumes y categorías interiores, conservación del filtro y regreso a Fotos. Sin desbordamiento a 1440/768/375/320; capturas revisadas en escritorio y móvil. ESLint, tipos, build y diff check correctos. Verificador `checkGalleryVisibility` en `scripts/check-community-home.browser.mjs`; las pruebas previas seleccionan explícitamente Álbumes cuando lo necesitan.
+
+No se repitieron las 233 API ni las 76 comprobaciones anteriores: no hay cambios de servidor, esquema o datos. Se mantuvo el proceso de presentación y sus interacciones existentes. Capturas y registros privados en `.local/tests/community-home-proof/*-gallery-photos-*.png` y `.local/tests/gallery-visibility-*`, fuera de Git.

@@ -2,6 +2,8 @@
 
 **Actualizado: 19-11-2026, Inicio visual y presentación.** [Última entrega](COMMUNITY_HOME_STORIES.md): **233 API y 76 comprobaciones de navegador (38 Brave/38 Opera)**, lint/tipos/build. Contextos aislados y bases nuevas de `.local/tests`; sin datos/acceso habitual. Los resultados de fotografías y producción anteriores corresponden a sus cortes.
 
+**Corrección posterior de visibilidad:** 32 comprobaciones nuevas (16 Brave/16 Opera) en Galería, lint/tipos/build. Sin cambios de servidor ni nueva ejecución API; no sumar a las 76 anteriores. [Detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).
+
 ## Evidencia histórica por corte
 
 | Entrega / código | Suite API registrada | Navegador registrado | Fuente |
