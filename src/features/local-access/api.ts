@@ -134,7 +134,7 @@ export const studentApi = {
   group: () => call<{ members: GroupMember[] }>('/student/group'),
   posts: () => call<{ demonstration?:boolean; posts: PublishedPost[]; mine: OwnPost[] }>('/student/posts'),
   createPost: (draft: PublicationDraft, key: string) => call<{ post: OwnPost }>('/student/posts', 'POST', draft, { 'Idempotency-Key': key }),
-  withdrawPost: (post: OwnPost) => call(`/student/posts/${post.id}/withdraw`, 'POST', { revision: post.revision }),
+  withdrawPost: (post: Pick<OwnPost, 'id' | 'revision'>) => call(`/student/posts/${post.id}/withdraw`, 'POST', { revision: post.revision }),
 }
 
 export type LocalNotice = { id: number; subject: string; message: string; kind: string; recipient: string; createdAt: string; acknowledged: number }
@@ -160,4 +160,15 @@ export const institutionalApi={
  list:()=>call<{posts:ReviewPost[]}>('/institutional-posts'),
  create:(draft:import('../../../server/contracts').InstitutionalDraft,key:string)=>call<{id:number}>('/institutional-posts','POST',draft,{'Idempotency-Key':key}),
  update:(post:ReviewPost,withdraw=false)=>call(`/institutional-posts/${post.id}`,'PATCH',{revision:post.revision,confirmed:true,withdraw,highlighted:withdraw?false:!post.highlighted,expiresAt:post.expiresAt??null}),
+}
+
+
+export const learningApi={
+  mine:(before=0)=>call<import('../../../server/contracts').LearningPage>(`/student/achievements?before=${before}`),
+  save:(id:number|null,draft:import('../../../server/contracts').LearningDraft,key:string,revision?:number)=>call<{item:import('../../../server/contracts').LearningAchievement}>('/student/achievements'+(id?'/'+id:''),id?'PATCH':'POST',{...draft,...(id?{revision}:{})},{'Idempotency-Key':key}),
+  submit:(item:{id:number;revision:number},share:boolean)=>call(`/student/achievements/${item.id}/submit`,'POST',{revision:item.revision,share,confirmed:true}),
+  cancel:(item:{id:number;revision:number})=>call(`/student/achievements/${item.id}/cancel`,'POST',{revision:item.revision}),
+  reviews:(before=0)=>call<{items:import('../../../server/contracts').LearningReview[];nextCursor:number|null}>(`/achievements/reviews?before=${before}`),
+  decide:(item:{id:number;revision:number},decision:'approve'|'reject',reason:string)=>call(`/achievements/${item.id}/review`,'POST',{revision:item.revision,decision,reason,confirmed:true}),
+  profile:(id:string,before=0)=>call<import('../../../server/contracts').SocialProfile>(`/student/members/${encodeURIComponent(id)}?before=${before}`),
 }

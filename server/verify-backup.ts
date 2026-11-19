@@ -12,7 +12,7 @@ export async function verifyLocalBackup(path: string) {
     if (checks.length !== 1 || checks[0]?.quick_check !== 'ok') throw new Error('La copia no superó la comprobación de integridad de SQLite.')
     if (db.prepare('PRAGMA foreign_key_check').all().length) throw new Error('La copia contiene referencias incompletas.')
     const version = Number(db.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n)
-    if (![9,10,11,12,13,14,15,16,17,18].includes(version)) throw new Error('La versión de esta copia no corresponde a un esquema local compatible. No se modificó ni migró.')
+    if (![9,10,11,12,13,14,15,16,17,18,19].includes(version)) throw new Error('La versión de esta copia no corresponde a un esquema local compatible. No se modificó ni migró.')
     const counts = {
       requests: Number(db.prepare('SELECT COUNT(*) AS n FROM requests').get()!.n),
       students: Number(db.prepare('SELECT COUNT(*) AS n FROM students').get()!.n),
@@ -28,6 +28,10 @@ export async function verifyLocalBackup(path: string) {
       if (metadata.format !== 'webp' || metadata.width !== Number(row.width) || metadata.height !== Number(row.height)) throw new Error('Una imagen de la copia no coincide con su registro.')
       await image.timeout({ seconds: 8 }).stats()
       counts.images++
+    }
+    if(version>=19)for(const row of db.prepare('SELECT bytes,width,height FROM learning_images').iterate()) {
+      const info=await sharp(row.bytes as Uint8Array).metadata()
+      if(info.format!=='webp'||info.width!==Number(row.width)||info.height!==Number(row.height)||info.exif)throw Error('La copia contiene una imagen de logro inválida.')
     }
     return { schema: version, ...counts }
   } finally { db.close() }

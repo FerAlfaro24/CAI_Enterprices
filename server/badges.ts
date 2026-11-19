@@ -1,4 +1,4 @@
-import { badgeDefinitions } from '../shared/badges.ts'
+import { badgeDefinitions, learningBadgeRules } from '../shared/badges.ts'
 import { transaction,type Database } from './database.ts'
 import { queueNotice } from './notices.ts'
 import { HttpError,record,revisionOf } from './validation.ts'
@@ -35,6 +35,10 @@ export function badgesRepository(db:Database){
   for(const row of completed){const day=Date.parse(String(row.day)+'T00:00:00Z')/86400000;run=day===previous+1?run+1:1;previous=day;longest=Math.max(longest,run);if(run===3&&!third)third=String(row.at)}
   const first=db.prepare('SELECT created_at FROM challenge_attempts WHERE student_id=? ORDER BY id LIMIT 1').get(student)
   const values=[{id:'first-answer',progress:first?1:0,target:1,at:first?String(first.created_at):undefined},{id:'three-consecutive',progress:Math.min(longest,3),target:3,at:third},{id:'five-days',progress:Math.min(completed.length,5),target:5,at:completed[4]?String(completed[4].at):undefined}]
+  const learned=(category:string)=>Number(db.prepare("SELECT COUNT(DISTINCT lower(trim(title))) AS n FROM learning_achievements WHERE student_id=? AND category=? AND validated_at IS NOT NULL").get(student,category)!.n)
+  const postCount=Number(db.prepare("SELECT COUNT(DISTINCT lower(trim(p.title))||char(0)||lower(trim(p.body))) AS n FROM publications p WHERE p.author_id=? AND EXISTS(SELECT 1 FROM publication_audit x WHERE x.publication_id=p.id AND x.action='publication.approve')").get(student)!.n)
+  const metrics={reading:learned('reading'),screen:learned('screen'),music:learned('music'),days:completed.length,posts:postCount}
+  values.push(...learningBadgeRules.map(rule=>({id:rule.id,progress:Math.min(metrics[rule.metric],rule.target),target:rule.target,at:metrics[rule.metric]>=rule.target?new Date().toISOString():undefined})))
   for(const item of values){
    if(!item.at||db.prepare('SELECT id FROM badge_grants WHERE student_id=? AND badge_id=?').get(student,item.id))continue
    const badge=definition(item.id),id=addGrant(student,badge,'automatic',badge.description,item.at);audit(null,id,'automatic',null,null,null)
@@ -55,10 +59,8 @@ export function badgesRepository(db:Database){
    return transaction(db,()=>{
     const id=active(user),previous=db.prepare('SELECT * FROM badge_requests WHERE student_id=? AND request_key=?').get(id,key) as RequestRow|undefined
     if(previous){if(previous.badge_id!==badge.id||previous.description!==description)throw new HttpError(409,'Este envío ya se recibió con otros datos.');return ownRequest(previous)}
-    if(badge.mode!=='review'||badge.availability!=='active')throw new HttpError(400,'Esta insignia se obtiene en Retos o la otorga coordinación directamente.')
-    if(db.prepare('SELECT id FROM badge_grants WHERE student_id=? AND badge_id=?').get(id,badge.id))throw new HttpError(409,'Ya tienes una concesión de esta insignia. Si fue retirada, consulta con coordinación.')
-    if(db.prepare("SELECT id FROM badge_requests WHERE student_id=? AND badge_id=? AND status='pending'").get(id,badge.id))throw new HttpError(409,'Ya tienes una solicitud pendiente para esta insignia.')
-    const inserted=Number(db.prepare('INSERT INTO badge_requests(student_id,badge_id,description,created_at,request_key) VALUES (?,?,?,?,?)').run(id,badge.id,description,new Date().toISOString(),key).lastInsertRowid);audit(inserted,null,'requested',null,null,id);return ownRequest(request(folio('BSR',inserted)))
+    throw new HttpError(410,'Las insignias se obtienen por progreso. Registra una actividad en Logros.')
+
    })
   },
   withdraw(user:StudentUser,id:string,value:unknown){const data=record(value),revision=revisionOf(data.revision);if(Object.keys(data).some(k=>!['revision','confirmed'].includes(k))||data.confirmed!==true)throw new HttpError(400,'Confirma la retirada de la solicitud.');transaction(db,()=>{const row=request(id);if(row.student_id!==active(user))throw new HttpError(404,'No se encontró la insignia o solicitud.');if(row.revision!==revision||row.status!=='pending')throw new HttpError(409,'La solicitud cambió. Actualiza su estado.');db.prepare("UPDATE badge_requests SET status='withdrawn',revision=revision+1 WHERE id=?").run(row.id);audit(row.id,null,'withdrawn',null,null,row.student_id)})},

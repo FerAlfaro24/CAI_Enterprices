@@ -41,12 +41,12 @@ test('Producción simulada: HTTPS de proxy, cookies, permisos y límites por cli
     await prepareProductionDatabase(other, 'old@example.test', password)
     const old = new DatabaseSync(other.databasePath)
     try {
-      old.exec('DELETE FROM migrations WHERE version=18')
+      old.exec('DELETE FROM migrations WHERE version=19')
       await assert.rejects(startRuntime({ ...other, port: 0 }, { log: () => {} }))
-      assert.equal(old.prepare('SELECT MAX(version) AS n FROM migrations').get()?.n, 17)
-      old.exec("INSERT INTO migrations VALUES (18,'2026-11-17T00:00:00.000Z'); DELETE FROM migrations WHERE version=15")
+      assert.equal(old.prepare('SELECT MAX(version) AS n FROM migrations').get()?.n, 18)
+      old.exec("INSERT INTO migrations VALUES (19,'2026-11-17T00:00:00.000Z'); DELETE FROM migrations WHERE version=15")
       await assert.rejects(startRuntime({ ...other, port: 0 }, { log: () => {} }))
-      assert.equal(old.prepare('SELECT COUNT(*) AS n FROM migrations').get()?.n, 17)
+      assert.equal(old.prepare('SELECT COUNT(*) AS n FROM migrations').get()?.n, 18)
     } finally { old.close() }
   })
   await t.test('rechaza la política HTTP insegura antes de crear una base', async () => {
@@ -187,7 +187,7 @@ test('Producción simulada: HTTPS de proxy, cookies, permisos y límites por cli
     const artifact = await createProductionBackup(config)
     assert.equal(artifact.startsWith(join(config.dataDirectory, 'backups') + (process.platform === 'win32' ? '\\' : '/')), true)
     const result = await verifyLocalBackup(artifact)
-    assert.equal(result.schema, 18); assert.equal(result.students, 1); assert.equal(result.accounts, 1)
+    assert.equal(result.schema, 19); assert.equal(result.students, 1); assert.equal(result.accounts, 1)
     checkProductionDatabase(config)
   })
 })

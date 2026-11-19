@@ -49,6 +49,8 @@ const nextTime = (state: CommunityState) => new Date(Date.parse(DEMO_DATE) + sta
 
 export function communityReducer(state: CommunityState, action: CommunityAction): CommunityState {
   switch (action.type) {
+    case 'achievementTab':
+      return { ...state, achievementTab: action.tab }
     case 'section':
       return { ...state, section: action.section, filter: 'recent', focusedPostId: null, focusRequest: state.focusRequest + 1 }
     case 'filter':

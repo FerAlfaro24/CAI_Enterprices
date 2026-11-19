@@ -7,10 +7,10 @@ import { feedPost, publicMember, type CommunityConnection } from './connection'
 import type { CommunityAction, CommunityState } from './types'
 import s from './community.module.css'
 import type { StudentProfile } from '../local-access/api'
-import { challengesApi,badgesApi,type BadgeSnapshot, type ChallengeSnapshot } from '../local-access/api'
+import { challengesApi,badgesApi,learningApi,type BadgeSnapshot, type ChallengeSnapshot } from '../local-access/api'
 
 const emptyState: CommunityState = { posts: [], mode: 'student', section: 'home', filter: 'recent', challengeId: '', attempts: {}, badgeRequests: [], notice: '', sequence: 0, resetKey: 0, focusedPostId: null, focusRequest: 0 }
-type Snapshot = { demonstration?:boolean; badges:BadgeSnapshot;challenges:ChallengeSnapshot;profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean; reactionsOpen: boolean;commentsOpen:boolean }
+type Snapshot = { achievements:import('../../../server/contracts').LearningPage; demonstration?:boolean; badges:BadgeSnapshot;challenges:ChallengeSnapshot;profile: StudentProfile; gallery: GalleryItem[]; user: StudentUser; members: GroupMember[]; posts: PublishedPost[]; mine: OwnPost[]; notices: StudentNotice[]; submissionsOpen: boolean; reactionsOpen: boolean;commentsOpen:boolean }
 
 /** Usa las vistas de v1.0 con una instantánea autorizada, sin inicializar fixtures. */
 export function ConnectedCommunity({ children }: { children: ReactNode }) {
@@ -30,9 +30,9 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
     const version = ++generation.current
     return studentApi.me().then(async ({ user }) => {
       const badges=await badgesApi.snapshot()
-      const [group, feed, catalog, notices, gallery, profile, challenges] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get(), studentApi.notices(), studentApi.gallery(), studentApi.profile(),challengesApi.today()])
+      const [group, feed, catalog, notices, gallery, profile, challenges, achievements] = await Promise.all([studentApi.group(), studentApi.posts(), catalogApi.get(), studentApi.notices(), studentApi.gallery(), studentApi.profile(),challengesApi.today(),learningApi.mine()])
       if (version !== generation.current) return
-      setSnapshot({ badges,challenges, profile: profile.profile, gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen, reactionsOpen: catalog.settings.reactionsOpen,commentsOpen:catalog.settings.commentsOpen }); setAnonymous(false); setError('')
+      setSnapshot({ achievements,badges,challenges, profile: profile.profile, gallery: gallery.images, user, members: group.members, notices: notices.notices, ...feed, submissionsOpen: catalog.settings.submissionsOpen, reactionsOpen: catalog.settings.reactionsOpen,commentsOpen:catalog.settings.commentsOpen }); setAnonymous(false); setError('')
     }).catch((error: unknown) => { if (version === generation.current) failure(error) })
       .finally(() => { if (version === generation.current) setChecking(false) })
   }, [failure])
@@ -62,6 +62,11 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
   const members = snapshot.members.map(publicMember)
   const publicMembers = [own, ...members, ...snapshot.posts.map(post => publicMember(post.author))]
   const connection: CommunityConnection = {
+    achievements:snapshot.achievements,
+    saveAchievement:(id,draft,key,revision)=>write(()=>learningApi.save(id,draft,key,revision),'Tu logro quedó guardado en privado.'),
+    submitAchievement:(item,share)=>write(()=>learningApi.submit(item,share),share?'Enviado a revisión para publicar.':'Enviado a validación privada; no se publicará.'),
+    cancelAchievement:item=>write(()=>learningApi.cancel(item),'Solicitud retirada; conservas tu logro.'),
+    withdrawAchievement:item=>write(()=>studentApi.withdrawPost(item),'Publicación retirada; conservas tu logro y su validación.'),
     demonstration:snapshot.demonstration===true,
     badges:snapshot.badges,
     requestBadge:(badgeId,description,key)=>write(()=>badgesApi.apply(badgeId,description,key),'Solicitud guardada. CAI la revisará en privado.'),
@@ -89,7 +94,8 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
     logout: async () => { await write(async () => { await studentApi.logout(); setSnapshot(null); setAnonymous(true); setProfileId(null); setDetail(null) }, 'Sesión cerrada.', { refresh: false }) },
   }
   const dispatch = (action: CommunityAction) => {
-    if (action.type === 'section') setUi(state => ({ ...state, section: action.section, focusRequest: state.focusRequest + 1 }))
+    if (action.type === 'section') setUi(state => ({ ...state, section: action.section, achievementTab:action.achievementTab??'mine', focusRequest: state.focusRequest + 1 }))
+    else if (action.type === 'achievementTab') setUi(state=>({...state,achievementTab:action.tab}))
     else if (action.type === 'filter') setUi(state => ({ ...state, filter: action.filter }))
     else if (action.type === 'focusPost') setDetail({ postId: action.postId, comments: false })
     else setNotice('Esta función está pendiente de conexión.')

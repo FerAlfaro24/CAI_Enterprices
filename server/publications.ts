@@ -36,8 +36,9 @@ function publicPost(db: Database, row: Row): PublishedPost {
   const profile = institutional ? null : JSON.parse(row.payload) as Submission
   const grant=row.badge_grant_id?db.prepare("SELECT badge_json,awarded_at FROM badge_grants WHERE id=? AND student_id=? AND status='active'").get(row.badge_grant_id,row.author_id):undefined
   const badge=grant?JSON.parse(String(grant.badge_json)) as {id:string;title:string}:null
+  const learning=db.prepare('SELECT id FROM learning_achievements WHERE publication_id=?').get(row.id),photos=publicationPhotos(db,row.id)
   return { id: folio(row.id), title: row.title, body: row.body, category: row.category,
-    author: institutional ? {id:'cai-team',displayName:'Equipo CAI',avatarColor:'#1f56d6'} : { id: publicProfileId(db, row.author_id), displayName: profile!.displayName, avatarColor: profile!.avatarColor }, ...(institutional?{institutional:true,kind:row.kind,audience:row.audience,highlighted:row.highlighted===1,expiresAt:row.expires_at,showInGallery:row.show_in_gallery===1,photos:publicationPhotos(db,row.id)}:{}), createdAt: row.created_at, publishedAt: row.published_at, commentsOpen:row.comments_open===1,...(grant&&badge?{recognition:{badgeId:badge.id,title:badge.title,awardedAt:String(grant.awarded_at)}}:{}) }
+    author: institutional ? {id:'cai-team',displayName:'Equipo CAI',avatarColor:'#1f56d6'} : { id: publicProfileId(db, row.author_id), displayName: profile!.displayName, avatarColor: profile!.avatarColor }, ...(institutional?{institutional:true,kind:row.kind,audience:row.audience,highlighted:row.highlighted===1,expiresAt:row.expires_at,showInGallery:row.show_in_gallery===1,photos:publicationPhotos(db,row.id)}:{}), ...(photos.length?{photos}:{}), ...(learning?{learningId:Number(learning.id)}:{}), createdAt: row.created_at, publishedAt: row.published_at, commentsOpen:row.comments_open===1,...(grant&&badge?{recognition:{badgeId:badge.id,title:badge.title,awardedAt:String(grant.awarded_at)}}:{}) }
 }
 
 export function publications(db: Database) {
@@ -132,6 +133,14 @@ export function publications(db: Database) {
         const explanation = decision === 'reject' ? field(reason, 'el motivo del rechazo', 5, 240) : null
         db.prepare('UPDATE publications SET status = ?, reason = ?, published_at = ?, revision = revision + 1 WHERE id = ?').run(decision === 'approve' ? 'publicada' : decision === 'reject' ? 'rechazada' : 'pendiente', explanation, decision === 'approve' ? new Date().toISOString() : null, row.id)
         audit(row.id, `publication.${decision}`, admin, null)
+        const learning=db.prepare('SELECT id,validated_at FROM learning_achievements WHERE publication_id=?').get(row.id)
+        if(learning){
+          const state=learning.validated_at?'approved':decision==='approve'?'approved':decision==='reject'?'changes':'pending'
+          const learningReason=decision==='approve'&&reason!==undefined?field(reason,'el motivo privado',8,280):explanation
+          db.prepare('UPDATE learning_achievements SET review=?,reason=?,validated_at=COALESCE(validated_at,?),revision=revision+1 WHERE id=?').run(state,learningReason,decision==='approve'?new Date().toISOString():null,Number(learning.id))
+          db.prepare('INSERT INTO learning_audit(achievement_id,action,actor,reason,created_at) VALUES (?,?,?,?,?)').run(Number(learning.id),'publication.'+decision,'ADMIN-'+admin,learningReason,new Date().toISOString())
+        }
+
         queueNotice(db, row.author_id, 'Revisión de tu publicación', 'CAI actualizó la revisión de una publicación. Entra en Mis publicaciones para consultar su estado y las indicaciones.')
       })
     },

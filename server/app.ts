@@ -1,3 +1,5 @@
+import { learningRepository } from './learning.ts'
+import { socialProfiles } from './social-profiles.ts'
 import { institutionalPosts } from './institutional-posts.ts'
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { openDatabase } from './database.ts'
@@ -72,6 +74,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const comments=commentsRepository(db)
   const challenges=challengesRepository(db,options.challengeClock)
   const badges=badgesRepository(db)
+  const learning=learningRepository(db), socialProfile=socialProfiles(db)
   const limits = new Map<string, { count: number; until: number }>()
   const limit = (key: string, maximum: number, duration: number) => {
     const now = Date.now()
@@ -227,14 +230,36 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       response.end(bytes)
       return
     }
+    const learningImage=path.match(/^\/api\/local\/learning-images\/([a-f0-9-]{36})$/)
+    if(learningImage&&method==='GET') {
+      const admin=auth.session(request),student=studentAuth.session(request)
+      if(!admin&&!student)throw new HttpError(401,'Inicia sesión para ver la imagen.')
+      const bytes=learning.image(learningImage[1]!,student,Boolean(admin))
+      response.writeHead(200,{'Content-Type':'image/webp','Content-Length':bytes.length,'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Cross-Origin-Resource-Policy':'same-origin','Content-Security-Policy':"default-src 'none'; sandbox"})
+      response.end(bytes);return
+    }
     if (path.startsWith('/api/local/student/')) {
       const user = studentAuth.session(request)
       if (!user) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible. Vuelve a entrar o consulta con CAI.')
-      const protectedBody = async () => {
-        const data = await body(request)
+      const protectedBody = async (maximum?:number) => {
+        const data = await body(request,maximum)
         if (studentAuth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
         return data
       }
+      if(path==='/api/local/student/achievements'&&method==='GET')return json(response,200,learning.mine(user,commentCursor(url.searchParams.get('before'))))
+      const achievement=path.match(/^\/api\/local\/student\/achievements(?:\/([1-9]\d*)(?:\/(submit|cancel))?)?$/)
+      if(achievement&&(method==='POST'||method==='PATCH')) {
+        limit(`learning:${user.id}`,30,60*60_000)
+        const id=achievement[1]?Number(achievement[1]):null
+        if(id!==null&&!Number.isSafeInteger(id))throw new HttpError(400,'Logro inválido.')
+        if(id&&achievement[2]&&method==='POST')return json(response,200,{item:achievement[2]==='submit'?learning.submit(user,id,await protectedBody()):learning.cancel(user,id,await protectedBody())})
+        if(!achievement[2]&&((id&&method==='PATCH')||(!id&&method==='POST'))){
+          const key=request.headers['idempotency-key'];if(typeof key!=='string')throw new HttpError(400,'Falta el identificador de guardado.')
+          return json(response,id?200:201,{item:await learning.save(user,id,await protectedBody(12_610_000),key,()=>studentAuth.session(request)?.id===user.id)})
+        }
+      }
+      const social=path.match(/^\/api\/local\/student\/members\/([a-f0-9-]{36}|cai-team)$/)
+      if(social&&method==='GET')return json(response,200,socialProfile(user,social[1]!,commentCursor(url.searchParams.get('before'))))
       if(path==='/api/local/student/badges'&&method==='GET')return json(response,200,badges.snapshot(user))
       if(path==='/api/local/student/badge-requests'&&method==='GET')return json(response,200,badges.mine(user,commentCursor(url.searchParams.get('before'))))
       if(path==='/api/local/student/badge-requests'&&method==='POST'){
@@ -317,7 +342,14 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       if (auth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
       return data
     }
-    if(path==='/api/local/badge-counts'&&method==='GET')return json(response,200,{counts:badges.counts()})
+    if(path==='/api/local/achievements/reviews'&&method==='GET')return json(response,200,learning.reviews(commentCursor(url.searchParams.get('before'))))
+    const learningReview=path.match(/^\/api\/local\/achievements\/([1-9]\d*)\/review$/)
+    if(learningReview&&method==='POST'){
+      limit(`learning-review:${user.id}`,60,15*60_000)
+      const id=Number(learningReview[1]);if(!Number.isSafeInteger(id))throw new HttpError(400,'Logro inválido.')
+      return json(response,200,{item:learning.decide(id,await protectedBody(),user.id)})
+    }
+    if(path==='/api/local/badge-counts'&&method==='GET')return json(response,200,{counts:{...badges.counts(),pending:badges.counts().pending+learning.pendingCount()}})
     if(path==='/api/local/badge-requests'&&method==='GET')return json(response,200,badges.reviews(url.searchParams.get('status')??'pending',commentCursor(url.searchParams.get('before'))))
     const badgeReview=path.match(/^\/api\/local\/badge-requests\/(BSR-\d+)(?:\/(approve|reject))?$/)
     if(badgeReview&&!badgeReview[2]&&method==='GET')return json(response,200,badges.reviewDetail(badgeReview[1]!))
