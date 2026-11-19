@@ -1,3 +1,4 @@
+import { migrateLearning } from './learning-migration.ts'
 import { migrateCommunityContent } from './community-content-migration.ts'
 import { DatabaseSync } from 'node:sqlite'
 import { challengeBank } from './challenge-bank.ts'
@@ -310,6 +311,7 @@ export function migrateDatabase(db: DatabaseSync) {
       COMMIT;`)
   }
   migrateCommunityContent(db)
+  migrateLearning(db)
   return db
 }
 

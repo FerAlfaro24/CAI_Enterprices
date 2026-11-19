@@ -82,6 +82,7 @@ export interface CommunityState {
   posts: Post[]
   mode: DemoMode
   section: Section
+  achievementTab?: 'mine' | 'badges' | 'community'
   filter: FeedFilter
   challengeId: string
   attempts: Record<string, Attempt>
@@ -94,7 +95,8 @@ export interface CommunityState {
 }
 
 export type CommunityAction =
-  | { type: 'section'; section: Section }
+  | { type: 'section'; section: Section; achievementTab?: 'mine' | 'badges' | 'community' }
+  | { type: 'achievementTab'; tab: 'mine' | 'badges' | 'community' }
   | { type: 'filter'; filter: FeedFilter }
   | { type: 'mode'; mode: DemoMode }
   | { type: 'react'; postId: string; reaction: Reaction }

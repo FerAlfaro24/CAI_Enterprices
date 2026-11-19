@@ -33,7 +33,13 @@ test('Insignias: reglas verificables, revisión privada, concesión y compartici
  const login=async(actor:string)=>{const r=await call(actor==='admin'?'/auth/login':'/student/login','POST',{email:actor+'@example.test',password},'anonymous');assert.equal(r.status,200);cookies[actor]=r.headers.getSetCookie().at(-1)!.split(';')[0]!}
  for(const actor of ['admin',...Object.keys(ids)])await login(actor)
  const snapshot=async(actor='alice')=>(await (await call('/student/badges','GET',undefined,actor)).json()) as BadgeSnapshot
+ const legacyApply=(badgeId='movie-explorer',description='Vi una película y aprendí expresiones para pedir ayuda.',actor='alice')=>{
+  const id=Number(app.db.prepare('INSERT INTO badge_requests(student_id,badge_id,description,created_at,request_key) VALUES (?,?,?,?,?)').run(Number(ids[actor]!.slice(4)),badgeId,description,new Date().toISOString(),randomUUID()).lastInsertRowid)
+  app.db.prepare("INSERT INTO badge_audit(request_id,student_id,action,created_at) VALUES (?,?,'requested',?)").run(id,Number(ids[actor]!.slice(4)),new Date().toISOString())
+  return badgesRepository(app.db).requestDetail(users[actor]!,`BSR-${String(id).padStart(4,'0')}`).request
+ }
  const apply=(badgeId='movie-explorer',description='Vi una película y aprendí expresiones para pedir ayuda.',key=randomUUID(),actor='alice')=>call('/student/badge-requests','POST',{badgeId,description},actor,key)
+
  const detail=async(id:string)=>(await (await call('/badge-requests/'+id,'GET',undefined,'admin')).json()) as {request:BadgeApplication;history:unknown[]}
  const decide=async(id:string,decision='approve',revision?:number)=>call('/badge-requests/'+id+'/'+decision,'POST',{revision:revision??(await detail(id)).request.revision,reason:'Revisión privada ficticia del aprendizaje.',confirmed:true},'admin')
  const correction=(grant:EarnedBadge,status:'active'|'revoked')=>call('/badge-grants/'+grant.id,'PATCH',{revision:grant.revision,status,reason:'Corrección privada ficticia del reconocimiento.',confirmed:true},'admin')
@@ -46,8 +52,8 @@ test('Insignias: reglas verificables, revisión privada, concesión y compartici
  let request:BadgeApplication,grant:EarnedBadge,shared:OwnPost
  const key=randomUUID()
  await t.test('privacidad y catálogo real preservado sin concesiones ficticias',async()=>{
-  assert.equal(badgeDefinitions.length,9);assert.equal(new Set(badgeDefinitions.map(b=>b.id)).size,9)
-  const data=await snapshot();assert.equal(data.catalog.length,9);assert.equal(data.grants.length,0);assert.equal(data.requests.items.length,0)
+  assert.equal(badgeDefinitions.length,21);assert.equal(new Set(badgeDefinitions.map(b=>b.id)).size,21)
+  const data=await snapshot();assert.equal(data.catalog.length,21);assert.equal(data.grants.length,0);assert.equal(data.requests.items.length,0)
   for(const actor of ['anonymous','admin'])assert.equal((await call('/student/badges','GET',undefined,actor)).status,401)
   for(const route of ['/badge-counts','/badge-requests','/badge-grants'])assert.equal((await call(route)).status,401)
   assert.equal((await call('/badge-grants','POST',{},'alice',randomUUID())).status,401)
@@ -60,21 +66,19 @@ test('Insignias: reglas verificables, revisión privada, concesión y compartici
   const count=app.db.prepare('SELECT COUNT(*) AS n FROM badge_grants').get()!.n,notices=app.db.prepare('SELECT COUNT(*) AS n FROM local_notices').get()!.n
   assert.deepEqual(await snapshot('achiever'),achieved);assert.equal(app.db.prepare('SELECT COUNT(*) AS n FROM badge_grants').get()!.n,count);assert.equal(app.db.prepare('SELECT COUNT(*) AS n FROM local_notices').get()!.n,notices)
  })
- await t.test('solicitud privada, validación, replay y bloqueo de duplicados',async()=>{
-  for(const badge of ['first-answer','good-companion','unknown'])assert.equal((await apply(badge)).status,400)
-  for(const description of ['','corto','x'.repeat(601),'Texto inválido con \u0000 control'])assert.equal((await apply('movie-explorer',description,randomUUID(),'limited')).status,400)
+ await t.test('no se admiten nuevas peticiones; el historial legado continúa privado',async()=>{
+  assert.equal((await apply('movie-explorer',undefined,key)).status,410)
   assert.equal((await call('/student/badge-requests','POST',{badgeId:'movie-explorer',description:'Una descripción suficiente de mi aventura',studentId:ids.bob},'alice',randomUUID())).status,400)
-  const r=await apply('movie-explorer',undefined,key);assert.equal(r.status,201);request=(await r.json() as {request:BadgeApplication}).request
-  assert.equal((await apply('movie-explorer',undefined,key)).status,201);assert.equal((await apply('movie-explorer','Un texto diferente que sí tiene suficientes caracteres',key)).status,409);assert.equal((await apply()).status,409)
-  assert.equal((await snapshot()).grants.length,0);assert.equal((await snapshot('bob')).requests.items.length,0);assert.equal((await call('/student/badge-requests/'+request.id,'GET',undefined,'bob')).status,404)
-  assert.equal((await call('/student/badge-requests/'+request.id,'GET',undefined,'outside')).status,404)
+  request=legacyApply()
+  assert.equal((await snapshot()).grants.length,0);assert.equal((await snapshot('bob')).requests.items.length,0)
+  for(const actor of ['bob','outside'])assert.equal((await call('/student/badge-requests/'+request.id,'GET',undefined,actor)).status,404)
  })
  await t.test('revisión con motivo privado, rechazo y nueva solicitud conservan historial',async()=>{
   assert.equal((await call('/badge-requests/'+request.id+'/approve','POST',{revision:1,reason:'Motivo suficiente para revisar'},'admin')).status,400)
   assert.equal((await decide(request.id,'reject')).status,200);assert.equal((await snapshot()).requests.items[0]!.status,'rejected');assert.equal((await detail(request.id)).history.length,2)
-  const response=await apply();assert.equal(response.status,201);request=(await response.json() as {request:BadgeApplication}).request
+  request=legacyApply()
   assert.equal((await decide(request.id)).status,200);grant=(await snapshot()).grants[0]!
-  assert.equal(grant.source,'cai');assert.equal(grant.badge.id,'movie-explorer');assert.ok(!grant.condition.includes('privada'));assert.equal((await decide(request.id,'approve',1)).status,409);assert.equal((await apply()).status,409)
+  assert.equal(grant.source,'cai');assert.equal(grant.badge.id,'movie-explorer');assert.ok(!grant.condition.includes('privada'));assert.equal((await decide(request.id,'approve',1)).status,409);assert.equal((await apply()).status,410)
   assert.equal((await call('/student/posts')).status,200);assert.equal((await (await call('/student/posts')).json() as {posts:unknown[]}).posts.length,0)
  })
  await t.test('compartir exige concesión propia activa; pasa por moderación sin texto privado',async()=>{
@@ -112,12 +116,12 @@ test('Insignias: reglas verificables, revisión privada, concesión y compartici
   assert.equal((await call('/student/badges/'+award.id,'GET',undefined,'alice')).status,404)
  })
  await t.test('retirada propia y paginación no exponen solicitudes o razones a otra cuenta',async()=>{
-  let r=await apply('music-catcher');const own=(await r.json() as {request:BadgeApplication}).request
+  const own=legacyApply('music-catcher')
   assert.equal((await call('/student/badge-requests/'+own.id+'/withdraw','POST',{revision:1,confirmed:true},'bob')).status,404)
   assert.equal((await call('/student/badge-requests/'+own.id+'/withdraw','POST',{revision:1,confirmed:true})).status,200);assert.equal((await decide(own.id)).status,409)
   const repo=badgesRepository(app.db)
-  for(let i=0;i<23;i++){const row=repo.apply(users.bob!,{badgeId:'music-catcher',description:'Aprendí una expresión con una canción ficticia '+i},randomUUID());repo.decide(row.id,'reject',{revision:1,reason:'Reforzar el ejemplo y explicar lo aprendido.',confirmed:true},admin)}
-  r=await call('/student/badge-requests','GET',undefined,'bob');const first=await r.json() as {items:BadgeApplication[];nextCursor:number};assert.equal(first.items.length,20)
+  for(let i=0;i<23;i++){const row=legacyApply('music-catcher','Aprendí una expresión con una canción ficticia '+i,'bob');repo.decide(row.id,'reject',{revision:1,reason:'Reforzar el ejemplo y explicar lo aprendido.',confirmed:true},admin)}
+  const r=await call('/student/badge-requests','GET',undefined,'bob');const first=await r.json() as {items:BadgeApplication[];nextCursor:number};assert.equal(first.items.length,20)
   assert.equal((await (await call('/student/badge-requests?before='+first.nextCursor,'GET',undefined,'bob')).json() as {items:BadgeApplication[]}).items.length,3)
   assert.equal((await call('/badge-requests?status=rejected','GET',undefined,'admin')).status,200);assert.equal((await call('/badge-requests?status=__proto__','GET',undefined,'admin')).status,400);assert.equal((await call('/student/badge-requests?before=NaN')).status,400)
  })
@@ -134,12 +138,12 @@ test('Insignias: reglas verificables, revisión privada, concesión y compartici
   let limited=false;for(let i=0;i<21;i++){const response=await apply('book-buddy','corto',randomUUID(),'limited');if(response.status===429){limited=true;break}assert.equal(response.status,400)}assert.equal(limited,true);assert.equal((await call('/student/badges','GET',undefined,'limited')).status,200)
  })
  await t.test('copia separada y reinicio conservan concesión, revisión y vínculos',async()=>{
-  const before=await snapshot(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,18);await close();app=createApplication(copy,{}, {challengeClock:()=>time});await start();assert.deepEqual(await snapshot(),before)
+  const before=await snapshot(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,19);await close();app=createApplication(copy,{}, {challengeClock:()=>time});await start();assert.deepEqual(await snapshot(),before)
   assert.equal((await (await call('/student/posts','GET',undefined,'bob')).json() as {posts:OwnPost[]}).posts[0]!.recognition!.badgeId,'movie-explorer')
  })
  await t.test('migración 15→16 conserva retos y sesiones; no concede por demo',async()=>{
   const copy=await backupLocalDatabase(path,join(directory,'legacy')),legacy=openDatabase(copy),attempts=legacy.prepare('SELECT * FROM challenge_attempts ORDER BY id').all(),sessions=legacy.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all()
-  legacy.exec('DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17; DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16');legacy.close();assert.equal((await verifyLocalBackup(copy)).schema,15)
+  legacy.exec('DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17; DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16');legacy.close();assert.equal((await verifyLocalBackup(copy)).schema,15)
   const migrated=openDatabase(copy);try{assert.deepEqual(migrated.prepare('SELECT * FROM challenge_attempts ORDER BY id').all(),attempts);assert.deepEqual(migrated.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),sessions);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM badge_grants').get()!.n,0)}finally{migrated.close()}
  })
 })

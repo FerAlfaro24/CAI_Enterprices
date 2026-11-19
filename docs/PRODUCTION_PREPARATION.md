@@ -1,6 +1,6 @@
 # CAI — preparación técnica de producción
 
-> Actualización del 19-11: la rama posterior `feat/v1-official-media` añade [fotos oficiales y esquema 17](OFFICIAL_MEDIA.md). Los resultados y la ausencia de migraciones de la entrega productiva del 17-11 son históricos. La [continuación de Inicio/historias](COMMUNITY_HOME_STORIES.md) usa esquema 18; el preflight actual exige 1–18. Instalar los seis medios privados en `CAI_DATA_DIR/official-media` por un canal privado: no están en GitHub, dist o public.
+> Actualización del 19-11: la rama posterior `feat/v1-official-media` añade [fotos oficiales y esquema 17](OFFICIAL_MEDIA.md). Los resultados y la ausencia de migraciones de la entrega productiva del 17-11 son históricos. La [continuación de Inicio/historias](COMMUNITY_HOME_STORIES.md) usa esquema 18; el corte de Inicio exigía 1–18. La [entrega de Logros](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados) incorpora esquema 19 y el preflight vigente exige 1–19; no actualiza bases existentes implícitamente. Ensayar actualización/recuperación antes de adoptar el nuevo código. Instalar los seis medios privados en `CAI_DATA_DIR/official-media` por un canal privado: no están en GitHub, dist o public.
 
 **17 de noviembre de 2026.** Rama `feat/v1-production-preparation`, desde `95e53e2`; código comprobado `9be8081`. Preparación de servidor disponible y ensayada con datos ficticios. **No hay despliegue, dominio, certificado, correo real ni aceptación de CAI comprobados.** Contratación y servicios externos siguen para el final.
 

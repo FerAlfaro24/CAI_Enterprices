@@ -2,7 +2,7 @@
 
 **19-11-2026 · `feat/v1-community-playful-design`, desde `4cdae44` de PR #15.** Prioridad nueva autorizada: hacer más atractiva la comunidad, con identidad propia, fondo sutil, respuestas visuales y celebraciones. El usuario amplió expresamente a perfil, notificaciones y Retos, con colores/puntuación/confeti inspirados en experiencias de aprendizaje lúdicas. La muestra conserva las reglas, puntos y autorizaciones reales existentes.
 
-**Continuación de documentación:** `docs/v1-learning-adventures-plan`, desde `3b368e8` de PR #18. Código funcional acumulado: `feat/v1-community-header-highlights` / `927b744`. El modelo acordado de Logros, insignias obtenidas y perfil social figura al final; todavía no está implementado. Sustituye la propuesta anterior de renombrar el apartado y pedir insignias. Los resultados de las entregas previas conservan sus propios cortes.
+**Continuación funcional:** `feat/v1-achievements-progressive-badges`, desde `0729cc5` del plan corregido; código `5349283`. Logros personales, imágenes, validación/publicación, insignias progresivas y perfiles ya conectados; ver entrega al final. Las propuestas y los resultados anteriores conservan sus propios cortes.
 
 ## Plan de trabajo y criterio de cierre
 
@@ -154,4 +154,46 @@ Al tocar nombre/avatar se abre un perfil social con **Publicaciones · Logros ·
 
 Actualizar componentes existentes y reutilizar revisión, comentarios, reacciones, IDs públicos y celebraciones. Pruebas por entrega en fixtures nuevas de `.local/tests`; nunca migrar ni probar sobre `.local/cai.sqlite` o la muestra del usuario. Mantener copia remota anterior estable y archivos privados fuera de Git. Sin dependencias o servicios externos de IA/extracción de portadas por este plan.
 
-**Pendiente:** implementar L1–L5, concretar umbrales/política de validación y revisar experiencia con usuario/coordinación. Esta corrección solo actualiza el diseño y la continuidad; no cambia código de producto, catálogo, datos o permisos. Revisión de código/documentación y enlaces; sin nuevas pruebas de producto.
+**Estado de este corte documental anterior (`0729cc5`):** todavía era diseño. La entrega siguiente implementa L1–L5, concreta niveles y validación privada; sus límites y pruebas figuran a continuación. No usar esta nota histórica para reconstruir lo ya conectado.
+
+## Logros, insignias y perfiles implementados
+
+**19-11-2026 · `feat/v1-achievements-progressive-badges`, desde `0729cc5`; código `5349283`.** El usuario autorizó implementar el modelo corregido. L1–L5 tienen primera implementación conectada; aceptación visual y prueba con coordinación siguen pendientes. No se renombra Logros.
+
+### Qué funciona
+
+- Mis logros presenta tarjetas de Lectura, Cine y series y Música. Registro de cuatro pasos: actividad, obra/imágenes, práctica/expresión/ejemplo y vista previa. Borrador y completado se guardan en servidor, pueden recargarse y editarse mientras no estén enviados ni validados. Las obras validadas se conservan inmutables; otra experiencia es otro registro.
+- Hasta tres JPEG/PNG de 3 MB cada una, máximo 12 millones de píxeles, convertidas con Sharp a WebP de lado máximo 1600 y sin EXIF. Solo bytes procesados en SQLite, sin archivos originales o rutas públicas. El guardado revalida sesión tras procesar y dentro de transacción, conserva revisión optimista y reintentos idempotentes. Presupuesto inicial: 30 MB por alumno, 128 MB de adjuntos de logros en la instalación y 1,000 registros por alumno. Estos límites no son una estimación de capacidad del proveedor definitivo.
+- Guardar no envía a coordinación ni publica. Un logro completado permite **Validar sin publicar** o **Enviar para publicar**. Validación privada y publicación tienen estados independientes. Coordinación ve la intención, texto e imágenes juntos, escribe motivo privado y confirma. Puede aprobar o pedir ajuste; se puede retirar una solicitud pendiente.
+- Compartir crea una publicación moderada de grupo, vinculada al mismo logro. La aprobación puede validar el aprendizaje; aprobar una validación privada nunca publica. Se reutilizan moderación, comentarios y reacciones. Imágenes pendientes/privadas no alimentan Inicio, perfil ajeno ni Galería. Una publicación retirada desaparece para compañeros sin borrar el logro validado o retirar la insignia automáticamente.
+- Perfil propio y de compañeros: Publicaciones, Logros compartidos e Insignias obtenidas. Se abre desde los autores/comentarios ya existentes y enlaza a la conversación canónica. Permisos en servidor por grupo, cuenta activa y audiencia, también en imagen/URL directa; sin borradores, motivos, expediente, correo o estadísticas privadas de Retos. La colección pública mínima de insignias incluye título/fecha/catálogo, no su evidencia privada. Paginación de 20 registros.
+- Coordinación usa **Logros e insignias**; la cola de logros indica validación privada frente a publicación. El contador de navegación suma los logros pendientes y las solicitudes anteriores; al decidir se actualiza. Las solicitudes de insignia antiguas siguen consultables/revisables; nuevas solicitudes se rechazan con 410. No se eliminan concesiones ni historias anteriores.
+
+### Reglas concretadas
+
+| Familia | Escalones nuevos | Qué cuenta |
+| --- | --- | --- |
+| Lectura | 3, 10 y 25 | Títulos distintos validados por CAI, aunque permanezcan privados. |
+| Cine y series | 3, 10 y 25 | Obras/experiencias con títulos distintos y validación. |
+| Música | 3, 10 y 25 | Títulos distintos con validación. |
+| Práctica en Retos | 7, 30 y 90 días | Tres preguntas respondidas en cada día; acumulados, no racha. |
+| Publicaciones | 5, 20 y 50 | Aprobaciones reales de contenido original; título/cuerpo idénticos normalizados no duplican el avance. |
+
+Catálogo actual: **21 insignias**, incluidos los tres reconocimientos iniciales de Retos y los tres institucionales conservados. Book Buddy, Explorador de películas y Music Catcher pasan a condiciones de tres logros validados para nuevas concesiones; el JSON/condición/fecha de las concesiones antiguas no se reescribe. Los niveles superiores tienen IDs propios. Duplicados de título en una misma actividad no suman; no es un detector semántico de textos reformulados. La moderación humana sigue siendo el control de calidad.
+
+El servidor calcula progreso y concede al consultar la instantánea autorizada, con una concesión única por alumno/ID y auditoría. No existe petición de insignia en la nueva interfaz. No suman borradores, pendientes o reintentos ni se inventan puntos de Retos. Retirar una publicación por privacidad conserva el reconocimiento ya ganado; correcciones excepcionales siguen con motivo/historial de coordinación. No se retiran automáticamente insignias por cambiar requisitos del catálogo o recalcular el avance. La celebración toma la definición de la concesión confirmada, admite los niveles nuevos y Ver mis insignias abre su pestaña y cierra el perfil superpuesto.
+
+### Persistencia y operación
+
+Migración **19**, aditiva: `learning_achievements`, `learning_images` y `learning_audit`, sin convertir solicitudes antiguas en obras inventadas. `publications`, IDs públicos y concesiones existentes conservados. Los adjuntos BLOB forman parte de la copia consistente; el verificador admite esquema 19 y revisa sus imágenes. El preflight productivo exige ahora historial 1–19; no migra una instalación existente al arrancar. No actualizar bases habituales o producción implícitamente: ensayo de actualización/recuperación N3 y adopción autorizada siguen pendientes.
+
+No se abrió ni migró `.local/cai.sqlite`, la muestra anterior de 4194 o la copia remota compilada. El frontend nuevo debe probarse con su API nueva de esquema 19. Muestra limpia de esta entrega en 4216/API 3226, creada con `community-showcase-server.ts ... --no-latest`, sin logros personales de QA, sin sustituir la referencia de presentación habitual. Datos/accesos y prueba visual privados en `.local/tests`; no forman parte del clon. Para reproducir, crear otra fixture con puertos libres, sin reiniciar la existente si se quieren conservar sus interacciones.
+
+### Evidencia y límites
+
+- Suite completa: **261 pruebas API correctas**, incluidas las pruebas históricas adaptadas a esquema 19 y a solicitudes antiguas; fixtures independientes. Tras el ajuste final de contador/confirmación de motivos, **42 pruebas pertinentes de logros, insignias y publicaciones** correctas. No sumar las dos tandas.
+- **108 comprobaciones de navegador: 54 Brave y 54 Opera GX**, `scripts/check-learning.browser.mjs`. Guardar/editar/recargar, imagen/vista previa/retirada, validación privada desde panel, publicación moderada, acceso desde compañero y conversación, concesión real y celebración/acceso directo, progreso 3/10, retirada y privacidad de otro grupo. Editor y colección a 1440/768/375/320, claro/oscuro, Escape y movimiento reducido; sin errores JS/consola inesperados. La matriz precede al último ajuste del contador de coordinación, comprobado después por API y tipos. Capturas revisadas en escritorio/móvil. Muestra limpia final de 4216 también renderizada y comprobada sin registros personales.
+- Build, comprobación de tipos del proyecto, ESLint, diff check y comprobación TypeScript estricta dirigida a `server/learning.ts`/`server/social-profiles.ts` y sus dependencias correctos. Sin dependencias añadidas. No se repitieron las matrices históricas completas de navegador de otras entregas.
+- Se corrigió durante QA una aserción demasiado genérica que confundía la explicación pública del catálogo con un motivo privado; la prueba actual busca el texto confidencial específico. Se conservan los intentos y sus límites. Las primeras ejecuciones detectaron también la adaptación pendiente del contrato de fotos vacío; se conservó el contrato antiguo de publicaciones de texto.
+
+Quedan revisión humana de las pantallas/umbrales, ajuste de nombres/criterios según CAI y N3/servicios externos de la guía general. No se implementaron vídeo/audio, evaluación automática de inglés, nuevas categorías o un verificador semántico de obras. Los motivos anteriores de revisión quedan auditados; esta primera pantalla muestra el motivo vigente, no una nueva interfaz completa de auditoría de logros. La copia remota anterior no se actualizó ni publicó otra instancia productiva.

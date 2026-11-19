@@ -1,5 +1,8 @@
 # CAI — pruebas y lectura de evidencia
 
+
+**Logros/insignias/perfiles, 19-11:** suite completa **261 API**; **108 navegador (54 Brave/54 Opera)**, con editor/colección claro/oscuro a 1440/768/375/320 y recorrido real de alumno/coordinación/compañero. Tras el ajuste final del contador se ejecutaron **42 API pertinentes**. Tipos del proyecto y estrictos dirigidos a servicios nuevos, lint/build correctos. No sumar tandas ni afirmar repetidas las matrices antiguas de navegador. [Alcance, intentos y límites](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). Fixture nueva por navegador; nunca sobre datos habituales.
+
 **Actualizado: 19-11-2026, Inicio visual y presentación.** [Última entrega](COMMUNITY_HOME_STORIES.md): **233 API y 76 comprobaciones de navegador (38 Brave/38 Opera)**, lint/tipos/build. Contextos aislados y bases nuevas de `.local/tests`; sin datos/acceso habitual. Los resultados de fotografías y producción anteriores corresponden a sus cortes.
 
 **Corrección posterior de visibilidad:** 32 comprobaciones nuevas (16 Brave/16 Opera) en Galería, lint/tipos/build. Sin cambios de servidor ni nueva ejecución API; no sumar a las 76 anteriores. [Detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).

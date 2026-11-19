@@ -3,6 +3,11 @@ import type { Member, Post } from './types'
 import type { StudentProfile, StudentProfileDraft } from '../local-access/api'
 
 export interface CommunityConnection {
+  achievements:import('../../../server/contracts').LearningPage
+  saveAchievement:(id:number|null,draft:import('../../../server/contracts').LearningDraft,key:string,revision?:number)=>Promise<boolean>
+  submitAchievement:(item:{id:number;revision:number},share:boolean)=>Promise<boolean>
+  cancelAchievement:(item:{id:number;revision:number})=>Promise<boolean>
+  withdrawAchievement:(item:{id:string;revision:number})=>Promise<boolean>
   demonstration?:boolean
   badges:import('../../../server/contracts').BadgeSnapshot
   requestBadge:(badgeId:string,description:string,key:string)=>Promise<boolean>

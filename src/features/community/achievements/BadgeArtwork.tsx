@@ -12,6 +12,7 @@ import consistency from '../../../assets/community/badges/cai-consistency.svg?no
 const prototypes: Readonly<Record<string, string>> = { 'first-answer': firstAnswer, 'three-consecutive': threeConsecutive, 'five-days': fiveDays, 'movie-explorer': movie, 'music-catcher': music, 'book-buddy': book, 'speaking-confidence': speaking, 'good-companion': companion, 'cai-consistency': consistency }
 
 export function BadgeArtwork({ badgeId, symbol, className }: { badgeId: string; symbol: string; className?: string }) {
-  const artwork = prototypes[badgeId]
+  const family=badgeId.startsWith('book-')?'book-buddy':badgeId.startsWith('screen-')?'movie-explorer':badgeId.startsWith('music-')?'music-catcher':badgeId.startsWith('practice-')?'cai-consistency':badgeId.startsWith('stories-')?'good-companion':badgeId
+  const artwork = prototypes[family]
   return <span className={className} aria-hidden="true" data-illustrated={artwork ? badgeId : undefined}>{artwork ? <img src={artwork} width="96" height="96" alt="" draggable={false} /> : symbol}</span>
 }

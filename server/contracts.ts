@@ -111,6 +111,7 @@ export const reactionKinds = ['love', 'wellDone', 'congrats', 'amazing', 'funny'
 export type ReactionKind = typeof reactionKinds[number]
 export type ReactionSummary = { counts: Record<ReactionKind, number>; myReaction: ReactionKind | null; revision: number }
 export type PublishedPost = PublicationDraft & {
+  learningId?: number
   institutional?:boolean; kind?:'story'|'notice'|'album'; audience?:'group'|'community'; highlighted?:boolean; expiresAt?:string|null; photos?:GalleryItem[]; showInGallery?:boolean;
   recognition?:{badgeId:string;title:string;awardedAt:string}
   id: string; author: GroupMember; createdAt: string; publishedAt: string | null; engagement?: ReactionSummary; commentCount?:number; commentsOpen?:boolean
@@ -149,3 +150,22 @@ export type BadgeGrantReview=EarnedBadge&{studentId:string;studentName:string;pr
 export type BadgeAudit={action:string;reason:string|null;actor:string;createdAt:string}
 
 export type InstitutionalDraft = {title:string;body:string;kind:'story'|'notice'|'album';audience:'group'|'community';program:string;group:string;imageIds:string[];showInGallery:boolean;highlighted:boolean;expiresAt:string|null;confirmed:boolean}
+
+
+export type LearningCategory = 'reading' | 'screen' | 'music'
+export type LearningDraft = {
+  category: LearningCategory; title: string; practice: string; expression: string; example: string;
+  state: 'draft' | 'completed'; images: ({ id: string } | { data: string })[];
+}
+export type LearningImage = { id: string; imagePath: string; width: number; height: number }
+export type LearningAchievement = Omit<LearningDraft, 'images'> & {
+  id: number; revision: number; review: 'none' | 'pending' | 'approved' | 'changes';
+  reason: string | null; createdAt: string; validatedAt: string | null; images: LearningImage[];
+  publication: { id: string; status: PublicationStatus; revision: number } | null;
+}
+export type LearningPage = { items: LearningAchievement[]; nextCursor: number | null }
+export type LearningReview = LearningAchievement & { studentName: string; studentId: string }
+export type SocialProfile = {
+  member: GroupMember; posts: PublishedPost[]; nextCursor: number | null;
+  badges: { id: string; badge: BadgeSpec; awardedAt: string }[];
+}

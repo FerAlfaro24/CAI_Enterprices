@@ -2,7 +2,7 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 18. **Continuar en `feat/v1-community-header-highlights`**, desde `ffb323d`. Cabecera limpia, cuenta/notificaciones reubicadas y avisos con fotos en un único carrusel. La revisión social anterior parte de `d6e66fd`. Publicaciones en una columna, reacciones solo con emojis/contadores y conversación más sencilla. La muestra visual anterior parte de `4cdae44`. [Primera muestra de diseño y plan](docs/COMMUNITY_DESIGN.md): Inicio, Retos lúdicos, perfil, bandeja de notificaciones y celebraciones. La preparación remota anterior parte de `d7ef781`. [Presentación remota protegida](docs/REMOTE_DEMO.md) con copia ficticia, separada del Vercel antiguo y del alojamiento definitivo. Galería anterior desde `f9c3c1a` de la entrega anterior. Galería muestra todas las fotos por defecto y mantiene Álbumes como opción. Inicio anterior desde `422b4d2`; backend `4e60bcd` e interfaz `86df7f6`. [Inicio, historias y álbumes](docs/COMMUNITY_HOME_STORIES.md): fotos autorizadas en Inicio, publicaciones oficiales con fotos, avisos/destacados/vencimiento y conversación compartida con Galería. La presentación al cliente usa una base ficticia independiente. Incluye las [fotos oficiales](docs/OFFICIAL_MEDIA.md) de la rama anterior; sus archivos privados se entregan fuera de GitHub. **Sin alojamiento definitivo validado**. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
+**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 19. **Continuar en `feat/v1-achievements-progressive-badges`**, código `5349283`, desde `0729cc5`. [Logros, insignias y perfiles](docs/COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados) conectados: actividades guiadas con imágenes, guardado privado, validación/publicación independientes, insignias progresivas obtenidas y perfiles de compañeros. Incluye las entregas anteriores de cabecera, Inicio/avisos, publicaciones, fotos oficiales, Retos y administración. Las fotos privadas se entregan fuera de GitHub. **Sin alojamiento definitivo validado**; la copia remota temporal anterior no se actualizó. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
 
 ## Qué funciona localmente
 
@@ -11,7 +11,8 @@
 - Panel v1.0 conectado: alumnos, grupos, ajustes, equipo, bandejas y moderación.
 - Comunidad: historias de alumnos por grupo y publicaciones de Equipo CAI con fotos/álbumes, avisos y destacados para grupo o todos los aprobados; comentarios/reacciones compartidos entre vistas.
 - Retos: **180 preguntas/45 temas**, tres al día, explicaciones, puntos, constancia y repaso.
-- Insignias: **nueve**, automáticas o concedidas por CAI, solicitudes/correcciones privadas y compartición voluntaria moderada.
+- Logros: lectura, cine/series y música con imágenes; borrador o completado privado, validación privada y publicación voluntaria moderada.
+- Insignias: **21**, progreso por actividades validadas, Retos y publicaciones; concesiones históricas conservadas. Perfil de compañeros con contenido compartido e insignias.
 - SQLite, migraciones, copias/verificación, avisos y recuperación locales.
 
 Google real, entrega real de correo, contenido comercial y validaciones finales, aceptación de CAI y validación del alojamiento siguen pendientes. La base técnica del servidor está [preparada y comprobada en simulación](docs/PRODUCTION_PREPARATION.md). **Vídeos: menor prioridad y opcionales; no implementados.** Si se retoman, solo coordinación sube y el grupo autorizado ve.
@@ -23,7 +24,7 @@ GitHub muestra este repositorio como público al 19-11-2026. Para operaciones au
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-community-header-highlights
+git switch --track origin/feat/v1-achievements-progressive-badges
 code .
 npm.cmd ci
 ```

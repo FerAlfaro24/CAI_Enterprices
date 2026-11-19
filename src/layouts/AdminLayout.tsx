@@ -20,7 +20,7 @@ const sections: Section[] = [
   { to: '/admin/alumnos', label: 'Alumnos', icon: 'users' },
   { to: '/admin/galeria', label: 'Galería privada', icon: 'image' },
   { to: '/admin/retos', label: 'Retos de inglés', icon: 'trend' },
-  { to: '/admin/insignias', label: 'Insignias', icon: 'shield',countKey:'badges' },
+  { to: '/admin/insignias', label: 'Logros e insignias', icon: 'shield',countKey:'badges' },
   { to: '/admin/mensajes', label: 'Mensajes y avisos', icon: 'chat' },
   { to: '/admin/configuracion', label: 'Configuración', icon: 'settings' },
 ]
