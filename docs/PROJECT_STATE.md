@@ -12,6 +12,8 @@
 
 **Cabecera/novedades:** identidad oficial sin franjas de gestión; campana junto al perfil, cuenta en Mi espacio y carrusel único de avisos/momentos. 122 comprobaciones nuevas (61 por navegador), tipos/lint/build. Corregida consulta posterior al logout; no se cambió la API ni la separación de fixtures. [Detalle](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar).
 
+**Diseño corregido, sin implementación:** [Logros e insignias](COMMUNITY_DESIGN.md#logros-e-insignias-modelo-acordado). El usuario mantiene Logros como apartado: prácticas repetibles privadas o compartidas tras revisión; insignias obtenidas por condiciones progresivas y perfiles de compañeros con contenido compartido/colección. Sustituye el nombre Mis aventuras y pedir insignias. Rama documental `docs/v1-learning-adventures-plan`, desde `3b368e8`; código funcional aún de cabecera. Sin nuevas funciones, catálogo, migración ni pruebas de producto. Niveles concretos y validación privada siguen como propuestas.
+
 ## Referencias de continuación
 
 - **Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d` de `feat/v1-community-social-feed`.

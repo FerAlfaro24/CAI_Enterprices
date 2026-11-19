@@ -16,6 +16,8 @@
 
 **Observación siguiente atendida:** [cabecera y novedades](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), sin franjas de demostración/gestión, cuenta reubicada y avisos con fotos en un carrusel; 122 comprobaciones nuevas. Mantener identidad de CAI y separación real de datos/entornos. Revisar visualmente con el usuario antes de ampliar el acabado.
 
+**Prioridad corregida por el usuario:** [Logros e insignias](COMMUNITY_DESIGN.md#logros-e-insignias-modelo-acordado). Mantener Logros; actividades repetibles guardables en privado o publicables tras revisión. Las insignias se obtienen por requisitos progresivos, no se piden. Perfil social con publicaciones/logros compartidos e insignias. L1 modelo/reglas, L2 registro/imágenes, L3 revisión/publicación, L4 insignias, L5 perfiles. Sustituye A1–A4 y el nombre Mis aventuras. Solo diseño; umbrales y validación privada por concretar, sin implementación ni apertura general de Galería.
+
 ## Orden de trabajo general posterior
 
 | ID / prioridad | Pendiente | Qué puede avanzar desarrollo solo | Qué necesita CAI/usuario y criterio de cierre |

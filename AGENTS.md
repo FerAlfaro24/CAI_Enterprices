@@ -8,6 +8,8 @@
 
 ## Alcance y prioridad
 
+- Prioridad acordada: [Logros e insignias](docs/COMMUNITY_DESIGN.md#logros-e-insignias-modelo-acordado), sin implementación todavía. Mantener Logros como nombre. Logros son prácticas repetibles con imágenes opcionales, guardado privado y publicación voluntaria moderada; insignias se obtienen por condiciones progresivas de logros/Retos/aportaciones, nunca se solicitan. Ampliar perfiles de compañeros con contenido compartido e insignias, sin revelar borradores/evidencia privada. Sustituye el nombre Mis aventuras y el plan anterior A1–A4; usar L1–L5. Umbrales y validación privada aún por concretar; no afirmar que estas funciones existen ni abrir Galería general a alumnos.
+
 - Cabecera conectada: sin las franjas anteriores ni rótulos de demostración. Campana para notificaciones privadas; grupo/inscripción/actualizar/logout en Mi espacio. Avisos institucionales fijados y momentos fotográficos comparten carrusel; avisos primero y pausa inicial, etiquetas claras, mensajes privados siempre separados. No volver a duplicar la banda de avisos ni las opciones de cuenta en Inicio.
 
 - Publicaciones: cinco emojis sin nombres visibles; nombres accesibles conservados. Tocar de nuevo retira. No volver a tarjetas conectadas estrechas, portadas editoriales o instrucciones redundantes. Pausa/errores/moderación siguen funcionando.

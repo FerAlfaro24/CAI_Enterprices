@@ -2,7 +2,7 @@
 
 **19-11-2026 · `feat/v1-community-playful-design`, desde `4cdae44` de PR #15.** Prioridad nueva autorizada: hacer más atractiva la comunidad, con identidad propia, fondo sutil, respuestas visuales y celebraciones. El usuario amplió expresamente a perfil, notificaciones y Retos, con colores/puntuación/confeti inspirados en experiencias de aprendizaje lúdicas. La muestra conserva las reglas, puntos y autorizaciones reales existentes.
 
-**Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d` de PR #17. La primera muestra y la revisión social se conservan como cortes anteriores; la limpieza de cabecera y las novedades unificadas figuran al final.
+**Continuación de documentación:** `docs/v1-learning-adventures-plan`, desde `3b368e8` de PR #18. Código funcional acumulado: `feat/v1-community-header-highlights` / `927b744`. El modelo acordado de Logros, insignias obtenidas y perfil social figura al final; todavía no está implementado. Sustituye la propuesta anterior de renombrar el apartado y pedir insignias. Los resultados de las entregas previas conservan sus propios cortes.
 
 ## Plan de trabajo y criterio de cierre
 
@@ -90,3 +90,68 @@ Ambos temas a 1440/768/375/320: sin desbordamiento, controles de cabecera dentro
 La muestra del usuario de 4194 conserva datos/accesos y recibe el código de interfaz actualizado. No se reinició ni sustituyó su base. Las fixtures de QA no se convierten en la muestra. Capturas y datos privados permanecen fuera de Git en `.local/tests/header-highlights-*`; la copia remota compilada anterior no se reemplazó.
 
 Archivos principales: `CommunityShell`, `MemberProfileDialog`, `StudentNotices`, `LoginPage`, `HomeView`, `ConnectedHomeHero`, proyección `highlights.ts`, estilos y opción de actualización en `ConnectedCommunity`. Sin dependencias nuevas, migraciones, cambios de permisos ni nuevas reglas de negocio. Queda pendiente la aceptación visual y continuar refinamientos del plan. Retirar rótulos de pruebas no acredita por sí solo dominio, correo/Google, infraestructura o aceptación productiva.
+
+## Logros e insignias: modelo acordado
+
+**19-11-2026 · corrección explícita del usuario, posterior a `d794fa1`, en `docs/v1-learning-adventures-plan`. Solo diseño/documentación; sin implementación, migraciones ni pruebas nuevas de producto.** Se mantiene **Logros** como nombre de navegación. Queda sustituida la propuesta de llamarlo Mis aventuras en inglés y de conceder una insignia por solicitar una actividad.
+
+### Tres conceptos separados
+
+| Concepto | Qué representa | Cómo funciona en el diseño acordado |
+| --- | --- | --- |
+| Logro | Una experiencia concreta de aprendizaje: lectura, película/serie, música y futuras categorías acordadas. | El alumno lo crea con preguntas guiadas, texto e imágenes opcionales; puede guardar varios de la misma categoría. Puede conservarlo privado sin publicarlo. |
+| Insignia | Un reconocimiento por cumplir condiciones acumuladas de logros, Retos o participación. | Se obtiene, no se pide. Requisitos claros, progreso real y escalones cada vez más exigentes; concesión confirmada por servidor, sin duplicados. |
+| Publicación | La decisión de compartir un logro u otro contenido con la comunidad autorizada. | El alumno solicita publicar; coordinación aprueba o pide un ajuste. Guardar/completar un logro u obtener una insignia no crea una publicación automática. |
+
+La solicitud pasa a ser de **publicación de un logro**, no de insignia. Revisión de contenido, validación de un logro y concesión de insignia son responsabilidades distintas, aunque una misma acción de coordinación pueda resolver más de una. No tratar un borrador privado como una actividad validada ni obligar a compartir para progresar.
+
+### Qué existe hoy y debe preservarse
+
+- Catálogo actual de nueve insignias: tres automáticas de Retos, tres solicitables de lectura/cine/música y tres institucionales. Esta es la implementación anterior, no el modelo nuevo. Existen revisión, motivos privados, historial, concesiones, celebraciones y compartición moderada; reutilizarlos donde encajen.
+- `ConnectedBadgeRequestForm` solo envía badgeId y texto de hasta 600 caracteres. `badges.apply` impide repetir si ya hay concesión (incluso retirada) o una petición pendiente. No basta cambiar sus etiquetas para convertirlo en logros repetibles.
+- Las concesiones actuales conservan ID, condición e historial. Planificar migración versionada y compatibilidad; no borrar, retirar ni transformar insignias ganadas en nuevas afirmaciones de lectura inventadas. Las correcciones excepcionales de coordinación no equivalen a un mecanismo de pedir insignias.
+- El perfil conectado ajeno (`MemberProfileDialog`) muestra alias/avatar; el propio añade progreso e insignias privadas. No existe todavía la colección social completa de un compañero. Los IDs públicos y la apertura desde autores/comentarios ya existen.
+- El procesamiento con Sharp y las fotos de coordinación ya existen. Adjuntos de alumnos a sus logros siguen pendientes; no habilitar para ello el endpoint administrativo ni la carga general a Galería.
+
+### Recorrido de Logros
+
+Propuesta visual dentro del apartado existente: **Mis logros · Insignias · Comunidad**. Las etiquetas internas se pueden afinar al implementar; no renombrar la navegación principal.
+
+1. **Registrar un logro.** Tarjetas iniciales Lectura, Cine y series, Música, con ideas pequeñas (capítulo, escena, canción), ayudas y preguntas adaptadas. No pedir que el alumno elija una insignia.
+2. **Personalizar.** Obra/título, qué practicó, palabra o expresión y ejemplo propio. Permitir explicación en español con intentos en inglés, sin examen automático. Imágenes opcionales con vista previa, cambio y retirada. Propuesta de límite inicial: hasta tres JPEG/PNG de 3 MB cada una; comprobar al implementar. Sin vídeo/audio en este alcance.
+3. **Guardar para mí.** Borrador o logro personal completado, ambos privados por defecto. El contenido privado no se expone a compañeros ni se envía a coordinación simplemente por guardar. El alumno puede volver a editar; distinguir su registro personal de un logro validado.
+4. **Compartir si quiero.** Vista previa y solicitud explícita de publicación; coordinación revisa texto/imágenes, aprueba o pide ajuste. Los compañeros solo ven la versión aprobada con su audiencia autorizada. Mantener una historia canónica para comentarios/reacciones y enlaces desde perfil/Inicio.
+
+La privacidad y la validez son independientes: propuesta a resolver antes de implementar las reglas de insignias por logros, **permitir solicitar validación privada sin publicar**. Solo coordinación autorizada vería lo enviado a validar. Así una actividad privada puede contar una vez validada; la revisión de publicación puede validar el mismo logro sin contarlo dos veces. Es una propuesta de funcionamiento, no una regla ya existente ni una obligación de validación para guardar un recuerdo personal.
+
+### Insignias progresivas, obtenidas por condiciones
+
+- Mostrar ilustración, requisito y avance real (por ejemplo 2 de 3), estado bloqueado/obtenido y fecha. Al cumplir, reutilizar la celebración existente; sin botón Solicitar insignia. Una concesión por nivel/ID, calculada en servidor y trazable.
+- Familias propuestas: lectura; cine/series; música; práctica/constancia en Retos; aportaciones a la comunidad; combinaciones de varias actividades. Los nombres y umbrales son propuestas por definir, no cambiar el catálogo actual durante esta documentación.
+- Ejemplos orientativos de niveles: 3/10/25 logros de lectura validados; 7/30/90 días de práctica completa; 5/20/50 publicaciones originales aprobadas. No confundir días acumulados con una racha consecutiva. Elegir condiciones de aprendizaje variadas para los niveles altos, en lugar de exigir únicamente más clics.
+- Contar actividades distintas y realmente completadas/validadas; borradores, pendientes, reintentos y duplicados no suman. Retos usa los resultados existentes, sin sumar puntos ficticios; publicaciones usa aprobaciones reales y un criterio contra duplicación, sin premiar mensajes vacíos ni volumen de comentarios/reacciones.
+- Definir antes de programar reglas de edición, corrección, retirada y exclusión de duplicados, y qué evidencia queda registrada. Retirar visibilidad de una publicación por voluntad del alumno no equivale a borrar el aprendizaje validado. Corrección de contenido inválido debe tener historial y una política explícita; no revocar automáticamente por un cambio de privacidad.
+- No publicar respuestas, intentos o estadísticas privadas de Retos para justificar una insignia. El perfil puede enseñar la insignia obtenida sin su expediente ni el texto privado que la respaldó.
+
+### Perfil de compañeros
+
+Al tocar nombre/avatar se abre un perfil social con **Publicaciones · Logros · Insignias**, alias/avatar y colección visual. Reutilizar entrada e identidad existentes; ampliar servidor/contratos/permisos y paginación, no filtrar en cliente toda la información privada recibida.
+
+- Publicaciones y logros: solo contenido aprobado, compartido y visible para quien visita según grupo/audiencia. El acceso por URL directa debe aplicar lo mismo. Un logro privado no aparece ni se delata por contadores/totales.
+- Insignias: colección de concesiones activas y datos públicos mínimos de título/fecha/condición general; motivos, solicitudes e historial de correcciones quedan privados. La visualización de la colección en el perfil social forma parte de la ampliación solicitada; no publica su evidencia privada.
+- Perfil propio: incluye logros privados, borradores, revisiones y acciones personales; vista previa de cómo lo ven compañeros. No exponer inscripción, correo, edad, avisos, puntuaciones/respuestas privadas ni expedientes.
+- Conservar límites de comunidad/grupo y cuentas activas. La solicitud de perfil social no amplía por sí sola la audiencia de publicaciones antiguas ni convierte imágenes en recursos públicos. Las imágenes de logros siguen vinculadas a su dueño y a la publicación autorizada, no se incorporan automáticamente a Galería.
+
+### Orden de implementación y cierre
+
+| Paso | Trabajo | Criterio de cierre |
+| --- | --- | --- |
+| L1 · modelo y reglas | Separar logro, validación, publicación e insignia; definir niveles/umbrales y contadores, privacidad y migración histórica. | Condiciones explícitas, sin pérdida ni reclasificación ficticia de concesiones, sin publicación obligatoria para progresar. |
+| L2 · logros guiados | Elección visual, preguntas, guardado/edición personal, imágenes privadas y vista previa. | Persistencia real, autorización por propietario, conversión segura sin EXIF, límites/formato, recarga/reintentos y escritorio/móvil/teclado comprobados. No presentar una carga sin persistencia como funcional. |
+| L3 · validación y publicación | Ampliar revisión sencilla de coordinación; validación privada si se adopta esa propuesta; reutilizar moderación/publicaciones/conversación. | Estados independientes, aprobación/ajustes, control de versiones de imágenes, ausencia de fugas de borradores y aprobación sin duplicar conteos. |
+| L4 · insignias | Motor de condiciones progresivas y catálogo con avance, concesión única/celebración y compatibilidad histórica. | Cómputo confirmado en servidor, concurrencia/idempotencia, niveles y evidencia correctos; sin peticiones de insignia ni publicación automática. |
+| L5 · perfiles | Colección propia y de compañeros con publicaciones/logros compartidos/insignias; paginación y enlaces al contenido canónico. | Privacidad por audiencia en cada consulta/archivo, perfiles propios/ajenos, pendientes y retiradas comprobados; móvil, teclado, temas y consola. |
+
+Actualizar componentes existentes y reutilizar revisión, comentarios, reacciones, IDs públicos y celebraciones. Pruebas por entrega en fixtures nuevas de `.local/tests`; nunca migrar ni probar sobre `.local/cai.sqlite` o la muestra del usuario. Mantener copia remota anterior estable y archivos privados fuera de Git. Sin dependencias o servicios externos de IA/extracción de portadas por este plan.
+
+**Pendiente:** implementar L1–L5, concretar umbrales/política de validación y revisar experiencia con usuario/coordinación. Esta corrección solo actualiza el diseño y la continuidad; no cambia código de producto, catálogo, datos o permisos. Revisión de código/documentación y enlaces; sin nuevas pruebas de producto.
