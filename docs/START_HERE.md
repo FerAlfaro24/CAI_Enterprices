@@ -6,7 +6,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-community-social-feed` / base `d6e66fd` | **Continuación actual:** publicaciones amplias, emojis sin etiquetas y conversación simplificada. [Revisión](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). |
+| `feat/v1-community-header-highlights` / base `ffb323d` | **Continuación actual:** cabecera limpia, opciones en Mi espacio y avisos/momentos en carrusel único. [Revisión](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar). |
+| `feat/v1-community-social-feed` / base `d6e66fd` | Entrega anterior: publicaciones amplias, emojis sin etiquetas y conversación simplificada. [Revisión](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). |
 | `feat/v1-community-playful-design` / base `4cdae44` | Entrega anterior: primera muestra visual de comunidad, Retos, perfil/notificaciones e interacciones. [Plan y evidencia](COMMUNITY_DESIGN.md). |
 | `feat/v1-remote-demo` / base `d7ef781` | Entrega anterior: presentación remota protegida y temporal, copia ficticia y frontend compilado. [Guía](REMOTE_DEMO.md). |
 | `fix/v1-gallery-all-photos` / base `f9c3c1a` | Entrega anterior: todas las fotos visibles por defecto; Álbumes opcional. Incluye el Inicio conectado y las entregas anteriores. [Guía](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería). |
@@ -44,7 +45,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-community-social-feed
+git switch --track origin/feat/v1-community-header-highlights
 code .
 npm.cmd ci
 ```

@@ -10,9 +10,12 @@
 
 **Revisión de publicaciones:** feed conectado de una columna, emoji/contador y retirada al tocar de nuevo; detalle social y comentarios simplificados. 124 comprobaciones nuevas (62 por navegador), tipos/lint/build. [Decisiones y límites](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). Conserva reglas, fotos y moderación; aceptación visual pendiente.
 
+**Cabecera/novedades:** identidad oficial sin franjas de gestión; campana junto al perfil, cuenta en Mi espacio y carrusel único de avisos/momentos. 122 comprobaciones nuevas (61 por navegador), tipos/lint/build. Corregida consulta posterior al logout; no se cambió la API ni la separación de fixtures. [Detalle](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar).
+
 ## Referencias de continuación
 
-- **Continuación actual:** `feat/v1-community-social-feed`, desde `d6e66fd` de `feat/v1-community-playful-design`.
+- **Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d` de `feat/v1-community-social-feed`.
+- **Revisión social anterior:** `feat/v1-community-social-feed`, desde `d6e66fd` de `feat/v1-community-playful-design`.
 - **Primera muestra visual anterior:** `feat/v1-community-playful-design`, desde `4cdae44` de `feat/v1-remote-demo`.
 - **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781` de `fix/v1-gallery-all-photos`.
 - **Corrección de Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a` de `feat/v1-community-home-stories`.

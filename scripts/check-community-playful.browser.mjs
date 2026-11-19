@@ -1,3 +1,11 @@
+async function refreshCommunity(page) {
+  await page.getByRole('button', { name: /^Abrir mi perfil:/ }).click()
+  const profile = page.getByRole('dialog')
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click()
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).waitFor()
+  await profile.getByRole('button', { name: 'Cerrar perfil', exact: true }).click()
+}
+
 /** Pruebas sobre una fixture nueva por navegador. Nunca usar cuentas habituales. */
 export async function checkCommunityPlayful(browser, { baseURL, correct, screenshotDir, browserLabel }) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, locale: 'es-MX' })
@@ -20,7 +28,7 @@ export async function checkCommunityPlayful(browser, { baseURL, correct, screens
     await page.getByLabel('Correo electrónico', { exact: true }).fill('bob@example.test')
     await page.getByLabel('Contraseña', { exact: true }).fill(password)
     await page.getByRole('button', { name: 'Entrar a mi espacio', exact: true }).click()
-    await page.getByRole('heading', { name: 'Tu comunidad, en imágenes.', exact: true }).waitFor()
+    await page.getByRole('heading', { name: 'Tu comunidad, al día.', exact: true }).waitFor()
     const me = (await request('/student/me')).user
     check(await page.getByRole('region', { name: 'Mis pequeños grandes pasos' }).isVisible(), 'Inicio muestra progreso real y accesos a Retos/Logros')
     check(await page.locator('[class*="community_"]').first().evaluate(node => { const style = getComputedStyle(node, '::before'); return style.maskImage !== 'none' && style.pointerEvents === 'none' }), 'Patrón original cargado como decoración sin interacción')
@@ -43,6 +51,7 @@ export async function checkCommunityPlayful(browser, { baseURL, correct, screens
     check(await notices.locator('[data-unread="false"]').count() > 0, 'Todas conserva los mensajes leídos')
     await shot('notices')
     await notices.getByRole('button', { name: 'Cerrar notificaciones', exact: true }).press('Escape')
+    await page.getByRole('group', { name: 'Contenido destacado' }).getByRole('button', { name: /^Momentos/ }).click()
     await page.getByRole('button', { name: 'Ver historia y fotos', exact: true }).click()
     let dialog = page.getByRole('dialog')
     await dialog.getByRole('button', { name: /^Me encanta:/ }).click()
@@ -57,7 +66,7 @@ export async function checkCommunityPlayful(browser, { baseURL, correct, screens
     check(await dialog.locator('[data-reaction-celebration]').count() === 0, 'Fallo de guardado no anuncia ni anima una reacción')
     await page.unroute(failing)
     await dialog.getByRole('button', { name: 'Cerrar publicación', exact: true }).press('Escape')
-    await page.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click()
+    await refreshCommunity(page)
     await page.getByRole('button', { name: 'Retos', exact: true }).click()
     const mission = page.getByRole('region', { name: 'Tu progreso en los retos', exact: true })
     check(await mission.getByRole('progressbar').getAttribute('aria-valuenow') === '0', 'Misión empieza con cero respuestas reales')
@@ -115,7 +124,7 @@ export async function checkCommunityPlayful(browser, { baseURL, correct, screens
         if (!response.ok()) throw Error(await response.text())
       }
     } finally { await admin.close() }
-    await page.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click()
+    await refreshCommunity(page)
     dialog = page.getByRole('dialog'); await dialog.waitFor()
     check(await dialog.getByRole('button', { name: 'Siguiente insignia (1)', exact: true }).isVisible(), 'Dos concesiones nuevas se presentan en cola')
     const first = await dialog.getByRole('heading').innerText()
@@ -198,7 +207,7 @@ export async function checkPlayfulDialogs(browser, { baseURL, screenshotDir, bro
       const response = await admin.request.post(baseURL + '/api/local/badge-grants', { data: { studentId: me.user.id, badgeId: 'cai-consistency', reason: 'Reconocimiento ficticio para comprobar el diálogo en móvil.', confirmed: true }, headers: { Origin: baseURL, 'Idempotency-Key': crypto.randomUUID() } })
       if (!response.ok()) throw Error(await response.text())
     } finally { await admin.close() }
-    await page.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click()
+    await refreshCommunity(page)
     await page.getByRole('dialog', { name: 'Constancia', exact: true }).waitFor()
     check(await fits(), 'Celebración de insignia cabe en móvil y permite desplazamiento vertical')
     await shot('mobile-badge-final')

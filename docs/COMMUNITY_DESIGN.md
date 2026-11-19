@@ -2,7 +2,7 @@
 
 **19-11-2026 · `feat/v1-community-playful-design`, desde `4cdae44` de PR #15.** Prioridad nueva autorizada: hacer más atractiva la comunidad, con identidad propia, fondo sutil, respuestas visuales y celebraciones. El usuario amplió expresamente a perfil, notificaciones y Retos, con colores/puntuación/confeti inspirados en experiencias de aprendizaje lúdicas. La muestra conserva las reglas, puntos y autorizaciones reales existentes.
 
-**Continuación posterior:** `feat/v1-community-social-feed`, desde `d6e66fd` de PR #16. La primera muestra de esta guía se conserva como corte anterior; la revisión de publicaciones figura al final.
+**Continuación actual:** `feat/v1-community-header-highlights`, desde `ffb323d` de PR #17. La primera muestra y la revisión social se conservan como cortes anteriores; la limpieza de cabecera y las novedades unificadas figuran al final.
 
 ## Plan de trabajo y criterio de cierre
 
@@ -64,3 +64,29 @@ Ambos temas y 1440/768/375/320: fila de cinco botones táctiles de al menos 44px
 Los verificadores anteriores de Inicio, diseño, reacciones y demo remota se adaptaron a retirar tocando el emoji; se comprobó su sintaxis, sin afirmar que se ejecutaron completos en este corte. Datos, historias largas, aprobaciones y retiradas de QA no se insertan en la muestra del usuario. La muestra ya abierta en 4194 usa el código actualizado sin reiniciar sus datos ni sus accesos. La copia remota compilada permanece separada y no se actualizó.
 
 Archivos principales de esta revisión: `home/ConnectedPostCard.tsx`, `social-feed.module.css`, selección de variante en `EditorialPostCard/HomeView`, `ReactionsBar`/estilos, `PostDetailDialog/PostCard`, `ConnectedComments` y estilos compartidos. Sin dependencias nuevas. Aceptación visual del usuario pendiente; el resto del plan conserva sus prioridades.
+
+## Cabecera y novedades en un solo lugar
+
+**19-11-2026 · `feat/v1-community-header-highlights`, desde `ffb323d`.** El usuario pidió retirar las franjas de demostración/gestión, ubicar mejor las opciones personales y unir avisos con el carrusel. La interfaz conectada y el acceso adoptan identidad de CAI; no se cambian ni se presentan los datos ficticios como expedientes de alumnos reales. La separación de fixtures, permisos y dependencias productivas continúa vigente.
+
+### Cambios de interfaz
+
+- Se eliminan ambas franjas de la comunidad conectada. Una campana con contador está junto al avatar. Programa/grupo, inscripción, actualización y cierre de sesión se encuentran en Mi espacio/Mi cuenta; las notificaciones conservan bandeja propia, también accesible desde el perfil. Éxitos rutinarios se anuncian sin ocupar una franja; errores permanecen visibles.
+- Cabecera de dos filas en móvil, con controles de navegación, tema, campana y perfil dentro del ancho. Se mantienen modos claro/oscuro y las rutas existentes. No se exige una nueva configuración o alta de usuario.
+- Inicio se titula **Tu comunidad, al día.** Un único carrusel reúne todos los avisos fijados autorizados y hasta cinco momentos fotográficos. Los selectores Avisos de CAI/Momentos permiten ir directamente al tipo de contenido, sin otra banda de avisos. Mensajes privados de cuenta jamás alimentan ese carrusel.
+- Los avisos fijados van primero y el avance empieza pausado cuando hay alguno. Pueden abrirse completos con Leer aviso; una composición gráfica de CAI resuelve los que no tienen fotografía, sin imágenes falsas de alumnos. Las fotos siguen con sus permisos y su conversación. Se conservan pausa, controles, movimiento reducido y detención por foco/hover/visibilidad. Selección por ID estable, no solo por posición.
+- Un aviso nuevo o retirado se refleja al actualizar. Si no hay avisos quedan los momentos; si no hay contenido se muestra un vacío claro sin flechas rotas. No se fusionan las conversaciones ni se crean avisos duplicados. La demo histórica en memoria conserva su variante.
+
+### Corrección de cierre de sesión
+
+La nueva prueba descubrió que el ayudante de escrituras actualizaba datos después de cada operación, incluso después de salir. Eso provocaba una consulta de cuenta con respuesta 401 tras haber revocado correctamente la sesión. Se añadió la opción refresh:false exclusivamente al cierre confirmado; todas las demás escrituras mantienen su actualización. Se conserva el bloqueo de operaciones, la invalidación de respuestas antiguas y el manejo de errores. No se cambió la API ni se ocultó el error en el verificador.
+
+### Evidencia y continuidad
+
+**122 comprobaciones nuevas: 61 Brave y 61 Opera GX.** Fixtures nuevas en 4201/API 3211 y 4199/API 3209; el intento previo en 4198/API 3208 se conserva como evidencia del 401 detectado. Verificador `scripts/check-community-header.browser.mjs`: ausencia de franjas, identidad, acceso a cuenta/inscripción/logout, campana/lectura, privacidad de mensajes y de otro grupo, aviso inicial, momentos, apertura completa, creación/retiro de aviso, vacío y casos sin avisos, pausa y avance real con reloj controlado de navegador.
+
+Ambos temas a 1440/768/375/320: sin desbordamiento, controles de cabecera dentro de pantalla, selectores operativos. Se revisaron capturas de escritorio/móvil. Cierre revoca realmente la sesión y termina sin errores de consola; tipos/lint/build y sintaxis correctos. No se repitieron la suite de API ni las matrices históricas de otras entregas. Cuatro verificadores recientes se adaptaron al título, a Momentos y a la actualización desde Mi espacio; se comprobó su sintaxis, sin declararlos ejecutados completos.
+
+La muestra del usuario de 4194 conserva datos/accesos y recibe el código de interfaz actualizado. No se reinició ni sustituyó su base. Las fixtures de QA no se convierten en la muestra. Capturas y datos privados permanecen fuera de Git en `.local/tests/header-highlights-*`; la copia remota compilada anterior no se reemplazó.
+
+Archivos principales: `CommunityShell`, `MemberProfileDialog`, `StudentNotices`, `LoginPage`, `HomeView`, `ConnectedHomeHero`, proyección `highlights.ts`, estilos y opción de actualización en `ConnectedCommunity`. Sin dependencias nuevas, migraciones, cambios de permisos ni nuevas reglas de negocio. Queda pendiente la aceptación visual y continuar refinamientos del plan. Retirar rótulos de pruebas no acredita por sí solo dominio, correo/Google, infraestructura o aceptación productiva.

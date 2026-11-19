@@ -1,3 +1,11 @@
+async function refreshCommunity(page) {
+  await page.getByRole('button', { name: /^Abrir mi perfil:/ }).click()
+  const profile = page.getByRole('dialog')
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click()
+  await profile.getByRole('button', { name: 'Actualizar comunidad', exact: true }).waitFor()
+  await profile.getByRole('button', { name: 'Cerrar perfil', exact: true }).click()
+}
+
 /** Vista social sobre fixtures nuevas; no utilizar datos o accesos habituales. */
 export async function checkCommunitySocial(browser, { baseURL, screenshotDir, browserLabel }) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1040 }, locale: 'es-MX' })
@@ -17,7 +25,7 @@ export async function checkCommunitySocial(browser, { baseURL, screenshotDir, br
   const bar = () => dialog().getByRole('region', { name: 'Celebraciones de ' + title, exact: true })
   const close = () => dialog().getByRole('button', { name: 'Cerrar publicación', exact: true }).press('Escape')
   const open = async () => { await story().getByRole('button', { name: title, exact: true }).click(); await dialog().getByRole('region', { name: 'Comentarios publicados' }).waitFor() }
-  const refresh = async () => { await page.getByRole('button', { name: 'Actualizar comunidad', exact: true }).click(); await story().waitFor() }
+  const refresh = async () => { await refreshCommunity(page); await story().waitFor() }
   const pause = async reactionsOpen => { const configuration = await call(admin, '/configuration'); await call(admin, '/configuration', 'PATCH', { ...configuration.settings, reactionsOpen }) }
   const settle = () => page.evaluate(() => Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {}))))
   try {
