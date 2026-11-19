@@ -8,6 +8,8 @@
 
 **Primera muestra de diseño:** 130 comprobaciones nuevas, 65 Brave/65 Opera (50 de recorrido y 15 de modales/contraste/privacidad por navegador), tipos/lint/build. Ver [plan, intentos y límites](COMMUNITY_DESIGN.md). API/esquema/reglas sin cambios; no se repitió la suite antigua.
 
+**Revisión social posterior:** 124 comprobaciones nuevas (62 Brave/62 Opera) de publicaciones/reacciones/comentarios y tamaño/tema/accesibilidad, tipos/lint/build. [Detalle](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). API y matrices anteriores no repetidas; cuatro verificadores previos adaptados y comprobados solo en sintaxis.
+
 ## Evidencia histórica por corte
 
 | Entrega / código | Suite API registrada | Navegador registrado | Fuente |

@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-community-playful-design`, desde `4cdae44`. [Muestra visual y plan](COMMUNITY_DESIGN.md), 130 comprobaciones Brave/Opera; copia remota anterior estable.
+- **Continuación actual:** `feat/v1-community-social-feed`, desde `d6e66fd`. [Publicaciones y conversación](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas), 124 comprobaciones nuevas.
+- **Primera muestra visual anterior:** `feat/v1-community-playful-design`, desde `4cdae44`. [Muestra visual y plan](COMMUNITY_DESIGN.md), 130 comprobaciones Brave/Opera; copia remota anterior estable.
 - **Presentación remota anterior:** `feat/v1-remote-demo`, desde `d7ef781`. [Presentación remota temporal](REMOTE_DEMO.md), copia ficticia protegida; Vercel sin actualizar.
 - **Galería anterior:** `fix/v1-gallery-all-photos`, desde `f9c3c1a`. Restaura las seis fotos como vista inicial; Álbumes opcional, filtros corregidos.
 - **Inicio conectado anterior:** `feat/v1-community-home-stories`, desde `422b4d2` de PR #12. Inicio conectado, publicaciones oficiales/álbumes y demo independiente, esquema 18. [Guía](COMMUNITY_HOME_STORIES.md).
@@ -16,6 +17,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-community-social-feed` parte de `d6e66fd`, PR #16. Feed conectado de una columna, reacciones solo con emojis/contadores y detalle/comentarios simplificados. 124 comprobaciones nuevas Brave/Opera y tipos/lint/build; sin cambios de esquema/API/reglas ni actualización de la copia remota compilada.
 
 `feat/v1-community-playful-design` parte de `4cdae44`, PR #15. Primera muestra visual autorizada de Inicio/Retos/perfil/notificaciones y celebraciones; reutiliza APIs/reglas/ilustraciones existentes. 130 comprobaciones de navegador y tipos/lint/build; suites API antiguas no repetidas. No cambia main/release ni el frontend compilado de la demo remota ya entregada.
 

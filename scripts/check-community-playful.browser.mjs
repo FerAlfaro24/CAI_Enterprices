@@ -46,9 +46,9 @@ export async function checkCommunityPlayful(browser, { baseURL, correct, screens
     await page.getByRole('button', { name: 'Ver historia y fotos', exact: true }).click()
     let dialog = page.getByRole('dialog')
     await dialog.getByRole('button', { name: /^Me encanta:/ }).click()
-    await dialog.getByRole('button', { name: 'Quitar mi reacción', exact: true }).waitFor()
+    await dialog.locator('[data-reaction-id="love"][aria-pressed="true"]').waitFor()
     check(await dialog.locator('[data-reaction-celebration]').count() === 1, 'Reacción confirmada anima el emoji')
-    await dialog.getByRole('button', { name: 'Quitar mi reacción', exact: true }).click()
+    await dialog.locator('[data-reaction-id="love"][aria-pressed="true"]').click()
     await dialog.getByText('Quitaste tu reacción.', { exact: true }).waitFor()
     const failing = '**/api/local/student/posts/*/reaction'
     await page.route(failing, route => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'Fallo simulado de QA.' }) }))
