@@ -6,7 +6,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-community-home-stories` / base `422b4d2` | **Continuación actual:** Inicio visual, publicaciones oficiales, álbumes/avisos y demo para el cliente; esquema 18. [Guía](COMMUNITY_HOME_STORIES.md). |
+| `fix/v1-gallery-all-photos` / base `f9c3c1a` | **Continuación actual:** todas las fotos visibles por defecto; Álbumes opcional. Incluye el Inicio conectado y las entregas anteriores. [Guía](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería). |
+| `feat/v1-community-home-stories` / base `422b4d2` | Entrega anterior: Inicio visual, publicaciones oficiales, álbumes/avisos y demo para el cliente; esquema 18. [Guía](COMMUNITY_HOME_STORIES.md). |
 | `feat/v1-official-media` / base `d410247` | Paso anterior: fotografías oficiales, audiencia común y esquema 17; incluye las ramas anteriores. [Guía](OFFICIAL_MEDIA.md). |
 | `feat/v1-production-preparation` / código `9be8081` | Preparación anterior: desde 95e53e2, añade configuración/sesiones/operación inicial de producción ensayadas; no desplegada. |
 | `test/v1-integral-review-2026-11-17` / pruebas `8c515de` | Revisión integral anterior, código completo y documentación corregida. |
@@ -40,7 +41,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-community-home-stories
+git switch --track origin/fix/v1-gallery-all-photos
 code .
 npm.cmd ci
 ```

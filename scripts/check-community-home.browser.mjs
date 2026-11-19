@@ -36,6 +36,7 @@ export async function checkCommunityHome(page,{baseURL,screenshotDir,browserLabe
   await dialog.getByRole('button',{name:'Cerrar publicación',exact:true}).press('Escape')
   check(await page.getByRole('dialog').count()===0,'Escape cierra la historia')
   await page.getByRole('button',{name:'Galería',exact:true}).click()
+  await page.getByRole('button',{name:'Álbumes',exact:true}).click()
   await page.getByRole('button',{name:`Explorar álbum: ${title}`,exact:true}).click()
   check((await page.getByRole('dialog').innerText()).includes('Foto 1 de 3'),'Galería agrupa tres fotos en un álbum')
   await page.getByRole('button',{name:'Foto siguiente del álbum',exact:true}).click()
@@ -128,6 +129,7 @@ export async function checkCommunityImagePost(page,{baseURL,files,browserLabel='
   await login(false)
   check(await page.getByRole('heading',{name:title,exact:true}).count()>=1,'El álbum nuevo llega al Inicio del alumno')
   await page.getByRole('button',{name:'Galería',exact:true}).click()
+  await page.getByRole('button',{name:'Álbumes',exact:true}).click()
   await page.getByRole('button',{name:`Explorar álbum: ${title}`,exact:true}).click()
   check((await page.getByRole('dialog').innerText()).includes('Foto 1 de 2'),'Las dos fotos nuevas forman un solo álbum')
   await page.getByRole('button',{name:'Foto siguiente del álbum',exact:true}).click()
@@ -141,6 +143,47 @@ export async function checkCommunityImagePost(page,{baseURL,files,browserLabel='
   await login(false)
   check(await page.getByRole('heading',{name:title,exact:true}).count()===0,'La retirada elimina el álbum nuevo del Inicio')
   await page.getByRole('button',{name:'Galería',exact:true}).click()
+  await page.getByRole('button',{name:'Álbumes',exact:true}).click()
   check(await page.getByRole('button',{name:`Explorar álbum: ${title}`,exact:true}).count()===0,'La retirada también elimina el álbum nuevo de Galería')
+  return {browser:browserLabel,checks:results.length,results}
+}
+
+export async function checkGalleryVisibility(page,{baseURL,browserLabel='browser',screenshotDir,password='Frase ficticia para fotos oficiales 2026'}){
+  const results=[],check=(value,label)=>{if(!value)throw Error(label);results.push(label)}
+  await page.goto(baseURL+'/login')
+  await page.getByLabel('Correo electrónico',{exact:true}).fill('bob@example.test')
+  await page.getByLabel('Contraseña',{exact:true}).fill(password)
+  await page.getByRole('button',{name:'Entrar a mi espacio',exact:true}).click()
+  await page.getByRole('button',{name:'Galería',exact:true}).click()
+  const grid=page.locator('[aria-label="Fotografías de la comunidad"]'),tiles=grid.getByRole('button')
+  check(await page.getByRole('button',{name:'Fotos',exact:true}).getAttribute('aria-pressed')==='true','Fotos es la vista inicial')
+  check(await tiles.count()===6,'Las seis fotos tienen su propia tarjeta visible')
+  for(const tile of await tiles.all())await tile.scrollIntoViewIfNeeded()
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[aria-label="Fotografías de la comunidad"] img')).every(img=>img.complete&&img.naturalWidth>0))
+  check(true,'Las seis fotografías cargan correctamente')
+  for(const [category,count]of [['Actividades',1],['Detrás de cámaras',1],['Eventos',4]]){
+    await page.getByRole('button',{name:category,exact:true}).click();check(await tiles.count()===count,`Filtro ${category} conserva sus fotos`)
+  }
+  await page.getByRole('button',{name:'Todas las fotos',exact:true}).click()
+  const src=await tiles.last().locator('img').getAttribute('src')
+  await tiles.last().click()
+  check(await page.getByRole('dialog').locator('[aria-label="Fotografías del álbum"] img').getAttribute('src')===src,'Abrir una miniatura muestra exactamente esa fotografía')
+  await page.getByRole('button',{name:'Ver historia y conversación',exact:true}).click()
+  await page.getByRole('dialog').getByRole('button',{name:'Conversación (3)',exact:true}).waitFor()
+  check(true,'La fotografía conserva la conversación de su historia')
+  await page.getByRole('button',{name:'Cerrar publicación',exact:true}).press('Escape')
+  await page.getByRole('button',{name:'Álbumes',exact:true}).click()
+  check(await page.locator('[aria-label="Álbumes de la comunidad"] article').count()===2,'Los dos álbumes siguen disponibles como segunda vista')
+  await page.getByRole('button',{name:'Actividades',exact:true}).click()
+  check(await page.locator('[aria-label="Álbumes de la comunidad"] article').count()===1,'El filtro de álbumes incluye categorías de sus fotos interiores')
+  await page.getByRole('button',{name:'Fotos',exact:true}).click()
+  check(await tiles.count()===1,'Cambiar de vista conserva el filtro')
+  await page.getByRole('button',{name:'Todas las fotos',exact:true}).click()
+  for(const width of [1440,768,375,320]){
+    await page.setViewportSize({width,height:900});check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Galería ${width}px sin desbordamiento`)
+    await page.screenshot({path:`${screenshotDir}/${browserLabel}-gallery-photos-${width}.png`,fullPage:true})
+  }
+  await page.getByRole('button',{name:'Inicio',exact:true}).click();await page.getByRole('button',{name:'Galería',exact:true}).click()
+  check(await tiles.count()===6,'Volver a Galería vuelve a mostrar todas las fotos')
   return {browser:browserLabel,checks:results.length,results}
 }

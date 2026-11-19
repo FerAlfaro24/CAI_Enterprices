@@ -12,11 +12,11 @@ import { GalleryImage } from './GalleryImage'
 import { useGalleryMotion } from './useGalleryMotion'
 import s from './gallery.module.css'
 
-export function AlbumDialog({ album, onClose }: { album: Album; onClose: () => void }) {
+export function AlbumDialog({ album, initialPhotoId, onClose }: { album: Album; initialPhotoId?:string; onClose: () => void }) {
   const dialog = useCommunityDialog()
   const reduced = useGalleryMotion()
   const { setDetail } = useCommunityDialogs()
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(() => Math.max(0,album.photos.findIndex(photo=>photo.id===initialPhotoId)))
   const id = useId()
   const photo = album.photos[index]!
   const move = (direction: number) => setIndex((current) => (current + direction + album.photos.length) % album.photos.length)
