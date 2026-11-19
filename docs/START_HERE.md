@@ -6,7 +6,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-remote-demo` / base `d7ef781` | **Continuación actual:** presentación remota protegida y temporal, copia ficticia y frontend compilado. [Guía](REMOTE_DEMO.md). |
+| `feat/v1-community-playful-design` / base `4cdae44` | **Continuación actual:** primera muestra visual de comunidad, Retos, perfil/notificaciones e interacciones. [Plan y evidencia](COMMUNITY_DESIGN.md). |
+| `feat/v1-remote-demo` / base `d7ef781` | Entrega anterior: presentación remota protegida y temporal, copia ficticia y frontend compilado. [Guía](REMOTE_DEMO.md). |
 | `fix/v1-gallery-all-photos` / base `f9c3c1a` | Entrega anterior: todas las fotos visibles por defecto; Álbumes opcional. Incluye el Inicio conectado y las entregas anteriores. [Guía](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería). |
 | `feat/v1-community-home-stories` / base `422b4d2` | Entrega anterior: Inicio visual, publicaciones oficiales, álbumes/avisos y demo para el cliente; esquema 18. [Guía](COMMUNITY_HOME_STORIES.md). |
 | `feat/v1-official-media` / base `d410247` | Paso anterior: fotografías oficiales, audiencia común y esquema 17; incluye las ramas anteriores. [Guía](OFFICIAL_MEDIA.md). |
@@ -42,7 +43,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-remote-demo
+git switch --track origin/feat/v1-community-playful-design
 code .
 npm.cmd ci
 ```
