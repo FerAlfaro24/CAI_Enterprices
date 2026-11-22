@@ -2,7 +2,7 @@
 
 **19-11-2026 · `feat/v1-community-playful-design`, desde `4cdae44` de PR #15.** Prioridad nueva autorizada: hacer más atractiva la comunidad, con identidad propia, fondo sutil, respuestas visuales y celebraciones. El usuario amplió expresamente a perfil, notificaciones y Retos, con colores/puntuación/confeti inspirados en experiencias de aprendizaje lúdicas. La muestra conserva las reglas, puntos y autorizaciones reales existentes.
 
-**Continuación funcional:** `feat/v1-achievements-progressive-badges`, desde `0729cc5` del plan corregido; código `5349283`. Logros personales, imágenes, validación/publicación, insignias progresivas y perfiles ya conectados; ver entrega al final. Las propuestas y los resultados anteriores conservan sus propios cortes.
+**Continuación funcional:** `style/v1-final-interface-polish`, desde `0b73032` (PR #20); código `5bd4c2a`. Primera pasada del punto 1: acabado visual y navegación de comunidad, página pública y panel. Logros/insignias/perfiles anteriores conservados. Resultados y límites al final; aprobación visual humana pendiente.
 
 ## Plan de trabajo y criterio de cierre
 
@@ -197,3 +197,34 @@ No se abrió ni migró `.local/cai.sqlite`, la muestra anterior de 4194 o la cop
 - Se corrigió durante QA una aserción demasiado genérica que confundía la explicación pública del catálogo con un motivo privado; la prueba actual busca el texto confidencial específico. Se conservan los intentos y sus límites. Las primeras ejecuciones detectaron también la adaptación pendiente del contrato de fotos vacío; se conservó el contrato antiguo de publicaciones de texto.
 
 Quedan revisión humana de las pantallas/umbrales, ajuste de nombres/criterios según CAI y N3/servicios externos de la guía general. No se implementaron vídeo/audio, evaluación automática de inglés, nuevas categorías o un verificador semántico de obras. Los motivos anteriores de revisión quedan auditados; esta primera pantalla muestra el motivo vigente, no una nueva interfaz completa de auditoría de logros. La copia remota anterior no se actualizó ni publicó otra instancia productiva.
+
+## Cierre visual: primera pasada
+
+**22-11-2026 · `style/v1-final-interface-polish`, desde `0b73032` de PR #20; código `5bd4c2a`.** El usuario eligió el punto 1 de la lista de entrega: cerrar diseño. Primera pasada implementada y comprobada; la aprobación visual del usuario y los datos comerciales oficiales siguen pendientes. No declarar cerrado todo el proyecto ni confundir la prueba automática con aceptación de CAI.
+
+### Cambios concretos
+
+- Cabecera móvil: los controles de tema pasan junto al avatar/campana y la navegación ocupa una fila completa, con texto de 14px y controles táctiles. En pantallas de 400px o menos queda la marca CAI; el enlace conserva el nombre accesible completo. Se comprobaron separación de marca/controles y ausencia de desbordamiento a 320px.
+- Galería: menos introducción antes de las fotos, explicación de audiencia plegable y títulos/orden compactos. Se mantienen Fotos como inicio, las seis fotografías, Álbumes, filtros, vacío claro, visor y permisos. La primera fotografía aparece dentro de la primera pantalla de 950px en la prueba móvil; no vuelve a ocultarse tras dos portadas.
+- Retos: la sección lateral muestra tres metas automáticas de la categoría Retos, priorizando las no obtenidas; añade sus barras reales y enlace a la pestaña Insignias. Ya no vuelca las 18 automáticas de todas las categorías bajo Tu pequeña colección. El catálogo completo permanece en Logros, sin cambiar requisitos, concesiones, puntos o respuestas.
+- Perfil propio: Mi actividad / Mi cuenta. Actividad reúne colección compartida e insignias recientes; cuenta reúne edición de alias/color, inscripción, notificaciones, actualización y salida. Puntos/serie siguen privados. Las insignias recientes utilizan las primeras concesiones activas del orden descendente del servidor. Perfil ajeno mantiene contenido compartido y permisos anteriores. Diálogo más ancho en escritorio y cabecera/cierre pegados arriba al desplazarse.
+- Notificaciones: texto y filtros más legibles, diálogo propio sin una segunda caja innecesaria y cierre visible al desplazarse. Se conservan lectura, filtros y mensajes privados.
+- Inicio, Logros y registro guiado: ajustes de tipografía y espacio, acciones más legibles y pie de acciones del editor pegado al borde visible. Se conservan publicaciones sociales, emojis sin palabras, borradores, imágenes y revisión.
+- Página pública: tamaños legibles en campos, botones, preguntas frecuentes y notas; ajuste de espaciado móvil. En oscuro, soporte blanco para el emblema oficial y trazos claros en el menú. Se preservan fotos, identidad y avisos de cifras/contenido comercial pendiente de confirmar; no se convierten muestras en afirmaciones comerciales aprobadas.
+- Panel: controles/tarjetas consistentes y retirada de una nota de prueba duplicada, manteniendo la advertencia local. Menú móvil con cierre visible, foco inicial, Tab/Shift+Tab contenidos, Escape/restauración de foco, fondo inactivo mientras está abierto y liberación al pasar a escritorio. Se conservan rutas, datos y operaciones existentes; no se ha rediseñado otro dashboard.
+
+### Verificación realmente ejecutada
+
+**454 comprobaciones de interfaz: 227 Brave y 227 Opera GX**, mediante `scripts/check-interface-polish.browser.mjs`. Inicio/Galería/Retos/Logros, ambas preferencias de tema y 1440/768/375/320; navegación legible, controles separados, imágenes/álbumes/filtros/vacío, perfil/edición/cuenta, notificaciones y cierre, registro guiado, página pública/formulario/FAQ/menú, acceso/registro y las nueve secciones del panel. En acceso/registro se comprobó el ancho en los cuatro tamaños; no se declara una nueva auditoría integral de esos formularios. Menú administrativo comprobado con teclado y cambio de tamaño. Movimiento reducido y navegación con movimiento normal; sin errores JS/consola inesperados.
+
+**108 comprobaciones adicionales de regresión de Logros: 54 por navegador**, reejecución de `check-learning.browser.mjs` adaptado a Mi cuenta. Guardado/edición/imagen, validación privada en el panel, publicación, perfil de compañero/conversación, concesión real/celebración, progreso y retirada. Son pruebas nuevas de esta entrega, separadas de las 108 históricas del 19-11, y no se suman como si aquellas se hubieran repetido dos veces.
+
+Build, tipos, ESLint, sintaxis y diff check correctos. Capturas revisadas de móvil y escritorio. El primer intento de matriz general se detuvo buscando el menú administrativo tras numerosas recargas completas; el recorrido actual usa enlaces reales de la aplicación y pasó en ambos navegadores. No se atribuye una causa de servidor no comprobada ni se relajaron límites para superarlo. No se reejecutó la suite API: `server`, `shared` y dependencias no cambian respecto a `0b73032`; sus 261 resultados anteriores conservan su fecha/alcance.
+
+QA solo en fixtures nuevas de 4220/API 3230 y 4221/API 3231, iniciadas con `--no-latest`. Las actividades/validaciones/retiradas de pruebas no pasan a la muestra del usuario. Bases/capturas/resultados privados en `.local/tests`; no subirlos a Git. Muestra limpia nueva de revisión en **4222/API 3232**, sin sustituir la referencia habitual ni el enlace remoto anterior. No afirmar que servidores históricos o el túnel temporal siguen disponibles sin comprobarlos.
+
+Archivos principales: `community.module.css`, `MemberProfileDialog`, `NotificationsDialog`, `ChallengeRewards`, `GalleryView`, estilos de Inicio/Retos/Galería/Logros/landing/admin, `SocialProfileContent`, `AdminLayout` y los dos verificadores actuales. Sin nuevas dependencias, migraciones o cambios de permisos.
+
+### Lo que sigue
+
+Recoger observaciones visuales concretas del usuario y corregirlas. El punto 2 requiere que coordinación complete tareas para validar facilidad de uso; una matriz de navegador no sustituye esa sesión. N3 de operación/recuperación y Google/correo/servicios reales conservan su lugar en NEXT_STEPS. No añadir vídeos, repaso personalizado u otras ampliaciones por este pulido. Tampoco presentar esta pasada como actualización del alojamiento público.

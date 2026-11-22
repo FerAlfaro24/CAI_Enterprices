@@ -1,12 +1,13 @@
 # CAI — empieza aquí
 
-**Actualizado: 19 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
+**Actualizado: 22 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
 
 ## Qué rama abrir
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-achievements-progressive-badges` / código `5349283` | **Continuación actual:** Logros personales con imágenes, insignias progresivas y perfiles sociales. [Entrega](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). |
+| `style/v1-final-interface-polish` / código `5bd4c2a` | **Continuación actual:** Primera pasada visual de comunidad/página pública/panel. [Entrega](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). |
+| `feat/v1-achievements-progressive-badges` / código `5349283` | Entrega anterior: Logros personales con imágenes, insignias progresivas y perfiles sociales. [Entrega](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). |
 | `feat/v1-community-header-highlights` / base `ffb323d` | Entrega anterior: cabecera limpia, opciones en Mi espacio y avisos/momentos en carrusel único. [Revisión](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar). |
 | `feat/v1-community-social-feed` / base `d6e66fd` | Entrega anterior: publicaciones amplias, emojis sin etiquetas y conversación simplificada. [Revisión](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). |
 | `feat/v1-community-playful-design` / base `4cdae44` | Entrega anterior: primera muestra visual de comunidad, Retos, perfil/notificaciones e interacciones. [Plan y evidencia](COMMUNITY_DESIGN.md). |
@@ -46,7 +47,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-achievements-progressive-badges
+git switch --track origin/style/v1-final-interface-polish
 code .
 npm.cmd ci
 ```

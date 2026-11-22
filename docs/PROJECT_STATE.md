@@ -1,6 +1,6 @@
 # CAI — estado vigente
 
-**Actualizado: 19 de noviembre de 2026, Logros, insignias progresivas y perfiles.** Suite completa: **261 API correctas**; navegador seleccionado: **108 comprobaciones (54 Brave/54 Opera)**. Tras el ajuste final del contador, 42 pruebas API pertinentes correctas; no se suman tandas. Tipos/lint/build y tipos estrictos de los nuevos servicios correctos. Los resultados anteriores conservan sus cortes. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice](DOCUMENTATION_INDEX.md).
+**Actualizado: 22 de noviembre de 2026, primera pasada del cierre visual.** **454 comprobaciones de interfaz (227 por navegador)** y **108 de regresión de Logros (54 por navegador)** reejecutadas; tipos/lint/build correctos. API no repetida: sin cambios de servidor/esquema/reglas, conserva los 261 resultados del 19-11 y sus límites. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice](DOCUMENTATION_INDEX.md).
 
 **Corrección posterior de Galería:** seis fotos visibles individualmente por defecto; Álbumes opcional y filtros por todas las categorías interiores. 32 comprobaciones nuevas (16 Brave/16 Opera), lint/tipos/build correctos. La suite API anterior no se repitió: no hubo cambios de servidor o datos. [Detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).
 
@@ -14,9 +14,12 @@
 
 **Logros implementados:** [entrega](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), código `5349283`, en `feat/v1-achievements-progressive-badges`. Tres actividades guiadas con imágenes, borrador/completado privado, validación privada/publicación opcional, 21 insignias obtenidas progresivamente y perfiles sociales. Esquema 19 aditivo; se conserva historial. Aceptación humana y adopción en instalaciones existentes pendientes; datos habituales y copia remota anterior sin actualizar.
 
+**Cierre visual:** [primera pasada](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada), código `5bd4c2a`: cabecera móvil legible, galería más directa, tres metas de Retos, perfil separado de cuenta, diálogos y acabado de página pública/panel. Muestra limpia 4222; QA separada. Sin cambios de datos habituales/servidor o actualización pública. Aceptación visual y sesión con coordinación pendientes.
+
 ## Referencias de continuación
 
-- **Continuación actual:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`, código `5349283`.
+- **Continuación actual:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`.
+- **Logros anterior:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`, código `5349283`.
 - **Cabecera anterior:** `feat/v1-community-header-highlights`, desde `ffb323d`.
 - **Revisión social anterior:** `feat/v1-community-social-feed`, desde `d6e66fd` de `feat/v1-community-playful-design`.
 - **Primera muestra visual anterior:** `feat/v1-community-playful-design`, desde `4cdae44` de `feat/v1-remote-demo`.
