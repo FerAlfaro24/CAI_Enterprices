@@ -6,8 +6,8 @@ import s from '../community.module.css'
 
 export function NotificationsDialog({ onClose }: { onClose: () => void }) {
   const dialog = useCommunityDialog(), id = useId()
-  return <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} onCancel={event => { event.preventDefault(); onClose() }}>
+  return <dialog ref={dialog} className={`${s.profileDialog} ${s.noticeDialog}`} aria-labelledby={`${id}-title`} onCancel={event => { event.preventDefault(); onClose() }}>
     <div className={s.dialogHeading}><div><span className={s.eyebrow}>TU BANDEJA PERSONAL</span><h2 id={`${id}-title`}>Mis notificaciones</h2></div><button type="button" className={s.iconButton} onClick={onClose} aria-label="Cerrar notificaciones"><CommunityIcon name="close" /></button></div>
-    <StudentNotices />
+    <div className={s.profileBody}><StudentNotices /></div>
   </dialog>
 }

@@ -2,7 +2,7 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 19 de noviembre de 2026:** aplicación integrada, SQLite esquema 19. **Continuar en `feat/v1-achievements-progressive-badges`**, código `5349283`, desde `0729cc5`. [Logros, insignias y perfiles](docs/COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados) conectados: actividades guiadas con imágenes, guardado privado, validación/publicación independientes, insignias progresivas obtenidas y perfiles de compañeros. Incluye las entregas anteriores de cabecera, Inicio/avisos, publicaciones, fotos oficiales, Retos y administración. Las fotos privadas se entregan fuera de GitHub. **Sin alojamiento definitivo validado**; la copia remota temporal anterior no se actualizó. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
+**Estado al 22 de noviembre de 2026:** aplicación integrada, SQLite esquema 19. **Continuar en `style/v1-final-interface-polish`**, código `5bd4c2a`, desde `0b73032`. [Primera pasada de cierre visual](docs/COMMUNITY_DESIGN.md#cierre-visual-primera-pasada): comunidad, perfil/cuenta, galería, Retos, página pública y panel. Aceptación visual pendiente. [Logros, insignias y perfiles](docs/COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados) conectados: actividades guiadas con imágenes, guardado privado, validación/publicación independientes, insignias progresivas obtenidas y perfiles de compañeros. Incluye las entregas anteriores de cabecera, Inicio/avisos, publicaciones, fotos oficiales, Retos y administración. Las fotos privadas se entregan fuera de GitHub. **Sin alojamiento definitivo validado**; la copia remota temporal anterior no se actualizó. `main` es antigua y `release/cai-demo-v1.0` la referencia visual congelada.
 
 ## Qué funciona localmente
 
@@ -24,7 +24,7 @@ GitHub muestra este repositorio como público al 19-11-2026. Para operaciones au
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-achievements-progressive-badges
+git switch --track origin/style/v1-final-interface-polish
 code .
 npm.cmd ci
 ```

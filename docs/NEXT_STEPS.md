@@ -1,6 +1,6 @@
 # CAI — próximos pasos vigentes
 
-**19 de noviembre de 2026.** Continuación `feat/v1-achievements-progressive-badges`, [estado real](PROJECT_STATE.md). La prioridad nueva de Logros/insignias/perfiles tiene primera implementación conectada; revisar la experiencia con el usuario. N1–N7 conserva el trabajo general posterior.
+**22 de noviembre de 2026.** Continuación `style/v1-final-interface-polish`, [estado real](PROJECT_STATE.md). El usuario eligió el punto 1: primera pasada de acabado implementada, pendiente de aceptación visual. Las funciones de Logros/insignias/perfiles ya estaban conectadas. N1–N7 conserva el trabajo general posterior.
 
 **Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
 
@@ -17,6 +17,8 @@
 **Observación siguiente atendida:** [cabecera y novedades](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), sin franjas de demostración/gestión, cuenta reubicada y avisos con fotos en un carrusel; 122 comprobaciones nuevas. Mantener identidad de CAI y separación real de datos/entornos. Revisar visualmente con el usuario antes de ampliar el acabado.
 
 **Modelo de Logros implementado:** [L1–L5 conectados](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), código `5349283`; ya no es propuesta pendiente. Logros personales e imágenes, validación privada/publicación independientes, 21 insignias obtenidas y perfiles sociales. Revisar pantallas/niveles con el usuario y corregir observaciones concretas; después N3, sin reconstruirlo. Adopción/migración de instalaciones existentes y servicios externos siguen pendientes.
+
+**Punto 1 atendido en primera pasada:** [cierre visual](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada), código `5bd4c2a`. 454 comprobaciones de interfaz y 108 de regresión de Logros, tipos/lint/build. Recoger ajustes visuales concretos; punto 2: comprobar tareas con una persona administradora, sin reconstruir el panel. N3 puede prepararse de forma aislada; cuentas/servicios de CAI y alojamiento siguen al final.
 
 ## Orden de trabajo general posterior
 

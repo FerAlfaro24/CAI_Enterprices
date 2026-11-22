@@ -334,3 +334,31 @@
 .photoTileBody>span {font-size:12px;color:var(--muted);line-height:1.4;}
 @media(max-width:900px){.photoGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
 @media(max-width:480px){.photoGrid{grid-template-columns:1fr}.photoTileBody{padding:14px}.photoTile>.galleryImage{aspect-ratio:4/3}}
+
+
+/* Les damos prioridad a las fotos; el detalle de audiencia queda a mano. */
+.connectedGallery .pageHeading { grid-template-columns:minmax(0,1fr) auto;gap:20px; }
+.connectedGallery .shareCard { padding:0;border:0;background:transparent;max-width:310px; }
+.galleryHelp { padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--paper); }
+.galleryHelp summary { display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--navy);min-height:44px;font-size:14px;font-weight:700;list-style:none; }
+.galleryHelp summary::after { content:'+';margin-left:auto;font-size:20px; }.galleryHelp[open] summary::after { content:'−'; }
+.galleryHelp p { font-size:14px;line-height:1.6;margin:12px 0 0; }
+.connectedGallery .viewChoices { margin-top:22px; }.connectedGallery .filters { margin:14px 0 18px;padding-bottom:14px;gap:6px; }
+.connectedGallery .filters button { font-size:14px;padding:9px 13px; }
+.connectedGallery .mosaicHeading h2 { font-size:24px;letter-spacing:-.5px; }
+.connectedGallery .mosaicHeading { gap:16px;align-items:center; }
+.connectedGallery .sort { font-size:13px; }.connectedGallery .sort select { min-height:44px;font-size:14px; }
+.connectedGallery .counts { font-size:13px;margin-block:14px; }.connectedGallery .headingIssue { display:none; }
+.photoTileBody small { font-size:12px; }.photoTileBody>span { font-size:14px; }.galleryNote { font-size:13px; }
+@media(max-width:650px) {
+ .connectedGallery .pageHeading { grid-template-columns:minmax(0,1fr);gap:14px; }
+ .connectedGallery .pageHeading h1 { font-size:clamp(34px,8vw,42px);margin-top:10px;letter-spacing:-1.5px; }
+ .connectedGallery .pageHeading>div>p { font-size:16px; }
+ .connectedGallery .shareCard { max-width:none; }.galleryHelp { padding:4px 14px; }
+ .connectedGallery .filters { gap:4px;margin-top:12px;margin-bottom:16px; }
+ .connectedGallery .filters button { padding:8px 11px; }
+ .connectedGallery .mosaicHeading { align-items:start;flex-direction:column;gap:12px; }
+ .connectedGallery .mosaicHeading h2 { font-size:22px; }
+ .connectedGallery .sort { width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px; }
+ .connectedGallery .sort select { width:auto;min-width:170px; }
+}

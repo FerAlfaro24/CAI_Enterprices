@@ -252,3 +252,16 @@
 @media(max-width:850px) { .mission { padding:22px; }.score { margin:16px 0; }.score strong { font-size:52px; }.missionPath { max-width:440px; margin-inline:auto; }.connected .pageHeading { gap:22px; } }
 @media(max-width:480px) { .mission { padding:18px; border-radius:22px; }.scoreStar { width:52px; height:52px; font-size:46px; }.score strong { font-size:46px; }.missionPath>button>span { width:48px; height:48px; }.finished { align-items:flex-start; padding:18px; gap:10px; }.finishMedal { font-size:30px; } }
 @media(prefers-reduced-motion:reduce) { .progressTrack>span { transition:none; } }
+
+
+/* Las tres preguntas siguen siendo protagonistas; la colección completa vive en Logros. */
+.connected .collection>p { margin:8px 0 16px;color:var(--text-secondary);font-size:15px; }
+.connected .badges { gap:10px; }.connected .badge { min-width:0; }.connected .badge strong { font-size:13px; }.connected .badge small { font-size:12px; }
+.connected .badge progress { width:100%;height:7px;accent-color:var(--primary);margin-top:8px; }
+.connected .textButton { font-size:14px;min-height:44px; }
+.connected .pageHeading>div>p { font-size:16px; }.connected .pageHeading>div>p:last-child { font-size:14px;margin-top:10px; }
+.connected .eyebrow { font-size:12px; }.connected .questionMeta>span,.connected .questionMeta>span:last-child { font-size:13px; }
+.connected .questionIntro { font-size:16px; }.connected .missionProgress { font-size:14px; }.connected .missionPath small { font-size:12px; }
+.connected .score>div>span,.connected .mission>p { font-size:13px; }.connected .streakPill { font-size:13px; }
+.connected .learnCard p,.connected .bottomCard p { font-size:16px; }
+@media(max-width:480px) { .connected .pageHeading h1 { font-size:36px; }.connected .mission { margin-bottom:4px; }.connected .questionForm { padding:22px 18px; }.connected .badge { padding:12px 8px; }.connected .badgeArtwork { width:60px;height:60px; }.connected .bottomCards { gap:18px; } }

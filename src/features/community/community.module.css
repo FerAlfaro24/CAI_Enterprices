@@ -599,3 +599,50 @@
  .connectedHeader .themeSelector button { width:42px; min-height:44px; flex:1; }
 }
 @media(max-width:400px) { .connectedHeader .brandName { font-size:15px; }.connectedHeader .brandName small { font-size:7px; }.connectedHeader .brandMark { width:32px; height:36px; font-size:14px; }.connectedHeader .sectionNav button { font-size:11px; }.communityError { margin:12px!important; } }
+
+
+/* Cierre visual: controles legibles y perfil organizado, sin cambiar permisos. */
+.community #community-title { scroll-margin-top:150px; }
+.memberDialog,.noticeDialog { width:min(700px,calc(100vw - 32px)); padding:0; max-height:calc(100dvh - 32px); }
+.noticeDialog { width:min(600px,calc(100vw - 32px)); }
+.memberDialog>.dialogHeading,.noticeDialog>.dialogHeading { position:sticky;top:0;z-index:3;margin:0;padding:18px 24px;background:var(--paper);border-bottom:1px solid var(--line); }
+.profileBody { padding:0 24px 24px; }
+.profileBody .profileIdentity { gap:16px;margin:20px 0;padding:18px; }
+.profileIdentity strong { display:block;color:var(--navy);font-size:20px; }
+.profileIdentity p { margin-top:4px;font-size:14px;color:var(--text-secondary); }
+.profileStats span { font-size:13px; }.profileCollection strong { font-size:13px; }
+.profilePrivateHint { display:flex;gap:6px;align-items:center;color:var(--text-secondary);font-size:13px;margin-top:-10px!important; }
+.profileTabs { display:flex;gap:8px;padding:5px;margin:20px 0;border-radius:16px;background:var(--surface-soft);border:1px solid var(--line); }
+.profileTabs button { flex:1;min-height:44px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--text-secondary);font-size:15px;font-weight:750; }
+.profileTabs button[aria-pressed=true] { background:var(--paper);color:var(--primary);border-color:var(--line);box-shadow:var(--shadow-rest); }
+.profileGroup { margin:14px 0!important;font-size:15px;color:var(--text-secondary); }
+.profileCollectionLink { margin:16px 0;min-height:44px;padding:10px 16px;border:1px solid var(--line);border-radius:24px;background:var(--paper);color:var(--primary);font-size:14px;font-weight:750; }
+.profileBody h3 { color:var(--navy);font-weight:800;line-height:1.3;font-size:21px;margin:18px 0 10px; }
+.accountActions>a,.accountActions>button { font-size:15px;min-height:48px; }
+.noticeDialog .profileActivity { padding:20px 0 0;background:transparent; }
+.noticeDialog .profileActivity>p { font-size:16px;line-height:1.6; }
+.noticeFilters button,.personalNotices button { font-size:14px;min-height:44px; }
+.personalNotices strong { font-size:17px;line-height:1.4; }.personalNotices p { font-size:15px;line-height:1.65; }.personalNotices small { font-size:13px; }
+.noticeState { font-size:12px; }
+@media(max-width:850px) {
+ .connectedHeader .topbarInner { grid-template-columns:minmax(0,1fr) auto;gap:6px 8px;padding:10px 16px; }
+ .connectedHeader .headerActions { display:flex;grid-column:2;grid-row:1;gap:6px; }
+ .connectedHeader .headerNotices,.connectedHeader .currentMember,.connectedHeader .themeSelector { grid-column:auto;grid-row:auto; }
+ .connectedHeader .themeSelector { display:flex;justify-self:auto;min-width:88px;padding:2px; }
+ .connectedHeader .themeSelector button { width:44px;min-width:44px;min-height:44px; }
+ .connectedHeader .sectionNav { grid-column:1/-1;grid-row:2;gap:4px; }
+ .connectedHeader .sectionNav button { font-size:14px;min-height:46px;padding:10px 6px; }
+ .connectedHeader .brandName { font-size:16px;letter-spacing:-.4px; }
+ .connectedHeader .brandName small { font-size:8px; }
+ .connectedHeader .communityBrand { gap:8px; }
+ .connectedHeader .brandMark { width:36px;height:40px;font-size:16px; }
+}
+@media(max-width:480px) {
+ .connectedHeader .brandName { font-size:14px; }.connectedHeader .brandName small { font-size:7px; }
+ .community #community-title { scroll-margin-top:145px; }
+ .memberDialog,.noticeDialog { width:calc(100vw - 20px);max-width:calc(100vw - 20px);max-height:calc(100dvh - 20px);border-radius:22px; }
+ .memberDialog>.dialogHeading,.noticeDialog>.dialogHeading { padding:14px 18px; }.profileBody { padding:0 18px 20px; }
+ .profileBody .profileIdentity { padding:14px; }.profileIdentity>.avatar { width:52px;height:52px; }
+ .profileStats b { font-size:25px; }.profileStats span { font-size:12px; }
+}
+@media(max-width:400px) { .connectedHeader .brandName { display:none; } }

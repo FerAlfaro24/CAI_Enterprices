@@ -5,6 +5,9 @@
 
 **Entrega de Logros/insignias/perfiles (19-11):** usar la rama actual de START_HERE con API de esquema 19. Para una presentación nueva independiente con medios oficiales privados instalados: `node server/tests/community-showcase-server.ts 4216 3226 --no-latest`, eligiendo otros puertos si ya están ocupados. Cada ejecución crea otra base; no reiniciar la muestra para actualizar contenido. La muestra de esta entrega se comprobó en 4216, con accesos ficticios de la guía de presentación. No usar el frontend nuevo contra la API antigua de 4194 ni migrar la base habitual para probar. [Funciones y límites](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados).
 
+
+**Pulido visual del 22-11:** muestra limpia creada en 4222/API 3232 con `node server/tests/community-showcase-server.ts 4222 3232 --no-latest`. Verificar disponibilidad antes de dar el enlace. No reiniciar para conservar sus interacciones. Perfil propio: Mi actividad / Mi cuenta; actualizar/editar/salir están en Mi cuenta. Los accesos ficticios se mantienen en la guía de presentación; no reutilizarlos con alumnos reales. [Entrega](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada).
+
 ## Elegir entorno antes de arrancar
 
 - **Quiero explorar Retos/Logros:** usar la fixture nueva separada siguiente. No necesita leer, preparar o migrar la base habitual.

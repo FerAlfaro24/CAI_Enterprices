@@ -1,5 +1,7 @@
 # CAI — pruebas y lectura de evidencia
 
+**Cierre visual, 22-11:** **454 comprobaciones de interfaz (227 Brave/227 Opera)** y **108 de regresión de Logros (54 por navegador)** ejecutadas en fixtures nuevas; tipos/lint/build. Ver [alcance, intento previo y límites](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). No se reejecutó API: sin cambios de servidor/esquema/permisos; los 261 resultados previos conservan su corte.
+
 
 **Logros/insignias/perfiles, 19-11:** suite completa **261 API**; **108 navegador (54 Brave/54 Opera)**, con editor/colección claro/oscuro a 1440/768/375/320 y recorrido real de alumno/coordinación/compañero. Tras el ajuste final del contador se ejecutaron **42 API pertinentes**. Tipos del proyecto y estrictos dirigidos a servicios nuevos, lint/build correctos. No sumar tandas ni afirmar repetidas las matrices antiguas de navegador. [Alcance, intentos y límites](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). Fixture nueva por navegador; nunca sobre datos habituales.
 

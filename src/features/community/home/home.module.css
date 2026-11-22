@@ -441,3 +441,12 @@
 @media(max-width:560px) { .noticeVisual { min-height:240px; padding:24px; gap:14px; }.noticeVisualIcon { position:absolute; right:28px; top:72px; width:68px; height:68px; border-radius:20px; }.noticeVisualIcon>svg { width:44px; height:44px; }.noticeVisual>strong { max-width:210px; padding-right:28px; font-size:31px; }.highlightChoices { gap:6px; }.highlightChoices button { padding:8px 11px; font-size:11px; } }
 
 @media(max-width:560px) { .noticeVisual { display:grid; grid-template-columns:64px minmax(0,1fr); gap:12px 16px; align-content:center; }.noticeVisualStamp { grid-column:1/-1; }.noticeVisualIcon { position:static; grid-column:1; grid-row:2; width:64px; height:64px; align-self:center; }.noticeVisual>strong { grid-column:2; grid-row:2; max-width:none; padding:0; font-size:clamp(25px,6vw,30px); }.noticeVisual>span:last-child { grid-column:1/-1; } }
+
+
+/* Misma identidad, lectura más cómoda y menos microtexto en acciones. */
+.home .highlightChoices button,.home .liveControls,.home .liveCaption>button,.home .feedMeta>button,.home .loadMore { font-size:14px; }
+.home .activityStrip small { font-size:13px; }.home .activityStrip>button { min-height:88px; }
+.home .feedMeta { font-size:13px; }.home .feedHeading p { font-size:16px; }
+@media(max-width:560px) { .home .activityStrip { padding:14px; }.home .activityStrip>button { padding:12px 8px; }.home .activityStrip small { font-size:12px;line-height:1.4; }.home .activityStrip b { font-size:25px; }.home .highlightChoices button { font-size:13px; }.home .noticeVisual { min-height:200px; }.home .liveCaption { padding:22px; } }
+
+.home .filters>button,.home .moreFilters summary { font-size:14px; }.home .recentAlbums>header button { font-size:14px;min-height:44px; }

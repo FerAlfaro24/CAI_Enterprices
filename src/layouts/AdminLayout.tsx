@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { useAdminConnection } from '../features/admin/useAdminConnection'
 import { LoginPage } from '../pages/LoginPage'
@@ -34,6 +34,7 @@ export function AdminLayout() {
   const { state } = connection
   const [message, setMessage] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
+  const sidebar=useRef<HTMLElement>(null)
   const { pathname } = useLocation()
   const pending = {
     badges:connection.badgeCounts.pending,
@@ -48,12 +49,24 @@ export function AdminLayout() {
   useEffect(() => { document.title = `${pageTitle} · Administración · CAI · Prototipo` }, [pageTitle])
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
 
-  useEffect(() => {
-    if (!menuOpen) return
-    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenuOpen(false) }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [menuOpen])
+  useEffect(()=>{
+    const query=matchMedia('(min-width:1024px)')
+    const desktop=()=>{if(query.matches)setMenuOpen(false)}
+    query.addEventListener('change',desktop)
+    return()=>query.removeEventListener('change',desktop)
+  },[])
+  useEffect(()=>{
+    if(!menuOpen)return
+    const panel=sidebar.current,previous=document.activeElement,overflow=document.body.style.overflow
+    document.body.style.overflow='hidden'
+    panel?.querySelector<HTMLButtonElement>('[aria-label="Cerrar menú del panel"]')?.focus()
+    const onKey=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'){event.preventDefault();setMenuOpen(false)}
+      if(event.key==='Tab'&&panel){const controls=[...panel.querySelectorAll<HTMLElement>('a,button')].filter(node=>node.getClientRects().length&&!node.hasAttribute('disabled'));const first=controls[0],last=controls.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus()}}
+    }
+    window.addEventListener('keydown',onKey)
+    return()=>{document.body.style.overflow=overflow;window.removeEventListener('keydown',onKey);if(previous instanceof HTMLElement&&previous.isConnected)previous.focus({preventScroll:true})}
+  },[menuOpen])
 
   if (connection.checking) return <main className={s.admin}><p role="status" className={s.content}>Comprobando acceso…</p></main>
   if (connection.sessionError) return <AccessFrame><h1>No pudimos comprobar tu acceso</h1><p role="alert">{connection.sessionError}</p><button type="button" className={accessStyles.primary} onClick={()=>window.location.reload()}>Volver a intentar</button></AccessFrame>
@@ -62,12 +75,13 @@ export function AdminLayout() {
     <div className={s.admin}>
       <a className={s['skip-link']} href="#admin-content">Saltar al contenido</a>
       <div className={s.shell}>
-        <aside id="admin-sidebar" className={cx(s.sidebar, menuOpen && s['sidebar--open'])} aria-label="Menú del panel">
+        <aside ref={sidebar} role={menuOpen?'dialog':undefined} aria-modal={menuOpen||undefined} id="admin-sidebar" className={cx(s.sidebar, menuOpen && s['sidebar--open'])} aria-label="Menú del panel">
           <Link to="/admin" className={s.brand} onClick={() => setMenuOpen(false)}>
             <img src={emblem} alt="" />
             <span><strong>CAI</strong><span>Panel administrativo</span></span>
           </Link>
 
+          <button type="button" className={s['sidebar-close']} aria-label="Cerrar menú del panel" onClick={()=>setMenuOpen(false)}><span aria-hidden="true">✕</span></button>
           <nav aria-label="Secciones de administración">
             <p className={s['nav-label']}>Gestión</p>
             <ul className={s['nav-list']}>
@@ -109,7 +123,7 @@ export function AdminLayout() {
           <button type="button" className={cx(s.backdrop, s['backdrop--open'])} aria-label="Cerrar menú" onClick={() => setMenuOpen(false)} />
         )}
 
-        <div className={s.main}>
+        <div className={s.main} inert={menuOpen}>
           <aside className={s['local-notice']}>Pruebas locales con datos ficticios. El acceso, las solicitudes y los alumnos se comprueban y guardan en este equipo.</aside>
           <header className={s.topbar}>
             <button
@@ -129,7 +143,6 @@ export function AdminLayout() {
             </div>
           </header>
           <main id="admin-content" tabIndex={-1} className={s.content}>
-            <p className={s.footnote}>Pruebas locales con datos ficticios. Solicitudes, alumnos y moderación conectados al guardado.</p>
             {connection.notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{connection.notice}</p>}
             {connection.error && <p role="alert" className={s.alert}>{connection.error} <button type="button" className={s.btn} onClick={()=>{void connection.refresh()}}>Volver a cargar</button></p>}
             {!connection.loaded ? <p role="status">Cargando los datos…</p> : <Outlet context={context} />}
