@@ -529,3 +529,11 @@
 @media(max-width:480px) { .celebrationDialog { padding:26px 20px; }.celebrationMedal { width:150px; height:150px; margin:18px auto 10px; }.celebrationArtwork { width:126px; height:126px; }.celebrationDialog h2 { font-size:29px; } }
 
 .celebrationDialog h2 { font-weight:850; }
+
+
+.connected .tabs button { font-size:14px; }.connected .pageHeading>div>p { font-size:16px; }
+.connected .stats { grid-template-columns:repeat(3,minmax(0,1fr)); }.connected .stats>div>div>span { font-size:14px; }
+.connected .collection .sectionHeading p,.connected .catalog .sectionHeading p { font-size:15px; }
+@media(max-width:650px) { .connected .pageHeading h1 { font-size:36px; }.connected .pageHeading { gap:18px; }.connected .shareCallout { padding:16px;min-height:0; }.connected .shareCallout h2 { font-size:16px; }.connected .tabs { margin-block:18px; }.connected .tabs button { font-size:13px; }.connected .stats { gap:10px; }.connected .stats strong { font-size:26px; }.connected .stats>div>div>span { font-size:13px; } }
+
+.connected .tabs button { text-transform:none; }.connected .tabs button { padding-inline:4px; }

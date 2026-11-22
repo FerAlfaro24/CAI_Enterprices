@@ -796,3 +796,18 @@
 .life .t-card figcaption { color: var(--heading); font-weight: 700; font-size: 1.05rem; }
 .life .t-card small { color: var(--muted); line-height: 1.6; }
 .life .t-card:last-child img { object-position: center 30%; }
+
+
+/* Cierre de legibilidad: conservar contenido pendiente de validación e identidad. */
+.landing .content-note { font-size:.875rem;line-height:1.65; }
+.landing :is(input,select,textarea) { font-size:1rem;min-height:44px; }
+.landing :is(.btn,.faq__list summary,.nav__actions a) { min-height:44px; }
+@media(max-width:640px) {
+ .landing { --section-y:56px; }.landing section h2 { font-size:clamp(27px,7vw,34px);line-height:1.15; }
+ .landing .faq__intro>p { font-size:1rem;line-height:1.65; }
+ .landing .hero__content { padding-top:104px;padding-bottom:40px; }.landing .hero__content>p:first-of-type { font-size:1rem;line-height:1.65; }
+ .landing .btn { font-size:.9375rem;min-height:48px; }.landing .faq__list summary { font-size:.9375rem;line-height:1.5; }
+}
+
+.landing .nav__burger span { background:var(--ink); }
+:global([data-theme='dark']) .landing .logo__img { background:#fff;border-radius:50%;padding:5px; }

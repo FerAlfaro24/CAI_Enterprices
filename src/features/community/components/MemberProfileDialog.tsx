@@ -13,27 +13,34 @@ import { selectBadgeGrants } from '../achievements/model'
 export function MemberProfileDialog({ memberId, onClose, onOpenNotifications }: { memberId: string; onClose: () => void; onOpenNotifications?: () => void }) {
   const dialog = useCommunityDialog()
   const id = useId()
-  const { state, connection } = useCommunity()
+  const { state, connection, dispatch } = useCommunity()
   const [activityVisible, setActivityVisible] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const [profileView,setProfileView]=useState<'activity'|'account'>('activity')
   const member = connection ? connection.resolveMember(memberId) : getMember(memberId)
   const own = member.id === 'alex'
   const earned = own ? selectBadgeGrants(state) : []
   const days = Object.keys(state.attempts).length
   const points = Object.values(state.attempts).reduce((total, attempt) => total + attempt.points, 0)
   const personalPosts = state.posts.filter((post) => post.authorId === member.id)
-  if (connection) return <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); if (!connection.busy) onClose() }}>
-    <div className={s.dialogHeading}><div><span className={s.eyebrow}>{member.id === connection.user.publicId ? 'MI ESPACIO' : 'MIEMBRO DEL GRUPO'}</span><h2 id={`${id}-title`}>{member.alias}</h2></div><button className={s.iconButton} disabled={connection.busy} type="button" onClick={onClose} aria-label="Cerrar perfil"><CommunityIcon name="close" /></button></div>
-    <div className={s.profileIdentity}><Avatar member={member} /><span>Nombre visible en la comunidad</span></div>
-    <p id={`${id}-description`}>{member.id === connection.user.publicId ? `${connection.user.program} · ${connection.user.group}` : 'Descubre lo que comparte y los reconocimientos que ha obtenido.'}</p>
-    {member.id === connection.user.publicId && <>
-      <section className={s.profileStats} aria-label="Mi progreso privado"><div><b>{connection.challenges.progress.points.toLocaleString('es-MX')}</b><span>puntos</span></div><div><b>{connection.badges.grants.filter(grant => grant.status === 'active').length}</b><span>insignias</span></div><div><b>{connection.challenges.progress.currentStreak}</b><span>días seguidos</span></div></section>
-      <section className={s.profileCollection} aria-label="Mis insignias recientes"><h3>Pequeños grandes logros</h3><div>{connection.badges.grants.filter(grant => grant.status === 'active').slice(-3).map(grant => <span key={grant.id}><BadgeArtwork badgeId={grant.badge.id} symbol={grant.badge.symbol} className={s.profileBadgeArtwork} /><strong>{grant.badge.title}</strong></span>)}</div>{!connection.badges.grants.some(grant => grant.status === 'active') && <p>Tu primera insignia empieza con un intento. Practica en Retos y ve construyendo tu colección.</p>}</section>
-      {connection.notice && <p role="status">{connection.notice}</p>}<OwnProfileForm connection={connection} />
-      <section className={s.accountActions} aria-label="Opciones de mi cuenta"><h3>Mi cuenta</h3><Link to="/mi-inscripcion" onClick={onClose}><CommunityIcon name="book" size={18} /> Mi inscripción <CommunityIcon name="arrow" size={16} /></Link>{onOpenNotifications && <button type="button" onClick={onOpenNotifications}><CommunityIcon name="bell" size={18} /> Mis notificaciones ({connection.notices.filter(item => !item.read).length}) <CommunityIcon name="arrow" size={16} /></button>}<button type="button" disabled={connection.busy || refreshing} onClick={async () => { setRefreshing(true); try { await connection.refresh() } finally { setRefreshing(false) } }}><CommunityIcon name="reset" size={18} /> {refreshing ? 'Actualizando…' : 'Actualizar comunidad'}</button><button type="button" disabled={connection.busy} className={s.logoutAction} onClick={() => { void connection.logout() }}>Cerrar sesión <CommunityIcon name="arrow" size={16} /></button>{connection.error && <p role="alert">{connection.error}</p>}</section>
-    </>}
-    <SocialProfileContent memberId={memberId} connection={connection} onClose={onClose}/>
-  </dialog>
+  if (connection) {
+    const isOwn=member.id===connection.user.publicId
+    const recent=connection.badges.grants.filter(grant=>grant.status==='active').slice(0,3)
+    return <dialog ref={dialog} className={`${s.profileDialog} ${s.memberDialog}`} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={event=>{event.preventDefault();if(!connection.busy)onClose()}}>
+      <div className={s.dialogHeading}><div><span className={s.eyebrow}>{isOwn?'MI ESPACIO':'MIEMBRO DEL GRUPO'}</span><h2 id={`${id}-title`}>{member.alias}</h2></div><button className={s.iconButton} disabled={connection.busy} type="button" onClick={onClose} aria-label="Cerrar perfil"><CommunityIcon name="close"/></button></div>
+      <div className={s.profileBody}>
+        <div className={s.profileIdentity}><Avatar member={member}/><div><strong>{member.alias}</strong><p id={`${id}-description`}>{isOwn?'Tu espacio personal en CAI':'Su aprendizaje, sus momentos y lo que comparte.'}</p></div></div>
+        {isOwn&&<><section className={s.profileStats} aria-label="Mi progreso privado"><div><b>{connection.challenges.progress.points.toLocaleString('es-MX')}</b><span>puntos</span></div><div><b>{connection.badges.grants.filter(grant=>grant.status==='active').length}</b><span>insignias</span></div><div><b>{connection.challenges.progress.currentStreak}</b><span>días seguidos</span></div></section><p className={s.profilePrivateHint}><CommunityIcon name="shield" size={15}/> Tus puntos y tu serie solo los ves tú.</p><div className={s.profileTabs} role="group" aria-label="Organizar mi perfil"><button type="button" aria-pressed={profileView==='activity'} onClick={()=>setProfileView('activity')}>Mi actividad</button><button type="button" aria-pressed={profileView==='account'} onClick={()=>setProfileView('account')}>Mi cuenta</button></div></>}
+        <div hidden={isOwn&&profileView!=='activity'}>
+          {isOwn&&recent.length>0&&<section className={s.profileCollection} aria-label="Mis insignias recientes"><h3>Mis insignias recientes</h3><div>{recent.map(grant=><span key={grant.id}><BadgeArtwork badgeId={grant.badge.id} symbol={grant.badge.symbol} className={s.profileBadgeArtwork}/><strong>{grant.badge.title}</strong></span>)}</div></section>}
+          {isOwn&&<button className={s.profileCollectionLink} type="button" onClick={()=>{onClose();dispatch({type:'section',section:'achievements',achievementTab:'badges'})}}>Ver todas mis insignias</button>}
+          <SocialProfileContent memberId={memberId} connection={connection} onClose={onClose}/>
+        </div>
+        {isOwn&&<div hidden={profileView!=='account'}><p className={s.profileGroup}>{connection.user.program} · {connection.user.group}</p>{connection.notice&&<p role="status">{connection.notice}</p>}<OwnProfileForm connection={connection}/><section className={s.accountActions} aria-label="Opciones de mi cuenta"><h3>Accesos de mi cuenta</h3><Link to="/mi-inscripcion" onClick={onClose}><CommunityIcon name="book" size={18}/> Mi inscripción <CommunityIcon name="arrow" size={16}/></Link>{onOpenNotifications&&<button type="button" onClick={onOpenNotifications}><CommunityIcon name="bell" size={18}/> Mis notificaciones ({connection.notices.filter(item=>!item.read).length}) <CommunityIcon name="arrow" size={16}/></button>}<button type="button" disabled={connection.busy||refreshing} onClick={async()=>{setRefreshing(true);try{await connection.refresh()}finally{setRefreshing(false)}}}><CommunityIcon name="reset" size={18}/>{refreshing?'Actualizando…':'Actualizar comunidad'}</button><button type="button" disabled={connection.busy} className={s.logoutAction} onClick={()=>{void connection.logout()}}>Cerrar sesión <CommunityIcon name="arrow" size={16}/></button>{connection.error&&<p role="alert">{connection.error}</p>}</section></div>}
+      </div>
+    </dialog>
+  }
+
   return (
     <dialog ref={dialog} className={s.profileDialog} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={(event) => { event.preventDefault(); onClose() }}>
       <div className={s.dialogHeading}>
