@@ -31,11 +31,13 @@ const titles: Record<string, string> = Object.fromEntries(
 
 export function AdminLayout() {
   const connection = useAdminConnection()
-  const { state } = connection
+  const { state, dismissNotice } = connection
   const [message, setMessage] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   const sidebar=useRef<HTMLElement>(null)
   const { pathname } = useLocation()
+  const [previousPath,setPreviousPath]=useState(pathname)
+  if(previousPath!==pathname){setPreviousPath(pathname);dismissNotice();setMessage('')}
   const pending = {
     badges:connection.badgeCounts.pending,
     requests: countByStatus(state.requests, requestStatuses).pendiente,
@@ -46,7 +48,7 @@ export function AdminLayout() {
   const announce = useCallback((text: string) => setMessage(text), [])
   const context = useMemo<AdminContext>(() => ({ state, dispatch: (action) => { void connection.mutate(action) }, announce, connection }), [state, announce, connection])
 
-  useEffect(() => { document.title = `${pageTitle} · Administración · CAI · Prototipo` }, [pageTitle])
+  useEffect(() => { document.title = `${pageTitle} · Administración · CAI` }, [pageTitle])
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
 
   useEffect(()=>{
@@ -104,8 +106,8 @@ export function AdminLayout() {
           </nav>
 
           <div className={s['sidebar-footer']}>
-            <nav aria-label="Otras áreas del prototipo">
-              <p className={s['nav-label']}>Prototipo</p>
+            <nav aria-label="Otras áreas de CAI">
+              <p className={s['nav-label']}>Otros espacios</p>
               <div className={s.areas}>
                 <Link to="/"><Icon name="globe" size={18} />Sitio institucional</Link>
                 <Link to="/community"><Icon name="chat" size={18} />Comunidad</Link>
@@ -114,7 +116,7 @@ export function AdminLayout() {
             </nav>
             <div className={s['user-card']}>
               <span className={s.avatar} aria-hidden="true">CO</span>
-              <div><strong>{connection.user.name}</strong><span>Administración · Sesión local</span></div>
+              <div><strong>{connection.user.name}</strong><span>Coordinación</span></div>
             </div>
           </div>
         </aside>
@@ -124,7 +126,7 @@ export function AdminLayout() {
         )}
 
         <div className={s.main} inert={menuOpen}>
-          <aside className={s['local-notice']}>Pruebas locales con datos ficticios. El acceso, las solicitudes y los alumnos se comprueban y guardan en este equipo.</aside>
+          {import.meta.env.DEV&&<aside className={s['local-notice']}>Entorno local · Los cambios se guardan en la instalación que tienes abierta.</aside>}
           <header className={s.topbar}>
             <button
               type="button"
@@ -143,7 +145,7 @@ export function AdminLayout() {
             </div>
           </header>
           <main id="admin-content" tabIndex={-1} className={s.content}>
-            {connection.notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{connection.notice}</p>}
+            {connection.notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{connection.notice}<button type="button" className={s['card-link']} onClick={dismissNotice} aria-label="Ocultar confirmación">Cerrar</button></p>}
             {connection.error && <p role="alert" className={s.alert}>{connection.error} <button type="button" className={s.btn} onClick={()=>{void connection.refresh()}}>Volver a cargar</button></p>}
             {!connection.loaded ? <p role="status">Cargando los datos…</p> : <Outlet context={context} />}
           </main>

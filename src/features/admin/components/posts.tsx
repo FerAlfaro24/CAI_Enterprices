@@ -1,4 +1,6 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useAdminModal } from '../useAdminModal'
+import { AdminReviewPhotos } from './AdminReviewPhotos'
+import { useId, useState } from 'react'
 import { cx } from '../../landing/utils'
 import s from '../admin.module.css'
 import { rejectReasons, type Post } from '../data/mockData'
@@ -58,19 +60,13 @@ export function PostCard({ post, onReview }: { post: Post; onReview: () => void 
 }
 
 export function PostDialog({ post, onClose }: { post: Post | null; onClose: () => void }) {
-  const ref = useRef<HTMLDialogElement>(null)
+  const ref = useAdminModal(Boolean(post))
   const { dispatch, announce, connection } = useAdmin()
   const [reason, setReason] = useState('')
   const [checked, setChecked] = useState(false)
   const [error, setError] = useState(false)
   const reasonsId = useId()
 
-  useEffect(() => {
-    const dialog = ref.current
-    if (!dialog) return
-    if (post && !dialog.open) dialog.showModal()
-    if (!post && dialog.open) dialog.close()
-  }, [post])
 
   const close = () => {
     if (connection?.busy) return
@@ -101,7 +97,6 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
       ref={ref}
       className={cx(s.dialog, s['dialog--wide'])}
       aria-labelledby="post-dialog-title"
-      onClose={close}
       onCancel={(event) => { event.preventDefault(); close() }}
       onClick={(event) => { if (event.target === event.currentTarget) close() }}
     >
@@ -128,6 +123,7 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
             <p style={{ margin: 0, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{post.body}</p>
             {cannotPublish && <p className={s.alert}>El autor debe tener acceso activo y conservar el programa y grupo del envío para publicarlo.</p>}
             {connection?.error && <p className={s.alert} role="alert">{connection.error}</p>}
+            {raw?.photos&&<AdminReviewPhotos photos={raw.photos}/>}
             {post.media && <MediaPlaceholder caption={post.media.caption} />}
 
             {post.status === 'pendiente' && (connection || post.checks) && (

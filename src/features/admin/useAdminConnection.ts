@@ -11,6 +11,7 @@ export function useAdminConnection() {
   const [requests, setRequests] = useState<LocalRequest[]>([]), [students, setStudents] = useState<LocalStudent[]>([]), [posts, setPosts] = useState<ReviewPost[]>([])
   const [configuration, setConfiguration] = useState<{groups: CatalogGroup[];settings:CommunityControls} | null>(null)
   const [error, setError] = useState(''), [busy, setBusy] = useState(false), [notice, setNotice] = useState('')
+  const dismissNotice=useCallback(()=>setNotice(''),[])
   const [invitation, setInvitation] = useState<(ActivationInvitation & {name:string}) | null>(null)
   const [team,setTeam]=useState<AdminAccount[]>([])
   const [badgeCounts,setBadgeCounts]=useState({pending:0,approved:0,rejected:0,withdrawn:0})
@@ -89,7 +90,7 @@ export function useAdminConnection() {
     const student=students.find(s=>s.id===id)
     if(!student||writing.current)return
     writing.current=true;setBusy(true);setError('')
-    try {setInvitation({...await localApi.invite(student),name:student.name});await refresh()}catch(error){failure(error)}finally{writing.current=false;setBusy(false)}
+    try {setInvitation({...await localApi.invite(student),name:student.name});await refresh();return true}catch(error){failure(error);return false}finally{writing.current=false;setBusy(false)}
   }
   const logout=async()=>{
     if(writing.current)return
@@ -101,6 +102,6 @@ export function useAdminConnection() {
   }
   const directory=students.map(s=>({...s,posts:posts.filter(p=>p.studentId===s.id&&p.status==='publicada').length,isNew:s.joinedAt.startsWith(new Date().toISOString().slice(0,7))}))
   const state:AdminState={requests,posts:posts.map(p=>({id:p.id,author:p.studentName,authorIsMinor:p.authorIsMinor,program:p.program,type:p.category==='achievement'?'logro':'experiencia',title:p.title,body:p.body,submittedAt:p.createdAt.slice(0,10),status:p.status,rejectReason:p.reason??undefined})),suspended:students.filter(s=>s.status==='suspendido').map(s=>s.id),settings:{...defaultSettings,allowPhotos:false,allowReactions:false,allowComments:false},directory}
-  return {badgeCounts,handleFailure:failure,setCommentsOpen,commentCounts,correctRecord,team,manageTeam,user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
+  return {dismissNotice,badgeCounts,handleFailure:failure,setCommentsOpen,commentCounts,correctRecord,team,manageTeam,user,checking,sessionError,accessMessage,requireLogin,loaded,configuration,saveControls,createGroup,toggleGroup,assign,state,requests,students,posts,error,busy,notice,invitation,setInvitation,mutate,moderate,invite,refresh,logout,onLogin:(user:LocalUser)=>{setError('');setSessionError('');setAccessMessage('');setUser(user)}}
 }
 export type AdminConnection=ReturnType<typeof useAdminConnection>

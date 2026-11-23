@@ -1,3 +1,4 @@
+import { useAdminModal } from '../useAdminModal'
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { ApiError, contactApi, type ContactInquiry, type ContactStatus } from '../../local-access/api'
 import { contactPrograms } from '../../landing/data/content'
@@ -41,11 +42,10 @@ export function ContactInbox() {
 }
 
 function ContactDialog({item,error,busy,onSave,onClose}:{item:ContactInquiry;error:string;busy:boolean;onSave:(item:ContactInquiry,status:ContactStatus,note:string)=>Promise<boolean>;onClose:()=>void}){
-  const ref=useRef<HTMLDialogElement>(null),id=useId()
+  const ref=useAdminModal(),id=useId()
   const [status,setStatus]=useState(item.status),[note,setNote]=useState(item.note)
-  useEffect(()=>{ref.current?.showModal()},[])
   const submit=(event:FormEvent)=>{event.preventDefault();void onSave(item,status,note)}
-  return <dialog ref={ref} className={s.dialog} aria-labelledby={`${id}-title`} onCancel={event=>{event.preventDefault();onClose()}} onClose={onClose}>
+  return <dialog ref={ref} className={s.dialog} aria-labelledby={`${id}-title`} onCancel={event=>{event.preventDefault();onClose()}} >
     <div className={s['dialog-head']}><div><h2 id={`${id}-title`}>Atender consulta {item.id}</h2><p>{item.name} · {item.contact}</p></div><button type="button" className={s['icon-btn']} disabled={busy} aria-label="Cerrar consulta" onClick={onClose}>×</button></div>
     <form className={`${s['dialog-body']} ${s['contact-followup']}`} onSubmit={submit} aria-label="Seguimiento de consulta">
       <p>Programa: {contactPrograms.find(program=>program.id===item.program)?.title??item.program}</p><p className={s['card-sub']}>Aceptó el uso de sus datos para atender esta consulta. Estas notas solo son visibles para coordinación.</p>

@@ -27,11 +27,11 @@ export function AdminPage() {
           <p className={s.eyebrow}>Panel de coordinación</p>
           <h1 className={s['page-title']}>Hola, {connection?.user?.name??'Coordinación'}</h1>
           <p className={s['page-lead']}>
-            Esto es lo que necesita tu atención hoy. Indicadores del servidor local; utiliza datos ficticios durante las pruebas.
+            Empieza por lo pendiente y continúa con las tareas de tu comunidad.
           </p>
         </div>
         <div className={s['head-actions']}>
-          {!!connection?.badgeCounts.pending&&<Link to="/admin/insignias" className={`${s.btn} ${s['btn--ghost']}`}>Revisar insignias ({connection.badgeCounts.pending})</Link>}
+          {!!connection?.badgeCounts.pending&&<Link to="/admin/insignias" className={`${s.btn} ${s['btn--ghost']}`}>Revisar logros e insignias ({connection.badgeCounts.pending})</Link>}
           {!!connection?.commentCounts.pendiente&&<Link to="/admin/publicaciones?bandeja=comentarios" className={`${s.btn} ${s['btn--ghost']}`}>Revisar comentarios ({connection.commentCounts.pendiente})</Link>}
           <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => {
             dispatch({ type: 'reset' })
@@ -43,6 +43,17 @@ export function AdminPage() {
           </Link>
         </div>
       </div>
+
+      <section className={s.workbench} aria-labelledby="workbench-title">
+        <div><h2 id="workbench-title">Tu mesa de trabajo</h2><p>Abre una bandeja para revisar. Los contadores se actualizan al guardar o pulsar Actualizar datos.</p></div>
+        <div className={s.taskLinks}>{[
+          {to:'/admin/solicitudes',label:'Solicitudes de ingreso',count:counts.pendiente,detail:'Comprobar datos y aprobar acceso'},
+          {to:'/admin/publicaciones',label:'Historias de alumnos',count:pendingPosts.length,detail:'Revisar texto, imágenes y destinatarios'},
+          {to:'/admin/publicaciones?bandeja=comentarios',label:'Comentarios',count:connection?.commentCounts.pendiente??0,detail:'Revisar las conversaciones'},
+          {to:'/admin/insignias',label:'Logros e insignias',count:connection?.badgeCounts.pending??0,detail:'Validar aprendizajes y solicitudes anteriores'},
+        ].map(task=><Link key={task.to} to={task.to}><span><strong>{task.label}</strong><small>{task.detail}</small></span><b aria-label={task.count+' pendientes'}>{task.count}</b><Icon name="arrow" size={18}/></Link>)}</div>
+        <div className={s.quickActions}><Link to="/admin/publicaciones?bandeja=cai" className={`${s.btn} ${s['btn--primary']}`}><Icon name="file" size={17}/>Crear aviso, historia o álbum</Link><Link to="/admin/configuracion?seccion=grupos" className={s.btn}>Gestionar grupos</Link><Link to="/admin/mensajes" className={s.btn}>Atender consultas</Link></div>
+      </section>
 
       <section className={s.kpis} aria-label="Indicadores principales">
         <KpiCard accent icon="inbox" label="Solicitudes pendientes" value={counts.pendiente} detail="por revisar" series={metrics.pending} />

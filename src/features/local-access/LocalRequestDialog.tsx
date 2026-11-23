@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useAdminModal } from '../admin/useAdminModal'
+import { useState } from 'react'
 import { Avatar, Icon, StatusBadge } from '../admin/components/ui'
 import { formatDate } from '../admin/state'
 import type { LocalRequest, RequestDecision } from './api'
@@ -8,13 +9,12 @@ export function LocalRequestDialog({ request, busy, error, onDecide, onClose }: 
   request: LocalRequest; busy: boolean; error: string
   onDecide: (decision: RequestDecision, reference?: string) => void; onClose: () => void
 }) {
-  const ref = useRef<HTMLDialogElement>(null)
+  const ref = useAdminModal()
   const [reference, setReference] = useState('')
   const [confirmed, setConfirmed] = useState(false)
   const needsConsent = request.ageGroup === 'menor' && request.guardianConsent !== 'recibida'
-  useEffect(() => { ref.current?.showModal() }, [])
   return (
-    <dialog ref={ref} className={`${s.dialog} ${s['local-dialog']}`} aria-labelledby="local-request-title" onClose={onClose} onCancel={(event) => { event.preventDefault(); if (!busy) onClose() }}>
+    <dialog ref={ref} className={`${s.dialog} ${s['local-dialog']}`} aria-labelledby="local-request-title" onCancel={(event) => { event.preventDefault(); if (!busy) onClose() }}>
       <div className={s['dialog-head']}>
         <Avatar name={request.name} />
         <div><h2 id="local-request-title">{request.name}</h2><p>{request.id} · {formatDate(request.submittedAt)}</p></div>
