@@ -6,7 +6,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `style/v1-final-interface-polish` / código `5bd4c2a` | **Continuación actual:** Primera pasada visual de comunidad/página pública/panel. [Entrega](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). |
+| `feat/v1-photo-viewer-notification-history` / código `bb7b8f6` | **Continuación actual:** [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md), esquema 20. |
+| `style/v1-final-interface-polish` / código `5bd4c2a` | Entrega anterior: Primera pasada visual de comunidad/página pública/panel. [Entrega](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). |
 | `feat/v1-achievements-progressive-badges` / código `5349283` | Entrega anterior: Logros personales con imágenes, insignias progresivas y perfiles sociales. [Entrega](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). |
 | `feat/v1-community-header-highlights` / base `ffb323d` | Entrega anterior: cabecera limpia, opciones en Mi espacio y avisos/momentos en carrusel único. [Revisión](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar). |
 | `feat/v1-community-social-feed` / base `d6e66fd` | Entrega anterior: publicaciones amplias, emojis sin etiquetas y conversación simplificada. [Revisión](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas). |
@@ -30,7 +31,7 @@ PR #9 conserva sus siete commits originales e incorpora la línea funcional; se 
 
 Sitio institucional, comunidad privada y panel. Persistencia/permisos locales para solicitudes/activación, alumnos/tutores, grupos, moderación, comentarios, reacciones, imágenes, perfiles, equipo y recuperación/avisos. Retos e Insignias **ya conectados**: 180 preguntas/45 temas, tres al día y 21 insignias con historial. Logros personales con imágenes, validación privada/publicación opcional y perfiles sociales ya conectados.
 
-SQLite esquema 19; fotos oficiales públicas y para todos los alumnos aprobados integradas. Google real, entrega de correo, contenido comercial/validaciones finales, aceptación de CAI e infraestructura pendientes. **Vídeos opcionales y de menor prioridad**, no implementados; si se retoman, solo coordinación sube y grupo autorizado ve. No ejecutar planes antiguos como tareas abiertas.
+SQLite esquema 20; fotos oficiales públicas y para todos los alumnos aprobados integradas. Google real, entrega de correo, contenido comercial/validaciones finales, aceptación de CAI e infraestructura pendientes. **Vídeos opcionales y de menor prioridad**, no implementados; si se retoman, solo coordinación sube y grupo autorizado ve. No ejecutar planes antiguos como tareas abiertas.
 
 El modo local sigue limitado a localhost. Producción exige configuración explícita, datos privados separados y proxy HTTPS loopback; se comprobó en simulación, **sin alojamiento definitivo**. Ver [guía productiva](PRODUCTION_PREPARATION.md), [PROJECT_STATE](PROJECT_STATE.md) y [NEXT_STEPS](NEXT_STEPS.md).
 
@@ -47,7 +48,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/style/v1-final-interface-polish
+git switch --track origin/feat/v1-photo-viewer-notification-history
 code .
 npm.cmd ci
 ```

@@ -1,15 +1,21 @@
+import { isImportantNotice } from '../shared/notice-policy.ts'
 import { createHash, randomBytes } from 'node:crypto'
 import { hashPassword } from './auth.ts'
 import { transaction, type Database } from './database.ts'
-import { HttpError } from './validation.ts'
+import { HttpError, record } from './validation.ts'
 import type { StudentNotice, StudentUser } from './contracts.ts'
 
 export function queueNotice(db: Database, id: number, subject: string, message: string, kind = 'information') {
-  db.prepare('INSERT INTO local_notices(request_id,subject,message,kind,created_at) VALUES (?,?,?,?,?)').run(id, subject, message, kind, new Date().toISOString())
+  db.prepare('INSERT INTO local_notices(request_id,subject,message,kind,created_at,important) VALUES (?,?,?,?,?,?)').run(id, subject, message, kind, new Date().toISOString(),Number(isImportantNotice(kind,subject)))
 }
 const hash = (token: string) => createHash('sha256').update(token).digest('hex')
 const eligible = `SELECT r.id, a.password_hash FROM requests r JOIN students s ON s.request_id = r.id
   JOIN student_accounts a ON a.request_id = r.id WHERE r.status = 'aprobada' AND s.status = 'activo'`
+function noticeIds(value:unknown,confirmation=false):number[] {
+  const data=record(value)
+  if(Object.keys(data).some(key=>!['ids',...(confirmation?['confirmed']:[])].includes(key))||!Array.isArray(data.ids)||data.ids.length>500||new Set(data.ids).size!==data.ids.length||data.ids.some(id=>!Number.isSafeInteger(id)||id<1)||(confirmation&&data.confirmed!==true))throw new HttpError(400,'Revisa las notificaciones y confirma la acción.')
+  return data.ids as number[]
+}
 export function notices(db: Database) {
   const reset = (token: unknown) => {
     if (typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) throw new HttpError(400, 'El enlace no es válido, caducó o ya se utilizó. Solicita uno nuevo.')
@@ -29,11 +35,31 @@ export function notices(db: Database) {
         r.email AS recipient FROM local_notices n JOIN requests r ON r.id = n.request_id ORDER BY n.id DESC`).all()
     },
     forStudent(user: StudentUser): StudentNotice[] {
-      return db.prepare('SELECT id,subject,message,kind,created_at,student_seen_at FROM local_notices WHERE request_id = ? ORDER BY id DESC').all(Number(user.id.slice(4))).map(row => ({ id: Number(row.id), subject: String(row.subject), message: String(row.message), kind: String(row.kind), createdAt: String(row.created_at), read: row.student_seen_at !== null }))
+      return db.prepare('SELECT id,subject,message,kind,created_at,student_seen_at,important FROM local_notices WHERE request_id = ? AND student_dismissed_at IS NULL ORDER BY id DESC').all(Number(user.id.slice(4))).map(row => ({ id: Number(row.id), subject: String(row.subject), message: String(row.message), kind: String(row.kind), createdAt: String(row.created_at), read: row.student_seen_at !== null, important: row.important===1 }))
     },
     studentSeen(user: StudentUser, id: number) {
-      const result = db.prepare('UPDATE local_notices SET student_seen_at = COALESCE(student_seen_at, ?) WHERE id = ? AND request_id = ?').run(new Date().toISOString(), id, Number(user.id.slice(4)))
+      const result = db.prepare('UPDATE local_notices SET student_seen_at = COALESCE(student_seen_at, ?) WHERE id = ? AND request_id = ? AND student_dismissed_at IS NULL').run(new Date().toISOString(), id, Number(user.id.slice(4)))
       if (!result.changes) throw new HttpError(404, 'No se encontró el aviso.')
+    },
+    archiveViewed(user:StudentUser,value:unknown) {
+      const ids=noticeIds(value),owner=Number(user.id.slice(4))
+      transaction(db,()=>{
+        const select=db.prepare('SELECT request_id FROM local_notices WHERE id=?')
+        for(const id of ids)if(Number(select.get(id)?.request_id)!==owner)throw new HttpError(404,'No se encontró el aviso.')
+        const update=db.prepare('UPDATE local_notices SET student_seen_at=COALESCE(student_seen_at,?) WHERE id=? AND request_id=? AND important=0 AND student_dismissed_at IS NULL')
+        const now=new Date().toISOString()
+        for(const id of ids)update.run(now,id,owner)
+      })
+    },
+    dismissHistory(user:StudentUser,value:unknown) {
+      const ids=noticeIds(value,true),owner=Number(user.id.slice(4))
+      transaction(db,()=>{
+        const select=db.prepare('SELECT request_id,student_seen_at FROM local_notices WHERE id=?')
+        for(const id of ids){const row=select.get(id);if(!row||Number(row.request_id)!==owner)throw new HttpError(404,'No se encontró el aviso.');if(row.student_seen_at===null)throw new HttpError(409,'Solo puedes borrar notificaciones del historial. Las importantes requieren Marcar leído.')}
+        const update=db.prepare('UPDATE local_notices SET student_dismissed_at=COALESCE(student_dismissed_at,?) WHERE id=? AND request_id=? AND student_seen_at IS NOT NULL')
+        const now=new Date().toISOString()
+        for(const id of ids)update.run(now,id,owner)
+      })
     },
     acknowledge(id: number) {
       const result = db.prepare('UPDATE local_notices SET acknowledged = 1 WHERE id = ?').run(id)

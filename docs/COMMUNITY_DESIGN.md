@@ -1,5 +1,7 @@
 # Comunidad CAI: diseño e interacciones
 
+**Observaciones posteriores del 22-11:** implementadas [fotos ampliadas, error visible en Retos y notificaciones Sin leer/Historial](COMMUNITY_FEEDBACK.md). Esa entrega modifica también servidor/esquema 20; las cifras de la primera pasada de abajo conservan su corte.
+
 **19-11-2026 · `feat/v1-community-playful-design`, desde `4cdae44` de PR #15.** Prioridad nueva autorizada: hacer más atractiva la comunidad, con identidad propia, fondo sutil, respuestas visuales y celebraciones. El usuario amplió expresamente a perfil, notificaciones y Retos, con colores/puntuación/confeti inspirados en experiencias de aprendizaje lúdicas. La muestra conserva las reglas, puntos y autorizaciones reales existentes.
 
 **Continuación funcional:** `style/v1-final-interface-polish`, desde `0b73032` (PR #20); código `5bd4c2a`. Primera pasada del punto 1: acabado visual y navegación de comunidad, página pública y panel. Logros/insignias/perfiles anteriores conservados. Resultados y límites al final; aprobación visual humana pendiente.

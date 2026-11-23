@@ -61,7 +61,7 @@ test('Bandejas: contacto privado, avisos propios y persistencia', async t => {
   await t.test('los avisos del alumno no incluyen destinatarios ni datos de otros; lectura independiente',async()=>{
     queueNotice(app.db,Number(owners.alice!.slice(4)),'Solo para Alice','Contenido de prueba privado.')
     const own=await notices('alice'), other=await notices('bob'), item=own.find(item=>item.subject==='Solo para Alice')!
-    assert.ok(item);assert.ok(!other.some(other=>other.id===item.id));assert.deepEqual(Object.keys(item).sort(),['createdAt','id','kind','message','read','subject'])
+    assert.ok(item);assert.ok(!other.some(other=>other.id===item.id));assert.deepEqual(Object.keys(item).sort(),['createdAt','id','important','kind','message','read','subject'])
     assert.ok(!JSON.stringify(own).includes('@'));assert.ok(!JSON.stringify(own).includes('token='))
     assert.equal((await call('/student/notices','GET',undefined,'anonymous')).status,401)
     assert.equal((await call(`/student/notices/${item.id}/seen`,'POST',{},'bob')).status,404)

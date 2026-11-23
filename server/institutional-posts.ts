@@ -1,3 +1,4 @@
+import { queueNotice } from './notices.ts'
 import { createHash } from 'node:crypto'
 import { administration, administrationAudit } from './administration.ts'
 import { transaction, type Database } from './database.ts'
@@ -39,6 +40,10 @@ export function institutionalPosts(db:Database) {
         const id=Number(db.prepare(`INSERT INTO publications(author_id,admin_author_id,idempotency_key,title,body,category,program,group_name,status,created_at,published_at,audience,kind,show_in_gallery,highlighted,expires_at,content_fingerprint)
           VALUES (NULL,?,?,?,?, 'experience',?,?,'publicada',?,?,?,?,?,?,?,?)`).run(admin,key,draft.title,draft.body,draft.program,draft.group,now,now,draft.audience,draft.kind,Number(draft.showInGallery),Number(draft.highlighted),draft.expiresAt,fingerprint).lastInsertRowid)
         for(const [position,image]of draft.imageIds.entries()){db.prepare('INSERT INTO publication_images VALUES (?,?,?)').run(id,image,position);db.prepare('UPDATE gallery_images SET draft=0 WHERE id=?').run(image)}
+        if(draft.kind==='notice'){
+          const recipients=db.prepare("SELECT r.id,r.payload FROM requests r JOIN students s ON s.request_id=r.id WHERE r.status='aprobada' AND s.status='activo'").all()
+          for(const recipient of recipients){const profile=JSON.parse(String(recipient.payload)) as {program:string;group:string};if(draft.audience==='community'||(profile.program===draft.program&&profile.group===draft.group&&profile.group!=='Por asignar'))queueNotice(db,Number(recipient.id),'Nuevo aviso de CAI','CAI publicó un aviso. Consulta Inicio para leer los avisos disponibles para tu cuenta.','announcement')}
+        }
         audit(admin,id,'institutional.published');return id
       })
     },

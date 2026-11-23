@@ -1,6 +1,6 @@
 # CAI — próximos pasos vigentes
 
-**22 de noviembre de 2026.** Continuación `style/v1-final-interface-polish`, [estado real](PROJECT_STATE.md). El usuario eligió el punto 1: primera pasada de acabado implementada, pendiente de aceptación visual. Las funciones de Logros/insignias/perfiles ya estaban conectadas. N1–N7 conserva el trabajo general posterior.
+**22 de noviembre de 2026.** Continuación `feat/v1-photo-viewer-notification-history`, [estado real](PROJECT_STATE.md). Corregidas las tres observaciones posteriores al cierre visual: ampliar fotos, errores de Retos y lectura/historial de notificaciones. [Criterios y evidencia](COMMUNITY_FEEDBACK.md). Siguiente: aceptación visual de esta entrega y validación humana del panel; después N3. No reconstruir Logros, Insignias ni las notificaciones nuevas. N1–N7 conserva el trabajo general posterior.
 
 **Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
 

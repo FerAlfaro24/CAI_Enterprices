@@ -1,6 +1,6 @@
 # CAI — índice y clasificación de toda la documentación
 
-**Actualizado: 19-11-2026, tras renovar Inicio y preparar la presentación.** 66 archivos Markdown: los 65 de la presentación remota y el plan/evidencia de diseño de comunidad. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.
+**Actualizado: 19-11-2026, tras renovar Inicio y preparar la presentación.** 67 archivos Markdown: incluye diseño de comunidad y la entrega de correcciones de fotos/Retos/notificaciones del 22-11. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.
 
 ## Cómo leer
 
@@ -16,6 +16,7 @@ Empezar por [START_HERE](START_HERE.md), [PROJECT_STATE](PROJECT_STATE.md) y [NE
 
 | Archivo | Clase | Contenido |
 | --- | --- | --- |
+| `docs/COMMUNITY_FEEDBACK.md` | Informe técnico vigente | [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md) |
 | `README.md` | Vigente | [CAI — sitio institucional, comunidad y administración](../README.md) |
 | `docs/START_HERE.md` | Vigente | [CAI — empieza aquí](START_HERE.md) |
 | `docs/PROJECT_STATE.md` | Vigente | [CAI — estado vigente](PROJECT_STATE.md) |

@@ -1,3 +1,4 @@
+import { seedCommunityFeedback } from './community-feedback-fixture.ts'
 import { publicProfileId } from '../public-profiles.ts'
 /** Presentación al cliente: siempre crea una base nueva e independiente. Nunca inicia producción. */
 import { mkdir, mkdtemp, writeFile } from 'node:fs/promises'
@@ -81,6 +82,7 @@ for(const [index,id]of shared.entries()){
 // Cronología ilustrativa de publicaciones de la demo; no atribuye fechas a las fotografías.
 const ages=[60,20,120,240,90,150,180,40]
 for(const [index,id]of shared.entries())app.db.prepare('UPDATE publications SET published_at=? WHERE id=?').run(new Date(Date.now()-ages[index]!*60_000).toISOString(),Number(id.slice(4)))
+if(process.argv.includes('--feedback-qa'))await writeFile(join(directory,'feedback-qa.json'),JSON.stringify({baseURL:`http://127.0.0.1:${port}`,filesDir:directory,...seedCommunityFeedback(app.db,students[0]!)},null,2),{flag:'wx'})
 app.server.listen(apiPort,'127.0.0.1');await once(app.server,'listening')
 const vite=await createServer({cacheDir:`node_modules/.vite-cai-web-${apiPort}`,server:{port,strictPort:true,host:'127.0.0.1',proxy:{'/api/local':{target:`http://127.0.0.1:${apiPort}`}}}})
 await vite.listen()

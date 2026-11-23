@@ -264,7 +264,7 @@ test('Logros personales, imágenes privadas, revisión, insignias progresivas y 
     });
     await t.test('copia consistente incluye logros, imágenes e historial; reinicio sin inventar concesiones', async () => {
         const backup = await backupLocalDatabase(path, join(dir, 'backup'));
-        assert.equal((await verifyLocalBackup(backup)).schema, 19);
+        assert.equal((await verifyLocalBackup(backup)).schema, 20);
         const db = openDatabase(backup);
         try {
             assert.equal(db.prepare('SELECT COUNT(*) AS n FROM learning_achievements').get()!.n, app.db.prepare('SELECT COUNT(*) AS n FROM learning_achievements').get()!.n);

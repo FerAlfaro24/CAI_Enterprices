@@ -215,7 +215,7 @@ export function learningRepository(db: Database) {
             return transaction(db, () => {
                 db.prepare('UPDATE learning_achievements SET review=?,reason=?,validated_at=?,revision=revision+1 WHERE id=?').run(data.decision === 'approve' ? 'approved' : 'changes', reason, data.decision === 'approve' ? at() : null, id);
                 audit(id, String(data.decision), 'ADMIN-' + admin, reason);
-                queueNotice(db, item.student_id, 'Tu logro tiene novedades', 'CAI revisó tu logro. Consulta Logros para ver el resultado y el motivo privado.');
+                queueNotice(db, item.student_id, 'Tu logro tiene novedades', 'CAI revisó tu logro. Consulta Logros para ver el resultado y el motivo privado.', 'learning-review');
                 return view(row(id));
             });
         },

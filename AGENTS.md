@@ -4,7 +4,7 @@
 
 1. Leer [START_HERE](docs/START_HERE.md), [PROJECT_STATE](docs/PROJECT_STATE.md), [BRANCHES](docs/BRANCHES.md) y [NEXT_STEPS](docs/NEXT_STEPS.md). Las instrucciones nuevas del usuario prevalecen. [DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md) clasifica el resto.
 2. Comprobar Git y cambios del usuario. Localizar componente/servicio existente, base y criterio de cierre antes de editar. No confundir un informe histórico con trabajo pendiente.
-3. Continuación actual: `style/v1-final-interface-polish`, desde `0b73032` (PR #20); código `5bd4c2a`. Leer [primera pasada del cierre visual](docs/COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). Cabecera móvil legible, galería compacta, tres metas de Retos, perfil Mi actividad/Mi cuenta, notificaciones y acabado público/panel. 454 UI (227 Brave/227 Opera) y 108 de regresión de Logros realmente reejecutadas, tipos/lint/build. Sin cambios de servidor/esquema/permisos/dependencias; no repetir API sin motivo. Muestra limpia nueva 4222, separada de QA y de muestras históricas. Pendiente aceptación visual y validación humana del panel; no sustituir la copia remota.
+3. Continuación actual: `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. Leer [fotos, Retos y notificaciones](docs/COMMUNITY_FEEDBACK.md). 272 API y 144 UI (72 Brave/72 Opera), tipos/lint/build. Esquema 20 aditivo; no migrar datos habituales para probar. Visor conserva post/foco, error de Retos rojo/tachita sin cambiar puntos. Notificaciones ordinarias pasan a Historial al cerrar, importantes solo con Marcar leído; borrar historial nunca elimina registros de coordinación. Siguiente: aceptación humana y N3; no rehacer entregas anteriores.
 
 ## Alcance y prioridad
 
@@ -24,7 +24,7 @@
 - Vídeos son **opcionales y de menor prioridad**; no iniciarlos por un plan histórico. Si se retoman, coordinación sube y grupo autorizado ve. Repaso dirigido, analítica pedagógica, búsqueda ampliada y bienvenida siguen como propuestas sin implementación ni autorización automática.
 - Priorizar trabajo autónomo autorizado. Agrupar Google/correo reales, material/permisos/validación y responsables de CAI al final; presupuesto/contratación después. Registrar dependencias sin inventar funciones para eludirlas.
 - Presentación remota temporal autorizada: verificar metadatos locales y proceso antes de afirmar que sigue disponible. No reiniciarla implícitamente: cambia claves y URL. Vercel público sigue en el prototipo antiguo; las vistas previas automáticas no son esta demo conectada. No incluir URL, contraseñas, copias o capturas privadas en Git.
-- Modo local conservado. Producción requiere origen HTTPS canónico, proxy loopback que sobrescriba cabeceras, datos privados fuera del código y base esquema 19 preparada para fixtures nuevas. Cookies __Host/Secure por aplicación; no relajar orígenes, red o confianza para superar una prueba. No presentarlo como desplegado o apto para alumnos reales antes de validar entorno/servicios/CAI.
+- Modo local conservado. Producción requiere origen HTTPS canónico, proxy loopback que sobrescriba cabeceras, datos privados fuera del código y base esquema 20 preparada para fixtures nuevas. Cookies __Host/Secure por aplicación; no relajar orígenes, red o confianza para superar una prueba. No presentarlo como desplegado o apto para alumnos reales antes de validar entorno/servicios/CAI.
 
 ## Desarrollo y seguridad
 
