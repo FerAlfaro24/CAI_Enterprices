@@ -1,6 +1,6 @@
 # CAI — estado vigente
 
-**Actualizado: 22 de noviembre de 2026, correcciones de uso de comunidad.** Continuación `feat/v1-photo-viewer-notification-history`, base `fb28061` de PR #21; código `bb7b8f6`. [Entrega vigente](COMMUNITY_FEEDBACK.md): fotos completas con visor, resultados correctos/incorrectos persistidos y notificaciones Sin leer/Historial. Esquema 20 aditivo, sin tocar bases habituales. **272 pruebas API y 144 comprobaciones UI (72 Brave/72 Opera)**; tipos/lint/build correctos. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice](DOCUMENTATION_INDEX.md).
+**Actualizado: 22 de noviembre de 2026, revisión de administración.** Continuación `feat/v1-admin-usability-review`, base `c3d4d82` de PR #22; código `e255f91`. [Entrega](ADMIN_USABILITY_REVIEW.md): mesa de trabajo, configuración por tareas, ficha dividida, búsqueda/filtros y revisión de fotos. **272 API y 370 UI** (344 recorrido + 26 dirigidas finales), tipos/lint/build; nueve secciones revisadas. Servidor/esquema/permisos sin cambios, SQLite 20. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Guía del panel](guia-administracion.md). Aceptación humana pendiente.
 
 **Cierre visual anterior:** 454 comprobaciones UI y 108 de Logros en la entrega de PR #21; no son una matriz repetida hoy. La nueva tanda cubre específicamente los tres cambios solicitados.
 
@@ -20,7 +20,9 @@
 
 ## Referencias de continuación
 
-- **Continuación actual:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`.
+- **Continuación actual:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`.
+- **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, código `bb7b8f6`, esquema 20.
+- **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`.
 - **Logros anterior:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`, código `5349283`.
 - **Cabecera anterior:** `feat/v1-community-header-highlights`, desde `ffb323d`.
 - **Revisión social anterior:** `feat/v1-community-social-feed`, desde `d6e66fd` de `feat/v1-community-playful-design`.
@@ -36,7 +38,7 @@
 - **Base visual:** `release/cai-demo-v1.0`, `f3ba46b`, preservada. Panel/Community avanzados ya existían y se conectaron; no reconstruirlos.
 - **Main:** `a3c2569`, antigua, 74 commits detrás de la base funcional al corte.
 - **Revisión anterior:** `chore/v1-final-review`, `fee87d1`, 15 commits detrás. No es la última línea funcional.
-- **Persistencia:** SQLite esquema 19. No hay despliegue productivo validado.
+- **Persistencia:** SQLite esquema 20. No hay despliegue productivo validado.
 
 Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BRANCHES. Las ramas posteriores conservan el trabajo acumulado. La nueva rama añade historias oficiales, medios vinculados y el Inicio renovado; no modifica main/release ni vuelve a fusionar funcionalidades históricas.
 

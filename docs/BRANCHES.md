@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md); esquema 20, 272 API y 144 UI; datos habituales sin migrar.
+- **Continuación actual:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`. [Administración](ADMIN_USABILITY_REVIEW.md), 272 API y 370 UI; sin cambios de esquema/permisos.
+- **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md); esquema 20, 272 API y 144 UI; datos habituales sin migrar.
 - **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`. [Cierre visual](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada), 454 UI y 108 regresión de Logros; sin cambios de servidor/esquema.
 - **Logros anterior:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`; código `5349283`. [Logros/insignias/perfiles](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), esquema 19, 261 API/108 navegador y ajuste final con 42 API pertinentes.
 - **Cabecera anterior:** `feat/v1-community-header-highlights`, desde `ffb323d`. [Cabecera/carrusel](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), 122 comprobaciones nuevas.
@@ -21,6 +22,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-admin-usability-review` parte de `c3d4d82` de PR #22. Revisión de nueve secciones administrativas, tareas/filtros/fichas y fotos de moderación, guía y QA independiente. [Entrega y límites](ADMIN_USABILITY_REVIEW.md). Conserva servidor/esquema 20, datos habituales y ramas oficiales; no fusionar automáticamente.
 
 `feat/v1-photo-viewer-notification-history` parte de `fb28061` de PR #21. Correcciones de fotos/Retos/notificaciones solicitadas el 22-11; migración 20 aditiva, visor sin recorte, distinción de acierto/error y lectura al cerrar con confirmación de importantes. Historial del alumno eliminable sin borrar registros administrativos. [Entrega](COMMUNITY_FEEDBACK.md). Sin fusión ni cambio de main/release o despliegue público.
 

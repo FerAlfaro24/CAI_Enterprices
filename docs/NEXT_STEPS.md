@@ -1,6 +1,6 @@
 # CAI — próximos pasos vigentes
 
-**22 de noviembre de 2026.** Continuación `feat/v1-photo-viewer-notification-history`, [estado real](PROJECT_STATE.md). Corregidas las tres observaciones posteriores al cierre visual: ampliar fotos, errores de Retos y lectura/historial de notificaciones. [Criterios y evidencia](COMMUNITY_FEEDBACK.md). Siguiente: aceptación visual de esta entrega y validación humana del panel; después N3. No reconstruir Logros, Insignias ni las notificaciones nuevas. N1–N7 conserva el trabajo general posterior.
+**22 de noviembre de 2026.** Continuación `feat/v1-admin-usability-review`, [estado real](PROJECT_STATE.md). Revisión técnica autónoma del panel completada: [diagnóstico, mejoras y evidencia](ADMIN_USABILITY_REVIEW.md). Siguiente: aceptación de coordinación real con [guía actualizada](guia-administracion.md), observaciones concretas y N3. Las correcciones de comunidad de PR #22 están incluidas. No reconstruir panel, Logros, Insignias ni notificaciones. N1–N7 conserva el trabajo general posterior.
 
 **Avance del 19-11:** [material oficial integrado](OFFICIAL_MEDIA.md), cuatro imágenes públicas/seis de comunidad para todos los aprobados, con carga sencilla desde administración. Esquema 17. No pedir otra vez la audiencia de estas fotos ni rehacer su integración. Pendiente cargar el catálogo desde el panel al adoptar esta rama en una instalación existente.
 
@@ -56,4 +56,4 @@ El 12 de noviembre se habló de tres semanas. Los documentos de planificación r
 
 ## Siguiente movimiento
 
-La revisión integral y la base técnica autónoma de producción quedaron comprobadas con sus límites. **Siguiente trabajo: refinamiento visual de COMMUNITY_DESIGN; después N3, operación y recuperación**, con fixtures/copias nuevas y sin tocar datos habituales. Resolver primero incidencias reproducibles y reutilizar las herramientas existentes. Google/correo/CAI continúan agrupados al final y alojamiento después. No reiniciar estas tareas completas ni desarrollar vídeos por un plan histórico.
+La revisión integral y la base técnica autónoma de producción quedaron comprobadas con sus límites. **Siguiente trabajo: aceptación humana del panel y refinamientos concretos; después N3, operación y recuperación**, con fixtures/copias nuevas y sin tocar datos habituales. Resolver primero incidencias reproducibles y reutilizar las herramientas existentes. Google/correo/CAI continúan agrupados al final y alojamiento después. No reiniciar estas tareas completas ni desarrollar vídeos por un plan histórico.

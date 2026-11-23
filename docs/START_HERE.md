@@ -6,7 +6,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-photo-viewer-notification-history` / código `bb7b8f6` | **Continuación actual:** [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md), esquema 20. |
+| `feat/v1-admin-usability-review` / código `e255f91` | **Continuación actual:** [Administración revisada](ADMIN_USABILITY_REVIEW.md); esquema 20. |
+| `feat/v1-photo-viewer-notification-history` / código `bb7b8f6` | Entrega anterior: [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md), esquema 20. |
 | `style/v1-final-interface-polish` / código `5bd4c2a` | Entrega anterior: Primera pasada visual de comunidad/página pública/panel. [Entrega](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). |
 | `feat/v1-achievements-progressive-badges` / código `5349283` | Entrega anterior: Logros personales con imágenes, insignias progresivas y perfiles sociales. [Entrega](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). |
 | `feat/v1-community-header-highlights` / base `ffb323d` | Entrega anterior: cabecera limpia, opciones en Mi espacio y avisos/momentos en carrusel único. [Revisión](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar). |
@@ -48,7 +49,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-photo-viewer-notification-history
+git switch --track origin/feat/v1-admin-usability-review
 code .
 npm.cmd ci
 ```
