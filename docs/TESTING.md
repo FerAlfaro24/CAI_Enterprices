@@ -1,5 +1,7 @@
 # CAI — pruebas y lectura de evidencia
 
+**Administración, 22-11:** 272 API de suite completa y **370 UI**: 344 del recorrido (172 Brave/172 Opera) y 26 dirigidas finales (13 por navegador). Tipos/lint/build. [Alcance, intentos y límites](ADMIN_USABILITY_REVIEW.md); no sumar matrices históricas.
+
 **Correcciones de comunidad, 22-11:** **272 API** (suite completa, incluye 10 subcasos nuevos y contenedor), **144 UI (72 Brave/72 Opera)** en fixtures nuevas, tipos/lint/build. [Evidencia, intentos y límites](COMMUNITY_FEEDBACK.md). Verificador `scripts/check-community-feedback.browser.mjs`. No sumar las tandas anteriores como si se hubieran repetido.
 
 **Cierre visual, 22-11:** **454 comprobaciones de interfaz (227 Brave/227 Opera)** y **108 de regresión de Logros (54 por navegador)** ejecutadas en fixtures nuevas; tipos/lint/build. Ver [alcance, intento previo y límites](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). No se reejecutó API: sin cambios de servidor/esquema/permisos; los 261 resultados previos conservan su corte.

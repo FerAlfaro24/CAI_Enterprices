@@ -1,196 +1,115 @@
-> **Guía operativa local — revisada documentalmente el 17-11-2026.** Estado completo en [PROJECT_STATE](PROJECT_STATE.md); arranque/aislamiento en [RUN_LOCAL](RUN_LOCAL.md). No es un despliegue ni una validación con usuarios reales.
-
 # Guía sencilla de administración de CAI
 
-**Versión de pruebas locales, con datos ficticios.** Las tareas siguientes ya están conectadas al guardado local. El uso con alumnos reales, permisos del material y entrega de correo se revisan con CAI antes de publicar. Esta guía no presupone que el sitio esté alojado en internet.
+**Actualizada el 22 de noviembre de 2026.** Corresponde a `feat/v1-admin-usability-review`. Las tareas guardan información en la instalación abierta. La muestra de revisión usa cuentas ficticias y una base separada. Alojamiento, entrega de correo y validación con coordinación real siguen pendientes. [Estado](PROJECT_STATE.md) · [Revisión de uso](ADMIN_USABILITY_REVIEW.md).
 
 ## Dónde encontrar cada tarea
 
 | Necesito… | Abro… |
 | --- | --- |
-| Ver qué requiere atención | Resumen |
-| Revisar una solicitud nueva | Solicitudes de ingreso |
-| Preparar acceso, revisar una ficha o suspender un alumno | Alumnos |
-| Corregir nombre, nacimiento, matrícula o tutor | Alumnos → Ficha → Corregir expediente |
-| Aprobar o rechazar una historia | Publicaciones |
-| Revisar comentarios de los alumnos | Publicaciones → Comentarios |
-| Pausar nuevos comentarios | Configuración → Comentarios de las historias |
-| Compartir o retirar imágenes de grupo o comunidad | Galería privada |
-| Atender una consulta o revisar un aviso de acceso | Mensajes y avisos |
-| Mantener grupos o pausar solicitudes/envíos | Configuración |
-| Activar o pausar reacciones a historias | Configuración → Reacciones a las historias |
-| Cambiar mi contraseña | Configuración → Seguridad de mi cuenta |
-| Recuperar acceso si olvidé mi contraseña | Acceso de administración → Olvidé mi contraseña |
-| Agregar, desactivar o reactivar un administrador | Configuración → Equipo administrador |
+| Empezar por lo pendiente | Resumen → Tu mesa de trabajo |
+| Revisar el ingreso de una persona | Solicitudes de ingreso → Revisar solicitud |
+| Preparar el acceso | Alumnos → Ficha → Resumen y acceso |
+| Cambiar de programa/grupo | Alumnos → Ficha → Programa y grupo |
+| Corregir nombre, nacimiento, matrícula o tutor | Alumnos → Ficha → Expediente privado |
+| Suspender/reactivar a alguien | Alumnos → Ficha → botón inferior |
+| Aprobar/rechazar historias | Publicaciones → Historias de alumnos |
+| Revisar comentarios | Publicaciones → Comentarios |
+| Crear un aviso, historia o álbum oficial | Publicaciones → Equipo CAI · Publicar |
+| Gestionar fotografías y permisos | Galería privada |
+| Validar un aprendizaje | Logros e insignias → Logros por revisar |
+| Consultar insignias obtenidas | Logros e insignias → Insignias obtenidas |
+| Consultar solicitudes antiguas de insignia | Logros e insignias → Solicitudes anteriores |
+| Revisar/programar preguntas | Retos de inglés → Calendario / Banco de preguntas |
+| Atender interesados | Mensajes y avisos → Consultas de contacto |
+| Consultar notificaciones enviadas a cuentas | Mensajes y avisos → Registro de notificaciones |
+| Crear/archivar/reactivar grupos | Configuración → Grupos |
+| Pausar solicitudes, publicaciones, comentarios o reacciones | Configuración → Participación |
+| Gestionar administradores | Configuración → Equipo |
+| Cambiar mi contraseña | Configuración → Mi seguridad |
 
-Entrar por **Acceso de administración** con la cuenta de coordinación. La cuenta del alumno tiene su propio acceso y no abre este panel. Al terminar, usar **Cerrar sesión**.
+Entrar por **Acceso de administración**. La cuenta de alumno no abre el panel. Cada administrador tiene su cuenta; al terminar, usar **Cerrar sesión**.
 
-## Rutina sugerida
+## Rutina diaria
 
-1. Abrir Resumen y revisar los pendientes.
-2. Atender las solicitudes de ingreso y las publicaciones que necesiten revisión.
-3. Consultar Mensajes y avisos. Guardar el seguimiento de las consultas y marcar los avisos revisados cuando corresponda.
-4. Si se compartirá una imagen, comprobar sus permisos y el grupo destinatario antes de publicarla.
+Abrir Resumen. En **Tu mesa de trabajo**, los cuatro contadores llevan a solicitudes, historias, comentarios y logros/solicitudes anteriores. Pueden solaparse: un logro que solicita publicación también es una historia en revisión. No sumar los contadores como personas o tareas exclusivas. Guardar una decisión actualiza el resumen; **Actualizar datos** vuelve a consultar el servidor.
 
-No hace falta revisar cada apartado si no hay trabajo pendiente. Los contadores muestran registros del servicio local. Para consultar cambios recientes de otra ventana, usar el botón de actualización del apartado.
+Los accesos inferiores permiten crear contenido oficial, gestionar grupos o atender consultas. Los gráficos quedan como información de apoyo, debajo de las tareas.
 
-## Revisar una solicitud
+## Revisar ingreso y preparar acceso
 
-En Solicitudes de ingreso, buscar por nombre o folio y abrir **Revisar solicitud**. Comprobar que los datos correspondan a un alumno inscrito. Para menores, confirmar la autorización del tutor y registrar su referencia antes de aprobar: marcar una casilla durante la solicitud no demuestra que el permiso exista.
+En Solicitudes buscar por nombre, correo, grupo, programa, matrícula o folio. La búsqueda admite nombres sin tildes. Elegir estado y abrir la solicitud correcta; comprobar datos e inscripción antes de aprobar. Aprobar incorpora al directorio. Rechazar conserva la decisión. Cerrar sin decidir mantiene el estado.
 
-Después de aprobar, el alumno aparece en Alumnos. Aprobar la solicitud y activar una contraseña son pasos distintos. Si se necesita corregir una decisión, abrir su detalle y devolverla a revisión. Esta acción puede revocar el acceso; revisar el aviso antes de confirmar.
+Un menor requiere autorización del tutor **registrada por coordinación**. Revisar el contacto, escribir una referencia de la autorización comprobada y confirmarla; solo entonces puede aprobarse. La declaración de edad o una casilla del registro no verifica identidad por sí sola.
 
-## Preparar el acceso y gestionar un alumno
+Para acceso por contraseña: Alumnos → Ficha → **Resumen y acceso** → **Preparar acceso**. Entregar el enlace privado al destinatario correcto. No se envía correo automáticamente. Preparar otro invalida el anterior. Si falla, la ficha conserva el contexto para reintentar. El acceso Google requiere la configuración real todavía pendiente.
 
-En Alumnos, abrir la ficha de la persona correcta. Desde allí se prepara su enlace de activación, se consulta el estado de cuenta y se suspende/reactiva el acceso. En las pruebas, el enlace se entrega manualmente a la cuenta ficticia usada en el recorrido; **no se envía un correo**. Preparar otro enlace invalida el anterior. No compartir enlaces o contraseñas en grupos, capturas o documentos públicos.
+**Devolver a pendientes** una solicitud aprobada bloquea el acceso e invalida sesiones/enlaces hasta que vuelva a aprobarse. No utilizarlo para cambiar un horario: usar Programa y grupo.
 
-Suspender cierra el acceso de esa cuenta; reactivarla exige entrar de nuevo. No borra su historial. Para cambiar programa o grupo, elegir una opción vigente y leer la confirmación: se cierran las sesiones anteriores y las historias no pasan automáticamente a otro grupo ni se republican al volver.
+## Alumnos: encontrar y gestionar
 
-La ficha permite corregir nombre, nacimiento, matrícula y tutor según el recorrido siguiente. Correo de acceso, contraseña y vínculo Google se gestionan aparte y no se cambian desde este formulario. El equipo administrador se gestiona desde Configuración.
+El directorio filtra estado, programa, grupo y activación; busca también por correo. Los filtros quedan en la dirección al recargar. **Quitar filtros** recupera la vista inicial de activos. Desde Configuración → Grupos → **Ver alumnos de este grupo** se abre el directorio ya filtrado, incluso si todavía está vacío.
 
-El alumno puede cambiar por sí mismo su **nombre visible y color del avatar** desde Community → Mi espacio → Editar mi perfil. Esto también actualiza el alias que muestra en historias anteriores; no cambia su nombre legal ni grupo. Los menores eligen únicamente entre las dos abreviaturas permitidas. Si coordinación tiene abierta una ficha antigua y recibe un aviso de cambio, debe actualizarla antes de actuar. La [guía de perfil](v1-student-profile.md) describe errores y límites.
+En la ficha:
 
-## Corregir el expediente de un alumno
+- **Resumen y acceso:** estado, cuenta y siguiente paso de activación.
+- **Programa y grupo:** cambiar asignación y confirmar efectos. El alumno deberá volver a entrar; sus historias conservan el grupo original y las publicadas vuelven a revisión.
+- **Expediente privado:** corregir los datos necesarios, indicar motivo, contraseña administrativa y confirmación. El historial permanece privado; la operación cierra sesiones del alumno. Correo e identidad Google se conservan.
 
-En Alumnos, abrir la **Ficha** de la persona correcta y pulsar **Corregir expediente**. Modificar los datos necesarios, indicar el motivo y confirmar con la contraseña propia y la casilla de verificación. Cancelar no guarda. El historial privado muestra quién corrigió, cuándo, por qué y los valores anteriores/nuevos.
+**Suspender acceso** abre una confirmación antes de guardar. Suspender cierra el acceso, conserva datos y permite reactivar desde la ficha. Reactivar no restaura enlaces viejos. Usar **Cancelar** si solo se quería consultar la ficha.
 
-Si la corrección afecta nombre, nacimiento o tutor de un menor, registrar una nueva referencia de autorización comprobada, distinta de la anterior. Un adulto corregido a menor también necesita tutor y autorización. Se ajusta el alias a una abreviatura privada y sus historias y comentarios publicados vuelven a revisión. Corregir solo matrícula no exige esa renovación. Revisar también imágenes donde aparezca: la galería no identifica automáticamente personas dentro de una foto.
+## Moderar historias y comentarios
 
-Al guardar se cierran las sesiones del alumno y se invalidan sus enlaces anteriores; conserva cuenta, correo y grupo. Un alumno suspendido sigue suspendido. Corregir edad a adulto no abre su privacidad ni cambia su alias automáticamente. La referencia o casilla no sustituye comprobar y custodiar la autorización real.
+**Historias de alumnos:** filtrar estado/tipo, buscar texto o autor y abrir Revisar. Leer texto y fotografías; **Ampliar** permite comprobarlas completas. Confirmar contenido y privacidad antes de publicar. Para rechazar, elegir un motivo; lo consulta el autor y coordinación. Una historia aprobada conserva su audiencia autorizada. Devolver a revisión la oculta; una retirada definitiva no se republica desde esta bandeja.
 
-Si la información cambió en otra ventana, el borrador se conserva hasta elegir **Cargar expediente y descartar borrador**. Si la respuesta se perdió, puede reintentarse el mismo envío sin duplicar historial; la contraseña se limpia y no hay reintentos automáticos. Detalles en [la guía del expediente](v1-student-record.md).
+**Comentarios:** comprobar autor, historia y disponibilidad antes de decidir. El motivo de no aprobación es privado. Pausar comentarios de una historia desde su revisión conserva los existentes. Para recibir nuevos comentarios deben estar abiertos el permiso general de Participación y el de esa historia.
 
-## Revisar publicaciones
+## Publicar como Equipo CAI
 
-En Publicaciones, abrir **Revisar** sobre la historia correspondiente. Leer el contenido y comprobar su privacidad. Para publicar, confirmar la revisión. Para rechazar, elegir un motivo; lo verá su autor, no todo el grupo.
+En **Equipo CAI · Publicar**, abrir **Crear publicación de CAI** y elegir historia, aviso o álbum. Escribir título/texto y destinatarios: todos los alumnos aprobados o un grupo. Se admiten hasta doce fotos JPEG/PNG de 3 MB, con descripción accesible y referencia de autorización. Un álbum requiere imágenes. Los borradores/cargas no son un banco público.
 
-Una publicación aprobada se muestra únicamente al programa y grupo autorizados. Devolverla a revisión la oculta hasta otra aprobación. Si el autor la retira, se conserva el historial y no se puede republicar desde la bandeja de retiradas.
+**Guardar también las fotos en Galería** permite encontrarlas allí sin duplicar la conversación. **Destacar en Inicio** incorpora el contenido al carrusel; la fecha de finalización es opcional. Revisar permisos y audiencia, confirmar y publicar. Un nuevo aviso institucional notifica a alumnos activos de su audiencia; una historia/álbum común no envía ese aviso general.
 
-## Revisar comentarios
+**Publicaciones de coordinación** conserva estado, audiencia, destacados y retirada. Retirar oculta el contenido de Inicio/Galería/destacados. Las publicaciones de alumnos se moderan en su propia pestaña.
 
-En **Publicaciones → Comentarios**, abrir un comentario En revisión y comprobar su texto, autor, historia y grupo. Elegir **Publicar comentario** o **No aprobar**, confirmar la revisión y guardar. Para no aprobar, escribir una indicación útil: solo la verá su autor y coordinación.
+## Galería
 
-El alumno consulta el estado en **Mis comentarios**, dentro de la historia. Sus envíos pendientes/no aprobados no aparecen al grupo. Publicar una historia y aprobar sus comentarios son decisiones distintas.
+Gestionar fotos ya publicadas, borradores o retiradas. Una foto muestra su audiencia y referencia interna. Retirar requiere confirmar; cancelar la conserva. Las herramientas **Cargar el paquete de fotos oficiales** y **Agregar una fotografía solo a Galería** están plegadas para no estorbar la lista.
 
-Se puede devolver un comentario publicado/no aprobado a revisión, o retirar uno publicado, indicando motivo. Los retirados conservan historial y no se pueden republicar. El alumno también puede retirar su propio comentario, incluso estando pausados los nuevos envíos.
+El paquete privado contiene las seis fotos oficiales autorizadas para todos los aprobados. Cargarlo de nuevo no duplica ni restaura retiradas. No está en GitHub: seguir [OFFICIAL_MEDIA](OFFICIAL_MEDIA.md). Para un álbum con historia y conversación, usar Equipo CAI · Publicar.
 
-**Configuración → Recibir nuevos comentarios** controla todos los grupos; inicialmente está pausado. **Recibir comentarios en esta historia**, dentro de la revisión, permite pausar solo esa historia. Se conservan comentarios existentes, revisión de pendientes y retirada propia. Para nuevos envíos deben estar activos ambos permisos.
+## Logros e insignias
 
-Si otra ventana revisó primero o se perdió la respuesta, cargar el estado actual antes de decidir otra vez. El panel explica que cargarlo descarta la decisión y el motivo que estabas preparando. Las listas tienen **Ver anteriores** cuando hay más registros. El [informe de comentarios](v1-community-comments.md) detalla pruebas y límites.
+En **Logros por revisar**, abrir **Revisar logro y decidir**. Comprobar práctica, expresión, ejemplo e imágenes. Escribir una indicación privada y confirmar la revisión. **Validar en privado** no publica nada; **Validar y publicar** solo aparece si el alumno solicitó compartir. **Pedir un ajuste** permite explicar qué reforzar.
 
-## Publicar una imagen
+Las **21 insignias** se obtienen por requisitos progresivos; las nuevas no se solicitan. **Insignias obtenidas** conserva concesiones e historial. Los reconocimientos especiales de CAI tienen su formulario separado y motivo privado; no sustituyen los requisitos de progreso. **Solicitudes anteriores** conserva las nueve categorías del modelo anterior y sus revisiones históricas.
 
-En Galería privada, elegir una imagen JPEG o PNG, hasta 3 MB y 12 millones de píxeles. Añadir título, descripción y texto alternativo: describir qué aparece ayuda a quien no pueda verla. Elegir categoría, programa y grupo activo, y registrar una referencia interna del permiso.
+Un logro compartido puede revisarse también como historia en Publicaciones, incluidas sus fotos. Su estado se sincroniza en servidor; no se necesita aprobarlo en ambos sitios.
 
-Revisar la vista previa, los permisos de las personas que aparezcan y el destinatario. Confirmar y publicar. Cambiar datos exige revisar de nuevo. La imagen será visible solo para ese grupo; la referencia interna permanece en administración.
+## Retos
 
-Para retirarla, abrir la acción y confirmar. Se bloquearán nuevas consultas y aparecerá en Retiradas. El historial se conserva; retirar no libera espacio ni elimina las copias ya descargadas. La capacidad local inicial es 128 MB. En esta etapa no hay subidas de alumnos, vídeos ni editor de álbumes múltiples.
+El calendario prepara tres preguntas diarias automáticamente, por grupo y fecha de Ciudad de México. No hay que cargarlas cada día. El banco inicial tiene 180 preguntas y 45 temas.
 
-## Consultas, avisos y recuperación
+Calendario permite revisar cada pregunta/solución, cambiarla por otra disponible o pausarla. Si ya hay respuestas, no cambiar el contenido de ese reto: programar otro día. Pausar conserva resultados y repaso.
 
-Mensajes y avisos tiene dos bandejas:
+Banco permite buscar/filtrar, revisar/editar o crear pregunta. **Borrador** queda en administración; **Lista** entra en rotaciones nuevas; **Archivada** conserva historial. Guardar una pregunta no modifica el contenido ya fijado en calendarios existentes.
 
-- **Consultas de contacto:** abrir la consulta y guardar su estado —Nueva, En seguimiento o Atendida— con una nota interna cuando ayude. Guardar seguimiento no envía una respuesta al interesado ni reserva una clase.
-- **Avisos de acceso:** revisar los eventos de solicitudes, cuentas y recuperación. Marcar un aviso revisado por coordinación no lo marca leído en la cuenta del alumno. En pruebas se puede preparar un enlace de recuperación; es una herramienta local, no una verificación de la identidad de quien lo recibe.
+Cada intento suma cinco puntos; acertar suma diez más. Tres respuestas cuentan como día de constancia aunque haya errores. No es una calificación ni un ranking público.
 
-La recuperación real requiere configurar correo y comprobar la entrega. Una cuenta de Google se recupera desde Google. No solicitar ni guardar la contraseña personal de Google del alumno.
+## Consultas y registro de notificaciones
 
-## Grupos y pausas
+En Consultas, abrir **Atender**, elegir Nueva/En seguimiento/Atendida y guardar una nota interna. Esto no responde un correo ni reserva clases.
 
-En Configuración, mantener el catálogo de programas/grupos y los controles disponibles. Archivar un grupo impide nuevas selecciones, pero sus alumnos actuales conservan la lectura. Se puede reactivar sin borrar su historial.
+**Registro de notificaciones** muestra mensajes de las cuentas: revisiones, insignias, avisos o acceso. **Marcar revisado** indica seguimiento de coordinación y es independiente de que el alumno lo haya leído. El borrado del historial por el alumno no borra este registro administrativo. Los enlaces de recuperación requieren comprobar el destinatario; no se envían automáticamente por correo.
 
-Pausar solicitudes de ingreso no borra solicitudes recibidas. Pausar nuevos envíos tampoco elimina publicaciones aprobadas ni impide retirarlas. Las opciones marcadas como pendientes no deben tratarse como funciones operativas.
+## Configuración, equipo y seguridad
 
-## Reacciones a las historias
+- **Participación:** activar/pausar solicitudes, publicaciones, reacciones y comentarios. Las pausas conservan contenido, cuentas e historial. Privacidad de menores y premoderación son reglas protegidas; no son interruptores ficticios.
+- **Grupos:** crear un programa/horario o archivar/reactivar uno existente. Archivar impide nuevas selecciones; no suspende alumnos ni elimina sus historias. Para otra audiencia, crear grupo y reasignar desde la ficha.
+- **Equipo:** agregar una cuenta pendiente, preparar enlace privado o desactivar/reactivar otra cuenta. Requiere contraseña y confirmación. Todas las cuentas administrativas tienen acceso completo. No se puede desactivar la propia ni dejar el sistema sin un administrador activo y activado.
+- **Mi seguridad:** cambiar solo la contraseña propia. Las confirmaciones deben coincidir. Guardar cierra todas las sesiones de esa cuenta; volver a entrar con la nueva contraseña. Para una contraseña olvidada, usar **Olvidé mi contraseña** desde el acceso administrativo y el procedimiento de recuperación local existente.
 
-En Configuración → **Reacciones a las historias**, activar **Permitir reacciones** para que los alumnos celebren las historias aprobadas de su grupo. Inicialmente están pausadas. Pausar nuevas publicaciones y pausar reacciones son controles distintos.
+## Si algo falla o cambia en otra ventana
 
-Cada alumno tiene una elección por historia y puede cambiarla o usar **Quitar mi reacción**. Al pausar, los contadores se conservan y cada persona puede quitar la suya. Listado y detalle muestran la misma elección; no se publica una lista de quién reaccionó. Los comentarios tienen su propio permiso y revisión; activar reacciones no los activa. La [guía de reacciones](v1-community-reactions.md) detalla pruebas y límites.
+Leer el mensaje antes de repetir. Una decisión no confirmada no debe darse por guardada; recargar el estado cuando se indique. Las correcciones de expediente, equipo y publicaciones usan revisión para evitar sobrescribir cambios ajenos. Conservar el borrador cuando el formulario lo permita; nunca incluir contraseñas o enlaces privados en documentos públicos.
 
-## Gestionar el equipo administrador
-
-En Configuración → Equipo administrador, **Agregar administrador** permite crear una cuenta pendiente con nombre/correo. Confirmar con la contraseña propia y la casilla de alcance. Cada administrador tiene acceso completo al panel y puede gestionar el equipo; no existe un rol de moderador limitado.
-
-Después, **Preparar invitación** genera un enlace privado de prueba de un uso y 24 horas para que la persona elija su contraseña. Otro enlace invalida el anterior. No se envía correo; verificar al responsable y el canal antes de una entrega real. No compartir contraseñas ni enlaces en chats o capturas. Una cuenta pendiente no puede entrar ni recuperarse como si ya estuviera activada.
-
-**Desactivar** cierra sus sesiones e invalida invitaciones/recuperación, conservando cuenta e historial. **Reactivar** exige entrar de nuevo y, si sigue pendiente, preparar otra invitación. No puedes desactivar tu propia cuenta ni dejar el sistema sin una cuenta activa que ya pueda entrar. Para relevar a un responsable, primero activar y comprobar el acceso del siguiente.
-
-Si la información cambió o la respuesta se perdió, actualizar el equipo antes de repetir. El alta evita duplicados al reintentar el mismo envío; una invitación perdida necesita prepararse de nuevo, no se recupera su token guardado. Detalles en [la guía del equipo](v1-admin-team.md).
-
-## Cambiar mi contraseña
-
-Para cambiar la contraseña propia, abrir Seguridad de mi cuenta, escribir la actual, la nueva y su confirmación. Usar una frase de 15 a 128 caracteres y guardar. Se cerrarán todas las sesiones de esa cuenta y habrá que entrar con la nueva contraseña; las cuentas de otras personas no se cierran. Esta acción no cambia el correo ni crea otro administrador.
-
-Si se pierde la conexión al guardar, el resultado puede ser incierto: volver a entrar con la nueva contraseña si el cambio se guardó, o con la anterior si el envío no llegó. No se reintenta automáticamente. Si no se conoce la contraseña actual, no se puede omitir desde el formulario; la recuperación administrativa y el procedimiento de custodia se validan para la entrega. Elegir la contraseña personalmente y no enviarla por chat ni guardarla en capturas o manuales.
-
-## Si olvidé mi contraseña administrativa
-
-Desde el acceso administrativo, elegir **Olvidé mi contraseña** y escribir el correo de la cuenta. La respuesta no confirma si esa cuenta existe ni muestra un enlace. **El entorno local habitual todavía no envía correos**: el recorrido se comprobó con un buzón ficticio aislado. La entrega real se habilitará después de verificar al responsable y configurar correo con CAI.
-
-Con la entrega configurada, abrir el enlace recibido y escribir dos veces la nueva contraseña. Dura 15 minutos y sirve una sola vez; un cambio correcto cierra las sesiones de esa cuenta y exige entrar normalmente. Pedirlo no cambia la contraseña ni cierra sesiones. Las solicitudes repetidas tienen un intervalo de 15 minutos; no hace falta enviarlas continuamente.
-
-Si el resultado aparece como incierto, intentar el acceso con la contraseña nueva. Si no funciona, solicitar otro enlace y respetar el plazo indicado; no compartir el enlace por chat ni en capturas. Ante pérdida del correo o sospecha de acceso ajeno, verificar la identidad y el canal con el responsable antes de recuperar. Esta función no crea otro administrador ni cambia el correo. Detalles y límites en [la guía de recuperación](v1-admin-recovery.md).
-
-## Si algo falla
-
-- **No conecta o no puede comprobar el acceso:** comprobar que el servicio local esté encendido y usar el reintento mostrado. No significa necesariamente que la contraseña sea incorrecta.
-- **No puede abrir una pantalla:** recuperar la conexión y pulsar Volver a cargar. La carga fallida no publicó cambios por sí misma.
-- **Un envío muestra error:** conservar el formulario y reintentar el mismo envío. Los formularios conectados conservan datos ante fallos previstos y evitan duplicar el mismo intento. Si hay duda, actualizar y comprobar el registro antes de empezar otro envío.
-- **La información cambió en otra ventana:** actualizar y revisar el estado vigente antes de volver a decidir.
-- **No aparece una historia o imagen:** comprobar grupo, estado de revisión y si fue retirada. Usar Actualizar comunidad en la vista del alumno.
-
-Si persiste un problema, anotar la tarea, hora y texto del error. Evitar incluir contraseñas, enlaces privados o datos de alumnos en capturas.
-
-## Antes de entregar al administrador real
-
-La [revisión técnica local](v1-final-review.md) ya se realizó. Sigue pendiente una sesión de uso con la persona que administrará CAI, usando cuentas ficticias y esta guía:
-
-1. Encontrar una solicitud pendiente, revisarla y explicar qué faltaría para aprobarla.
-2. Preparar el acceso del alumno correcto y distinguir aprobación de activación.
-3. Aprobar o rechazar una historia y explicar quién puede verla.
-4. Guardar el seguimiento de una consulta sin confundirlo con enviar una respuesta.
-5. Encontrar y retirar una imagen del grupo correcto, y cerrar sesión.
-
-Registrar por tarea si pudo terminar sin ayuda, dónde se detuvo y qué texto/acción no entendió. No marcar esta validación como completada por haber pasado pruebas automáticas. Confirmar también programas, permisos, responsables y procedimiento de respaldo. La contratación de servidor se resuelve después, como se acordó; las cuentas y servicios externos se agrupan con esta revisión final.
-
-Para las operaciones técnicas de copia y recuperación, consultar [respaldos y recuperación local](respaldo-recuperacion-local.md). El administrador no necesita ejecutar restauraciones durante su rutina diaria.
-
-
-## Retos de inglés: preparar sin hacerlo cada día
-
-En **Retos de inglés**, el calendario automático sirve tres preguntas diarias: gramática, vocabulario y vida diaria. Cambian a medianoche de Ciudad de México. El banco inicial tiene 180 preguntas y 45 temas, con explicación y ejemplo. No hace falta subir retos todos los días.
-
-1. En **Calendario**, elige fecha y grupo. Abre Revisar pregunta y explicación. Para sustituir una, escoge otra del área y pulsa Usar esta pregunta. Puedes programar desde hoy hasta 90 días después.
-2. Si ya hay respuestas, el contenido queda conservado: puedes pausar la pregunta o programar otra para otro día. Pausar todos los retos conserva resultados y permite repasar.
-3. En **Banco de preguntas**, busca por tema y filtra área/disponibilidad. Crear pregunta permite escribir la instrucción, tres o cuatro opciones, marcar una sola correcta y añadir explicación/ejemplo. Revisa Vista previa con solución antes de guardar.
-4. Borrador queda solo en administración. Lista entra en futuras rotaciones. Archivada se conserva sin entrar en nuevas selecciones. Editar el banco no reescribe preguntas ya servidas/programadas; para sustituir una del calendario elige otra entrada.
-5. Si otra ventana cambió la pregunta/calendario, actualiza y revisa antes de guardar; evita confirmar a ciegas con datos viejos.
-
-El alumno tiene un intento por pregunta, cinco puntos por participar y diez más por acertar. Completar tres preguntas suma un día de constancia, incluso con errores. Puede repasar sus respuestas anteriores; no es una calificación. Las insignias persistentes se integrarán en el siguiente módulo. Añadir a la validación final con CAI: revisar un reto, preparar un borrador, programarlo para el grupo correcto y explicar la pausa sin borrar resultados.
-
-
-## Insignias y reconocimientos
-
-En **Insignias** aparecen solicitudes pendientes y concesiones registradas. El número de pendientes también se muestra en el menú y en Resumen.
-
-1. En Solicitudes, abre Revisar solicitud, comprueba alumno, grupo y lo aprendido. Elige aprobar o no aprobar, escribe un motivo claro de 8–280 caracteres y confirma. La declaración y el motivo son privados; aprobar no publica una historia. Si no se aprueba, el alumno puede reforzar lo indicado y solicitar otra vez.
-2. Las automáticas no requieren revisión: primera respuesta, tres días completos seguidos y cinco días completos de retos. No se exige acertar todas las respuestas. Las aventuras de películas, canciones y lectura sí las revisa CAI.
-3. Dar reconocimiento permite elegir alumno activo y una distinción institucional: Sin miedo al inglés, Buen compañero o Constancia. Comprueba al alumno, escribe el motivo privado y confirma. Las demás insignias siguen sus propios recorridos.
-4. En Concesiones e historial, abre Ver concesión. Si hubo un error, puedes retirar/restaurar con motivo y confirmación. Se conserva la fecha y la historia original. Una retirada no borra puntos ni respuestas; las historias públicas vinculadas vuelven a revisión. Restaurar no las publica otra vez: revisa la historia por separado.
-5. Si aparece conflicto o se pierde la conexión durante una decisión, carga el estado actual antes de repetirla. El alumno conserva el texto de una solicitud que no pudo confirmar y puede reintentar sin duplicarla.
-
-El alumno decide si comparte su insignia. El formulario de publicación usa un texto nuevo editable, sin copiar la solicitud ni los motivos. No hay reconocimiento público automático ni acceso a colecciones privadas de compañeros. Añadir a la validación final con CAI: revisar una solicitud, explicar una indicación, conceder un reconocimiento al alumno correcto y corregir una concesión sin republicar una historia por accidente.
-
-
-## Fotografías oficiales y destinatarios
-
-En **Galería privada**, el bloque **Fotos oficiales de CAI** permite cargar las seis imágenes ya preparadas. Marcar que se compartirán con todos los alumnos aprobados y pulsar **Cargar fotos oficiales**. Se puede reintentar sin duplicar ni recuperar fotos retiradas. Para nuevas imágenes, elegir **Un grupo específico** o **Todos los alumnos aprobados** antes de revisar permisos y publicar. Las imágenes antiguas conservan su grupo. Ver [guía de material oficial](OFFICIAL_MEDIA.md).
-
-
-## Publicar una historia, un aviso o un álbum de CAI
-
-En **Publicaciones → Crear publicación de CAI**, elegir el tipo, escribir título/texto y seleccionar destinatarios. Añadir fotos nuevas (con descripción y autorización) o fotografías disponibles de Galería. **Guardar también las fotos en Galería** crea el archivo visual; en un álbum se activa automáticamente. **Destacar en Inicio** lo incluye en la selección principal; un aviso destacado aparece encima del carrusel. La fecha opcional indica cuándo dejará de mostrarse la publicación. Revisar permisos y confirmar.
-
-Inicio y Galería abren la misma historia y conversación. En **Publicaciones de coordinación** se puede quitar/poner destacado o retirar con confirmación. La retirada afecta la historia, las fotos y el álbum asociados. En Galería, **Borradores** muestra archivos de cargas que todavía no se publicaron; el acceso de alumnos permanece bloqueado. **Agregar una fotografía solo a Galería** conserva el uso de foto independiente, sin crear una historia.
-
-Las historias de alumnos siguen en la bandeja de moderación y sus comentarios se revisan con las herramientas existentes. **Mis notificaciones** es privado para cada alumno; no se convierte en un aviso compartido de coordinación. Ver [guía y presentación](COMMUNITY_HOME_STORIES.md).
+La validación con una persona de coordinación real sigue pendiente: probar ingreso, activación, cambio de grupo, moderación con fotos, aviso y recuperación. Las comprobaciones automáticas de [ADMIN_USABILITY_REVIEW](ADMIN_USABILITY_REVIEW.md) no sustituyen esa sesión ni un despliegue desde internet.

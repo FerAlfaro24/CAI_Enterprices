@@ -1,3 +1,4 @@
+import { normalizeSearch } from '../features/admin/search'
 import { OfficialPublisher } from '../features/admin/components/OfficialPublisher'
 import { useState } from 'react'
 import { useSearchParams } from 'react-router'
@@ -18,12 +19,14 @@ const statusFilters: { value: PostStatus; label: string }[] = [
 export function AdminPostsPage() {
   const { state, connection } = useAdmin()
   const [params,setParams]=useSearchParams()
+  const official=params.get('bandeja')==='cai'
+  const [query,setQuery]=useState('')
   const comments=Boolean(connection&&params.get('bandeja')==='comentarios')
   const [status, setStatus] = useState<PostStatus>('pendiente')
   const [type, setType] = useState<PostType | 'todas'>('todas')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const counts = countByStatus(state.posts, postStatuses)
-  const visible = state.posts.filter((p) => p.status === status && (type === 'todas' || p.type === type))
+  const visible = state.posts.filter((p) => p.status === status && (type === 'todas' || p.type === type) && normalizeSearch(`${p.title} ${p.author} ${p.program} ${p.id} ${p.body}`).includes(normalizeSearch(query)))
   const flagged = state.posts.filter((p) => p.status === 'pendiente' && (connection || p.checks)).length
 
   return (
@@ -33,15 +36,16 @@ export function AdminPostsPage() {
           <p className={s.eyebrow}>Moderación</p>
           <h1 className={s['page-title']}>Publicaciones</h1>
           <p className={s['page-lead']}>
-            Revisa el texto y la privacidad antes de publicar. Solo los alumnos del mismo programa y grupo podrán ver cada historia aprobada.
+            Revisa historias y comentarios de alumnos, o publica avisos y álbumes como Equipo CAI. Cada contenido conserva sus destinatarios autorizados.
           </p>
         </div>
         {connection&&!comments && <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={connection.busy} onClick={() => { void connection.refresh() }}><Icon name="refresh" size={16} />Actualizar publicaciones</button>}
       </div>
 
-      {connection?.configuration&&<OfficialPublisher groups={connection.configuration.groups} onAccessLost={()=>{void connection.refresh()}}/>}
-      {connection&&<div className={s.tabs} role="group" aria-label="Tipo de moderación"><button type="button" className={s.tab} aria-pressed={!comments} onClick={()=>setParams({})}>Historias</button><button type="button" className={s.tab} aria-pressed={comments} onClick={()=>setParams({bandeja:'comentarios'})}>Comentarios ({connection.commentCounts.pendiente} en revisión)</button></div>}
-      {comments?<AdminCommentsPanel/>:<><section className={s.stats} aria-label="Resumen de moderación">
+
+      {connection&&<div className={s.tabs} role="group" aria-label="Tipo de moderación"><button type="button" className={s.tab} aria-pressed={!comments&&!official} onClick={()=>setParams({})}>Historias de alumnos</button><button type="button" className={s.tab} aria-pressed={comments} onClick={()=>setParams({bandeja:'comentarios'})}>Comentarios ({connection.commentCounts.pendiente} en revisión)</button><button type="button" className={s.tab} aria-pressed={official} onClick={()=>setParams({bandeja:'cai'})}>Equipo CAI · Publicar</button></div>}
+      {connection?.configuration&&<div hidden={!official}><OfficialPublisher groups={connection.configuration.groups} onAccessLost={()=>{void connection.refresh()}}/></div>}
+      {official?null:comments?<AdminCommentsPanel/>:<><section className={s.stats} aria-label="Resumen de moderación">
         <p><strong>{counts.pendiente}</strong>en revisión</p>
         <p><strong>{flagged}</strong>requieren verificación</p>
         <p><strong>{counts.publicada}</strong>publicadas</p>
@@ -66,6 +70,8 @@ export function AdminPostsPage() {
         </div>
       </div>
 
+      <label className={s.listSearch}>Buscar publicación<input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Título, alumno, programa o texto" /></label>
+      <p className={s.resultCount} role="status">{visible.length} publicaciones con estos filtros</p>
       {visible.length === 0 ? (
         <p className={`${s.card} ${s.empty}`}>No hay publicaciones con estos filtros.</p>
       ) : (
@@ -74,7 +80,7 @@ export function AdminPostsPage() {
         </div>
       )}
       <p className={s.footnote}>
-        {connection ? 'Revisión guardada en este equipo. Retirar es definitivo; devolver a revisión oculta la historia del feed hasta una nueva aprobación.' : 'Publicaciones e imágenes ficticias. Las decisiones solo existen en esta pestaña y no publican nada.'}
+        {connection ? 'Las decisiones se guardan. Retirar es definitivo; devolver a revisión oculta la historia del feed hasta una nueva aprobación.' : 'Publicaciones e imágenes ficticias. Las decisiones solo existen en esta pestaña y no publican nada.'}
       </p>
 
       <PostDialog post={state.posts.find((p) => p.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />

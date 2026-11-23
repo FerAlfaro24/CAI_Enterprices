@@ -2,7 +2,7 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 22 de noviembre de 2026:** aplicación integrada, SQLite esquema 20. **Continuar en `feat/v1-photo-viewer-notification-history`**, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos ampliadas, resultados de Retos y notificaciones](docs/COMMUNITY_FEEDBACK.md): visor completo, error rojo/tachita, bandeja Sin leer/Historial y borrado privado con confirmación. Incluye el cierre visual anterior y Logros, insignias, perfiles, publicaciones, fotos oficiales y administración conectados. Fotos privadas fuera de GitHub. Aceptación humana e infraestructura definitiva pendientes. `main` es antigua y `release/cai-demo-v1.0` conserva la referencia visual congelada.
+**Estado al 22 de noviembre de 2026:** aplicación integrada, SQLite esquema 20. **Continuar en `feat/v1-admin-usability-review`**, desde `c3d4d82` de PR #22; código `e255f91`. [Administración revisada](docs/ADMIN_USABILITY_REVIEW.md): tareas directas, configuración por apartados, ficha clara, búsqueda/filtros y fotos en moderación. 272 API y 370 comprobaciones UI de esta entrega. Incluye las correcciones de fotos/Retos/notificaciones y las funciones anteriores. [Guía para coordinación](docs/guia-administracion.md). Aceptación humana, servicios externos e infraestructura definitiva pendientes; fotos privadas fuera de Git. `main` es antigua y `release/cai-demo-v1.0` conserva la referencia visual congelada.
 
 ## Qué funciona localmente
 
@@ -24,7 +24,7 @@ GitHub muestra este repositorio como público al 19-11-2026. Para operaciones au
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-photo-viewer-notification-history
+git switch --track origin/feat/v1-admin-usability-review
 code .
 npm.cmd ci
 ```

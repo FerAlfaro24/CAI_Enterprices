@@ -1,3 +1,5 @@
+import { useSearchParams } from 'react-router'
+import { normalizeSearch } from '../features/admin/search'
 import { useState } from 'react'
 import s from '../features/admin/admin.module.css'
 import { StudentDialog } from '../features/admin/components/StudentDialog'
@@ -14,18 +16,25 @@ const filters: { value: Filter; label: string }[] = [
 
 export function AdminStudentsPage() {
   const { state,connection } = useAdmin()
-  const [filter, setFilter] = useState<Filter>('activo')
-  const [program, setProgram] = useState('todos')
-  const [query, setQuery] = useState('')
+  const [params,setParams]=useSearchParams()
+  const filter=(['activo','suspendido','todos'].includes(params.get('estado')??'')?params.get('estado'):'activo') as Filter
+  const program=params.get('programa')??'todos', group=params.get('grupo')??'todos', access=params.get('acceso')??'todos', query=params.get('q')??''
+  const update=(key:string,value:string)=>setParams(current=>{const next=new URLSearchParams(current);if(value&&value!=='todos')next.set(key,value);else next.delete(key);return next},{replace:true})
+  const setFilter=(value:Filter)=>setParams(current=>{const next=new URLSearchParams(current);next.set('estado',value);return next},{replace:true})
+  const setProgram=(value:string)=>setParams(current=>{const next=new URLSearchParams(current);next.delete('grupo');if(value==='todos')next.delete('programa');else next.set('programa',value);return next},{replace:true})
+  const setQuery=(value:string)=>update('q',value)
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   const directory = buildDirectory(state)
-  const programs = [...new Set(directory.map((st) => st.program))].sort()
-  const normalized = query.trim().toLocaleLowerCase('es')
+  const programs = [...new Set([...(program==='todos'?[]:[program]),...directory.map((st) => st.program)])].sort()
+  const normalized = normalizeSearch(query)
+  const groupNames=[...new Set([...(group==='todos'?[]:[group]),...directory.filter(st=>program==='todos'||st.program===program).map(st=>st.group)])].sort()
   const visible = directory.filter((st) =>
     (filter === 'todos' || st.status === filter) &&
     (program === 'todos' || st.program === program) &&
-    (!normalized || `${st.name} ${st.id} ${st.group}`.toLocaleLowerCase('es').includes(normalized)),
+    (group==='todos'||st.group===group) &&
+    (access==='todos'||connection?.students.find(item=>item.id===st.id)?.accountStatus===access) &&
+    (!normalized || normalizeSearch(`${st.name} ${st.id} ${st.group} ${st.program} ${connection?.requests.find(item=>item.id===st.id)?.applicant.email??''}`).includes(normalized)),
   )
   const count = (value: Filter) => (value === 'todos' ? directory.length : directory.filter((st) => st.status === value).length)
   const minors = directory.filter((st) => st.ageGroup === 'menor').length
@@ -64,14 +73,17 @@ export function AdminStudentsPage() {
             <option value="todos">Todos los programas</option>
             {programs.map((name) => <option key={name} value={name}>{name}</option>)}
           </select>
+          <label className={s['sr-only']} htmlFor="group-filter">Grupo</label><select id="group-filter" className={s.select} value={group} onChange={e=>update('grupo',e.target.value)}><option value="todos">Todos los grupos</option>{groupNames.map(name=><option key={name}>{name}</option>)}</select>
+          <label className={s['sr-only']} htmlFor="account-filter">Activación de cuenta</label><select id="account-filter" className={s.select} value={access} onChange={e=>update('acceso',e.target.value)}><option value="todos">Cualquier activación</option><option value="pendiente">Por activar</option><option value="activada">Activadas</option></select>
           <div className={s.search}>
             <Icon name="search" size={18} />
             <label htmlFor="student-search" className={s['sr-only']}>Buscar alumno</label>
-            <input id="student-search" type="search" placeholder="Buscar por nombre, folio o grupo" value={query} onChange={(event) => setQuery(event.target.value)} />
+            <input id="student-search" type="search" placeholder="Nombre, correo, folio o grupo" value={query} onChange={(event) => setQuery(event.target.value)} />
           </div>
         </div>
       </div>
 
+      <p className={s.resultCount} role="status">{visible.length} alumnos con estos filtros {params.size>0&&<button type="button" className={s['card-link']} onClick={()=>setParams({})}>Quitar filtros</button>}</p>
       <section className={`${s.card} ${s['table-card']}`} aria-labelledby="students-caption">
         <table className={s.table}>
           <caption id="students-caption" className={s['sr-only']}>Alumnos: {visible.length} resultados</caption>
@@ -80,7 +92,7 @@ export function AdminStudentsPage() {
               <th scope="col">Alumno</th>
               <th scope="col">Programa y grupo</th>
               <th scope="col">Publicaciones</th>
-              <th scope="col">Perfil</th>
+              <th scope="col">Acceso</th>
               <th scope="col">Estado</th>
               <th scope="col"><span className={s['sr-only']}>Acciones</span></th>
             </tr>
@@ -107,8 +119,8 @@ export function AdminStudentsPage() {
                     <span className={s['cell-stack']}>{student.program}<span>{student.group}</span></span>
                   </td>
                   <td data-label="Publicaciones">{student.posts}</td>
-                  <td data-label="Perfil" className={s['cell-muted']}>
-                    <span className={s['cell-icon']}><Icon name={connection||isPrivate ? 'lock' : 'globe'} size={15} />{connection?'Solo su grupo':isPrivate ? 'Privado' : 'Comunidad'}</span>
+                  <td data-label="Acceso" className={s['cell-muted']}>
+                    <span className={s['cell-icon']}><Icon name={connection||isPrivate ? 'lock' : 'globe'} size={15} />{connection?(connection.students.find(item=>item.id===student.id)?.accountStatus==='activada'?'Cuenta activada':'Por activar'):isPrivate ? 'Privado' : 'Comunidad'}</span>
                   </td>
                   <td data-label="Estado"><StatusBadge status={student.status} /></td>
                   <td>
@@ -125,7 +137,7 @@ export function AdminStudentsPage() {
         </table>
         {visible.length === 0 && <p className={s.empty}>Ningún alumno coincide con los filtros.</p>}
       </section>
-      <p className={s.footnote}>Prueba local: directorio conectado al servidor. Utiliza únicamente datos ficticios.</p>
+      <p className={s.footnote}>Abre una ficha para preparar el acceso, cambiar de grupo o corregir el expediente privado.</p>
 
       <StudentDialog student={directory.find((st) => st.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />
     </>

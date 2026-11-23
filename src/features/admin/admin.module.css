@@ -508,3 +508,21 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 @media(max-width:560px) { .topbar { gap:8px; }.topbar-end { gap:6px; }.topbar-end .avatar { display:none; }.topbar-title { min-width:0; }.page-head { gap:14px; }.head-actions { flex-wrap:wrap; }.head-actions .btn { flex:1 1 140px; }.card { padding:18px; } }
 
 .topbar .icon-btn { width:44px;min-height:44px; }
+/* Coordinación: tareas claras, listas buscables y revisión sin perder contexto. */
+.workbench { padding:22px; margin:0 0 24px; border:1px solid var(--line); border-radius:20px; background:var(--surface); }
+.workbench h2 { font-size:22px; font-weight:800; margin:0 0 6px; }.workbench p { color:var(--muted);font-size:14px;line-height:1.6;margin:0; }
+.taskLinks { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0; }
+.taskLinks>a { display:flex;align-items:center;gap:12px;min-width:0;padding:16px;border:1px solid var(--line);border-radius:14px;color:var(--ink);text-decoration:none;background:var(--blue-50); }
+.taskLinks>a>span { flex:1;min-width:0; }.taskLinks strong { display:block;font-size:16px; }.taskLinks small { display:block;color:var(--muted);font-size:13px;line-height:1.5;margin-top:4px; }.taskLinks b { border-radius:999px;padding:6px 12px;background:var(--surface);font-size:20px; }
+.taskLinks>a:hover { border-color:var(--blue-600); }.quickActions { display:flex;gap:10px;flex-wrap:wrap; }
+.listSearch { display:grid;gap:6px;font-size:14px;min-width:0;max-width:580px; }.listSearch input { min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit; }
+.resultCount { display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:14px 0; }
+.dialog .dialog-head { position:sticky;top:0;z-index:3;background:var(--surface);padding-bottom:16px;border-bottom:1px solid var(--line); }
+.dialog .dialog-foot { position:sticky;bottom:0;z-index:2;background:var(--surface); }
+.dialog .icon-btn { min-width:44px;min-height:44px; }.dialog-body .tabs { flex-wrap:wrap; }.accessNext { padding:16px;border:1px solid var(--line);border-radius:14px;margin-top:16px; }.accessNext h3 { font-weight:750; }.accessNext p { margin:10px 0;font-size:14px;line-height:1.6; }
+.reviewPhotos>div { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px; }.reviewPhotos button { border:1px solid var(--line);border-radius:12px;padding:6px;background:var(--surface);color:var(--ink);cursor:zoom-in; }.reviewPhotos img { width:100%;height:110px;object-fit:contain; }.reviewPhotos button span { display:block;font-size:13px;padding:8px 0; }
+.reviewPhotoDialog { width:min(1150px,calc(100vw - 24px));max-height:calc(100dvh - 24px);margin:auto;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);overflow:auto; }.reviewPhotoDialog::backdrop { background:#071226df; }.reviewPhotoDialog .dialog-head { align-items:center;justify-content:space-between; }.reviewPhotoDialog figure { margin:16px; }.reviewPhotoDialog img { width:100%;height:calc(100dvh - 240px);object-fit:contain; }.reviewPhotoDialog figcaption { margin-top:8px;font-size:14px; }
+.learningReviewDetails { margin-top:16px; }.learningReviewDetails>summary { cursor:pointer;min-height:44px;font-weight:750;padding:12px;border:1px solid var(--line);border-radius:10px; }.learningReviewDetails[open]>summary { margin-bottom:16px; }.learningReviewDetails textarea { width:100%;min-height:90px; }.learningReviewDetails blockquote { padding:14px;margin:12px 0;border-left:3px solid var(--blue-600); }
+@media(max-width:640px) { .taskLinks { grid-template-columns:minmax(0,1fr); }.workbench { padding:16px; }.taskLinks>a { padding:12px; }.dialog .dialog-head { padding:16px; }.dialog .dialog-foot { padding:12px; }.reviewPhotos img { height:80px; }.toolbar-group { flex-wrap:wrap; }.toolbar-group>* { max-width:100%; }.listSearch { width:100%; } }
+
+.admin [hidden] { display:none!important; }

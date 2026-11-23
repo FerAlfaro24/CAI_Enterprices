@@ -1,3 +1,4 @@
+import { normalizeSearch } from '../features/admin/search'
 import { useState } from 'react'
 import s from '../features/admin/admin.module.css'
 import { RequestReview } from '../features/admin/components/RequestReview'
@@ -21,11 +22,11 @@ export function AdminRequestsPage() {
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const counts = countByStatus(state.requests, requestStatuses)
-  const normalized = query.trim().toLocaleLowerCase('es')
+  const normalized = normalizeSearch(query)
 
   const visible = state.requests.filter((r) =>
     (filter === 'todas' || r.status === filter) &&
-    (!normalized || `${r.name} ${r.program} ${r.id}`.toLocaleLowerCase('es').includes(normalized)),
+    (!normalized || normalizeSearch(`${r.name} ${r.program} ${r.id} ${r.applicant?.email??''} ${r.applicant?.group??''} ${r.applicant?.studentCode??''}`).includes(normalized)),
   )
 
   return (
@@ -51,10 +52,11 @@ export function AdminRequestsPage() {
         <div className={s.search}>
           <Icon name="search" size={18} />
           <label htmlFor="request-search" className={s['sr-only']}>Buscar solicitud</label>
-          <input id="request-search" type="search" placeholder="Buscar por nombre, programa o folio" value={query} onChange={(event) => setQuery(event.target.value)} />
+          <input id="request-search" type="search" placeholder="Nombre, correo, grupo o folio" value={query} onChange={(event) => setQuery(event.target.value)} />
         </div>
       </div>
 
+      <p className={s.resultCount} role="status">{visible.length} solicitudes con estos filtros {normalized&&<button type="button" className={s['card-link']} onClick={()=>setQuery('')}>Limpiar búsqueda</button>}</p>
       <section className={`${s.card} ${s['table-card']}`} aria-labelledby="requests-caption">
         <table className={s.table}>
           <caption id="requests-caption" className={s['sr-only']}>
@@ -103,7 +105,7 @@ export function AdminRequestsPage() {
         )}
       </section>
       <p className={s.footnote}>
-        Pruebas con datos ficticios. Las decisiones se guardan en el servidor local y se conservan al recargar.
+        Las decisiones se conservan al recargar. Aprobar incorpora al alumno al directorio; la activación de cuenta se prepara desde su ficha.
       </p>
 
       <RequestDialog request={state.requests.find((r) => r.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />
