@@ -1,3 +1,4 @@
+import { migrateNoticeHistory } from './notice-history-migration.ts'
 import { migrateLearning } from './learning-migration.ts'
 import { migrateCommunityContent } from './community-content-migration.ts'
 import { DatabaseSync } from 'node:sqlite'
@@ -312,6 +313,7 @@ export function migrateDatabase(db: DatabaseSync) {
   }
   migrateCommunityContent(db)
   migrateLearning(db)
+  migrateNoticeHistory(db)
   return db
 }
 

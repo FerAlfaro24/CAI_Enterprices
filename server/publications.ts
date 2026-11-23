@@ -141,7 +141,7 @@ export function publications(db: Database) {
           db.prepare('INSERT INTO learning_audit(achievement_id,action,actor,reason,created_at) VALUES (?,?,?,?,?)').run(Number(learning.id),'publication.'+decision,'ADMIN-'+admin,learningReason,new Date().toISOString())
         }
 
-        queueNotice(db, row.author_id, 'Revisión de tu publicación', 'CAI actualizó la revisión de una publicación. Entra en Mis publicaciones para consultar su estado y las indicaciones.')
+        queueNotice(db, row.author_id, 'Revisión de tu publicación', 'CAI actualizó la revisión de una publicación. Entra en Mis publicaciones para consultar su estado y las indicaciones.','publication-review')
       })
     },
   }

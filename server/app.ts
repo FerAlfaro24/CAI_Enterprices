@@ -286,6 +286,12 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       }
       if (path === '/api/local/student/gallery' && method === 'GET') return json(response, 200, { images: gallery.forStudent(user) })
       if (path === '/api/local/student/notices' && method === 'GET') return json(response, 200, { notices: mail.forStudent(user) })
+      if(path==='/api/local/student/notices/archive-viewed'&&method==='POST'){
+        limit(`notices-close:${user.id}`,60,15*60_000);mail.archiveViewed(user,await protectedBody());return json(response,200,{ok:true})
+      }
+      if(path==='/api/local/student/notices/dismiss-history'&&method==='POST'){
+        limit(`notices-dismiss:${user.id}`,60,15*60_000);mail.dismissHistory(user,await protectedBody());return json(response,200,{ok:true})
+      }
       const seen = path.match(/^\/api\/local\/student\/notices\/(\d+)\/seen$/)
       if (seen && method === 'POST') {
         const id = Number(seen[1]), data = await protectedBody()

@@ -87,6 +87,8 @@ export function ConnectedCommunity({ children }: { children: ReactNode }) {
         throw error
       }
     }, 'Perfil actualizado.'),
+    archiveViewedNotices:ids=>write(()=>studentApi.archiveViewedNotices(ids),'Notificaciones vistas guardadas en el historial.'),
+    dismissNotices:ids=>write(()=>studentApi.dismissNotices(ids),'Historial actualizado.'),
     user, members, gallery: snapshot.gallery, notices: snapshot.notices, seen: id => write(() => studentApi.seen(id), 'Aviso marcado como leído.'), mine: snapshot.mine, submissionsOpen: snapshot.submissionsOpen, busy, error, notice, refresh,
     resolveMember: id => publicMembers.find(member => member.id === id) ?? publicMember({ id, displayName: 'Miembro no disponible', avatarColor: '#1f56d6' }),
     submit: (draft, key) => write(() => studentApi.createPost(draft, key), 'Tu publicación se guardó y está pendiente de revisión.'),

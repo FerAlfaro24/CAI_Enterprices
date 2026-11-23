@@ -117,6 +117,9 @@ export const contactApi = {
   update: (contact: ContactInquiry, status: ContactStatus, note: string) => call(`/contacts/${contact.id}`, 'PATCH', {revision:contact.revision,status,note}),
 }
 
+async function noticeBatches(path:string,ids:number[],confirmation=false) {
+  for(let offset=0;offset<ids.length;offset+=500)await call(path,'POST',{ids:ids.slice(offset,offset+500),...(confirmation?{confirmed:true}:{})})
+}
 export const studentApi = {
   react: (postId: string, reaction: import('../../../server/contracts').ReactionKind | null, revision: number, key: string) => call(`/student/posts/${postId}/reaction`, 'PATCH', { reaction, revision }, { 'Idempotency-Key': key }),
   profile: () => call<{ profile: import('../../../server/contracts').StudentProfile }>('/student/profile'),
@@ -124,6 +127,8 @@ export const studentApi = {
   gallery: () => call<{images: GalleryItem[]}>('/student/gallery'),
   notices: () => call<{ notices: StudentNotice[] }>('/student/notices'),
   seen: (id: number) => call(`/student/notices/${id}/seen`, 'POST', {}),
+  archiveViewedNotices:(ids:number[])=>noticeBatches('/student/notices/archive-viewed',ids),
+  dismissNotices:(ids:number[])=>noticeBatches('/student/notices/dismiss-history',ids,true),
   requestRecovery: (email: string) => call<{message: string}>('/recovery/request', 'POST', { email }),
   resetPassword: (token: string, password: string, confirm: string) => call('/recovery/reset', 'POST', { token, password, confirm }),
   activate: (token: string, password: string, confirm: string) => call('/activation', 'POST', { token, password, confirm }),

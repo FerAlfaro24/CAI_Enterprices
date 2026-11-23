@@ -265,3 +265,6 @@
 .connected .score>div>span,.connected .mission>p { font-size:13px; }.connected .streakPill { font-size:13px; }
 .connected .learnCard p,.connected .bottomCard p { font-size:16px; }
 @media(max-width:480px) { .connected .pageHeading h1 { font-size:36px; }.connected .mission { margin-bottom:4px; }.connected .questionForm { padding:22px 18px; }.connected .badge { padding:12px 8px; }.connected .badgeArtwork { width:60px;height:60px; }.connected .bottomCards { gap:18px; } }
+
+/* Respondida no equivale a acertada: icono y color comunican ambos estados. */
+.missionPath>button[data-result='incorrect']>span { background:#aa393e;color:#fff;box-shadow:0 4px 0 #74282e; }

@@ -21,6 +21,8 @@ export interface CommunityConnection {
   gallery: GalleryItem[]
   notices: StudentNotice[]
   seen: (id: number) => Promise<boolean>
+  archiveViewedNotices:(ids:number[])=>Promise<boolean>
+  dismissNotices:(ids:number[])=>Promise<boolean>
   mine: OwnPost[]
   submissionsOpen: boolean
   reactionsOpen: boolean
