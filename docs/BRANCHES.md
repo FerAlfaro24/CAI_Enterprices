@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`. [Cierre visual](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada), 454 UI y 108 regresión de Logros; sin cambios de servidor/esquema.
+- **Continuación actual:** `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md); esquema 20, 272 API y 144 UI; datos habituales sin migrar.
+- **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`. [Cierre visual](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada), 454 UI y 108 regresión de Logros; sin cambios de servidor/esquema.
 - **Logros anterior:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`; código `5349283`. [Logros/insignias/perfiles](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), esquema 19, 261 API/108 navegador y ajuste final con 42 API pertinentes.
 - **Cabecera anterior:** `feat/v1-community-header-highlights`, desde `ffb323d`. [Cabecera/carrusel](COMMUNITY_DESIGN.md#cabecera-y-novedades-en-un-solo-lugar), 122 comprobaciones nuevas.
 - **Revisión social anterior:** `feat/v1-community-social-feed`, desde `d6e66fd`. [Publicaciones y conversación](COMMUNITY_DESIGN.md#publicaciones-y-conversación-más-sencillas), 124 comprobaciones nuevas.
@@ -20,6 +21,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`feat/v1-photo-viewer-notification-history` parte de `fb28061` de PR #21. Correcciones de fotos/Retos/notificaciones solicitadas el 22-11; migración 20 aditiva, visor sin recorte, distinción de acierto/error y lectura al cerrar con confirmación de importantes. Historial del alumno eliminable sin borrar registros administrativos. [Entrega](COMMUNITY_FEEDBACK.md). Sin fusión ni cambio de main/release o despliegue público.
 
 `style/v1-final-interface-polish` parte de `0b73032` (PR #20), código `5bd4c2a`. Primera pasada de punto 1, acabado visual y navegación de comunidad/página pública/panel. Incluye Logros anteriores; no reconstruirlos. Muestra nueva separada, aceptación humana pendiente, sin migraciones ni fusión de PR.
 

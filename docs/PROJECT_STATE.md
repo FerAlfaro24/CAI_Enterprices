@@ -1,6 +1,8 @@
 # CAI — estado vigente
 
-**Actualizado: 22 de noviembre de 2026, primera pasada del cierre visual.** **454 comprobaciones de interfaz (227 por navegador)** y **108 de regresión de Logros (54 por navegador)** reejecutadas; tipos/lint/build correctos. API no repetida: sin cambios de servidor/esquema/reglas, conserva los 261 resultados del 19-11 y sus límites. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice](DOCUMENTATION_INDEX.md).
+**Actualizado: 22 de noviembre de 2026, correcciones de uso de comunidad.** Continuación `feat/v1-photo-viewer-notification-history`, base `fb28061` de PR #21; código `bb7b8f6`. [Entrega vigente](COMMUNITY_FEEDBACK.md): fotos completas con visor, resultados correctos/incorrectos persistidos y notificaciones Sin leer/Historial. Esquema 20 aditivo, sin tocar bases habituales. **272 pruebas API y 144 comprobaciones UI (72 Brave/72 Opera)**; tipos/lint/build correctos. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Índice](DOCUMENTATION_INDEX.md).
+
+**Cierre visual anterior:** 454 comprobaciones UI y 108 de Logros en la entrega de PR #21; no son una matriz repetida hoy. La nueva tanda cubre específicamente los tres cambios solicitados.
 
 **Corrección posterior de Galería:** seis fotos visibles individualmente por defecto; Álbumes opcional y filtros por todas las categorías interiores. 32 comprobaciones nuevas (16 Brave/16 Opera), lint/tipos/build correctos. La suite API anterior no se repitió: no hubo cambios de servidor o datos. [Detalle](COMMUNITY_HOME_STORIES.md#corrección-de-visibilidad-en-galería).
 

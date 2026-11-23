@@ -1,5 +1,7 @@
 # CAI — respaldo y recuperación local
 
+**22-11:** el esquema vigente es 20. La copia conserva prioridad, lectura y descarte del historial del alumno sin eliminar el aviso administrativo. El verificador acepta copias 9–20; migrar solo una copia aislada al ensayar recuperación. [Entrega y prueba de persistencia](COMMUNITY_FEEDBACK.md).
+
 **Guía operativa al 17-11-2026**, contrastada con `server/backup.ts` y `server/verify-backup.ts`; no se ejecuta aquí contra datos del usuario. Para pruebas del agente, usar solo fixtures nuevas y copias separadas. [Inicio](START_HERE.md) · [Arranque](RUN_LOCAL.md) · [Pruebas](TESTING.md).
 
 **Producción:** usar `production:backup` con configuración privada explícita; reutiliza el mismo mecanismo y guarda en CAI_DATA_DIR/backups, sin abrir .local como alternativa. `local:backup` se detiene en NODE_ENV=production. Ver [guía productiva](PRODUCTION_PREPARATION.md); la operación/recuperación del alojamiento real aún debe validarse.
