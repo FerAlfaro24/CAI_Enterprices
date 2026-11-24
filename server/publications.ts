@@ -1,3 +1,4 @@
+import { learningPublicationLimits } from '../shared/learning.ts'
 import { publicationPhotos } from './community-media.ts'
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError, record } from './validation.ts'
@@ -23,13 +24,14 @@ function field(value: unknown, label: string, min: number, max: number) {
   if (typeof value !== 'string' || value.trim().length < min || value.trim().length > max || [...value].some((char) => char.charCodeAt(0) < 32 && ![9, 10, 13].includes(char.charCodeAt(0)))) throw new HttpError(400, `Revisa ${label}: debe tener entre ${min} y ${max} caracteres.`)
   return value.trim()
 }
-export function validatePublication(value: unknown): PublicationDraft {
+export function validatePublication(value: unknown, source: 'story' | 'learning' = 'story'): PublicationDraft {
+  const limits = source === 'learning' ? learningPublicationLimits : publicationLimits
   const data = record(value)
   if (Object.keys(data).some((key) => !['title', 'body', 'category','badgeGrantId'].includes(key))) throw new HttpError(400, 'La publicación contiene datos no admitidos.')
   if(data.badgeGrantId!==undefined&&(typeof data.badgeGrantId!=='string'||!/^BDG-\d{4,}$/.test(data.badgeGrantId)||!Number.isSafeInteger(Number(data.badgeGrantId.slice(4)))||data.category!=='achievement'))throw new HttpError(400,'Solo puedes compartir una insignia válida como logro.')
   if (typeof data.category !== 'string' || !Object.hasOwn(publicationCategories, data.category)) throw new HttpError(400, 'Elige Logro o Experiencia.')
-  return { title: field(data.title, 'el título', publicationLimits.titleMin, publicationLimits.titleMax),
-    body: field(data.body, 'el texto', publicationLimits.bodyMin, publicationLimits.bodyMax), category: data.category as PublicationDraft['category'],...(data.badgeGrantId?{badgeGrantId:data.badgeGrantId as string}:{}) }
+  return { title: field(data.title, 'el título', limits.titleMin, limits.titleMax),
+    body: field(data.body, 'el texto', limits.bodyMin, limits.bodyMax), category: data.category as PublicationDraft['category'],...(data.badgeGrantId?{badgeGrantId:data.badgeGrantId as string}:{}) }
 }
 function publicPost(db: Database, row: Row): PublishedPost {
   const institutional=row.admin_author_id!==null
