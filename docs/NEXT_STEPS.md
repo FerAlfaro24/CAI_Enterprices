@@ -1,8 +1,12 @@
 # CAI — próximos pasos vigentes
 
+## Presentación solicitada — 24-11-2026
+
+Preparada una copia remota independiente con F1–F5 para la presentación del usuario; rama `test/v1-client-presentation-2026-11-24` desde `15d3a94`. [Estado, pruebas y vencimiento](REMOTE_DEMO.md#presentación-actualizada--24-de-noviembre-de-2026). Cierra el 25-11 a las 10:12 CDMX; no renovar automáticamente. Tras la presentación, recoger observaciones humanas y retomar F6 Google/correo institucionales y alojamiento final; Top espera decisión del cliente. No dar por probados los dispositivos físicos o el correo real.
+
 ## Entrega F5: Retos diarios y progreso personal — 24-11-2026
 
-**Implementada y comprobada**, rama `feat/v1-daily-challenges-refresh`, código `258abfb`, [PR #34](https://github.com/FerAlfaro24/CAI_Enterprices/pull/34), borrador. Base `5f5ce0a` de F3b/F4; incluye esas entregas y las anteriores, sin fusionar nada nuevamente. Esta es la continuación vigente. Top/ranking permanece a la espera del cliente.
+**Implementada y comprobada**, rama `feat/v1-daily-challenges-refresh`, código `258abfb`, [PR #34](https://github.com/FerAlfaro24/CAI_Enterprices/pull/34), borrador. Base `5f5ce0a` de F3b/F4; incluye esas entregas y las anteriores, sin fusionar nada nuevamente. Esta es la base funcional de la presentación actual. Top/ranking permanece a la espera del cliente.
 
 ### Qué cambió
 

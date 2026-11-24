@@ -1,5 +1,21 @@
 # Presentación remota protegida de CAI
 
+## Presentación actualizada — 24 de noviembre de 2026
+
+Nueva presentación solicitada expresamente hoy por el usuario, máximo 24 horas. Rama `test/v1-client-presentation-2026-11-24`, desde `15d3a94` de F5 (`258abfb`/PR #34). Incluye F1–F5 completos; no se fusionan ramas intermedias ni se cambia main/release o Vercel. Esta sección sustituye como estado operativo las ventanas históricas de abajo.
+
+Se creó una fixture nueva con `server/tests/community-showcase-server.ts 4240 3340 --client-presentation` y luego una copia remota independiente con `scripts/remote-demo.mjs --open-entry`. Solo frontend compilado y API; esquema22, origen HTTPS productivo y cookies seguras. Portada/registro libres, comunidad/administración/fotos con cuenta propia. Datos habituales y copias anteriores conservados, sin migrarlos. El lanzador portátil existente no instala servicios ni cambia configuración del sistema.
+
+Muestra inicial: once alumnos ficticios de Inglés/Francés con claves individuales, nueve publicaciones/avisos y 27 comentarios inmediatos; seis fotos oficiales en Galería, imagen adicional del aviso fuera de Galería; cinco Logros privados y dos días previos de Retos (80 puntos) para el alumno principal. Las tres actividades de hoy quedan sin responder. Las cuentas/conversaciones se identifican como ilustrativas; no son participación real. No se publican fotografías en Git ni como recursos públicos.
+
+El último aviso aparece primero y tiene foto; el carrusel contiene solo avisos. Registro usa Clase y folio automático, comunidad común entre clases, comentarios inmediatos y borrado propio, Logros simplificados y publicador administrativo separado. Google/correo reales siguen pendientes; para cuentas nuevas coordinación prepara y comparte manualmente el enlace de activación. Top sigue pendiente de decisión del cliente.
+
+La ventana vence el **25-11-2026 a las 10:12, Ciudad de México**, o antes si se apaga/desconecta la computadora o termina el proceso. No es alojamiento permanente. Metadatos activos en `.local/tests/remote-demo-latest.json`; URL, claves individuales y `accesos-para-presentacion.txt` exclusivamente en la carpeta privada indicada. No renovar implícitamente ni detener esta instancia al cerrar las pruebas locales.
+
+**Comprobado en esta entrega:** build/tipos y ESLint; 21 pruebas dirigidas de contenido y entrada/proxy, correctas. La primera ejecución de puertos locales recibió EACCES por restricciones del entorno; con acceso autorizado se ejecutaron las 21 sin fallos. Por HTTPS real: 72 comprobaciones Brave (16 entrada/privacidad, 17 registro/aprobación/activación/login y 39 presentación compartida) y 55 en Opera GX (16 entrada/privacidad +39 presentación); 127 en total. Registro sintético CAI-0012 suspendido al terminar, sin borrar su historial. Fotos completas, sincronización automática de reacciones entre alumnos de clases distintas, retirada restaurada, publicador, aviso con imagen, formulario Logros, repaso de errores, Retos sin responder, consola sin errores y tamaños1440/768/375/320. Captura móvil de Retos inspeccionada. Las 331 API/134 UI de F5 son evidencia histórica, no repetida hoy. Dispositivos/redes físicos del cliente y Google/correo reales no comprobados.
+
+Verificador adicional reproducible: `scripts/check-client-presentation.browser.mjs`, recibe accesos privados en ejecución, sin credenciales ni URL activa en código. Las pruebas/capturas privadas quedan ignoradas. No confundir ninguna URL de ventanas anteriores con la nueva.
+
 ## Entrada pública temporal — 23 de noviembre de 2026
 
 El usuario autorizó quitar la contraseña adicional. La portada, registro y pantallas de acceso son públicas; comunidad, expediente, administración y fotografías privadas siguen requiriendo su cuenta y permisos. El modo predeterminado del lanzador mantiene Basic; `--open-entry` lo desactiva explícitamente para esta prueba autorizada.
