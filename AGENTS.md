@@ -8,6 +8,8 @@
 
 ## Alcance y prioridad
 
+- Prueba con amigos autorizada el 23-11 por máximo 24 horas: [estado y evidencia](docs/REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026). Usa versión actual de administración, copia ficticia nueva, nueve claves individuales y seis fotos oficiales. Metadatos activos en `.local/tests/remote-demo-latest.json`; comprobar vencimiento/proceso/render antes de dar enlace. No reactivar o renovar la ventana implícitamente. Accesos y textos para repartir exclusivamente en carpeta privada, nunca Git. No confundir con la demo vencida del 19-11.
+
 - Punto 1: [primera pasada visual](docs/COMMUNITY_DESIGN.md#cierre-visual-primera-pasada) implementada. Perfil propio abre Mi actividad; las acciones/edición están en Mi cuenta. No volver a mezclar ambas vistas ni a volcar el catálogo completo dentro de Retos. Galería sigue mostrando seis fotos por defecto; conservar filtros/visor. Cerrar el diseño requiere observaciones humanas; después validar tareas con coordinación y continuar N3.
 
 - Logros e insignias ya implementados según [modelo y entrega](docs/COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). Mantener Logros como nombre. Tres rutas guiadas, borradores/completados privados, validación privada o publicación moderada voluntaria; fotos hasta tres JPEG/PNG de 3 MB. Catálogo 21, requisitos acumulados y concesión única en servidor, nunca pedir insignias nuevas. Conservar historial de las nueve anteriores y no inferir obras de solicitudes viejas. Perfiles ajenos solo con publicaciones/logros compartidos e insignias activas; motivos, archivos privados, expediente y progreso de Retos protegidos. No recrear L1–L5. Siguiente: revisión humana/refinamientos concretos y N3.

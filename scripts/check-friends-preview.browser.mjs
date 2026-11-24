@@ -1,0 +1,39 @@
+export async function checkFriendsPreview(browser,{access,filesDir}) {
+ const base=access.origin,results=[],errors=[],contexts=[]
+ const check=(value,label)=>{if(!value)throw Error(label);results.push(label)}
+ const create=async(options={})=>{const context=await browser.newContext({locale:'es-MX',viewport:{width:1440,height:1000},reducedMotion:'reduce',...options});context.setDefaultTimeout(20000);contexts.push(context);return context}
+ const api=async(context,path,method='GET',data)=>{const response=await context.request.fetch(base+'/api/local'+path,{method,data,headers:{Origin:base}});if(!response.ok())throw Error(path+' HTTP '+response.status());return response.json()}
+ const pageFor=async(context)=>{const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});return page}
+ let a,b,first,second,oldReaction,postId
+ try {
+  const anonymous=await create()
+  for(const path of ['/','/community','/api/local/health'])check((await anonymous.request.get(base+path)).status()===401,'Sin contraseña no se publica '+path)
+  const gate=await create({httpCredentials:access.gate});check((await gate.request.get(base+'/api/local/student/me')).status()===401,'La contraseña de entrada no sustituye la cuenta de alumno')
+  a=await create({httpCredentials:access.gate});b=await create({httpCredentials:access.gate});const admin=await create({httpCredentials:access.gate})
+  await api(a,'/student/login','POST',access.student)
+  const friend=access.students.find(item=>item.email==='camila@example.test');await api(b,'/student/login','POST',{email:friend.email,password:friend.password})
+  const userA=(await api(a,'/student/me')).user,userB=(await api(b,'/student/me')).user;check(userA.id!==userB.id&&userA.group===userB.group,'Dos cuentas distintas comparten el grupo de prueba')
+  first=await pageFor(a);second=await pageFor(b);await Promise.all([first.goto(base+'/community'),second.goto(base+'/community')]);for(const p of [first,second])await p.getByRole('heading',{name:'Tu comunidad, al día.',exact:true}).waitFor();check(true,'Dos sesiones cargan la comunidad actual por HTTPS')
+  const cookies=await a.cookies(base);check(cookies.some(c=>c.name.startsWith('__Host-')&&c.secure&&c.httpOnly&&c.sameSite==='Strict'),'La sesión remota conserva cookies seguras')
+  const feed=(await api(a,'/student/posts')).posts,item=feed.find(p=>p.title==='Celebramos en comunidad');postId=item.id;oldReaction=item.engagement.myReaction;check(oldReaction===null,'La cuenta de comprobación empieza sin reacción propia')
+  for(const p of [first,second])await p.getByRole('button',{name:'Celebramos en comunidad',exact:true}).click()
+  const da=first.getByRole('dialog',{name:'Publicación: Celebramos en comunidad',exact:true}),db=second.getByRole('dialog',{name:'Publicación: Celebramos en comunidad',exact:true})
+  const baseline=item.engagement.counts.love
+  await da.locator('button[data-reaction-id="love"]').click();await da.locator('button[data-reaction-id="love"][aria-pressed=true]').waitFor();check(true,'Una cuenta guarda su reacción mediante el enlace remoto')
+  await second.waitForFunction(expected=>document.querySelector('dialog button[data-reaction-id="love"] b')?.textContent===String(expected),baseline+1,{timeout:30000});check(true,'La otra cuenta recibe el contador automáticamente sin recargar')
+  await da.locator('button[data-reaction-id="love"]').click();await second.waitForFunction(expected=>document.querySelector('dialog button[data-reaction-id="love"] b')?.textContent===String(expected),baseline,{timeout:30000});check(true,'Retirar la reacción también se sincroniza automáticamente')
+  await da.getByRole('button',{name:/^Ampliar imagen/}).click();const photo=first.getByRole('dialog',{name:'Imagen 1 de 3',exact:true});await photo.locator('img').evaluate(e=>e.decode());check(await photo.locator('img').evaluate(e=>e.naturalWidth>0&&getComputedStyle(e).objectFit==='contain'),'Las fotografías oficiales abren completas por HTTPS');await first.keyboard.press('Escape');await first.keyboard.press('Escape')
+  await first.getByRole('navigation',{name:'Secciones de comunidad'}).getByRole('button',{name:'Galería',exact:true}).click();const gallery=first.getByRole('button',{name:/^Ver foto /});check(await gallery.count()===6,'La galería conserva las seis fotos oficiales')
+  const image=await gallery.first().locator('img').getAttribute('src');check((await gate.request.get(new URL(image,base).href)).status()===401,'Las imágenes privadas requieren también sesión de alumno')
+  for(const width of [1440,375,320]){await first.setViewportSize({width,height:950});check(await first.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'La vista remota cabe en '+width+' px')}
+  await first.reload();await first.getByRole('heading',{name:'Tu comunidad, al día.',exact:true}).waitFor();check(true,'La recarga de una ruta privada mantiene acceso y contenido')
+  for(const path of ['/.git/config','/.local/cai.sqlite','/server/app.ts'])check((await a.request.get(base+path)).status()===404,'No se expone '+path)
+  await api(admin,'/auth/login','POST',access.admin);const panel=await pageFor(admin);await panel.goto(base+'/admin');await panel.getByRole('heading',{name:'Tu mesa de trabajo',exact:true}).waitFor();check(true,'Coordinación accede al panel administrativo más reciente')
+  check((await api(a,'/student/challenges')).progress.todayAnswered===0&&(await api(b,'/student/challenges')).progress.todayAnswered===0,'Los retos quedan sin responder para las pruebas de personas')
+  await first.screenshot({path:filesDir+'/friends-mobile.png'});check(errors.length===0,'Sin errores de JavaScript ni consola inesperados'+(errors.length?': '+errors.join('; '):''))
+  return {checks:results.length,results,errors}
+ } finally {
+  if(a&&postId){try{const current=(await api(a,'/student/posts')).posts.find(p=>p.id===postId);if(current&&current.engagement.myReaction!==oldReaction)await a.request.patch(base+'/api/local/student/posts/'+postId+'/reaction',{headers:{Origin:base,'Idempotency-Key':await first.evaluate(()=>crypto.randomUUID())},data:{reaction:oldReaction,revision:current.engagement.revision}})}catch{}}
+  await Promise.allSettled(contexts.map(context=>context.close()))
+ }
+}
