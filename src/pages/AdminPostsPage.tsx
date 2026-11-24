@@ -51,7 +51,7 @@ export function AdminPostsPage() {
         <p><strong>{counts.rechazada}</strong>rechazadas</p>
       </section>
 
-      {connection&&<label className={s.field}>Autor de la publicación<select value={origin} onChange={event=>setOrigin(event.target.value as typeof origin)}><option value="all">Todos: alumnos y Equipo CAI</option><option value="student">Alumnos</option><option value="cai">Equipo CAI</option></select></label>}
+      {connection&&<label className={s.publicationAuthor}>Autor de la publicación<select value={origin} onChange={event=>setOrigin(event.target.value as typeof origin)}><option value="all">Todos: alumnos y Equipo CAI</option><option value="student">Alumnos</option><option value="cai">Equipo CAI</option></select></label>}
       <div className={s.toolbar}>
         <div className={s.tabs} role="group" aria-label="Filtrar por estado">
           {statusFilters.map(({ value, label }) => (

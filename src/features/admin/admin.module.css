@@ -534,3 +534,9 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 .publisherChoices button span { font-size:14px; color:var(--muted); }
 .publisherChoices [aria-pressed=true] { outline:2px solid var(--blue-600); outline-offset:2px; background:var(--blue-50); }
 @media(max-width:560px) { .publisherChoices { grid-template-columns:1fr; } }
+
+/* Campos de escritura y confirmación siempre reconocibles en ambos temas. */
+.officialComposer textarea,.publicationReason textarea { width:100%;min-width:0;min-height:120px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;resize:vertical; }
+.publicationReason { display:grid;gap:8px;font-size:14px;font-weight:600; }
+.publicationAuthor { display:grid;gap:8px;max-width:420px;margin-block:20px;font-size:14px;font-weight:600; }
+.publicationAuthor select { width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit; }
