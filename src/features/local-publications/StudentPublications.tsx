@@ -5,7 +5,7 @@ import { PublicationCard, PublicationStatusLabel } from './PublicationCard'
 import s from '../admin/admin.module.css'
 import p from './publications.module.css'
 
-export function StudentPublications({ user, onAccessLost }: { user: StudentUser; onAccessLost: () => void }) {
+export function StudentPublications({ onAccessLost }: { user: StudentUser; onAccessLost: () => void }) {
   const [posts, setPosts] = useState<PublishedPost[]>([])
   const [mine, setMine] = useState<OwnPost[]>([])
   const [loaded, setLoaded] = useState(false)
@@ -38,7 +38,7 @@ export function StudentPublications({ user, onAccessLost }: { user: StudentUser;
     setBusy(true); setError(''); setNotice('')
     try {
       await studentApi.createPost(draft, key)
-      setNotice('Publicación enviada. CAI la revisará antes de compartirla con tu grupo.')
+      setNotice('Publicación enviada. CAI la revisará antes de compartirla con la comunidad.')
       await refresh()
       return true
     } catch (error) { setError(handleError(error)); return false }
@@ -49,7 +49,7 @@ export function StudentPublications({ user, onAccessLost }: { user: StudentUser;
     setBusy(true); setError(''); setNotice('')
     try {
       await studentApi.withdrawPost(selected)
-      setSelected(null); setNotice('Publicación retirada. Ya no se muestra en tu grupo.')
+      setSelected(null); setNotice('Publicación retirada. Ya no se muestra en la comunidad.')
       await refresh()
     } catch (error) {
       setError(handleError(error))
@@ -57,10 +57,10 @@ export function StudentPublications({ user, onAccessLost }: { user: StudentUser;
     } finally { setBusy(false) }
   }
   return <div className={p.stack}>
-    <div className={p.actions}><p className={s['card-sub']}>Comparte tus avances con tu programa y grupo. CAI revisa cada publicación antes de mostrarla.</p><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void refresh() }}>Actualizar publicaciones</button></div>
+    <div className={p.actions}><p className={s['card-sub']}>Comparte tus avances con la comunidad. CAI revisa cada publicación antes de mostrarla.</p><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void refresh() }}>Actualizar publicaciones</button></div>
     {notice && <p role="status" className={`${s.alert} ${s['alert--ok']}`}>{notice}</p>}
     {error && <div role="alert" className={s.alert}>{error} <button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={() => { void refresh() }}>Volver a cargar</button></div>}
-    {user.group === 'Por asignar' ? <p className={s.alert}>CAI debe asignarte un grupo antes de que puedas enviar y leer publicaciones del grupo.</p> : <PublicationComposer busy={busy} onSend={send} />}
+    <PublicationComposer busy={busy} onSend={send} />
     <section className={s.card} aria-labelledby="own-publications-title">
       <div className={s['card-head']}><div><h2 id="own-publications-title" className={s['card-title']}>Mis publicaciones</h2><p className={s['card-sub']}>Consulta la revisión o retira una publicación. Solo tú y coordinación ven los motivos de rechazo.</p></div></div>
       {!loaded && !error && <p className={s.empty} role="status">Cargando tus publicaciones…</p>}
@@ -73,7 +73,7 @@ export function StudentPublications({ user, onAccessLost }: { user: StudentUser;
       </li>)}</ul>
     </section>
     <section aria-labelledby="group-publications-title" className={p.stack}>
-      <div><h2 id="group-publications-title" className={s['card-title']}>Publicaciones de mi grupo</h2><p className={s['card-sub']}>{user.program} · {user.group}</p></div>
+      <div><h2 id="group-publications-title" className={s['card-title']}>Publicaciones de la comunidad</h2><p className={s['card-sub']}>Todos los alumnos aprobados</p></div>
       {loaded && !posts.length && <p className={s.empty}>Las publicaciones aparecerán aquí cuando CAI las apruebe.</p>}
       {posts.map((post) => <PublicationCard key={post.id} post={post} />)}
     </section>
@@ -116,7 +116,7 @@ function WithdrawDialog({ post, busy, onClose, onConfirm }: { post: OwnPost; bus
   useEffect(() => { ref.current?.showModal() }, [])
   return <dialog ref={ref} className={`${s.dialog} ${s['local-dialog']}`} aria-labelledby="withdraw-publication-title" onClose={onClose} onCancel={(event) => { event.preventDefault(); if (!busy) onClose() }}>
     <div className={s['dialog-head']}><h2 id="withdraw-publication-title">¿Retirar esta publicación?</h2></div>
-    <div className={s['dialog-body']}><strong className={p.body}>{post.title}</strong><p>Dejará de mostrarse al grupo. Se conservará en tu historial como retirada y coordinación no podrá volver a publicarla.</p></div>
+    <div className={s['dialog-body']}><strong className={p.body}>{post.title}</strong><p>Dejará de mostrarse a la comunidad. Se conservará en tu historial como retirada y coordinación no podrá volver a publicarla.</p></div>
     <div className={s['dialog-foot']}><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={onClose}>Cancelar</button><button type="button" className={`${s.btn} ${s['btn--reject']}`} disabled={busy} onClick={onConfirm}>Sí, retirar publicación</button></div>
   </dialog>
 }

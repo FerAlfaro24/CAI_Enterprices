@@ -1,3 +1,4 @@
+import { MemberLink } from './MemberLink'
 import { useCommunity } from '../context'
 import { members } from '../data/members'
 import s from '../community.module.css'
@@ -6,7 +7,7 @@ import { Avatar, CommunityIcon } from './ui'
 export function MemberDirectory() {
   const { state, connection } = useCommunity()
   const points = Object.values(state.attempts).reduce((sum, attempt) => sum + attempt.points, 0)
-  if (connection) return <section className={s.directory} aria-label="Miembros de mi grupo">{connection.members.map(member => <article className={s.memberCard} key={member.id}><Avatar member={member} /><div><h2>{member.alias}</h2><span>Alumno de tu grupo</span></div></article>)}{!connection.members.length && <p>CAI debe confirmar la asignación de tu grupo.</p>}</section>
+  if (connection) return <section className={s.directory} aria-label="Miembros de la comunidad">{connection.members.map(member => <article className={s.memberCard} key={member.id}><MemberLink member={member} avatar/><div><h2><MemberLink member={member}/></h2><span>Alumno de CAI</span></div>{member.joinedAt&&<small>Se incorporó el <time dateTime={member.joinedAt}>{new Intl.DateTimeFormat('es-MX',{day:'numeric',month:'short',year:'numeric',timeZone:'America/Mexico_City'}).format(new Date(member.joinedAt))}</time></small>}</article>)}{!connection.members.length&&<p>Los alumnos aprobados aparecerán aquí.</p>}</section>
   return (
     <section className={s.directory} aria-label="Perfiles ficticios de la comunidad">
       {members.map((member) => <article className={s.memberCard} key={member.id}>

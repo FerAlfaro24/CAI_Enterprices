@@ -58,7 +58,7 @@ export function LocalOverview({ requests, students, pendingPosts, onReview }: {
   requests: LocalRequest[]; students: LocalStudent[]; pendingPosts: number; onReview: (request: LocalRequest) => void
 }) {
   const pending = requests.filter((request) => request.status === 'pendiente')
-  const missingConsent = pending.filter((request) => request.ageGroup === 'menor' && request.guardianConsent !== 'recibida').length
+  const missingConsent = pending.filter((request) => request.guardianConsent === 'pendiente').length
   const active = students.filter((student) => student.status === 'activo').length
   return (
     <>

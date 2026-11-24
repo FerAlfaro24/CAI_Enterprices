@@ -30,9 +30,10 @@ const select=`SELECT c.*,r.payload,s.status AS student_status,r.status AS reques
  FROM post_comments c JOIN requests r ON r.id=c.author_id JOIN students s ON s.request_id=c.author_id JOIN publications p ON p.id=c.publication_id`
 const eligible=`r.status='aprobada' AND s.status='activo' AND (p.audience='community' OR (json_extract(r.payload,'$.program')=p.program AND json_extract(r.payload,'$.group')=p.group_name))`
 /** Caller already owns the assignment/record transaction. Never revive old public text silently. */
-export function holdAuthorComments(db:Database,author:number,admin:number,reason:string) {
- db.prepare("INSERT INTO comment_audit(comment_id,admin_id,action,reason,created_at) SELECT id,?,'comment.held',?,? FROM post_comments WHERE author_id=? AND status='publicado'").run(admin,reason,new Date().toISOString(),author)
- db.prepare("UPDATE post_comments SET status='pendiente',reason=?,revision=revision+1 WHERE author_id=? AND status='publicado'").run(reason,author)
+export function holdAuthorComments(db:Database,author:number,admin:number,reason:string, groupOnly=false) {
+ const scope=groupOnly?" AND publication_id IN (SELECT id FROM publications WHERE audience='group')":""
+ db.prepare("INSERT INTO comment_audit(comment_id,admin_id,action,reason,created_at) SELECT id,?,'comment.held',?,? FROM post_comments WHERE author_id=? AND status='publicado'"+scope).run(admin,reason,new Date().toISOString(),author)
+ db.prepare("UPDATE post_comments SET status='pendiente',reason=?,revision=revision+1 WHERE author_id=? AND status='publicado'"+scope).run(reason,author)
 }
 function page<T>(rows:Row[],map:(row:Row)=>T):CommentPage<T> {return {items:rows.slice(0,20).map(map),nextCursor:rows.length>20?rows[19]!.id:null}}
 export function commentsRepository(db:Database) {

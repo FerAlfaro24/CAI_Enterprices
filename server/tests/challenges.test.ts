@@ -49,7 +49,7 @@ test('Retos: calendario real, aprendizaje privado, administración y persistenci
  const snapshot=async(actor='alice')=>(await (await call('/student/challenges','GET',undefined,actor)).json()) as ChallengeSnapshot
  const answer=(q:DailyQuestion,index:number,key=randomUUID(),actor='alice')=>call('/student/challenges/'+q.id+'/answer','POST',{revision:q.revision,answerIndex:index},actor,key)
  const correct=(q:DailyQuestion)=>JSON.parse(String(app.db.prepare('SELECT content_json FROM daily_challenges WHERE id=?').get(Number(q.id.slice(2)))!.content_json)).correctIndex as number
- const groupId=Number(app.db.prepare("SELECT id FROM course_groups WHERE program='Business English' AND name='Mar y jue · 19:30'").get()!.id)
+ const groupId=0
  const calendar=async(day='2026-11-12')=>(await (await call('/challenges/calendar?day='+day+'&groupId='+groupId,'GET',undefined,'admin')).json()) as {items:ChallengeSchedule[];controls:{enabled:boolean;revision:number}}
  const configure=async(enabled:boolean)=>{const c=(await calendar()).controls;assert.equal((await call('/challenges/controls','PATCH',{...c,enabled},'admin')).status,200)}
  const bank=async()=>(await (await call('/challenges/bank','GET',undefined,'admin')).json() as {items:ChallengeBankItem[]}).items
@@ -62,8 +62,8 @@ test('Retos: calendario real, aprendizaje privado, administración y persistenci
   const data=await snapshot();assert.equal(data.items.length,3);assert.equal(data.day,'2026-11-12');first=data.items[0]!
   assert.deepEqual(Object.keys(first).sort(),['attempt','day','id','instruction','kind','options','previousGroup','question','revision','slot','topic']);assert.equal(first.attempt,null)
   assert.equal(JSON.stringify(data).includes('correctIndex'),false);assert.equal(JSON.stringify(data).includes('@'),false)
-  const peer=await snapshot('bob'),foreign=await snapshot('carol');assert.equal(peer.items[0]!.id,first.id);assert.notEqual(foreign.items[0]!.id,first.id);assert.equal(foreign.items[0]!.question,first.question)
-  assert.equal((await answer(foreign.items[0]!,0)).status,404)
+  const peer=await snapshot('bob'),foreign=await snapshot('carol');assert.equal(peer.items[0]!.id,first.id);assert.equal(foreign.items[0]!.id,first.id);assert.equal(foreign.items[0]!.question,first.question)
+  assert.equal((await call('/student/challenges/Q-999999/answer','POST',{revision:1,answerIndex:0},'alice',randomUUID())).status,404)
  })
  await t.test('valida origen, opciones, revisiones e identidad antes de puntuar',async()=>{
   const route='/student/challenges/'+first.id+'/answer'
@@ -134,10 +134,10 @@ test('Retos: calendario real, aprendizaje privado, administración y persistenci
  await t.test('cambio de grupo no permite repetir puntos del día ni expone progreso ajeno',async()=>{
   const q=(await snapshot()).items[0]!;assert.equal((await answer(q,correct(q))).status,200)
   const row=app.db.prepare('SELECT payload FROM requests WHERE id=?').get(Number(ids.alice!.slice(4)))!,payload=JSON.parse(String(row.payload));payload.group='Viernes · 18:00';app.db.prepare('UPDATE requests SET payload=? WHERE id=?').run(JSON.stringify(payload),Number(ids.alice!.slice(4)))
-  const after=await snapshot();assert.equal(after.items[0]!.previousGroup,true);assert.equal(after.items[0]!.id,q.id)
+  const after=await snapshot();assert.equal(after.items[0]!.previousGroup,false);assert.equal(after.items[0]!.id,q.id)
   const foreign=(await snapshot('carol')).items[0]!;assert.equal((await answer(foreign,0)).status,409)
   payload.group='Por asignar';app.db.prepare('UPDATE requests SET payload=? WHERE id=?').run(JSON.stringify(payload),Number(ids.alice!.slice(4)))
-  assert.equal((await snapshot()).needsGroup,true);assert.equal((await snapshot()).items.length,1);assert.equal((await call('/student/challenges/history')).status,200)
+  assert.equal((await snapshot()).needsGroup,false);assert.equal((await snapshot()).items.length,3);assert.equal((await call('/student/challenges/history')).status,200)
  })
  await t.test('revoca una sesión mientras llega el cuerpo y conserva cero nuevas respuestas',async()=>{
   const q=(await snapshot('bob')).items[0]!,count=app.db.prepare('SELECT COUNT(*) AS n FROM challenge_attempts').get()!.n
@@ -153,13 +153,13 @@ test('Retos: calendario real, aprendizaje privado, administración y persistenci
   assert.equal((await call('/student/challenges','GET',undefined,'carol')).status,200)
  })
  await t.test('copia independiente y reinicio conservan preguntas, respuestas y auditoría',async()=>{
-  const before=await snapshot(),history=await (await call('/student/challenges/history')).json(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,20)
+  const before=await snapshot(),history=await (await call('/student/challenges/history')).json(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,21)
   await close();app=createApplication(copy,{}, {challengeClock:()=>time});await start();assert.deepEqual(await snapshot(),before);assert.deepEqual(await (await call('/student/challenges/history')).json(),history)
   assert.ok(app.db.prepare("SELECT COUNT(*) AS n FROM administration_audit WHERE kind LIKE 'challenge%'").get()!.n as number>0)
  })
  await t.test('migración 14→15 aditiva, banco sembrado una sola vez',async()=>{
   const copy=await backupLocalDatabase(path,join(directory,'legacy')),legacy=openDatabase(copy),before=legacy.prepare('SELECT * FROM requests ORDER BY id').all()
-  legacy.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DELETE FROM migrations WHERE version=20; DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17; DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15');legacy.close();assert.equal((await verifyLocalBackup(copy)).schema,14)
+  legacy.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DELETE FROM migrations WHERE version=21; DELETE FROM migrations WHERE version=20; DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17; DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15');legacy.close();assert.equal((await verifyLocalBackup(copy)).schema,14)
   const upgraded=openDatabase(copy);assert.deepEqual(upgraded.prepare('SELECT * FROM requests ORDER BY id').all(),before);assert.equal(upgraded.prepare('SELECT COUNT(*) AS n FROM challenge_bank').get()!.n,180);upgraded.prepare("UPDATE challenge_bank SET status='archived' WHERE id='grammar-001'").run();upgraded.close()
   const reopened=openDatabase(copy);try{assert.equal(reopened.prepare("SELECT status FROM challenge_bank WHERE id='grammar-001'").get()!.status,'archived');assert.equal(reopened.prepare('SELECT COUNT(*) AS n FROM challenge_bank').get()!.n,180)}finally{reopened.close()}
  })

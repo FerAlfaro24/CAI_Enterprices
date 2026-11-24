@@ -62,7 +62,7 @@ export function StudentArea() {
   return (
     <div className={s.admin}>
       <a href="#student-content" className={s['skip-link']}>Saltar a mi espacio</a>
-      <aside className={s['local-notice']}>Prueba local · Usa datos ficticios. Tu acceso, grupo y publicaciones de texto se guardan en este equipo. Entra en Community para compartir historias con tu grupo.</aside>
+      <aside className={s['local-notice']}>Prueba local · Usa datos ficticios. Tu acceso, grupo y publicaciones de texto se guardan en este equipo. Entra en Community para compartir historias con la comunidad.</aside>
       <header className={s.topbar}>
         <Link to="/" className={s['card-link']}>CAI · Mi espacio</Link>
         <div className={s['topbar-end']}><ThemeSelector /><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={() => { void logout() }}>Cerrar sesión</button></div>
@@ -78,16 +78,16 @@ export function StudentArea() {
           <h2 id="student-profile-title" className={s['card-title']}>Datos de mi inscripción</h2>
           <dl className={s.details}>
             <dt>Nombre visible</dt><dd>{user.displayName}</dd>
-            <dt>Programa</dt><dd>{user.program}</dd>
-            <dt>Grupo</dt><dd>{user.group}</dd>
+            <dt>Clase o inscripción</dt><dd>{user.program}</dd>
+            {user.group&&<><dt>Grupo anterior</dt><dd>{user.group}</dd></>}
           </dl>
         </section>
         <section className={`${s.card} ${s['student-group']}`} aria-labelledby="student-group-title">
-          <h2 id="student-group-title" className={s['card-title']}>Mi grupo</h2>
-          <p className={s['card-sub']}>Aquí solo aparecen los nombres visibles de alumnos activos de tu programa y grupo.</p>
+          <h2 id="student-group-title" className={s['card-title']}>La comunidad</h2>
+          <p className={s['card-sub']}>Aquí solo aparecen los nombres visibles de alumnos activos de CAI.</p>
           {members.length ? <ul className={`${s.queue} ${s['local-records']}`}>
             {members.map((member, index) => <li key={`${member.displayName}-${index}`}><span className={s.avatar} style={{ background: member.avatarColor }} aria-hidden="true">{member.displayName[0]}</span><strong>{member.displayName}</strong></li>)}
-          </ul> : <p className={s.empty}>Tu grupo aparecerá cuando CAI confirme su asignación.</p>}
+          </ul> : <p className={s.empty}>La comunidad aparecerá cuando CAI confirme su asignación.</p>}
         </section>
       </main>
     </div>

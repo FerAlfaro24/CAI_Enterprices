@@ -85,7 +85,7 @@ test('Administración: catálogo, pausas y asignación sin mezclar audiencias', 
     assert.equal((await call('/configuration', 'PATCH', { ...current, submissionsOpen: true })).status, 200)
     assert.equal((await call(`/posts/${post.id}/approve`, 'POST', { revision: post.revision, confirmed: true })).status, 200)
   })
-  await t.test('reasignación exige confirmación/revisión/catálogo; revoca acceso y oculta historias antiguas', async () => {
+  await t.test('reasignación exige confirmación/revisión/catálogo; revoca acceso y conserva historias compartidas', async () => {
     const before = currentStudent(), assignment = { revision: before.revision, program: newGroup.program, group: newGroup.name, confirmed: true }
     assert.equal((await call(`/students/${alice}/assignment`, 'PATCH', { ...assignment, confirmed: false })).status, 400)
     assert.equal((await call(`/students/${alice}/assignment`, 'PATCH', { ...assignment, program: 'Inventado' })).status, 400)
@@ -94,22 +94,22 @@ test('Administración: catálogo, pausas y asignación sin mezclar audiencias', 
     assert.equal((await call('/student/me', 'GET', undefined, 'alice')).status, 401)
     const changed = await login('alice'); assert.equal(changed.publicId, originalUser.publicId); assert.equal(changed.group, newGroup.name)
     const oldFeed = await (await call('/student/posts', 'GET', undefined, 'bob')).json() as { posts: OwnPost[] }
-    assert.ok(!oldFeed.posts.some(item => item.id === post.id))
+    assert.ok(oldFeed.posts.some(item => item.id === post.id))
     const ownFeed = await (await call('/student/posts', 'GET', undefined, 'alice')).json() as { posts: OwnPost[]; mine: OwnPost[] }
-    assert.ok(!ownFeed.posts.some(item => item.id === post.id)); assert.equal(ownFeed.mine.find(item => item.id === post.id)!.status, 'pendiente')
+    assert.ok(ownFeed.posts.some(item => item.id === post.id)); assert.equal(ownFeed.mine.find(item => item.id === post.id)!.status, 'publicada')
     const reviewed = app.db.prepare('SELECT program,group_name FROM publications WHERE id = ?').get(Number(post.id.slice(4)))!
     assert.equal(reviewed.program, profile.program); assert.equal(reviewed.group_name, profile.group)
     assert.equal((await call(`/posts/${post.id}/approve`, 'POST', { revision: ownFeed.mine.find(item => item.id === post.id)!.revision, confirmed: true })).status, 409)
   })
-  await t.test('volver de grupo no republica; el historial permanece y hace falta otra revisión', async () => {
+  await t.test('volver de grupo conserva publicación e historial, sin otra aprobación', async () => {
     assert.equal((await call(`/students/${alice}/assignment`, 'PATCH', { revision: currentStudent().revision, program: profile.program, group: profile.group, confirmed: true })).status, 200)
     await login('alice')
     const feed = await (await call('/student/posts', 'GET', undefined, 'alice')).json() as { posts: OwnPost[]; mine: OwnPost[] }
-    assert.equal(feed.posts.length, 0); const pending = feed.mine.find(item => item.id === post.id)!; assert.equal(pending.status, 'pendiente')
-    assert.equal((await call(`/posts/${post.id}/approve`, 'POST', { revision: pending.revision, confirmed: true })).status, 200)
+    assert.equal(feed.posts.length, 1); const pending = feed.mine.find(item => item.id === post.id)!; assert.equal(pending.status, 'publicada')
+    assert.equal((await call(`/posts/${post.id}/approve`, 'POST', { revision: pending.revision, confirmed: true })).status, 409)
     const settings = (await config()).settings
     assert.equal((await call('/configuration', 'PATCH', { ...settings, submissionsOpen: false })).status, 200)
-    assert.equal((await call(`/student/posts/${post.id}/withdraw`, 'POST', { revision: pending.revision + 1 }, 'alice')).status, 200)
+    assert.equal((await call(`/student/posts/${post.id}/withdraw`, 'POST', { revision: pending.revision }, 'alice')).status, 200)
   })
   await t.test('catálogo, controles, auditoría y asignación sobreviven al reinicio sin perder cuentas', async () => {
     const before = await config(), counts = app.db.prepare('SELECT count(*) AS n FROM student_accounts').get()!.n

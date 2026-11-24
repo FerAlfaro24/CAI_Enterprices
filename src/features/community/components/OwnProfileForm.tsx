@@ -24,11 +24,11 @@ export function OwnProfileForm({ connection }: { connection: CommunityConnection
   }
   if (!draft) return <section className={s.profileActivity} aria-label="Mi perfil visible">
     <h3>Mi perfil visible</h3>
-    <p>Puedes cambiar el nombre que ve tu grupo y el color de tu avatar. Para corregir tu expediente, consulta con coordinación.</p>
+    <p>Puedes cambiar el nombre que ve la comunidad y el color de tu avatar. Para corregir tu expediente, consulta con coordinación.</p>
     <button type="button" className={s.primaryButton} disabled={connection.busy} onClick={() => { setError(''); setDraft({ displayName: profile.displayName, avatarColor: profile.avatarColor, revision: profile.revision }) }}>Editar mi perfil</button>
   </section>
   return <form className={`${s.composerForm} ${s.profileEditor}`} aria-label="Editar mi perfil visible" onSubmit={event => { void submit(event) }} noValidate>
-    <p id={`${id}-help`}>Este nombre se verá en tu grupo y en tus publicaciones anteriores. Evita teléfonos, correos y otros datos personales.</p>
+    <p id={`${id}-help`}>Este nombre se verá en la comunidad y en tus publicaciones anteriores. Evita teléfonos, correos y otros datos personales.</p>
     <fieldset disabled={busy}>
       <div className={s.formField}><label htmlFor={`${id}-name`}>Nombre visible</label>
         {profile.nameOptions ? <select id={`${id}-name`} value={draft.displayName} onChange={event => setDraft({ ...draft, displayName: event.target.value })} aria-describedby={`${id}-help ${id}-privacy`}>

@@ -1,5 +1,37 @@
 # CAI — próximos pasos vigentes
 
+## Entrega F1b y F2: registro y comunidad compartida — 23-11-2026
+
+**Cierre conjunto comprobado.** Base del registro `0247632` en `feat/v1-registration-simplification`; integración completa `3a7fdb3` en **`feat/v1-shared-community`, continuación vigente**. Ambas incluyen F1a. La rama del registro es un punto intermedio: usar la integración F2 para adoptar o mostrar registro sin grupos. No actualizar main/release ni fusionar PR automáticamente.
+
+### Comportamiento entregado
+
+- Registro de tres pasos con Clase: Inglés, Francés o Español. Sin selector de quién lo llena, grupo/horario, matrícula manual ni paso de tutor. Se conserva fecha de nacimiento, nombre abreviado/privacidad de menores, normas, aprobación y activación. El folio `CAI-0001` es la matrícula automática, se muestra en la revisión administrativa y no puede cambiarse manualmente en el expediente nuevo.
+- Contrato nuevo `SchoolRegistration` con `className`, normalizado internamente a inscripción con grupo vacío. No se asigna un grupo ficticio ni se depende de que haya grupos activos para aceptar solicitudes. Clases validadas en servidor. Idempotencia, folios únicos, límites de edad y correo, pausas, sesiones y aprobación conservados.
+- Expedientes de registro nuevo pueden aprobarse y corregirse sin tutor, sin generar consentimientos ficticios. Formularios conectados de solicitud, resumen, ficha y edición distinguen esos registros. Los expedientes/contratos históricos conservan sus programas, grupos, tutores y evidencias; no se inventó una equivalencia de idioma para registros anteriores ni se borró su historial.
+- Miembros: todos los aprobados activos, también recién aprobados sin contraseña todavía; alias, UUID social y fecha real de ingreso, sin correo, fecha de nacimiento ni expediente. Directorio/perfiles sociales e Inicio ya conectados entre clases; los ingresos recientes usan la fecha real.
+- Publicaciones y Logros compartidos de alumnos usan audiencia de comunidad, conservando aprobación previa, comentarios todavía moderados y controles existentes. Cambiar clase revoca la sesión y conserva contenido común/progreso; cambiar inscripción histórica no vuelve a ocultar publicaciones/comentarios de audiencia común. Borradores, logros privados, motivos y archivos sin publicación siguen privados. Fotografías institucionales históricas restringidas conservan su audiencia original.
+- Retos: un calendario común para alumnos de cualquier clase, sin grupo ni horario. Administración programa para toda la comunidad (el campo de compatibilidad `groupId=0` identifica el calendario común, no un grupo real). Banco actual de inglés, tres preguntas por día CDMX, puntos/rachas y respuestas individuales conservados. El banco multilingüe y el acabado de F5 siguen pendientes; no se implementó Top.
+
+### Migración y adopción
+
+La migración21 reconstruye la tabla de publicaciones para retirar la restricción SQLite que exigía audiencia de grupo en contenidos de alumnos. Conserva columnas, IDs, secuencia AUTOINCREMENT, índices/triggers y referencias hijas; valida claves foráneas antes de confirmar y revierte ante error. Solo cambia audiencia de publicaciones de alumnos y registra auditoría; no publica pendientes/rechazadas/retiradas ni convierte logros privados en publicaciones. No modifica las audiencias de fotografías institucionales históricas.
+
+Las respuestas anteriores mantienen pregunta, contenido y puntos originales, aunque pertenezcan al calendario antiguo. Un intento antiguo del día impide repetir puntos en el mismo espacio; el día siguiente todos reciben los mismos IDs comunes. El historial permanece privado. No se borró ni recalculó progreso para unificar clases.
+
+Modo local migra como antes; **producción exige esquema21 preparado previamente**, sin migración automática al arrancar. El verificador de respaldo acepta21 y mantiene comprobación de copias anteriores. Para adoptar en una instalación existente: copia consistente verificada, ensayo de actualización separado y revisión de integridad/conteos/privacidad antes de cambiar servicio/datos. Volver a una rama anterior no revierte el esquema. Esta entrega no ejecutó ese proceso sobre datos habituales o la copia remota.
+
+### Evidencia nueva
+
+- **294 resultados de servidor correctos**, suite completa `node --test server/tests/*.test.ts`. Actualizadas expectativas de audiencias de grupo que el usuario sustituyó; no se omitieron suites ni se relajaron controles de cuentas, revisión, privacidad o recursos institucionales privados. Fixtures de esquemas históricos ajustadas para retirar21 al simular versiones anteriores.
+- Nuevas pruebas `simple-registration.test.ts`: tres clases, niño sin tutor, matrícula automática, idempotencia, rechazo de matrícula manual/perfil público de menor/clase ajena, catálogo de grupos archivado, corrección sin tutor y registro en pausa.
+- Nuevas pruebas `shared-community.test.ts`: convivencia entre clases, recién aprobado sin activación, aprobación antes de publicar, conversación, perfiles, imagen privada, retos comunes y progreso individual; migración desde restricción física de20, IDs/credenciales/bytes/comentarios/attempts/secuencia intactos, idempotencia, respaldo, reinicio e intento histórico/cambio de día.
+- **98 comprobaciones UI nuevas**,49 Brave y49 Opera: registro real de menor/adulto de clases distintas, clase obligatoria, tres pasos, aprobación en panel sin tutor, activación de ocho letras, directorio/ingresos/perfil cruzados, publicación aprobada visible en otra cuenta, preguntas comunes y cambio de clase sin perder acceso social/progreso.1440/768/375/320 y temas claro/oscuro; sin errores inesperados de ejecución/consola. Las dos respuestas401 esperadas al intentar entrar sin cuenta se reconocen únicamente durante esa comprobación de acceso.
+- ESLint, tipos/build y sintaxis de verificador correctos. Verificador `scripts/check-shared-community.browser.mjs`; el verificador de registro remoto se adaptó al formulario nuevo para cuando se adopte esta versión. No ejecutarlo contra la demo anterior suponiendo que ya fue actualizada.
+
+QA nueva `.local/tests/final-review-M6WPr3` con API3272/vista compilada4632; evidencia, accesos y capturas fuera de Git. Se cerraron únicamente esos dos procesos de QA al terminar. No se reinició ni renovó la demo remota, no se aplicó migración a `.local/cai.sqlite` ni a su copia de presentación, y no se publicaron datos de alumnos. Google/correo reales, F3–F6 y aceptación humana de esta entrega siguen pendientes.
+
+
 ## Entrega F1a: activación y contraseñas — 23-11-2026
 
 **Implementado y comprobado**, código `ce3160d`, rama `feat/v1-access-usability`, PR #28. Base de preparación `95a6522`, descendiente de `12b088b`/PR #27. Siguiente entrega: F1b; antes de actualizar una demostración con registro sin grupos completar aceptación conjunta con F2.
@@ -20,13 +52,13 @@
 
 ### Entregas y ramas
 
-Solo la primera rama de implementación se ha creado. Las demás se crearán desde la punta comprobada de la entrega anterior, cuando empiece su trabajo; no son funcionalidades implementadas ni ramas ya disponibles. Commits pequeños por mejora comprobada y PR en borrador contra su base inmediata; sin fusión automática.
+Ya se crearon las ramas F1a, F1b y F2. Las demás se crearán desde la punta comprobada de la entrega anterior, cuando empiece su trabajo; no son funcionalidades implementadas ni ramas ya disponibles. Commits pequeños por mejora comprobada y PR en borrador contra su base inmediata; sin fusión automática.
 
 | Orden | Estado | Rama | Alcance y dependencia |
 | --- | --- | --- | --- |
 | F1a | Implementada y comprobada (`ce3160d`) | `feat/v1-access-usability` | Activación/recuperación de alumno con mínimo8, mostrar/ocultar y coincidencia. Independiente de la reorganización de grupos. |
-| F1b | Planificada | `feat/v1-registration-simplification` | Clase, matrícula automática y registro normal de menores. Prepara contratos y migración compatible; aceptación conjunta con F2. |
-| F2 | Planificada, enlazada a F1b | `feat/v1-shared-community` | Autorizaciones sociales comunes, miembros/fechas, fotos y asignación diaria sin grupo. Comprobar F1b+F2 antes de cambiar la copia de demostración. |
+| F1b | Integrada en F2 (`0247632`) | `feat/v1-registration-simplification` | Clase, matrícula automática y registro normal de menores. Prepara contratos y migración compatible; aceptación conjunta con F2. |
+| F2 | Comprobada (`3a7fdb3`) | `feat/v1-shared-community` | Autorizaciones sociales comunes, miembros/fechas, fotos y asignación diaria sin grupo. Comprobar F1b+F2 antes de cambiar la copia de demostración. |
 | F3a | Planificada, después de F2 | `feat/v1-community-moderation` | Vista de comunidad para admin, eliminación contextual y suspensiones temporales/permanentes. Conservar controles de sesión. |
 | F3b | Planificada, después de F3a | `feat/v1-direct-comments` | Comentarios inmediatos, borrar propios, quitar revisión previa y sus contadores. Abrirlos una vez comprobadas las herramientas de moderación. |
 | F4a | Planificada | `feat/v1-learning-form-simplification` | Logros simples, límites compartidos mayores y campos opcionales; no romper publicación derivada o insignias. |

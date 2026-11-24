@@ -1,5 +1,8 @@
 # CAI — inventario de ramas
 
+**F1b + F2 comprobados — 23-11:** continuación `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
+
+
 **F1a implementado y comprobado — 23-11:** `feat/v1-access-usability`, código `ce3160d` (PR #28). Activación/recuperación de alumnos con mínimo8, sin composición obligatoria, controles independientes de mostrar/ocultar y coincidencia inmediata. 58 pruebas de servidor y 94 comprobaciones de navegador (47 Brave/47 Opera), lint/tipos/build correctos. Administración conserva mínimo15. Sin migración ni actualización del enlace remoto. Siguiente: F1b y validación conjunta con F2; Top pendiente del cliente.
 
 
@@ -13,7 +16,9 @@
 
 ## Qué utilizar
 
-- **Continuación de desarrollo:** `feat/v1-access-usability`, creada desde `12b088b` de PR #27; F1a implementada en `ce3160d`, con preparación y evidencia en PR #28. Las otras ramas de F1b–F6 son planificadas, no creadas.
+- **Continuación vigente:** `feat/v1-shared-community`, código `3a7fdb3`, esquema21, incluye F1b/F1a y cierre conjunto.
+- **Base de registro:** `feat/v1-registration-simplification`, código `0247632`; etapa intermedia, requiere F2.
+- **Acceso anterior:** `feat/v1-access-usability`, creada desde `12b088b` de PR #27; F1a implementada en `ce3160d`, con preparación y evidencia en PR #28. F1b/F2 ya creadas; F3–F6 permanecen planificadas.
 - **Entrega anterior:** `fix/v1-remote-registration-guidance`, código `146e061`, base `2f6a04f` de PR #24. [Alta propia](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026); esquema/permisos conservados.
 - **Administración anterior:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`. [Administración](ADMIN_USABILITY_REVIEW.md), 272 API y 370 UI; sin cambios de esquema/permisos.
 - **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md); esquema 20, 272 API y 144 UI; datos habituales sin migrar.

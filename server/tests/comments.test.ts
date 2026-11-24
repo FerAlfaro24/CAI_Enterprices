@@ -54,7 +54,7 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   for(const actor of ['anonymous','admin']){assert.equal((await call(route,'GET',undefined,actor)).status,401);assert.equal((await create('Hola',randomUUID(),actor)).status,401)}
   for(const path of ['/comments','/comment-counts','/comments/CMT-0001'])assert.equal((await call(path)).status,401)
   assert.equal((await call('/comments/CMT-0001/approve','POST',{revision:1,confirmed:true})).status,401)
-  assert.equal((await create('Hola',randomUUID(),'carol')).status,404);assert.equal((await call(route,'GET',undefined,'carol')).status,404)
+  assert.equal((await create('Hola',randomUUID(),'carol')).status,409);assert.equal((await call(route,'GET',undefined,'carol')).status,200)
   assert.equal((await create()).status,409);await enable(true)
  })
  await t.test('valida texto, identidad elegida en servidor, origen, cursor y estado',async()=>{
@@ -117,13 +117,13 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   const privatePage=await own('bob');assert.equal(privatePage.items.length,20);assert.ok(privatePage.nextCursor)
   const queue=await (await call('/comments?status=publicado','GET',undefined,'admin')).json() as CommentPage<CommentReview>;assert.equal(queue.items.length,20);assert.ok(queue.nextCursor)
  })
- await t.test('cambio de grupo revoca sesión y retiene comentarios para revisión aunque vuelva',async()=>{
+ await t.test('cambio de grupo revoca sesión y conserva comentarios compartidos',async()=>{
   const r=await create('Comentario de alumno menor ficticio',randomUUID(),'minor'),comment=(await r.json() as {comment:OwnComment}).comment;await decide(comment.id,'approve')
   const repo=accessRepository(app.db);let student=repo.students().find(s=>s.id===ids.minor)!
   repo.assignStudent(student.id,student.revision,'Business English','Viernes · 18:00',true,admin)
-  assert.equal((await call(route,'GET',undefined,'minor')).status,401);assert.equal((await detail(comment.id)).comment.status,'pendiente')
+  assert.equal((await call(route,'GET',undefined,'minor')).status,401);assert.equal((await detail(comment.id)).comment.status,'publicado')
   student=repo.students().find(s=>s.id===ids.minor)!;repo.assignStudent(student.id,student.revision,profile.program,profile.group,true,admin);await login('minor')
-  assert.equal((await detail(comment.id)).comment.status,'pendiente');assert.ok((await detail(comment.id)).history.some(h=>h.action==='comment.held'))
+  assert.equal((await detail(comment.id)).comment.status,'publicado');assert.ok(!(await detail(comment.id)).history.some(h=>h.action==='comment.held'))
  })
  await t.test('corrección adulto→menor vuelve a revisar comentarios y revoca sesión',async()=>{
   const r=await create('Comentario anterior a corregir edad',randomUUID(),'record'),comment=(await r.json() as {comment:OwnComment}).comment;await decide(comment.id,'approve')
@@ -150,14 +150,14 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   let limited=false;for(let i=0;i<21;i++){const response=await create('',randomUUID(),'limited');if(response.status===429){limited=true;break}assert.equal(response.status,400)}assert.equal(limited,true)
  })
  await t.test('copia separada/reinicio conservan comentarios privados, decisiones y reintentos',async()=>{
-  const before=await own(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,20)
+  const before=await own(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,21)
   await close();app=createApplication(copy);await start();assert.deepEqual(await own(),before);assert.equal((await create('Primera palabra de ánimo ficticia',key)).status,201)
   assert.ok((await detail(first.id)).history.length>3)
  })
  await t.test('migración 13→14 conserva reacciones/sesiones e inicia comentarios cerrados',async()=>{
   const copy=await backupLocalDatabase(path,join(directory,'legacy')),legacy=openDatabase(copy)
   const sessions=legacy.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),reactions=legacy.prepare('SELECT * FROM post_reactions').all()
-  legacy.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DELETE FROM migrations WHERE version=20; DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17; DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14');legacy.close()
+  legacy.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DELETE FROM migrations WHERE version=21; DELETE FROM migrations WHERE version=20; DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17; DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14');legacy.close()
   assert.equal((await verifyLocalBackup(copy)).schema,13);const migrated=openDatabase(copy)
   try{assert.deepEqual(migrated.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),sessions);assert.deepEqual(migrated.prepare('SELECT * FROM post_reactions').all(),reactions);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM post_comments').get()!.n,0);assert.equal(migrated.prepare('SELECT comments_open FROM community_controls').get()!.comments_open,0)}finally{migrated.close()}
  })

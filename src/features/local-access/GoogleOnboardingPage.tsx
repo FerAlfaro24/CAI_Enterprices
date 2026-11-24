@@ -33,7 +33,7 @@ export function GoogleOnboardingPage() {
         <p className={s.notice}>Prueba local con datos ficticios. CAI debe revisar tu solicitud antes de que puedas entrar a la comunidad.</p>
         {state && 'requestId' in state && <p>Folio <strong>{state.requestId}</strong></p>}
         {state?.status === 'anonymous' && <><p>Usa la misma cuenta de Google con la que empezaste. Si aún no tienes solicitud, te pediremos tus datos.</p><GoogleSignInButton /><Link to="/login">Entrar con contraseña</Link></>}
-        {state?.status === 'pending' && <p>Ya recibimos tus datos. CAI comprobará tu inscripción y, si eres menor, la autorización de tu tutor. Podrás volver aquí con la misma cuenta de Google.</p>}
+        {state?.status === 'pending' && <p>Ya recibimos tus datos. CAI comprobará tu inscripción. Podrás volver aquí con la misma cuenta de Google.</p>}
         {(state?.status === 'rejected' || state?.status === 'suspended') && <p>El acceso todavía no está disponible. Contacta con CAI e indica tu folio para revisar tu situación.</p>}
         {state?.status === 'approved' && <p>Tus datos ya fueron revisados. Puedes entrar con tu cuenta de Google sin crear otra contraseña.</p>}
         {error && <p role="alert">{error}</p>}

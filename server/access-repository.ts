@@ -138,8 +138,8 @@ export function accessRepository(db: Database) {
         db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
         db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
         // Mantener la audiencia original de cada envío. Volver a un grupo no republica historias automáticamente.
-        if(!profile.className)holdAuthorComments(db,key,actor,'Cambio de grupo del autor; requiere nueva revisión.')
-        if(!profile.className)db.prepare("UPDATE publications SET status = CASE WHEN status = 'publicada' THEN 'pendiente' ELSE status END, published_at = NULL, revision = revision + 1 WHERE author_id = ? AND status <> 'retirada'").run(key)
+        if(!profile.className)holdAuthorComments(db,key,actor,'Cambio de grupo del autor; requiere nueva revisión.',true)
+        if(!profile.className)db.prepare("UPDATE publications SET status = CASE WHEN status = 'publicada' THEN 'pendiente' ELSE status END, published_at = NULL, revision = revision + 1 WHERE author_id = ? AND audience='group' AND status <> 'retirada'").run(key)
         audit(actor, key, 'student.assigned')
         administrationAudit(db, actor, 'student.assigned', { id, before, after: { program, group } })
         queueNotice(db, key, 'Cambio de inscripción', profile.className ? 'CAI actualizó tu clase. Vuelve a entrar; sigues compartiendo la misma comunidad.' : 'CAI actualizó tu inscripción. Vuelve a entrar para consultar los datos actuales.')

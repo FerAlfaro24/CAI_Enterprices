@@ -1,5 +1,8 @@
 # CAI — abrir y probar localmente
 
+**Actualización F1b/F2 — 23-11:** La rama vigente es `feat/v1-shared-community`, esquema21. Registro por Clase, sin grupo/tutor/matrícula manual; aprobación/activación conservadas. Generar fixtures nuevas para probar. No migrar la instalación habitual para reproducir las comprobaciones. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
+
+
 **Guía operativa al 17-11-2026**, para la línea de [START_HERE](START_HERE.md). Node >=24.12.0, npm >=10 y Git. Solo datos ficticios. La documentación no mantiene encendido ningún servidor: los enlaces localhost funcionan mientras se ejecutan los procesos en ese equipo.
 
 

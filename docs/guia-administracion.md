@@ -1,5 +1,8 @@
 # Guía sencilla de administración de CAI
 
+**Actualización F1b/F2 — 23-11:** Registro nuevo: revisar la Clase y los datos, aprobar y preparar el acceso; el menor no necesita el paso de tutor. La matrícula corresponde al folio automático. Grupos/tutores mostrados en expedientes anteriores son historial. Cambiar una clase conserva la comunidad compartida y exige volver a entrar. Retos usa calendario común; comentarios continúan en revisión hasta F3. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
+
+
 **Actualizada el 22 de noviembre de 2026.** Corresponde a `feat/v1-admin-usability-review`. Las tareas guardan información en la instalación abierta. La muestra de revisión usa cuentas ficticias y una base separada. Alojamiento, entrega de correo y validación con coordinación real siguen pendientes. [Estado](PROJECT_STATE.md) · [Revisión de uso](ADMIN_USABILITY_REVIEW.md).
 
 ## Dónde encontrar cada tarea

@@ -75,11 +75,11 @@ test('Publicaciones: revisión, privacidad, retirada y persistencia', async (t) 
     assert.equal((await call('/posts/PUB-0001/approve', 'POST', { revision: 1, confirmed: true })).status, 401)
     assert.equal((await call('/student/posts', 'GET', undefined, 'admin')).status, 401)
   })
-  await t.test('valida longitudes, tipo, campos adicionales, origen y grupo asignado', async () => {
+  await t.test('valida longitudes, tipo, campos adicionales, origen y acceso sin grupo', async () => {
     for (const invalid of [{ title: 'abc' }, { body: 'corto' }, { category: 'announcement' }, { category: 'toString' }, { title: 'a'.repeat(101) }, { body: 'a'.repeat(1201) }, { body: 'texto\u0000inválido' }, { status: 'publicada' }, { authorId: 2 }, { group: 'otro' }, { photos: [] }]) assert.equal((await create({ ...draft, ...invalid })).status, 400)
     assert.equal((await call('/student/posts', 'POST', draft)).status, 400)
     assert.equal((await call('/student/posts', 'POST', draft, 'alice', { Origin: 'https://otro.example', 'Idempotency-Key': randomUUID() })).status, 403)
-    assert.equal((await create(draft, randomUUID(), 'unassigned')).status, 409)
+    assert.equal((await create(draft, randomUUID(), 'unassigned')).status, 201)
     assert.deepEqual((await lists('unassigned')).posts, [])
   })
   await t.test('envía a revisión sin duplicar al reintentar y separa claves por autor', async () => {
@@ -96,7 +96,7 @@ test('Publicaciones: revisión, privacidad, retirada y persistencia', async (t) 
     assert.deepEqual((await lists()).posts, [])
     assert.ok((await reviews()).posts.some((p) => p.id === post.id && p.studentId === alice))
   })
-  await t.test('publicar exige revisión expresa y solo muestra datos públicos al mismo grupo/programa', async () => {
+  await t.test('publicar exige revisión expresa y comparte solo datos públicos entre clases y grupos', async () => {
     assert.equal((await decide(post, 'approve')).status, 400)
     assert.equal((await decide(post, 'approve', { confirmed: true })).status, 200)
     assert.equal((await decide(post, 'reject', { reason: 'Un motivo ficticio' })).status, 409)
@@ -111,8 +111,8 @@ test('Publicaciones: revisión, privacidad, retirada y persistencia', async (t) 
     assert.equal(feed[0]!.author.id, session.user.publicId)
     assert.ok(group.members.some(member => member.id === feed[0]!.author.id && member.displayName === feed[0]!.author.displayName))
     assert.ok(!JSON.stringify(feed).includes('@')); assert.ok(!JSON.stringify(feed).includes('studentId'))
-    assert.deepEqual((await lists('carol')).posts, [])
-    assert.deepEqual((await lists('dan')).posts, [])
+    assert.ok((await lists('carol')).posts.some(item=>item.id===post.id))
+    assert.ok((await lists('dan')).posts.some(item=>item.id===post.id))
     assert.ok(!(await lists('bob')).mine.some((p) => p.id === post.id))
   })
   await t.test('devolver a revisión la oculta y rechazar requiere un motivo privado para el autor', async () => {

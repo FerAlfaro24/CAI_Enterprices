@@ -1,5 +1,8 @@
 # CAI — empieza aquí
 
+**F1b + F2 comprobados — 23-11:** continuación `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
+
+
 **F1a implementado y comprobado — 23-11:** `feat/v1-access-usability`, código `ce3160d` (PR #28). Activación/recuperación de alumnos con mínimo8, sin composición obligatoria, controles independientes de mostrar/ocultar y coincidencia inmediata. 58 pruebas de servidor y 94 comprobaciones de navegador (47 Brave/47 Opera), lint/tipos/build correctos. Administración conserva mínimo15. Sin migración ni actualización del enlace remoto. Siguiente: F1b y validación conjunta con F2; Top pendiente del cliente.
 
 
@@ -12,7 +15,9 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-access-usability` | **Continuación de desarrollo:** F1a comprobada; [secuencia y criterios](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). Código funcional `ce3160d`. |
+| `feat/v1-shared-community` | **Continuación vigente:** registro/comunidad comprobados juntos, código `3a7fdb3`, esquema21. [Entrega](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026). |
+| `feat/v1-registration-simplification` | Registro base `0247632`; punto intermedio que requiere F2, no adoptar solo. |
+| `feat/v1-access-usability` | Entrega anterior: F1a comprobada; [secuencia y criterios](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). Código funcional `ce3160d`. |
 | `fix/v1-open-preview-entry` | Última entrega funcional anterior: [entrada pública temporal](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026), incluye PR #25; esquema 20. |
 | `fix/v1-remote-registration-guidance` / código `146e061` | Entrega anterior: [Alta propia en prueba remota](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026), incluye administración; esquema 20. |
 | `feat/v1-admin-usability-review` / código `e255f91` | Administración anterior: [Administración revisada](ADMIN_USABILITY_REVIEW.md); esquema 20. |
@@ -58,7 +63,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-access-usability
+git switch --track origin/feat/v1-shared-community
 code .
 npm.cmd ci
 ```

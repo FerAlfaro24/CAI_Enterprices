@@ -161,7 +161,7 @@ test('Logros personales, imágenes privadas, revisión, insignias progresivas y 
         assert.ok(!JSON.stringify(profile).includes(draft.practice));
         assert.ok(!JSON.stringify(profile).includes('Comprobé el ejemplo y el aprendizaje; motivo privado.'));
         assert.ok(!JSON.stringify(profile).includes('@'));
-        assert.equal((await call('/student/members/' + publicId, 'GET', undefined, 'outside')).status, 404);
+        assert.equal((await call('/student/members/' + publicId, 'GET', undefined, 'outside')).status, 200);
     });
     await t.test('publicación voluntaria comparte las imágenes solo después de aprobar', async () => {
         assert.equal((await submit(item, true)).status, 200);
@@ -179,7 +179,7 @@ test('Logros personales, imágenes privadas, revisión, insignias progresivas y 
         assert.equal(profile.posts[0]!.learningId, item.id);
         assert.equal(profile.posts[0]!.photos!.length, 1);
         assert.equal((await call(shared.images[0]!.imagePath.slice(10), 'GET', undefined, 'bob')).status, 200);
-        assert.equal((await call(shared.images[0]!.imagePath.slice(10), 'GET', undefined, 'outside')).status, 404);
+        assert.equal((await call(shared.images[0]!.imagePath.slice(10), 'GET', undefined, 'outside')).status, 200);
         assert.equal((await (await call('/student/gallery', 'GET', undefined, 'bob')).json() as {
             images: unknown[];
         }).images.length, 0);
@@ -264,7 +264,7 @@ test('Logros personales, imágenes privadas, revisión, insignias progresivas y 
     });
     await t.test('copia consistente incluye logros, imágenes e historial; reinicio sin inventar concesiones', async () => {
         const backup = await backupLocalDatabase(path, join(dir, 'backup'));
-        assert.equal((await verifyLocalBackup(backup)).schema, 20);
+        assert.equal((await verifyLocalBackup(backup)).schema, 21);
         const db = openDatabase(backup);
         try {
             assert.equal(db.prepare('SELECT COUNT(*) AS n FROM learning_achievements').get()!.n, app.db.prepare('SELECT COUNT(*) AS n FROM learning_achievements').get()!.n);

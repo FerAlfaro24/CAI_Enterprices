@@ -12,7 +12,7 @@ export function LocalRequestDialog({ request, busy, error, onDecide, onClose }: 
   const ref = useAdminModal()
   const [reference, setReference] = useState('')
   const [confirmed, setConfirmed] = useState(false)
-  const needsConsent = request.ageGroup === 'menor' && request.guardianConsent !== 'recibida'
+  const needsConsent = request.guardianConsent === 'pendiente'
   return (
     <dialog ref={ref} className={`${s.dialog} ${s['local-dialog']}`} aria-labelledby="local-request-title" onCancel={(event) => { event.preventDefault(); if (!busy) onClose() }}>
       <div className={s['dialog-head']}>
@@ -23,8 +23,9 @@ export function LocalRequestDialog({ request, busy, error, onDecide, onClose }: 
       <div className={s['dialog-body']}>
         <dl className={s.details}>
           <dt>Estado</dt><dd><StatusBadge status={request.status} /></dd>
-          <dt>Programa</dt><dd>{request.program}</dd>
-          <dt>Grupo</dt><dd>{request.applicant.group}</dd>
+          <dt>Clase o inscripción anterior</dt><dd>{request.program}</dd>
+          {request.applicant.group&&<><dt>Grupo anterior</dt><dd>{request.applicant.group}</dd></>}
+          <dt>Matrícula</dt><dd>{request.applicant.studentCode??request.id}</dd>
           <dt>Correo</dt><dd className={s['local-break']}>{request.applicant.email}</dd>
           <dt>Acceso</dt><dd>{request.signInMethod === 'google' ? 'Google · Cuenta confirmada' : 'Con contraseña, después de activar'}</dd>
           <dt>Edad</dt><dd>{request.applicant.age} años</dd>
@@ -43,7 +44,7 @@ export function LocalRequestDialog({ request, busy, error, onDecide, onClose }: 
             <button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={!confirmed || reference.trim().length < 8} onClick={() => onDecide('consent', reference)}>Registrar autorización</button>
           </fieldset>
         )}
-        {!needsConsent && request.ageGroup === 'menor' && <p className={`${s.alert} ${s['alert--ok']}`}>Autorización del tutor registrada.</p>}
+        {request.guardianConsent === 'recibida' && <p className={`${s.alert} ${s['alert--ok']}`}>Autorización del tutor registrada.</p>}
         {error && <p role="alert" className={s.alert}>{error}</p>}
       </div>
       <div className={s['dialog-foot']} aria-busy={busy}>

@@ -42,7 +42,7 @@ export function CommunityWorkspace() {
   return (
     <CommunitySectionLayout>
       <header className={s.welcomeHeader}>
-        <div><span className={s.eyebrow}>{heading.eyebrow}</span><h1 id="community-title" tabIndex={-1}>{heading.title}</h1><p>{connection ? 'Alias de alumnos activos de tu programa y grupo.' : heading.description}</p><div className={s.communityNumbers}><span><i aria-hidden="true" />{(connection?.members ?? members).filter((member) => !member.institution).length} {connection ? 'alumnos de tu grupo' : 'alumnos ficticios'}</span><span>{state.posts.filter((post) => post.status === 'approved').length} historias compartidas</span></div></div>
+        <div><span className={s.eyebrow}>{heading.eyebrow}</span><h1 id="community-title" tabIndex={-1}>{heading.title}</h1><p>{connection ? 'Conoce a los alumnos de toda la comunidad CAI.' : heading.description}</p><div className={s.communityNumbers}><span><i aria-hidden="true" />{(connection?.members ?? members).filter((member) => !member.institution).length} {connection ? 'alumnos de la comunidad' : 'alumnos ficticios'}</span><span>{state.posts.filter((post) => post.status === 'approved').length} historias compartidas</span></div></div>
       </header>
       <ModerationPanel />
       <MySubmissions />
