@@ -17,6 +17,7 @@ const sections: Section[] = [
   { to: '/admin', label: 'Resumen', icon: 'home' },
   { to: '/admin/solicitudes', label: 'Solicitudes de ingreso', icon: 'inbox', countKey: 'requests' },
   { to: '/admin/publicaciones', label: 'Publicaciones', icon: 'file', countKey: 'posts' },
+  { to: '/admin/comunidad', label: 'Ver comunidad', icon: 'chat' },
   { to: '/admin/alumnos', label: 'Alumnos', icon: 'users' },
   { to: '/admin/galeria', label: 'Galería privada', icon: 'image' },
   { to: '/admin/retos', label: 'Retos de inglés', icon: 'trend' },

@@ -84,6 +84,9 @@ export function publications(db: Database) {
         return ownPost(db.prepare(`${select} WHERE p.id = ?`).get(id) as Row)
       })
     },
+    communityForAdmin(before=0):PublishedPost[] {
+      return (db.prepare(`${select} WHERE p.audience='community' AND p.status='publicada' AND (p.admin_author_id IS NOT NULL OR (r.status='aprobada' AND s.status='activo')) AND (p.expires_at IS NULL OR p.expires_at>?) AND (?=0 OR p.id<?) ORDER BY p.id DESC LIMIT 21`).all(new Date().toISOString(),before,before) as Row[]).filter(available).map(row=>publicPost(db,row))
+    },
     feed(user: StudentUser): PublishedPost[] {
       const profile = activeProfile(user)
       return (db.prepare(`${select} WHERE p.status = 'publicada' AND (p.expires_at IS NULL OR p.expires_at>?) AND (p.audience='community' OR (p.program=? AND p.group_name=? AND p.group_name<>'Por asignar')) ORDER BY p.published_at DESC,p.id DESC`).all(new Date().toISOString(),profile.program,profile.group) as Row[]).filter(available).map(row=>({...publicPost(db,row),engagement:reactionSummary(db,row.id,idOf(user.id,'CAI'),row.program,row.group_name,row.audience==='community')}))

@@ -1,3 +1,4 @@
+import { currentRestriction, unrestrictedStudent } from './student-restrictions.ts'
 import { createHash, randomBytes } from 'node:crypto'
 import type { IncomingMessage } from 'node:http'
 import type { ActivationInvitation, GroupMember, StudentUser, Submission } from './contracts.ts'
@@ -16,6 +17,8 @@ const accountQuery = `SELECT r.id, r.payload, r.revision AS record_revision, a.p
   LEFT JOIN student_accounts a ON a.request_id = r.id
   WHERE r.status = 'aprobada' AND s.status = 'activo'
   AND (a.request_id IS NOT NULL OR EXISTS (SELECT 1 FROM google_identities g WHERE g.request_id = r.id))`
+const accessibleQuery = `${accountQuery} AND ${unrestrictedStudent('r.id')}`
+
 type AccountRow = { id: number; payload: string; password_hash: string | null; record_revision:number }
 
 function userFrom(db: Database, row: AccountRow): StudentUser {
@@ -39,7 +42,7 @@ export function studentAccounts(db: Database, cookies: CookiePolicy = localCooki
   const sessionName = sessionCookieName(cookieName, cookies)
   const cookie = (token: string, age: number) => sessionCookie(cookieName, token, age, cookies)
   const activated = (id: number) => db.prepare('SELECT request_id FROM student_accounts WHERE request_id = ? UNION ALL SELECT request_id FROM google_identities WHERE request_id = ?').get(id, id)
-  const available = (id: number) => db.prepare("SELECT r.id FROM requests r JOIN students s ON s.request_id = r.id WHERE r.id = ? AND r.status = 'aprobada' AND s.status = 'activo'").get(id)
+  const available = (id: number) => db.prepare(`SELECT r.id FROM requests r JOIN students s ON s.request_id = r.id WHERE r.id = ? AND r.status = 'aprobada' AND s.status = 'activo' AND ${unrestrictedStudent('r.id')}`).get(id)
   const audit = (id: number, action: string, actor: number | null = null) => db.prepare('INSERT INTO audit_log(actor_id, request_id, action, created_at) VALUES (?, ?, ?, ?)').run(actor, id, action, new Date().toISOString())
   const invitation = (token: unknown) => {
     if (typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) throw new HttpError(400, 'El enlace no es válido, ya se utilizó o caducó. Pide otro a CAI.')
@@ -83,11 +86,13 @@ export function studentAccounts(db: Database, cookies: CookiePolicy = localCooki
       const fallback = `scrypt-v2:00000000000000000000000000000000:${'0'.repeat(128)}`
       const valid = await verifyPassword(password, row?.password_hash ?? fallback)
       if (!valid || !row?.password_hash) return null
-      const current = db.prepare(`${accountQuery} AND r.id = ?`).get(row.id) as AccountRow | undefined
+      const restriction=currentRestriction(db,row.id)
+      if(restriction)throw new HttpError(403,restriction.expires_at===null?'Tu acceso a CAI está suspendido. Consulta con coordinación.':'Tu acceso a CAI está suspendido temporalmente. Consulta con coordinación.')
+      const current = db.prepare(`${accessibleQuery} AND r.id = ?`).get(row.id) as AccountRow | undefined
       return current && current.password_hash===row.password_hash && current.record_revision===row.record_revision ? userFrom(db, current) : null
     },
     forGoogle(subject: string): StudentUser | null {
-      const row = db.prepare(`${accountQuery} AND r.id = (SELECT request_id FROM google_identities WHERE subject = ?)`).get(subject) as AccountRow | undefined
+      const row = db.prepare(`${accessibleQuery} AND r.id = (SELECT request_id FROM google_identities WHERE subject = ?)`).get(subject) as AccountRow | undefined
       return row ? userFrom(db, row) : null
     },
     start(user: StudentUser) {
@@ -101,7 +106,7 @@ export function studentAccounts(db: Database, cookies: CookiePolicy = localCooki
     session(request: IncomingMessage): StudentUser | null {
       const token = tokenFrom(request, sessionName)
       if (!token) return null
-      const row = db.prepare(`${accountQuery} AND r.id = (SELECT request_id FROM student_sessions WHERE token_hash = ? AND expires_at > ?)`).get(hashToken(token), Date.now()) as AccountRow | undefined
+      const row = db.prepare(`${accessibleQuery} AND r.id = (SELECT request_id FROM student_sessions WHERE token_hash = ? AND expires_at > ?)`).get(hashToken(token), Date.now()) as AccountRow | undefined
       return row ? userFrom(db, row) : null
     },
     end(request: IncomingMessage) {
@@ -110,7 +115,7 @@ export function studentAccounts(db: Database, cookies: CookiePolicy = localCooki
       return cookie('', 0)
     },
     group(user: StudentUser): GroupMember[] {
-      const own = db.prepare(`${accountQuery} AND r.id = ?`).get(idOf(user.id)) as AccountRow | undefined
+      const own = db.prepare(`${accessibleQuery} AND r.id = ?`).get(idOf(user.id)) as AccountRow | undefined
       if (!own) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible.')
       const rows = db.prepare(`SELECT r.id,r.payload,s.joined_at FROM requests r JOIN students s ON s.request_id=r.id
         WHERE r.status='aprobada' AND s.status='activo' ORDER BY s.joined_at DESC,r.id DESC`).all()

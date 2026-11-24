@@ -177,3 +177,13 @@ export const learningApi={
   decide:(item:{id:number;revision:number},decision:'approve'|'reject',reason:string)=>call(`/achievements/${item.id}/review`,'POST',{revision:item.revision,decision,reason,confirmed:true}),
   profile:(id:string,before=0)=>call<import('../../../server/contracts').SocialProfile>(`/student/members/${encodeURIComponent(id)}?before=${before}`),
 }
+
+
+export type {StudentRestriction,ModerationAuthor,CommunityModerationPost,CommunityModerationComment,CommunityModerationAction} from '../../../server/contracts'
+export const communityModerationApi={
+ posts:(before=0)=>call<{items:import('../../../server/contracts').CommunityModerationPost[];nextCursor:number|null}>(`/community/posts?before=${before}`),
+ comments:(id:string,before=0)=>call<{items:import('../../../server/contracts').CommunityModerationComment[];nextCursor:number|null}>(`/community/posts/${id}/comments?before=${before}`),
+ restrictions:(history=false,before=0)=>call<{items:import('../../../server/contracts').StudentRestriction[];nextCursor:number|null}>(`/community/restrictions?view=${history?'history':'active'}&before=${before}`),
+ apply:(author:import('../../../server/contracts').ModerationAuthor,comment:import('../../../server/contracts').CommunityModerationComment|undefined,data:import('../../../server/contracts').CommunityModerationAction,key:string)=>call(`/community/students/${author.studentId}${comment?'/comments/'+comment.id:''}/moderate`,'POST',data,{'Idempotency-Key':key}),
+ revoke:(item:import('../../../server/contracts').StudentRestriction,reason:string)=>call(`/community/restrictions/${item.id}/revoke`,'POST',{revision:item.revision,reason,confirmed:true}),
+}

@@ -174,3 +174,13 @@ export type SocialProfile = {
   member: GroupMember; posts: PublishedPost[]; nextCursor: number | null;
   badges: { id: string; badge: BadgeSpec; awardedAt: string }[];
 }
+
+
+export type StudentRestriction = {
+ id:number;studentId:string;studentName:string;reason:string;createdAt:string;expiresAt:string|null;endedAt:string|null;
+ status:'active'|'expired'|'revoked';revision:number
+}
+export type ModerationAuthor = {studentId:string;displayName:string;studentRevision:number;restriction:StudentRestriction|null}
+export type CommunityModerationPost = PublishedPost & {moderation:ModerationAuthor|null}
+export type CommunityModerationComment = PublicComment & {revision:number;moderation:ModerationAuthor}
+export type CommunityModerationAction = {studentRevision:number;commentRevision?:number;removeComment:boolean;suspend:boolean;durationDays:number|null;reason:string;confirmed:boolean}
