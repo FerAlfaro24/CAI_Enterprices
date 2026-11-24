@@ -1,47 +1,37 @@
+import { dailyPractice,practiceAreas,practiceDateLabel } from '../../../../shared/challenge-practice'
+import { useDailyRenewal } from './useDailyRenewal'
 import { useRef,useState } from 'react'
-import { challengesApi,ApiError,type DailyQuestion,type ChallengeHistory } from '../../local-access/api'
+import type { DailyQuestion } from '../../local-access/api'
 import type { CommunityConnection } from '../connection'
 import { CommunityIcon } from '../components/ui'
 import { MotionButton } from '../components/CommunityMotion'
 import { ChallengeQuestionPanel } from './ChallengeQuestionPanel'
 import { ConnectedChallengeRewards } from './ChallengeRewards'
 import { DailyMission } from './DailyMission'
-import { CelebrationBurst } from '../components/CelebrationBurst'
+import { DailyPracticeSummary } from './DailyPracticeSummary'
+import { PracticeHistory } from './PracticeHistory'
 import s from './challenges.module.css'
 
-const dateLabel=(day:string)=>new Intl.DateTimeFormat('es-MX',{dateStyle:'long',timeZone:'UTC'}).format(new Date(day+'T12:00:00Z'))
 function adapter(q:DailyQuestion){return {...q,correctIndex:q.attempt?.correctIndex??-1,explanation:q.attempt?.explanation??'',example:q.attempt?.example??''}}
-function PracticeHistory({connection}:{connection:CommunityConnection}){
- const [history,setHistory]=useState<ChallengeHistory|null>(null),[loading,setLoading]=useState(false),[error,setError]=useState('')
- const reading=useRef(false)
- const load=async(more=false)=>{
-  if(reading.current)return
-  reading.current=true;setLoading(true);setError('')
-  try{const page=await challengesApi.history(more?history?.nextCursor??0:0);setHistory(old=>({items:more?[...(old?.items??[]),...page.items]:page.items,nextCursor:page.nextCursor}))}
-  catch(error){if(error instanceof ApiError&&error.status===401)connection.handleFailure(error);setError(error instanceof Error?error.message:'No pudimos cargar tu repaso.')}
-  finally{reading.current=false;setLoading(false)}
- }
- return <section className={s.history} aria-label="Mi cuaderno de repaso"><span className={s.eyebrow}>MI CUADERNO DE REPASO</span><h2>Lo que ya practicaste.</h2><p>Solo tú puedes consultar tus respuestas aquí. Abre una pregunta para recordar la explicación.</p><MotionButton type="button" className={s.textButton} disabled={loading} onClick={()=>{void load()}}>{loading?'Cargando…':history?'Actualizar mi repaso':'Ver mis respuestas anteriores'}</MotionButton>{error&&<p role="alert" className={s.error}>{error}</p>}
-  {history?.items.length===0&&<p>Aún no hay respuestas guardadas. Empieza con las preguntas de hoy.</p>}
-  {history?.items.map(q=><details className={s.review} key={q.id}><summary>{q.attempt?.correct?'✓':'↻'} {q.topic} · {dateLabel(q.day)}</summary><p><b>{q.question}</b></p><p>Elegiste: {q.options[q.attempt!.answerIndex]} · +{q.attempt!.points} puntos</p><p>Respuesta correcta: <b>{q.options[q.attempt!.correctIndex]}</b></p><p>{q.attempt!.explanation}</p><p><b>Otro ejemplo:</b> {q.attempt!.example}</p></details>)}
-  {history?.nextCursor&&<MotionButton type="button" className={s.textButton} disabled={loading} onClick={()=>{void load(true)}}>Ver más respuestas</MotionButton>}
- </section>
-}
-export function ConnectedChallengesView({connection}:{connection:CommunityConnection}){
- const {challenges:data}=connection
- const [selection,setSelection]=useState(()=>data.items.find(q=>!q.attempt)?.id??data.items[0]?.id??'')
+export function ConnectedChallengesView({connection}:{connection:CommunityConnection}) {
+ const {challenges:data}=connection,progress=data.progress,today=dailyPractice(data.items)
+ const [selection,setSelection]=useState(()=>today.nextId??data.items[0]?.id??'')
  const question=data.items.find(q=>q.id===selection)??data.items.find(q=>!q.attempt)??data.items[0]
  const next=data.items.find(q=>!q.attempt&&q.id!==question?.id)
- const progress=data.progress
- const [initialCompleted]=useState(progress.todayAnswered)
+ const [initialCompleted]=useState(progress.todayAnswered),[updating,setUpdating]=useState(false)
+ const renewing=useRef(false),renewal=useDailyRenewal(data.serverTime,data.nextRefreshAt)
+ const select=(id:string)=>{setSelection(id);requestAnimationFrame(()=>{const panel=document.getElementById('daily-question');panel?.focus();panel?.scrollIntoView({block:'start',behavior:'instant'})})}
+ const refresh=async()=>{if(renewing.current||connection.busy)return;renewing.current=true;setUpdating(true);try{await connection.refresh()}finally{renewing.current=false;setUpdating(false)}}
  return <div className={`${s.challenges} ${s.connected}`}>
-  <header className={s.pageHeading}><div><span className={s.eyebrow}><CommunityIcon name="spark" size={18}/> UN POQUITO CADA DÍA</span><h1 id="community-title" tabIndex={-1}>Pequeños retos.<br/><em>Inglés que se queda.</em></h1><p>Tres preguntas para practicar gramática, palabras que confunden y situaciones cotidianas. Equivocarte también es aprender.</p><p>{dateLabel(data.day)} · Cambian a medianoche, hora de Ciudad de México.</p></div>
-  <DailyMission data={data} selectedId={question?.id} onSelect={setSelection}/></header>
-  {data.needsGroup&&<p className={s.error} role="status">Coordinación debe asignarte un grupo para que puedas responder. Tu progreso anterior se conserva.</p>}
+  <header className={s.pageHeading}><div><span className={s.eyebrow}><CommunityIcon name="spark" size={18}/> UN POQUITO CADA DÍA</span><h1 id="community-title" tabIndex={-1}>Pequeños retos.<br/><em>Inglés que se queda.</em></h1><p>Tres actividades de inglés: gramática, vocabulario y vida diaria. El mismo conjunto para toda la comunidad; tus respuestas y tu progreso son privados.</p>
+   <div className={s.renewal} role="region" aria-label="Renovación de los retos"><span className={s.sectionKicker}>{practiceDateLabel(data.day)}</span><strong>Próximos retos: {renewal.label.toLowerCase()}</strong><p>Se renuevan a medianoche, hora de Ciudad de México, aunque estés en otra zona horaria.</p><button type="button" className={s.textButton} disabled={updating||connection.busy} onClick={()=>{void refresh()}}>{updating?'Actualizando…':'Actualizar mis retos'}</button></div>
+   <details className={s.howItWorks}><summary>¿Cómo funcionan las tres actividades?</summary><ol><li>Elige una actividad del recorrido y responde una vez.</li><li>Sumas 5 puntos por intentarlo y 10 extra si aciertas: hasta 45 al día.</li><li>Lee la explicación. Repasar no cambia tu respuesta ni vuelve a sumar puntos.</li></ol><p>Completar las tres cuenta como un día de práctica, aunque haya errores. Los temas pueden reaparecer en otros contextos para reforzar lo aprendido. Es práctica de inglés, no una calificación de tu curso.</p></details>
+  </div><DailyMission data={data} selectedId={question?.id} onSelect={select}/></header>
   {!data.enabled&&<p className={s.error} role="status">Coordinación pausó los retos. Puedes seguir repasando tus respuestas guardadas.</p>}
-  {progress.todayAnswered===3&&<section className={s.finished} role="status">{initialCompleted<3&&<CelebrationBurst/>}<span className={s.finishMedal} aria-hidden="true">✦</span><div><span className={s.sectionKicker}>TRES INTENTOS. UN GRAN PASO.</span><h2>¡Por hoy, misión cumplida!</h2><p>Ya practicaste las tres preguntas. Repasa lo que aprendiste y vuelve mañana por otras nuevas.</p><strong>+{data.items.reduce((sum,item)=>sum+(item.attempt?.points??0),0)} puntos de práctica hoy</strong></div></section>}
-  <div className={s.challengeGrid}><div>{question?<><ChallengeQuestionPanel key={question.id+'-'+question.revision} challenge={adapter(question)} attempt={question.attempt??undefined}/>{question.previousGroup&&<p className={s.questionIntro}>Respondiste esta pregunta antes de cambiar de grupo. Tu resultado se conserva.</p>}{question.attempt&&next&&<MotionButton type="button" className={s.checkButton} onClick={()=>{setSelection(next.id);document.getElementById('community-title')?.focus()}}>Siguiente pregunta <CommunityIcon name="arrow" size={17}/></MotionButton>}</>:<section className={s.bottomCard}><h2>Hoy no hay preguntas disponibles.</h2><p>Puedes volver más tarde o repasar lo que ya aprendiste.</p></section>}</div><ConnectedChallengeRewards progress={progress}/></div>
-  <div className={s.bottomCards}><section className={s.bottomCard}><span className={s.eyebrow}>CONSTANCIA SIN PRESIÓN</span><h2>Un día a la vez.</h2><p>{progress.completedDays} días completos · Mejor serie: {progress.longestStreak} días</p><details className={s.streakRule}><summary>Cómo se calcula mi progreso</summary><p>Sumas 5 puntos por responder y 10 más si aciertas. Hay un intento por pregunta. Completar las tres cuenta como un día, aunque haya errores. La serie incluye hoy o se mantiene hasta ayer mientras empiezas; un día completo sin terminar corta la serie. Los puntos y tu mejor serie se conservan.</p><p>Los retos se renuevan según la fecha de Ciudad de México. Tu progreso es privado y no es una calificación ni un examen de nivel.</p></details></section><section className={s.bottomCard}><span className={s.eyebrow}>PRACTICAR PARA RECORDAR</span><h2>Vuelve con curiosidad.</h2><p>Los temas reaparecen en contextos diferentes: artículos, tiempos verbales, falsos amigos y expresiones que sí se usan.</p></section></div>
+  {renewal.expired&&<p className={s.renewal} role="status">Ya cambió el día de práctica. Actualiza tus retos para ver las nuevas actividades; tu progreso está guardado.</p>}
+  {progress.todayAnswered===3&&<DailyPracticeSummary data={data} celebrate={initialCompleted<3} onSelect={select}/>}
+  <div className={s.challengeGrid}><div id="daily-question" role="region" aria-label="Actividad seleccionada" tabIndex={-1} className={s.questionStage}>{question?<><p className={s.activeActivity}>{practiceAreas[question.slot]} · Actividad {question.slot+1} de 3 · {question.attempt?'Tu respuesta guardada':'Elige una opción y compruébala'}</p><ChallengeQuestionPanel key={question.id+'-'+question.revision} challenge={adapter(question)} attempt={question.attempt??undefined} expired={renewal.expired} activityLabel={practiceAreas[question.slot]}/>{question.previousGroup&&<p className={s.questionIntro}>Este resultado pertenece a tu práctica anterior. Se conserva en tu recorrido.</p>}{question.attempt&&next&&<MotionButton type="button" className={`${s.checkButton} ${s.nextQuestion}`} disabled={renewal.expired||connection.busy} onClick={()=>select(next.id)}>Siguiente actividad: {practiceAreas[next.slot]} <CommunityIcon name="arrow" size={17}/></MotionButton>}</>:<section className={s.bottomCard}><h2>Hoy no hay preguntas disponibles.</h2><p>Puedes actualizar más tarde o repasar lo que ya aprendiste.</p></section>}{data.enabled&&data.items.length>0&&data.items.length<3&&<p className={s.questionIntro}>Hay {data.items.length} actividades disponibles. Cuando coordinación habilite las restantes, aparecerán aquí.</p>}</div><ConnectedChallengeRewards progress={progress}/></div>
+  <div className={s.bottomCards}><section className={s.bottomCard}><span className={s.eyebrow}>CONSTANCIA SIN PRESIÓN</span><h2>Un día a la vez.</h2><p>{progress.completedDays} días completos · Mejor serie: {progress.longestStreak} días</p><details className={s.streakRule}><summary>Cómo se calcula mi progreso</summary><p>Completar las tres cuenta como un día, aunque haya errores. La serie incluye hoy o se mantiene hasta ayer mientras empiezas; un día sin completar las tres corta la serie. Los puntos y tu mejor serie se conservan.</p><p>Tu progreso es privado. Puedes revisar cualquier respuesta guardada sin volver a sumar puntos.</p></details></section><section className={s.bottomCard}><span className={s.eyebrow}>PRACTICAR PARA RECORDAR</span><h2>Vuelve con curiosidad.</h2><p>Artículos, tiempos verbales, falsos amigos y expresiones cotidianas. Lo importante es entender la explicación y probar una frase propia.</p><button type="button" className={s.textButton} onClick={()=>{const history=document.getElementById('practice-history');history?.focus();history?.scrollIntoView({block:'start',behavior:'instant'})}}>Abrir mi cuaderno de repaso</button></section></div>
   <PracticeHistory connection={connection}/>
  </div>
 }

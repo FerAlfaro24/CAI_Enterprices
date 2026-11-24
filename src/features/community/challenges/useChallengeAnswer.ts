@@ -3,7 +3,7 @@ import { useCommunity } from '../context'
 import type { Attempt, Challenge } from '../types'
 
 /** Shared by the original compact quiz and the redesigned Retos panel. */
-export function useChallengeAnswer(challenge: Challenge, attempt: Attempt | undefined) {
+export function useChallengeAnswer(challenge: Challenge, attempt: Attempt | undefined, expired = false) {
   const { dispatch,connection } = useCommunity()
   const [pending,setPending]=useState(false)
   const sending=useRef(false),request=useRef<{index:number;key:string}|null>(null)
@@ -13,7 +13,7 @@ export function useChallengeAnswer(challenge: Challenge, attempt: Attempt | unde
   const choose = (index: number) => { if(!sending.current){setSelection(index); setError('')} }
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (attempt||sending.current) return
+    if (attempt||sending.current||expired) return
     if (selected === null) {
       setError('Elige una opción para participar en el reto.')
       event.currentTarget.querySelector<HTMLInputElement>('input[type="radio"]')?.focus()
@@ -30,5 +30,5 @@ export function useChallengeAnswer(challenge: Challenge, attempt: Attempt | unde
     dispatch({ type: 'answer', challengeId: challenge.id, answerIndex: selected })
     setError('')
   }
-  return { selected, error, choose, submit,pending,unavailable:Boolean(connection&&(!connection.challenges.enabled||connection.challenges.needsGroup)) }
+  return { selected, error, choose, submit,pending,unavailable:expired||Boolean(connection&&(!connection.challenges.enabled||connection.challenges.needsGroup)) }
 }

@@ -268,3 +268,50 @@
 
 /* Respondida no equivale a acertada: icono y color comunican ambos estados. */
 .missionPath>button[data-result='incorrect']>span { background:#aa393e;color:#fff;box-shadow:0 4px 0 #74282e; }
+
+/* Retos diarios: distinguir participación, aciertos y renovación. */
+.renewal { margin-top:18px;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:var(--paper); }
+.renewal>strong { display:block;color:var(--navy);font-size:18px; }
+.renewal>p { color:var(--text-secondary);font-size:14px;line-height:1.6;margin:8px 0; }
+.howItWorks { margin-top:14px;color:var(--text-secondary);font-size:14px;line-height:1.7; }
+.howItWorks summary { min-height:44px;cursor:pointer;color:var(--primary);font-weight:750; }
+.howItWorks ol { padding-left:22px; }
+.howItWorks li { margin-bottom:8px; }
+.connected .missionPath small { font-size:12px; }
+.connected .missionPath>button[data-result='incorrect']>span { background:#a8362b;color:#fff;box-shadow:0 4px 0 #78291f; }
+.connected .missionPath>button[aria-current]>span { outline:3px solid #14284a;outline-offset:4px; }
+.connected .totalPoints { text-align:left;font-size:13px;border-top:1px solid #cfad58;padding-top:12px; }
+.connected .finished { background:var(--paper);border-color:var(--line);color:var(--navy); }
+.connected .finished[data-perfect='true'] { border-color:var(--success-line); }
+.finishedContent { min-width:0;flex:1; }
+.dailyResults { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px; }
+.dailyResults button { display:grid;gap:6px;justify-items:start;min-height:100px;padding:14px;border:1px solid var(--success-line);border-radius:16px;background:var(--success-bg);color:var(--success-ink);text-align:left; }
+.dailyResults button[data-result='incorrect'] { border-color:var(--error-ink);background:var(--error-bg);color:var(--error-ink); }
+.dailyResults button>span { font-size:24px;font-weight:800; }
+.dailyResults small { font-size:13px; }
+.questionStage { min-width:0;scroll-margin-top:115px; }
+.questionStage:focus-visible { outline:3px solid var(--primary);outline-offset:5px;border-radius:24px; }
+.activeActivity { margin:0 0 12px;color:var(--text-secondary);font-size:14px;font-weight:700; }
+.nextQuestion { margin-top:18px; }
+.connected .completed[data-result='incorrect'] { color:var(--error-ink); }
+.connected .result[data-result='incorrect'] { background:var(--error-bg);color:var(--error-ink);border-color:var(--error-ink); }
+.connected .result>.resultPoints { font-size:36px;line-height:1.1;margin:0 0 16px; }
+.resultPoints small { font-size:13px;font-weight:650; }
+.historyFilters { display:flex;flex-wrap:wrap;gap:8px;margin:16px 0; }
+.historyFilters button { min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:22px;background:var(--paper);color:var(--navy);font-weight:700; }
+.historyFilters [aria-pressed='true'] { background:var(--primary-fill);color:#fff;border-color:transparent; }
+.review[data-result='incorrect'] { border-left:4px solid var(--error-ink); }
+.review[data-result='correct'] { border-left:4px solid var(--success-ink); }
+.history { scroll-margin-top:115px; }
+@media(max-width:560px) { .dailyResults { grid-template-columns:1fr; }.dailyResults button { grid-template-columns:30px 1fr;align-items:center;min-height:68px;padding:12px; }.dailyResults button>span { grid-row:span 2; }.dailyResults small { grid-column:2; }.finished { align-items:flex-start; }.finishMedal { font-size:28px; }.renewal { padding:14px; }.renewal>strong { font-size:17px; } }
+
+.personalStats { display:grid;gap:12px;margin-block:16px; }
+.personalStats>div { display:flex;justify-content:space-between;gap:12px;align-items:baseline; }
+.personalStats dt { font-size:14px;color:var(--text-secondary); }
+.personalStats dd { margin:0;color:var(--navy);font-size:24px;font-weight:800; }
+
+.connected .incorrect { border-color:#bd6553; }
+.connected .correct { border-color:#2d7655; }
+
+.connected .finished h2,.history h2 { font-weight:800; }
+@media(max-width:560px) { .connected .finished .finishMedal { display:none; } }
