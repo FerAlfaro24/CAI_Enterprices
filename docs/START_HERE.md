@@ -1,5 +1,8 @@
 # CAI — empieza aquí
 
+**Nuevo análisis de pruebas con amigos:** [F1–F6 y criterios de cierre](NEXT_STEPS.md#prioridad-vigente-observaciones-de-amigos-del-23-11-2026). Rama documental `docs/v1-friends-feedback-plan`; código funcional continúa en `c59ec6c`/PR #26. No confundir el plan con cambios ya implementados.
+
+
 **Actualizado: 23 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
 
 ## Qué rama abrir
