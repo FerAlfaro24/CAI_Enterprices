@@ -1,5 +1,8 @@
 # CAI — preparación técnica de producción
 
+**Actualización F1b/F2 — 23-11:** La entrega F1b/F2 requiere esquema21. El arranque productivo rechaza20 y no migra automáticamente; preparar copia/ensayo con el proceso de actualización antes de adoptar. El código de esta entrega no está desplegado; los ensayos productivos anteriores son evidencia histórica de su versión. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
+
+
 **Actualización del 22-11:** [notificaciones e historial](COMMUNITY_FEEDBACK.md) incorporan esquema 20; preflight vigente exige 1–20. Migración local aditiva explícita al adoptar esta rama; producción sigue sin migrar al arrancar. No abrir bases habituales para pruebas.
 
 > Actualización del 19-11: la rama posterior `feat/v1-official-media` añade [fotos oficiales y esquema 17](OFFICIAL_MEDIA.md). Los resultados y la ausencia de migraciones de la entrega productiva del 17-11 son históricos. La [continuación de Inicio/historias](COMMUNITY_HOME_STORIES.md) usa esquema 18; el corte de Inicio exigía 1–18. La [entrega de Logros](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados) incorpora esquema 19 y el preflight de esa entrega exigía 1–19; no actualiza bases existentes implícitamente. Ensayar actualización/recuperación antes de adoptar el nuevo código. Instalar los seis medios privados en `CAI_DATA_DIR/official-media` por un canal privado: no están en GitHub, dist o public.

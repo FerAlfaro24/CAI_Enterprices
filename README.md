@@ -1,5 +1,8 @@
 # CAI — sitio institucional, comunidad y administración
 
+**Registro y comunidad compartida comprobados:** `feat/v1-shared-community`, código `3a7fdb3`, esquema21. [Entrega, pruebas y adopción](docs/NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).294 pruebas de servidor/98 de navegador; la demostración remota conserva la versión anterior.
+
+
 **F1a comprobado:** `feat/v1-access-usability`, código `ce3160d`: activación y recuperación de alumnos con mínimo8, mostrar/ocultar y confirmación inmediata; 58 pruebas de servidor/94 navegador, lint y build. [Entrega y próximos bloques](docs/NEXT_STEPS.md#entrega-f1a-activación-y-contraseñas--23-11-2026). El enlace remoto sigue en su versión anterior; Top pendiente del cliente.
 
 
