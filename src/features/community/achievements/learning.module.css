@@ -13,3 +13,13 @@
 .editorTop>span,.kicker { font-size:12px; }
 .socialPost button,.socialTabs button { font-size:14px; }
 @media(max-width:650px) { .start { padding:18px;gap:10px; }.start h2 { font-size:27px;margin:8px 0; }.start p { font-size:15px; }.start .kicker { display:none; }.bigSpark { font-size:48px; }.studio { gap:18px; }.choices button { padding:16px; }.collectionHeading { margin-top:8px; }.editorActions { gap:8px; }.editorActions button { min-width:100px; }.editorBody { padding-bottom:10px; } }
+
+/* Un solo formulario: nombre y experiencia se distinguen sin pasos intermedios. */
+.compactChoices { display:flex; flex-wrap:wrap; gap:8px; margin-block:8px 4px; }
+.compactChoices button { min-height:44px; padding:10px 14px; border:1px solid var(--line); border-radius:20px; background:var(--surface); color:var(--navy); font:inherit; font-weight:700; }
+.compactChoices [aria-pressed=true] { background:var(--primary-fill); color:#fff; border-color:transparent; }
+.editor .fieldHelp { display:flex; flex-wrap:wrap; gap:6px 16px; justify-content:space-between; margin:0; color:var(--text-secondary); font-size:13px; }
+.fieldHelp span { white-space:nowrap; }
+.learningCard h3,.learningCard p,.learningCard blockquote { overflow-wrap:anywhere; }
+.learningCard p,.learningCard blockquote { white-space:pre-wrap; }
+.editorBody>.help { margin-block:12px; }

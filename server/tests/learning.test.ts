@@ -94,7 +94,7 @@ test('Logros personales, imágenes privadas, revisión, insignias progresivas y 
         assert.equal(meta.exif, undefined);
     });
     await t.test('rechaza inyección de propietario, imágenes ajenas, SVG, corrupción y límites', async () => {
-        for (const data of [{ ...draft, studentId: users.bob!.id }, { ...draft, images: [{ id: item.images[0]!.id }] }, { ...draft, images: [{ data: 'data:image/svg+xml;base64,PHN2Zy8+' }] }, { ...draft, images: [{ data: 'data:image/png;base64,YWJj' }] }, { ...draft, images: Array(4).fill({ data: dataUrl }) }, { ...draft, title: 'x', practice: 'corto' }])
+        for (const data of [{ ...draft, studentId: users.bob!.id }, { ...draft, images: [{ id: item.images[0]!.id }] }, { ...draft, images: [{ data: 'data:image/svg+xml;base64,PHN2Zy8+' }] }, { ...draft, images: [{ data: 'data:image/png;base64,YWJj' }] }, { ...draft, images: Array(4).fill({ data: dataUrl }) }, { ...draft, title: ' ', practice: ' ' }])
             assert.equal((await call('/student/achievements', 'POST', data, 'bob', randomUUID())).status, 400);
         await assert.rejects(repo.save(alice, null, draft, randomUUID(), () => false), { status: 401 });
         const large = { ...draft, images: [{ data: 'data:image/png;base64,' + Buffer.alloc(3 * 1024 * 1024 + 1).toString('base64') }] };

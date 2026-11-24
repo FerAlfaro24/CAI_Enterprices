@@ -1,3 +1,4 @@
+import { learningLimits, learningPublicationBody } from '../shared/learning.ts';
 import { createHash, randomUUID } from 'node:crypto';
 import sharp from 'sharp';
 import { transaction, type Database } from './database.ts';
@@ -62,9 +63,9 @@ export function learningRepository(db: Database) {
                 throw new HttpError(400, 'Revisa los campos del logro.');
             if (!['reading', 'screen', 'music'].includes(String(data.category)) || !['draft', 'completed'].includes(String(data.state)) || !Array.isArray(data.images) || data.images.length > 3)
                 throw new HttpError(400, 'Elige una actividad y hasta tres imágenes.');
-            const draft = { category: String(data.category), title: field(data.title, 100), practice: field(data.practice, 600), expression: field(data.expression, 160), example: field(data.example, 300), state: String(data.state) };
-            if (!draft.title || (draft.state === 'completed' && (draft.title.length < 4 || draft.practice.length < 20 || draft.expression.length < 2 || draft.example.length < 5)))
-                throw new HttpError(400, 'Para completar: título, al menos 20 caracteres de práctica, una expresión y un ejemplo de cinco caracteres.');
+            const draft = { category: String(data.category), title: field(data.title, learningLimits.titleMax), practice: field(data.practice, learningLimits.practiceMax), expression: field(data.expression, learningLimits.expressionMax), example: field(data.example, learningLimits.legacyExampleMax), state: String(data.state) };
+            if (!draft.title || (draft.state === 'completed' && !draft.practice))
+                throw new HttpError(400, 'Escribe el nombre de lo que viste, leíste o escuchaste y qué aprendiste. Las palabras o frases y las imágenes son opcionales.');
             const owner = active(user);
             if (id)
                 own(user, id);
@@ -168,7 +169,7 @@ export function learningRepository(db: Database) {
                         throw new HttpError(409, 'CAI pausó los nuevos envíos de publicaciones.');
                     if (post && ['pendiente', 'publicada'].includes(String(post.status)))
                         throw new HttpError(409, 'Este logro ya está compartido o en revisión.');
-                    const draft = validatePublication({ title: item.title, category: 'achievement', body: `${item.practice}\n\nLo que aprendí: ${item.expression}\nMi ejemplo: ${item.example}` });
+                    const draft = validatePublication({ title: item.title, category: 'achievement', body: learningPublicationBody(item) }, 'learning');
                     const publication = Number(db.prepare("INSERT INTO publications(audience,author_id,idempotency_key,title,body,category,program,group_name,created_at) VALUES ('community',?,?,?,?,?,?,?,?)").run(owner.id, randomUUID(), draft.title, draft.body, 'achievement', owner.profile.program, owner.profile.group, at()).lastInsertRowid);
                     db.prepare("INSERT INTO publication_audit(publication_id,student_id,action,created_at) VALUES (?,?,'publication.submitted',?)").run(publication, owner.id, at());
                     db.prepare('UPDATE learning_achievements SET publication_id=? WHERE id=?').run(publication, id);
