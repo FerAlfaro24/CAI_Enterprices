@@ -1,5 +1,7 @@
 # CAI — próximos pasos vigentes
 
+**23-11, preferencia posterior:** amigos crean su propia solicitud en `/registro`, coordinación aprueba y comparte activación para que elijan contraseña. [Recorrido comprobado](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026). Repartir las instrucciones de registro actualizadas, conservar la misma ventana temporal y recoger incidencias reales. Las cuentas preasignadas ya no son la vía de esta prueba; no saltar aprobación ni implementar correo/Google automáticamente.
+
 **23-11, en curso:** prueba con amigos autorizada en copia HTTPS temporal de la versión actual. [Alcance y comprobaciones](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026). Siguiente acción humana: repartir una cuenta por persona, probar en sus dispositivos/redes y anotar incidencias. Moderación y actualización cada 15 segundos conservadas; no empezar Google/alojamiento definitivo por esta activación. No renovar automáticamente el máximo de 24 horas.
 
 **22 de noviembre de 2026.** Continuación `feat/v1-admin-usability-review`, [estado real](PROJECT_STATE.md). Revisión técnica autónoma del panel completada: [diagnóstico, mejoras y evidencia](ADMIN_USABILITY_REVIEW.md). Siguiente: aceptación de coordinación real con [guía actualizada](guia-administracion.md), observaciones concretas y N3. Las correcciones de comunidad de PR #22 están incluidas. No reconstruir panel, Logros, Insignias ni notificaciones. N1–N7 conserva el trabajo general posterior.

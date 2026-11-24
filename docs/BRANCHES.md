@@ -23,6 +23,8 @@
 
 ## Ramas añadidas después del corte
 
+`fix/v1-remote-registration-guidance` parte de `2f6a04f` de PR #24. Textos del alta conectada y enlaces privados corregidos para uso remoto, verificador completo de registro/aprobación/activación y evidencia. Sin cambios de API/reglas/esquema. [Entrega](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026).
+
 `test/v1-friends-remote-2026-11-23` parte de `cbf9a41` de PR #23. Registra la prueba temporal con amigos y un verificador HTTPS de sincronización/protección. Código de aplicación idéntico al cierre de administración; sin cambios de esquema/permisos ni datos habituales. Credenciales y URL activa fuera de Git. [Guía](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026).
 
 `feat/v1-admin-usability-review` parte de `c3d4d82` de PR #22. Revisión de nueve secciones administrativas, tareas/filtros/fichas y fotos de moderación, guía y QA independiente. [Entrega y límites](ADMIN_USABILITY_REVIEW.md). Conserva servidor/esquema 20, datos habituales y ramas oficiales; no fusionar automáticamente.

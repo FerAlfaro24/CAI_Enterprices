@@ -27,7 +27,7 @@ export function LocalInvitationDialog({ invitation, name, onClose, recovery = fa
           <label htmlFor="activation-link">{recovery ? 'Enlace de recuperación' : 'Enlace de activación'}</label>
           <textarea id="activation-link" readOnly value={url} rows={4} onFocus={(event) => event.currentTarget.select()} />
         </div>
-        <p className={s.alert}>Es un enlace privado de prueba: funciona únicamente en este equipo. No se envió ningún correo. Si generas otro, el anterior dejará de funcionar.</p>
+        <p className={s.alert}>Es un enlace privado de un solo uso. Compártelo únicamente con su destinatario. No se envió ningún correo. Si generas otro, el anterior dejará de funcionar.</p>
         {message && <p role="status">{message}</p>}
       </div>
       <div className={s['dialog-foot']}>

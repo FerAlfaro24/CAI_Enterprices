@@ -283,7 +283,7 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
 
           <div className={s.divider}><span>{local ? 'Correo de contacto' : 'Datos de acceso'}</span></div>
 
-          <Field label={byTutor ? 'Correo del tutor para entrar' : 'Correo electrónico'} htmlFor={`${id}-email`} hint={google ? 'Cuenta confirmada por Google. Completa los datos del alumno; CAI revisará su inscripción.' : 'Usa un correo ficticio: en la demo no se envían mensajes.'} hintId={`${id}-email-hint`} error={err('email')} errorId={`${id}-email-error`}>
+          <Field label={byTutor ? 'Correo del tutor para entrar' : 'Correo electrónico'} htmlFor={`${id}-email`} hint={google ? 'Cuenta confirmada por Google. Completa los datos del alumno; CAI revisará su inscripción.' : local ? 'Con este correo entrarás después de la aprobación y activación. Por ahora no se envían correos automáticos.' : 'Usa un correo ficticio: en la demo no se envían mensajes.'} hintId={`${id}-email-hint`} error={err('email')} errorId={`${id}-email-error`}>
             <input {...fieldProps('email', true)} type="email" inputMode="email" autoComplete="off" maxLength={120} value={values.email} readOnly={Boolean(google)} onChange={onText('email')} placeholder="demo@example.test" />
           </Field>
 
@@ -309,7 +309,7 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
             <li className={s['rule-note']}>No uses una contraseña real: la demo no la guarda.</li>
           </ul>
           </>}
-          {local && <p className={s.hint}>{google ? 'No necesitas crear otra contraseña. Continuar con Google no sustituye la aprobación de CAI ni la autorización del tutor.' : 'Esta solicitud no crea una cuenta ni pide contraseña. Usa un correo ficticio durante las pruebas locales.'}</p>}
+          {local && <p className={s.hint}>{google ? 'No necesitas crear otra contraseña. Continuar con Google no sustituye la aprobación de CAI ni la autorización del tutor.' : 'Primero envía la solicitud. Cuando CAI la apruebe, te compartirá un enlace privado para elegir tu contraseña y activar la cuenta.'}</p>}
         </div>
       )}
 
@@ -552,13 +552,13 @@ function SignupSuccess({ ref, request, onRestart, local = false, google = false 
     { title: 'Solicitud recibida', text: `Folio ${request.id} · Hoy`, done: true },
     ...(minor ? [{ title: 'Autorización del tutor', text: 'Recepción la confirmará con el tutor registrado.', done: false }] : []),
     { title: 'Revisión de CAI', text: 'La coordinación verifica que el alumno esté inscrito.', done: false },
-    { title: 'Acceso a la comunidad', text: google ? 'Tras la aprobación, vuelve a entrar con la misma cuenta de Google.' : local ? 'Tras la aprobación, coordinación preparará tu enlace de activación. En las pruebas locales no se envían correos.' : 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
+    { title: 'Acceso a la comunidad', text: google ? 'Tras la aprobación, vuelve a entrar con la misma cuenta de Google.' : local ? 'Tras la aprobación, coordinación te compartirá el enlace para elegir tu contraseña. No se envían correos automáticos.' : 'Llegaría un aviso al correo registrado. En la demo no se envían correos.', done: false },
   ]
   return (
     <div className={s.success}>
       <span className={s['success-icon']} aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg></span>
       <h2 ref={ref} tabIndex={-1}>¡Solicitud enviada!</h2>
-      <p>La solicitud <strong>{request.id}</strong> de {request.applicant?.displayName ?? request.name} quedó pendiente de revisión. {google ? 'Tu cuenta de Google quedó asociada a esta solicitud; todavía no tienes acceso de alumno.' : local ? 'Se guardó en este equipo. Todavía no se creó una cuenta de alumno.' : 'Esto es una simulación: no se creó una cuenta real.'}</p>
+      <p>La solicitud <strong>{request.id}</strong> de {request.applicant?.displayName ?? request.name} quedó pendiente de revisión. {google ? 'Tu cuenta de Google quedó asociada a esta solicitud; todavía no tienes acceso de alumno.' : local ? 'CAI ya puede revisar tu solicitud. Después de aprobarla, te compartirá el enlace para elegir tu contraseña y activar tu acceso.' : 'Esto es una simulación: no se creó una cuenta real.'}</p>
       <ol className={s.timeline} aria-label="Qué sigue">
         {timeline.map(({ title, text, done }) => (
           <li key={title} className={cx(done && s['timeline--done'])}>
