@@ -1,5 +1,8 @@
 # CAI — estado vigente
 
+**23-11, pruebas humanas recibidas y analizadas:** rama documental `docs/v1-friends-feedback-plan`, código funcional intacto `c59ec6c` de PR #26. [Plan vigente F1–F6](NEXT_STEPS.md#prioridad-vigente-observaciones-de-amigos-del-23-11-2026): registro/clase, comunidad común, comentarios directos y sanciones, Logros/publicador/avisos, Retos/top, Google/correo. Cambios pendientes, no implementados ni probados todavía. Causas contrastadas con código; sin migraciones, reinicios o cambio de datos de prueba. Prioriza estas observaciones sobre N3 anterior.
+
+
 **23-11, entrada pública autorizada:** continuación `fix/v1-open-preview-entry`, desde `cb84099` de PR #25. [Prueba temporal sin contraseña adicional](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026): misma base y claves; enlace nuevo y vencimiento original conservado. Portada/registro libres, comunidad/administración/fotos privadas con cuenta. 13 pruebas de entrada y 33 comprobaciones HTTPS nuevas, tipos/lint correctos. No renovar la ventana implícitamente.
 
 
