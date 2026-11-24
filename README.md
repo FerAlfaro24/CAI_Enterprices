@@ -1,6 +1,9 @@
 # CAI — sitio institucional, comunidad y administración
 
-**23-11, entrada pública autorizada:** continuación `fix/v1-open-preview-entry`, desde `cb84099` de PR #25. [Prueba temporal sin contraseña adicional](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026): misma base y claves; enlace nuevo y vencimiento original conservado. Portada/registro libres, comunidad/administración/fotos privadas con cuenta. 13 pruebas de entrada y 33 comprobaciones HTTPS nuevas, tipos/lint correctos. No renovar la ventana implícitamente.
+**F1a comprobado:** `feat/v1-access-usability`, código `ce3160d`: activación y recuperación de alumnos con mínimo8, mostrar/ocultar y confirmación inmediata; 58 pruebas de servidor/94 navegador, lint y build. [Entrega y próximos bloques](docs/NEXT_STEPS.md#entrega-f1a-activación-y-contraseñas--23-11-2026). El enlace remoto sigue en su versión anterior; Top pendiente del cliente.
+
+
+**23-11, entrada pública autorizada:** continuación `fix/v1-open-preview-entry`, desde `cb84099` de PR #25. [Prueba temporal sin contraseña adicional](docs/REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026): misma base y claves; enlace nuevo y vencimiento original conservado. Portada/registro libres, comunidad/administración/fotos privadas con cuenta. 13 pruebas de entrada y 33 comprobaciones HTTPS nuevas, tipos/lint correctos. No renovar la ventana implícitamente.
 
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.

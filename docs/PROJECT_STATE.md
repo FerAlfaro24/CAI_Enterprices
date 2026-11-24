@@ -1,5 +1,8 @@
 # CAI — estado vigente
 
+**F1a implementado y comprobado — 23-11:** `feat/v1-access-usability`, código `ce3160d` (PR #28). Activación/recuperación de alumnos con mínimo8, sin composición obligatoria, controles independientes de mostrar/ocultar y coincidencia inmediata. 58 pruebas de servidor y 94 comprobaciones de navegador (47 Brave/47 Opera), lint/tipos/build correctos. Administración conserva mínimo15. Sin migración ni actualización del enlace remoto. Siguiente: F1b y validación conjunta con F2; Top pendiente del cliente.
+
+
 **Confirmación posterior del usuario:** resto del plan F1–F6 aprobado como alcance; **Top/clasificación pendiente de consultar al cliente, sin autorización para implementarlo todavía**. Retos diarios siguen incluidos. Ningún cambio funcional aplicado por esta confirmación.
 
 
@@ -33,7 +36,8 @@
 
 ## Referencias de continuación
 
-- **Continuación actual:** `fix/v1-remote-registration-guidance`, código `146e061`, desde `2f6a04f` de PR #24.
+- **Continuación de desarrollo:** `feat/v1-access-usability`, base documental `12b088b`; código funcional `ce3160d`, F1a comprobada.
+- **Entrega de registro anterior:** `fix/v1-remote-registration-guidance`, código `146e061`, desde `2f6a04f` de PR #24.
 - **Administración anterior:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`.
 - **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, código `bb7b8f6`, esquema 20.
 - **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`.

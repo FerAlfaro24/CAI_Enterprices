@@ -173,6 +173,26 @@ test('Cuentas de alumnos: activación, permisos, grupos y revocación', async (t
   })
 })
 
+test('activación de alumno: límites compartidos, confirmación y contraseñas sin composición obligatoria', async t => {
+  const app = createApplication(':memory:')
+  const repo = accessRepository(app.db), accounts = studentAccounts(app.db)
+  const admin = Number(app.db.prepare("INSERT INTO admin_users(email,name,password_hash,role) VALUES ('admin@example.test','Coordinación',?,'admin')").run(await hashPassword(testPassword)).lastInsertRowid)
+  t.after(() => app.db.close())
+  for (const [index, password] of ['abcdefgh', 'a'.repeat(128), '🙂'.repeat(8)].entries()) {
+    await t.test(`acepta una contraseña válida de ${[...password].length} caracteres y conserva el enlace ante errores`, async () => {
+      const email = `password-${index}@example.test`
+      const request = repo.submit(validateSubmission({ ...baseSubmission, email }), randomUUID())
+      repo.decide(request.id, 1, 'approve', admin)
+      const invitation = accounts.invite(request.id, 1, admin)
+      const token = new URLSearchParams(invitation.path.split('#')[1]).get('token')!
+      for (const invalid of ['', 'abcdefg', '        ', 'abcdefg ', '🙂'.repeat(7), 'a'.repeat(129)]) await assert.rejects(accounts.activate(token, invalid), /8 a 128/)
+      await accounts.activate(token, password)
+      assert.ok(await accounts.login(email, password))
+      await assert.rejects(accounts.activate(token, password), /enlace/)
+    })
+  }
+})
+
 test('la migración 2 preserva una base de la versión 1', () => {
   const db = new DatabaseSync(':memory:')
   // Base v1 mínima: no se borran ni recrean expedientes al añadir cuentas.
