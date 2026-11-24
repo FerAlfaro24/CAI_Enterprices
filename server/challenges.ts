@@ -8,6 +8,18 @@ export function challengeDay(date=new Date()) {
  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:challengeTimeZone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date)
  return ['year','month','day'].map(key=>parts.find(part=>part.type===key)!.value).join('-')
 }
+// La frontera se obtiene de Intl, sin fijar un desfase UTC ni asumir la zona del dispositivo.
+const renewals = new Map<string,string>()
+export function nextChallengeRefresh(now:Date):string {
+ const day=challengeDay(now),known=renewals.get(day)
+ if(known)return known
+ let low=now.getTime(),high=low+48*60*60*1000
+ while(high-low>1){const middle=Math.floor((low+high)/2);if(challengeDay(new Date(middle))===day)low=middle;else high=middle}
+ const result=new Date(high).toISOString()
+ renewals.set(day,result)
+ if(renewals.size>4)renewals.delete(renewals.keys().next().value!)
+ return result
+}
 const ordinal=(day:string)=>Date.parse(day+'T00:00:00Z')/86_400_000
 function validDay(value:unknown):string {
  if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isFinite(ordinal(value))||new Date(value+'T00:00:00Z').toISOString().slice(0,10)!==value)throw new HttpError(400,'Elige una fecha válida.')
@@ -90,7 +102,7 @@ export function challengesRepository(db:Database,clock:()=>Date=()=>new Date()) 
   bank,controls,calendar,
   snapshot(user:StudentUser):ChallengeSnapshot {
    return transaction(db,()=>{
-    const {id}=active(user),day=today(),needsGroup=false
+    const {id}=active(user),now=clock(),day=challengeDay(now),needsGroup=false
     if(controls().enabled)ensure(day)
     const attempted=db.prepare('SELECT * FROM challenge_attempts WHERE student_id=? AND day=? ORDER BY slot').all(id,day) as Attempt[]
     const rows=db.prepare("SELECT * FROM daily_challenges WHERE day=? AND program=? AND group_name=? AND state='published' ORDER BY slot").all(day,shared.program,shared.group) as Assignment[]
@@ -99,7 +111,7 @@ export function challengesRepository(db:Database,clock:()=>Date=()=>new Date()) 
      const attempt=attempted.find(item=>item.slot===slot),row=attempt?get(attempt.assignment_id):rows.find(item=>item.slot===slot)
      if(row)items.push(publicQuestion(row,attempt??null,row.program!==shared.program||row.group_name!==shared.group))
     }
-    return {day,timeZone:challengeTimeZone,enabled:controls().enabled,needsGroup,items,progress:progress(id,day)}
+    return {day,timeZone:challengeTimeZone,serverTime:now.toISOString(),nextRefreshAt:nextChallengeRefresh(now),enabled:controls().enabled,needsGroup,items,progress:progress(id,day)}
    })
   },
   answer(user:StudentUser,id:string,value:unknown,key:string):ChallengeResult {
