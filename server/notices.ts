@@ -1,3 +1,4 @@
+import { unrestrictedStudent } from './student-restrictions.ts'
 import { isImportantNotice } from '../shared/notice-policy.ts'
 import { isValidStudentPassword, studentPasswordHint } from '../shared/student-password.ts'
 import { createHash, randomBytes } from 'node:crypto'
@@ -11,7 +12,7 @@ export function queueNotice(db: Database, id: number, subject: string, message: 
 }
 const hash = (token: string) => createHash('sha256').update(token).digest('hex')
 const eligible = `SELECT r.id, a.password_hash FROM requests r JOIN students s ON s.request_id = r.id
-  JOIN student_accounts a ON a.request_id = r.id WHERE r.status = 'aprobada' AND s.status = 'activo'`
+  JOIN student_accounts a ON a.request_id = r.id WHERE r.status = 'aprobada' AND s.status = 'activo' AND ${unrestrictedStudent('r.id')}`
 function noticeIds(value:unknown,confirmation=false):number[] {
   const data=record(value)
   if(Object.keys(data).some(key=>!['ids',...(confirmation?['confirmed']:[])].includes(key))||!Array.isArray(data.ids)||data.ids.length>500||new Set(data.ids).size!==data.ids.length||data.ids.some(id=>!Number.isSafeInteger(id)||id<1)||(confirmation&&data.confirmed!==true))throw new HttpError(400,'Revisa las notificaciones y confirma la acción.')

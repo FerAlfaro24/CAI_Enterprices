@@ -1,3 +1,4 @@
+import { currentRestriction } from './student-restrictions.ts'
 import { createHash, randomBytes } from 'node:crypto'
 import type { IncomingMessage } from 'node:http'
 import { OAuth2Client } from 'google-auth-library'
@@ -49,7 +50,7 @@ export function googleAccounts(db: Database, options: GoogleOptions, cookies: Co
     if (!account) return { status: 'anonymous' }
     if (!account.request_id) return { status: 'profile', email: account.email }
     const row = db.prepare('SELECT r.status, s.status AS student_status FROM requests r LEFT JOIN students s ON s.request_id = r.id WHERE r.id = ?').get(account.request_id) as { status: string; student_status: string | null }
-    const status = row.status === 'pendiente' ? 'pending' : row.status === 'rechazada' ? 'rejected' : row.student_status === 'activo' ? 'approved' : 'suspended'
+    const status = row.status === 'pendiente' ? 'pending' : row.status === 'rechazada' ? 'rejected' : row.student_status === 'activo' && !currentRestriction(db,account.request_id) ? 'approved' : 'suspended'
     return { status, requestId: `CAI-${String(account.request_id).padStart(4, '0')}` }
   }
   const end = (request: IncomingMessage) => {

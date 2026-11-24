@@ -1,0 +1,28 @@
+.feed { display:grid; gap:20px; max-width:960px; }
+.post { min-width:0; }
+.header { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.person { display:flex; gap:12px; align-items:center; min-width:0; }
+.avatar { display:grid; place-items:center; width:42px; height:42px; flex-shrink:0; border-radius:50%; background:var(--blue-600); color:#fff; font-weight:750; }
+.person strong { display:block; overflow-wrap:anywhere; }
+.meta { font-size:12px; color:var(--muted); }
+.body { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.7; }
+.photos { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-block:16px; }
+.photos button { border:0; border-radius:12px; padding:0; background:var(--blue-50); cursor:pointer; overflow:hidden; }
+.photos img { width:100%; height:180px; object-fit:cover; display:block; }
+.comments { margin-top:16px; border-top:1px solid var(--line); padding-top:16px; }
+.comment { padding:16px; border:1px solid var(--line); border-radius:12px; margin-bottom:12px; background:var(--blue-50); }
+.comment p { white-space:pre-wrap; overflow-wrap:anywhere; }
+.comment header { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+.form { display:grid; gap:14px; }
+.form input[type='text'],.form select { width:100%; min-height:44px; border:1px solid var(--line); border-radius:8px; padding:10px; font:inherit; background:var(--surface); color:var(--ink); }
+.form label:not(.choice) { display:grid; gap:7px; font-size:14px; font-weight:650; }
+.form fieldset { border:0; padding:0; margin:0; display:grid; gap:16px; }
+.choice { display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:14px; }
+.choice input { width:18px; height:18px; flex-shrink:0; margin-top:2px; }
+.sample { margin:0; padding:14px; border-left:3px solid var(--blue-600); background:var(--blue-50); white-space:pre-wrap; overflow-wrap:anywhere; }
+.restriction { max-width:960px; display:grid; gap:10px; }
+.restriction p { margin:0; overflow-wrap:anywhere; }
+.viewer { --paper:var(--app-paper); --text:var(--app-ink); --line:var(--app-line); }
+@media(max-width:480px) { .header button { width:100%; }.photos img { height:140px; }.comment { padding:12px; } }
+
+.field { display:grid; gap:7px; }

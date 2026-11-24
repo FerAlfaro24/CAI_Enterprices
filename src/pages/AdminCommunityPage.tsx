@@ -1,0 +1,75 @@
+import { useCallback,useEffect,useId,useRef,useState,type FormEvent } from 'react'
+import { useAdmin } from '../features/admin/state'
+import { useAdminModal } from '../features/admin/useAdminModal'
+import { Icon } from '../features/admin/components/ui'
+import { PhotoViewer } from '../features/community/components/PhotoViewer'
+import { ApiError,communityModerationApi,type CommunityModerationAction,type CommunityModerationComment,type CommunityModerationPost,type ModerationAuthor,type StudentRestriction } from '../features/local-access/api'
+import s from '../features/admin/admin.module.css'
+import m from '../features/admin/moderation.module.css'
+const date=(value:string)=>new Intl.DateTimeFormat('es-MX',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Mexico_City'}).format(new Date(value))
+type Target={author:ModerationAuthor;comment?:CommunityModerationComment}
+
+function ModerationDialog({target,onClose,onSaved,onFailure}:{target:Target;onClose:()=>void;onSaved:()=>void;onFailure:(e:unknown)=>void}) {
+ const ref=useAdminModal(),id=useId(),sending=useRef(false),attempt=useRef({signature:'',key:crypto.randomUUID()})
+ const [remove,setRemove]=useState(Boolean(target.comment)),[suspend,setSuspend]=useState(!target.comment),[days,setDays]=useState('7'),[reason,setReason]=useState(''),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('')
+ const submit=async(event:FormEvent)=>{
+  event.preventDefault();if(sending.current)return
+  if(!confirmed||(!remove&&!suspend)){setError('Elige una medida y confirma antes de continuar.');return}
+  const data:CommunityModerationAction={studentRevision:target.author.studentRevision,...(target.comment?{commentRevision:target.comment.revision}:{}),removeComment:remove,suspend,durationDays:days==='permanent'?null:Number(days),reason:reason.trim(),confirmed:true}
+  const signature=JSON.stringify(data);if(attempt.current.signature!==signature)attempt.current={signature,key:crypto.randomUUID()}
+  sending.current=true;setBusy(true);setError('')
+  try{await communityModerationApi.apply(target.author,target.comment,data,attempt.current.key);onSaved()}
+  catch(e){onFailure(e);setError(e instanceof Error?e.message:'No se pudo confirmar la medida. Actualiza antes de intentarlo otra vez.')}
+  finally{sending.current=false;setBusy(false)}
+ }
+ return <dialog ref={ref} className={`${s.dialog} ${s['local-dialog']}`} aria-labelledby={id+'-title'} onCancel={e=>{e.preventDefault();if(!busy)onClose()}}>
+  <header className={s['dialog-head']}><div><h2 id={id+'-title'}>{target.comment?'Moderar comentario':'Suspender cuenta'}</h2><p>{target.author.displayName}</p></div><button type="button" className={s['icon-btn']} aria-label="Cerrar moderación" disabled={busy} onClick={onClose}><Icon name="close"/></button></header>
+  <form className={m.form} onSubmit={e=>{void submit(e)}} aria-busy={busy}>
+   <div className={s['dialog-body']}><fieldset disabled={busy}>
+    {target.comment&&<><blockquote className={m.sample}>{target.comment.body}</blockquote><label className={m.choice}><input type="checkbox" checked={remove} onChange={e=>setRemove(e.target.checked)}/>Eliminar este comentario de la comunidad</label></>}
+    <label className={m.choice}><input type="checkbox" checked={suspend} disabled={Boolean(target.author.restriction)} onChange={e=>setSuspend(e.target.checked)}/>Suspender el acceso de {target.author.displayName}</label>
+    {target.author.restriction&&<p role="status">Esta cuenta ya tiene una suspensión activa. Puedes gestionarla en Suspensiones activas.</p>}
+    {suspend&&<><div className={m.field}><label htmlFor={id+'-days'}>Duración de la suspensión</label><select id={id+'-days'} value={days} onChange={e=>setDays(e.target.value)}><option value="1">1 día</option><option value="3">3 días</option><option value="7">7 días</option><option value="30">30 días</option><option value="permanent">Permanente</option></select></div><p>Se cerrarán sus sesiones y se cancelarán sus enlaces de acceso. Cuando termine, deberá volver a entrar. Los comentarios eliminados permanecerán eliminados.</p></>}
+    <label htmlFor={id+'-reason'}>Motivo<input id={id+'-reason'} type="text" minLength={5} maxLength={240} value={reason} required onChange={e=>setReason(e.target.value)}/></label>
+    <label className={m.choice}><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)}/>Confirmo las medidas seleccionadas.</label>
+   </fieldset>{error&&<p role="alert" className={s.alert}>{error}</p>}</div>
+   <footer className={s['dialog-foot']}><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={onClose}>Cancelar</button><button type="submit" className={`${s.btn} ${s['btn--reject']}`} disabled={busy||!confirmed||(!remove&&!suspend)}>{busy?'Aplicando…':remove&&suspend?'Eliminar y suspender':suspend?'Suspender cuenta':'Eliminar comentario'}</button></footer>
+  </form>
+ </dialog>
+}
+function RevokeDialog({item,onClose,onSaved,onFailure}:{item:StudentRestriction;onClose:()=>void;onSaved:()=>void;onFailure:(e:unknown)=>void}) {
+ const ref=useAdminModal(),id=useId(),sending=useRef(false)
+ const [reason,setReason]=useState(''),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('')
+ return <dialog ref={ref} className={`${s.dialog} ${s['local-dialog']}`} aria-labelledby={id+'-title'} onCancel={e=>{e.preventDefault();if(!busy)onClose()}}><header className={s['dialog-head']}><h2 id={id+'-title'}>Levantar suspensión de {item.studentName}</h2><button type="button" className={s['icon-btn']} disabled={busy} aria-label="Cerrar revisión de suspensión" onClick={onClose}><Icon name="close"/></button></header>
+  <form className={m.form} aria-busy={busy} onSubmit={e=>{e.preventDefault();if(sending.current||!confirmed)return;sending.current=true;setBusy(true);setError('');void communityModerationApi.revoke(item,reason).then(onSaved).catch(e=>{onFailure(e);setError(e instanceof Error?e.message:'No se pudo confirmar el cambio.')}).finally(()=>{sending.current=false;setBusy(false)})}}><div className={s['dialog-body']}><p>Podrá volver a iniciar sesión si su inscripción sigue activa. Esto conserva los comentarios eliminados y el historial de la medida.</p><fieldset disabled={busy}><label htmlFor={id+'-reason'}>Motivo de la revisión<input id={id+'-reason'} type="text" required minLength={5} maxLength={240} value={reason} onChange={e=>setReason(e.target.value)}/></label><label className={m.choice}><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)}/>Confirmo que quiero levantar esta suspensión.</label></fieldset>{error&&<p role="alert" className={s.alert}>{error}</p>}</div><footer className={s['dialog-foot']}><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={busy} onClick={onClose}>Cancelar</button><button type="submit" className={`${s.btn} ${s['btn--primary']}`} disabled={busy||!confirmed}>Levantar suspensión</button></footer></form>
+ </dialog>
+}
+function ModerationComments({postId,onModerate,onFailure}:{postId:string;onModerate:(target:Target)=>void;onFailure:(e:unknown)=>void}) {
+ const [items,setItems]=useState<CommunityModerationComment[]>([]),[cursor,setCursor]=useState<number|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState(''),generation=useRef(0)
+ const read=useCallback(async(before=0)=>{const version=++generation.current;setLoading(true);setError('');try{const page=await communityModerationApi.comments(postId,before);if(version===generation.current){setItems(old=>before?[...old,...page.items]:page.items);setCursor(page.nextCursor)}}catch(e){if(version===generation.current){onFailure(e);setError(e instanceof Error?e.message:'No pudimos cargar los comentarios.')}}finally{if(version===generation.current)setLoading(false)}},[postId,onFailure])
+ const invalidate=useCallback(()=>{generation.current++},[])
+ useEffect(()=>{let active=true;void Promise.resolve().then(()=>{if(active)void read()});return()=>{active=false;invalidate()}},[read,invalidate])
+ return <section className={m.comments} aria-label="Comentarios publicados">{items.map(comment=><article key={comment.id} className={m.comment} data-comment-id={comment.id}><header><div><strong>{comment.author.displayName}</strong><p className={m.meta}>{date(comment.createdAt)}</p></div><button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={()=>onModerate({author:comment.moderation,comment})}>Moderar comentario de {comment.author.displayName}</button></header><p>{comment.body}</p></article>)}{loading&&<p role="status">Cargando comentarios…</p>}{error&&<p role="alert" className={s.alert}>{error}</p>}{!loading&&!error&&!items.length&&<p>Todavía no hay comentarios publicados.</p>}{cursor!==null&&<button type="button" className={s.btn} disabled={loading} onClick={()=>{void read(cursor)}}>Ver más comentarios</button>}</section>
+}
+export function AdminCommunityPage() {
+ const {connection}=useAdmin(),requireLogin=useRef(connection?.requireLogin)
+ useEffect(()=>{requireLogin.current=connection?.requireLogin},[connection?.requireLogin])
+ const [tab,setTab]=useState<'posts'|'active'|'history'>('posts'),[posts,setPosts]=useState<CommunityModerationPost[]>([]),[restrictions,setRestrictions]=useState<StudentRestriction[]>([]),[cursor,setCursor]=useState<number|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[opened,setOpened]=useState<string|null>(null),[target,setTarget]=useState<Target|null>(null),[revoke,setRevoke]=useState<StudentRestriction|null>(null),[refreshKey,setRefreshKey]=useState(0),[photo,setPhoto]=useState<{post:CommunityModerationPost;index:number}|null>(null),generation=useRef(0)
+ const failure=useCallback((e:unknown)=>{if(e instanceof ApiError&&e.status===401)requireLogin.current?.('Tu sesión terminó. Vuelve a entrar para moderar la comunidad.')},[])
+ const read=useCallback(async(before=0)=>{
+  const version=++generation.current;setLoading(true);setError('')
+  try{if(tab==='posts'){const page=await communityModerationApi.posts(before);if(version===generation.current){setPosts(old=>before?[...old,...page.items]:page.items);setCursor(page.nextCursor)}}else{const page=await communityModerationApi.restrictions(tab==='history',before);if(version===generation.current){setRestrictions(old=>before?[...old,...page.items]:page.items);setCursor(page.nextCursor)}}}
+  catch(e){if(version===generation.current){failure(e);setError(e instanceof Error?e.message:'No pudimos cargar la comunidad.')}}finally{if(version===generation.current)setLoading(false)}
+ },[tab,failure])
+ const invalidate=useCallback(()=>{generation.current++},[])
+ useEffect(()=>{let active=true;void Promise.resolve().then(()=>{if(active)void read()});return()=>{active=false;invalidate()}},[read,invalidate])
+ const saved=()=>{setTarget(null);setRevoke(null);setRefreshKey(k=>k+1);setNotice('La medida quedó guardada.');void read()}
+ return <><div className={s['page-head']}><div><p className={s.eyebrow}>CONVIVENCIA CAI</p><h1 className={s['page-title']}>Comunidad</h1><p className={s['page-lead']}>Recorre lo que comparten los alumnos y actúa directamente donde haga falta.</p></div><button type="button" className={`${s.btn} ${s['btn--ghost']}`} disabled={loading} onClick={()=>{setRefreshKey(k=>k+1);void read()}}>Actualizar comunidad</button></div>
+  <div className={s.tabs} role="group" aria-label="Apartados de comunidad administrativa">{([['posts','Publicaciones'],['active','Suspensiones activas'],['history','Historial']] as const).map(([value,label])=><button type="button" key={value} className={s.tab} aria-pressed={tab===value} onClick={()=>{if(value===tab)return;setPosts([]);setRestrictions([]);setCursor(null);setLoading(true);setTab(value);setNotice('');setOpened(null)}}>{label}</button>)}</div>
+  {notice&&<p role="status" className={s.alert}>{notice}</p>}{error&&<p role="alert" className={s.alert}>{error}</p>}
+  {tab==='posts'?<div className={m.feed}>{posts.map(post=><article key={post.id} className={`${s.card} ${m.post}`} aria-label={'Publicación: '+post.title}><header className={m.header}><div className={m.person}><span className={m.avatar} aria-hidden="true">{post.author.displayName.slice(0,2).toUpperCase()}</span><div><strong>{post.author.displayName}</strong><span className={m.meta}>{date(post.publishedAt??post.createdAt)}</span></div></div>{post.moderation&&(post.moderation.restriction?<span className={s.alert}>Cuenta suspendida</span>:<button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={()=>setTarget({author:post.moderation!})}>Suspender cuenta de {post.author.displayName}</button>)}</header><h2 className={s['card-title']}>{post.title}</h2><p className={m.body}>{post.body}</p>{Boolean(post.photos?.length)&&<div className={m.photos}>{post.photos!.map((image,index)=><button type="button" key={image.id} aria-label={'Ampliar imagen '+(index+1)+' de '+post.title} onClick={()=>setPhoto({post,index})}><img src={image.imagePath} alt={image.alt} loading="lazy"/></button>)}</div>}<button type="button" className={`${s.btn} ${s['btn--ghost']}`} aria-expanded={opened===post.id} onClick={()=>setOpened(opened===post.id?null:post.id)}>{opened===post.id?'Cerrar comentarios':'Ver comentarios'} ({post.commentCount??0})</button>{opened===post.id&&<ModerationComments key={post.id+'-'+refreshKey} postId={post.id} onModerate={setTarget} onFailure={failure}/>}</article>)}</div>:<div className={m.feed}>{restrictions.map(item=><article className={`${s.card} ${m.restriction}`} key={item.id}><div className={m.header}><h2 className={s['card-title']}>{item.studentName}</h2><strong>{item.status==='active'?'Activa':item.status==='expired'?'Finalizada':'Levantada por coordinación'}</strong></div><p>{item.expiresAt?'Hasta '+date(item.expiresAt):'Permanente'}</p><p>Motivo: {item.reason}</p><p className={m.meta}>Aplicada el {date(item.createdAt)}</p>{item.status==='active'&&<button type="button" className={`${s.btn} ${s['btn--ghost']}`} onClick={()=>setRevoke(item)}>Levantar suspensión de {item.studentName}</button>}</article>)}</div>}
+  {loading&&<p role="status">Cargando comunidad…</p>}{!loading&&!error&&!(tab==='posts'?posts.length:restrictions.length)&&<p className={s.card}>{tab==='posts'?'Todavía no hay publicaciones compartidas.':tab==='active'?'No hay suspensiones activas.':'Todavía no se han registrado medidas.'}</p>}{cursor!==null&&<button type="button" className={s.btn} disabled={loading} onClick={()=>{void read(cursor)}}>Ver más</button>}
+  {target&&<ModerationDialog target={target} onClose={()=>setTarget(null)} onSaved={saved} onFailure={failure}/>} {revoke&&<RevokeDialog item={revoke} onClose={()=>setRevoke(null)} onSaved={saved} onFailure={failure}/>}
+  {photo&&<div className={m.viewer}><PhotoViewer photos={photo.post.photos!.map(image=>({id:image.id,src:image.imagePath,alt:image.alt,caption:image.description}))} index={photo.index} onChange={index=>setPhoto({...photo,index})} onClose={()=>setPhoto(null)}/></div>}
+ </>
+}

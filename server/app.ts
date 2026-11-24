@@ -1,3 +1,4 @@
+import { communityModeration } from './community-moderation.ts'
 import { learningRepository } from './learning.ts'
 import { socialProfiles } from './social-profiles.ts'
 import { institutionalPosts } from './institutional-posts.ts'
@@ -72,6 +73,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   const team=adminTeam(db)
   const records=studentRecords(db)
   const comments=commentsRepository(db)
+  const moderation=communityModeration(db)
   const challenges=challengesRepository(db,options.challengeClock)
   const badges=badgesRepository(db)
   const learning=learningRepository(db), socialProfile=socialProfiles(db)
@@ -347,6 +349,23 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       const data = await body(request, maximum)
       if (auth.session(request)?.id !== user.id) throw new HttpError(401, 'Tu sesión terminó. Vuelve a entrar antes de guardar cambios.')
       return data
+    }
+    if(path==='/api/local/community/posts'&&method==='GET')return json(response,200,moderation.feed(commentCursor(url.searchParams.get('before'))))
+    const communityComments=path.match(/^\/api\/local\/community\/posts\/(PUB-\d+)\/comments$/)
+    if(communityComments&&method==='GET')return json(response,200,moderation.comments(communityComments[1]!,commentCursor(url.searchParams.get('before'))))
+    if(path==='/api/local/community/restrictions'&&method==='GET'){
+      const view=url.searchParams.get('view')??'active';if(!['active','history'].includes(view))throw new HttpError(400,'Elige suspensiones activas o historial.')
+      return json(response,200,moderation.restrictions(view==='history',commentCursor(url.searchParams.get('before'))))
+    }
+    const communityAction=path.match(/^\/api\/local\/community\/students\/(CAI-\d+)(?:\/comments\/(CMT-\d+))?\/moderate$/)
+    if(communityAction&&method==='POST'){
+      limit(`community-moderation:${user.id}`,60,15*60_000)
+      const key=request.headers['idempotency-key'];return json(response,200,moderation.apply(communityAction[1]!,communityAction[2]??null,await protectedBody(),typeof key==='string'?key:'',user.id))
+    }
+    const endRestriction=path.match(/^\/api\/local\/community\/restrictions\/([1-9]\d*)\/revoke$/)
+    if(endRestriction&&method==='POST'){
+      limit(`community-moderation:${user.id}`,60,15*60_000);const id=Number(endRestriction[1]);if(!Number.isSafeInteger(id))throw new HttpError(400,'Suspensión inválida.')
+      return json(response,200,moderation.revoke(id,await protectedBody(),user.id))
     }
     if(path==='/api/local/achievements/reviews'&&method==='GET')return json(response,200,learning.reviews(commentCursor(url.searchParams.get('before'))))
     const learningReview=path.match(/^\/api\/local\/achievements\/([1-9]\d*)\/review$/)

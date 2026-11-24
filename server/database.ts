@@ -1,3 +1,4 @@
+import { migrateCommunityModeration } from './community-moderation-migration.ts'
 import { migrateNoticeHistory } from './notice-history-migration.ts'
 import { migrateSharedCommunity } from './shared-community-migration.ts'
 import { migrateLearning } from './learning-migration.ts'
@@ -316,6 +317,7 @@ export function migrateDatabase(db: DatabaseSync) {
   migrateLearning(db)
   migrateNoticeHistory(db)
   migrateSharedCommunity(db)
+  migrateCommunityModeration(db)
   return db
 }
 
