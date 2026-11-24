@@ -526,3 +526,11 @@ a.nav-item:hover { background: var(--blue-50); color: var(--ink); }
 @media(max-width:640px) { .taskLinks { grid-template-columns:minmax(0,1fr); }.workbench { padding:16px; }.taskLinks>a { padding:12px; }.dialog .dialog-head { padding:16px; }.dialog .dialog-foot { padding:12px; }.reviewPhotos img { height:80px; }.toolbar-group { flex-wrap:wrap; }.toolbar-group>* { max-width:100%; }.listSearch { width:100%; } }
 
 .admin [hidden] { display:none!important; }
+
+.publisherChoices { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.publisherChoices button { min-height:100px; padding:18px; border:1px solid var(--line); border-radius:16px; text-align:left; background:var(--surface); color:var(--ink); }
+.publisherChoices button strong,.publisherChoices button span { display:block; }
+.publisherChoices button strong { font-size:18px; margin-bottom:8px; }
+.publisherChoices button span { font-size:14px; color:var(--muted); }
+.publisherChoices [aria-pressed=true] { outline:2px solid var(--blue-600); outline-offset:2px; background:var(--blue-50); }
+@media(max-width:560px) { .publisherChoices { grid-template-columns:1fr; } }

@@ -65,16 +65,18 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   assert.equal((await call(route+'?before=NaN')).status,400)
   assert.equal((await call('/comments?status=__proto__','GET',undefined,'admin')).status,400)
  })
- await t.test('envío idempotente privado hasta aprobación, sin datos de expediente',async()=>{
+ await t.test('publicación inmediata e idempotente sin datos de expediente',async()=>{
   let response=await create('Primera palabra de ánimo ficticia',key);assert.equal(response.status,201);first=(await response.json() as {comment:OwnComment}).comment
   response=await create('Primera palabra de ánimo ficticia',key);assert.equal(response.status,201);assert.equal((await response.json() as {comment:OwnComment}).comment.id,first.id)
   assert.equal((await create('Otro texto con la misma clave',key)).status,409)
-  assert.equal((await own()).items[0]!.status,'pendiente');assert.equal((await own('bob')).items.length,0)
-  assert.equal((await publicPage('bob')).items.length,0)
+  assert.equal((await own()).items[0]!.status,'publicado');assert.equal((await own('bob')).items.length,0)
+  assert.equal((await publicPage('bob')).items.length,1)
   assert.equal((await detail(first.id)).history.length,1)
-  const feed=await (await call('/student/posts')).json() as {posts:PublishedPost[]};assert.equal(feed.posts[0]!.commentCount,0)
+  const feed=await (await call('/student/posts')).json() as {posts:PublishedPost[]};assert.equal(feed.posts[0]!.commentCount,1)
  })
- await t.test('aprobar exige confirmación; grupo recibe solo texto e identidad pública',async()=>{
+ await t.test('revisión histórica exige confirmación; compañero recibe solo identidad pública',async()=>{
+  // Simula una fila pendiente anterior; la entrega no la republica automáticamente.
+  app.db.prepare("UPDATE post_comments SET status='pendiente' WHERE id=?").run(Number(first.id.slice(4)))
   assert.equal((await call('/comments/'+first.id+'/approve','POST',{revision:1},'admin')).status,400)
   assert.equal((await decide(first.id,'approve')).status,200)
   const item=(await publicPage('bob')).items[0]!
@@ -94,13 +96,14 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   assert.ok((await detail(first.id)).history.some(h=>h.action==='comment.withdrawn'))
  })
  await t.test('pausa general conserva conversación y reintento; retirada propia sigue permitida',async()=>{
-  const r=await create('Comentario de otro alumno',randomUUID(),'bob');second=(await r.json() as {comment:OwnComment}).comment;assert.equal((await decide(second.id,'approve')).status,200)
+  const r=await create('Comentario de otro alumno',randomUUID(),'bob');second=(await r.json() as {comment:OwnComment}).comment;assert.equal(second.status,'publicado')
   await enable(false);assert.equal((await create()).status,409);assert.equal((await publicPage()).items.length,1)
   assert.equal((await create('Primera palabra de ánimo ficticia',key)).status,201)
   assert.equal((await withdraw((await own('bob')).items[0]!,'bob')).status,200);await enable(true)
  })
  await t.test('pausa por historia usa revisión, conserva lectura y no bloquea revisar pendientes',async()=>{
   const r=await create('Comentario pendiente al cerrar',randomUUID(),'bob');second=(await r.json() as {comment:OwnComment}).comment
+  app.db.prepare("UPDATE post_comments SET status='pendiente' WHERE id=?").run(Number(second.id.slice(4)))
   let current=latestPost()
   assert.equal((await call('/posts/'+post.id+'/comments','PATCH',{revision:current.revision,open:false},'admin')).status,200)
   assert.equal((await call('/posts/'+post.id+'/comments','PATCH',{revision:current.revision,open:true},'admin')).status,409)
@@ -110,15 +113,15 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
  })
  await t.test('paginación estable de 20, sin duplicar cuando llega otro comentario',async()=>{
   const user=await studentAccounts(app.db).login('bob@example.test',password),service=commentsRepository(app.db)
-  for(let i=0;i<23;i++){const item=service.create(user!,post.id,{body:'Comentario paginado ficticio '+i},randomUUID());service.decide(item.id,'approve',{revision:1,confirmed:true},admin)}
+  for(let i=0;i<23;i++){const item=service.create(user!,post.id,{body:'Comentario paginado ficticio '+i},randomUUID());assert.equal(item.status,'publicado')}
   const firstPage=await publicPage();assert.equal(firstPage.items.length,20);assert.ok(firstPage.nextCursor)
-  const added=service.create(user!,post.id,{body:'Nuevo mientras se consultaba otra página'},randomUUID());service.decide(added.id,'approve',{revision:1,confirmed:true},admin)
+  const added=service.create(user!,post.id,{body:'Nuevo mientras se consultaba otra página'},randomUUID());assert.equal(added.status,'publicado')
   const next=await publicPage('alice',firstPage.nextCursor!);assert.ok(next.items.length>0);assert.equal(new Set([...firstPage.items,...next.items].map(c=>c.id)).size,firstPage.items.length+next.items.length)
   const privatePage=await own('bob');assert.equal(privatePage.items.length,20);assert.ok(privatePage.nextCursor)
   const queue=await (await call('/comments?status=publicado','GET',undefined,'admin')).json() as CommentPage<CommentReview>;assert.equal(queue.items.length,20);assert.ok(queue.nextCursor)
  })
  await t.test('cambio de grupo revoca sesión y conserva comentarios compartidos',async()=>{
-  const r=await create('Comentario de alumno menor ficticio',randomUUID(),'minor'),comment=(await r.json() as {comment:OwnComment}).comment;await decide(comment.id,'approve')
+  const r=await create('Comentario de alumno menor ficticio',randomUUID(),'minor'),comment=(await r.json() as {comment:OwnComment}).comment;assert.equal(comment.status,'publicado')
   const repo=accessRepository(app.db);let student=repo.students().find(s=>s.id===ids.minor)!
   repo.assignStudent(student.id,student.revision,'Business English','Viernes · 18:00',true,admin)
   assert.equal((await call(route,'GET',undefined,'minor')).status,401);assert.equal((await detail(comment.id)).comment.status,'publicado')
@@ -126,7 +129,7 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   assert.equal((await detail(comment.id)).comment.status,'publicado');assert.ok(!(await detail(comment.id)).history.some(h=>h.action==='comment.held'))
  })
  await t.test('corrección adulto→menor vuelve a revisar comentarios y revoca sesión',async()=>{
-  const r=await create('Comentario anterior a corregir edad',randomUUID(),'record'),comment=(await r.json() as {comment:OwnComment}).comment;await decide(comment.id,'approve')
+  const r=await create('Comentario anterior a corregir edad',randomUUID(),'record'),comment=(await r.json() as {comment:OwnComment}).comment;assert.equal(comment.status,'publicado')
   const record=(await (await call('/students/'+ids.record+'/record','GET',undefined,'admin')).json() as {record:StudentRecord}).record
   const body={revision:record.revision,firstName:record.firstName,lastName:record.lastName,birthDate:(new Date().getFullYear()-15)+'-01-01',studentCode:record.studentCode,guardian:{name:'Tutor Ficticio',relationship:'Tutor',contact:'tutor@example.test'},reason:'Corrección ficticia de edad',consentReference:'Referencia nueva ficticia de comentarios',currentPassword:password,confirmed:true}
   assert.equal((await call('/students/'+ids.record+'/record','PATCH',body,'admin',randomUUID())).status,200)
@@ -141,6 +144,7 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   assert.equal(await streamed(route,'minor','{"body":','"Texto que no debe guardarse"}',()=>{const repo=accessRepository(app.db),student=repo.students().find(s=>s.id===ids.minor)!;repo.setStudentStatus(student.id,student.revision,'suspendido',admin)}),401)
   assert.equal(app.db.prepare('SELECT COUNT(*) AS n FROM post_comments').get()!.n,count)
   const r=await create('Pendiente para probar revocación administrativa'),comment=(await r.json() as {comment:OwnComment}).comment
+  app.db.prepare("UPDATE post_comments SET status='pendiente' WHERE id=?").run(Number(comment.id.slice(4)))
   assert.equal(await streamed('/comments/'+comment.id+'/approve','admin','{"revision":1,','"confirmed":true}',()=>{app.db.prepare('DELETE FROM sessions').run()}),401);await login('admin')
   assert.equal((await detail(comment.id)).comment.status,'pendiente')
  })
@@ -160,6 +164,18 @@ test('Comentarios: revisión privada, audiencia, cursores y recuperación',async
   legacy.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22; DELETE FROM migrations WHERE version=21; DELETE FROM migrations WHERE version=20; DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17; DROP INDEX publication_badge_grant; ALTER TABLE publications DROP COLUMN badge_grant_id; DROP TABLE badge_audit; DROP TABLE badge_grants; DROP TABLE badge_requests; DELETE FROM migrations WHERE version=16; DROP TABLE challenge_attempts; DROP TABLE daily_challenges; DROP TABLE challenge_bank; DROP TABLE challenge_controls; DELETE FROM migrations WHERE version=15; DROP TABLE comment_audit; DROP TABLE post_comments; ALTER TABLE community_controls DROP COLUMN comments_open; ALTER TABLE publications DROP COLUMN comments_open; DELETE FROM migrations WHERE version=14');legacy.close()
   assert.equal((await verifyLocalBackup(copy)).schema,13);const migrated=openDatabase(copy)
   try{assert.deepEqual(migrated.prepare('SELECT * FROM student_sessions ORDER BY token_hash').all(),sessions);assert.deepEqual(migrated.prepare('SELECT * FROM post_reactions').all(),reactions);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM post_comments').get()!.n,0);assert.equal(migrated.prepare('SELECT comments_open FROM community_controls').get()!.comments_open,0)}finally{migrated.close()}
+ })
+ await t.test('borrado propio directo; revisiones privadas y reintento no reviven lo eliminado',async()=>{
+  const next=publications(app.db).create(account!,{title:'Conversación inmediata',body:'Prueba ficticia de eliminación del propio comentario.',category:'experience'},randomUUID());publications(app.db).decide(next.id,next.revision,'approve',admin,undefined,true)
+  const url='/student/posts/'+next.id+'/comments',key=randomUUID(),data={body:'Comentario para borrar directamente'}
+  const response=await call(url,'POST',data,'alice',key);assert.equal(response.status,201);const comment=(await response.json() as {comment:OwnComment}).comment;assert.equal(comment.status,'publicado')
+  const ownList=await (await call(url)).json() as CommentPage<PublicComment>,other=await (await call(url,'GET',undefined,'carol')).json() as CommentPage<PublicComment>
+  assert.equal(ownList.items[0]!.ownRevision,comment.revision);assert.equal(other.items[0]!.ownRevision,undefined)
+  assert.equal((await withdraw(comment,'carol')).status,404);assert.equal((await withdraw({...comment,revision:99})).status,409)
+  assert.equal((await withdraw(comment)).status,200);assert.equal((await (await call(url,'POST',data,'alice',key)).json() as {comment:OwnComment}).comment.status,'retirado')
+  assert.equal((await (await call(url,'GET',undefined,'carol')).json() as CommentPage<PublicComment>).items.length,0)
+  for(const status of ['pendiente','rechazado','retirado'])app.db.prepare('INSERT INTO post_comments(publication_id,author_id,request_key,body,status,created_at) VALUES (?,?,?,?,?,?)').run(Number(next.id.slice(4)),Number(account!.id.slice(4)),randomUUID(),'Comentario histórico '+status,status,new Date().toISOString())
+  assert.equal((await (await call(url,'GET',undefined,'carol')).json() as CommentPage<PublicComment>).items.length,0)
  })
  await t.test('ocultar la historia bloquea conversaciones y altas; autor aún puede retirar su envío',async()=>{
   const pending=(await own()).items.find(item=>item.status==='pendiente')!

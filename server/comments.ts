@@ -49,7 +49,7 @@ export function commentsRepository(db:Database) {
   list(user:StudentUser,postId:string,before=0) {
    const post=posts.visible(user,postId)
    const rows=db.prepare(`${select} WHERE c.publication_id=? AND c.status='publicado' AND ${eligible} AND (?=0 OR c.id<?) ORDER BY c.id DESC LIMIT 21`).all(post.id,before,before) as Row[]
-   return {...page(rows,publicComment),commentsOpen:post.comments_open===1&&administration(db).settings().commentsOpen}
+   return {...page(rows,row=>({...publicComment(row),...(row.author_id===numberId(user.id,'CAI')?{ownRevision:row.revision}:{})})),commentsOpen:post.comments_open===1&&administration(db).settings().commentsOpen}
   },
   mine(user:StudentUser,postId:string,before=0) {
    const post=posts.visible(user,postId)
@@ -64,8 +64,8 @@ export function commentsRepository(db:Database) {
     const previous=db.prepare(select+' WHERE c.author_id=? AND c.request_key=?').get(author,key) as Row|undefined
     if(previous){if(previous.publication_id!==post.id||previous.body!==body)throw new HttpError(409,'Este envío ya se recibió con otros datos. Actualiza tus comentarios.');return own(previous)}
     if(!administration(db).settings().commentsOpen||post.comments_open!==1)throw new HttpError(409,'Los nuevos comentarios están pausados. Puedes leer la conversación y retirar los tuyos.')
-    const id=Number(db.prepare('INSERT INTO post_comments(publication_id,author_id,request_key,body,created_at) VALUES (?,?,?,?,?)').run(post.id,author,key,body,new Date().toISOString()).lastInsertRowid)
-    audit(id,'comment.submitted',null,author);return own(get(folio(id)))
+    const id=Number(db.prepare("INSERT INTO post_comments(publication_id,author_id,request_key,body,created_at,status) VALUES (?,?,?,?,?,'publicado')").run(post.id,author,key,body,new Date().toISOString()).lastInsertRowid)
+    audit(id,'comment.published',null,author);return own(get(folio(id)))
    })
   },
   withdraw(user:StudentUser,id:string,value:unknown) {

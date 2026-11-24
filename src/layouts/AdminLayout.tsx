@@ -16,6 +16,7 @@ type Section = { to: string; label: string; icon: IconName; countKey?: 'requests
 const sections: Section[] = [
   { to: '/admin', label: 'Resumen', icon: 'home' },
   { to: '/admin/solicitudes', label: 'Solicitudes de ingreso', icon: 'inbox', countKey: 'requests' },
+  { to: '/admin/crear-publicacion', label: 'Crear publicación', icon: 'file' },
   { to: '/admin/publicaciones', label: 'Publicaciones', icon: 'file', countKey: 'posts' },
   { to: '/admin/comunidad', label: 'Ver comunidad', icon: 'chat' },
   { to: '/admin/alumnos', label: 'Alumnos', icon: 'users' },
@@ -42,7 +43,7 @@ export function AdminLayout() {
   const pending = {
     badges:connection.badgeCounts.pending,
     requests: countByStatus(state.requests, requestStatuses).pendiente,
-    posts: countByStatus(state.posts, postStatuses).pendiente + connection.commentCounts.pendiente,
+    posts: countByStatus(state.posts, postStatuses).pendiente,
   }
   const pageTitle = titles[pathname.replace(/\/$/, '')] ?? 'Administración'
 

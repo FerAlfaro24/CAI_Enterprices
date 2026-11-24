@@ -49,15 +49,15 @@ export function institutionalPosts(db:Database) {
     },
     update(id:number,value:unknown,admin:number) {
       const data=record(value),revision=revisionOf(data.revision)
-      if(Object.keys(data).some(k=>!['revision','confirmed','withdraw','highlighted','expiresAt'].includes(k))||data.confirmed!==true||typeof data.withdraw!=='boolean'||typeof data.highlighted!=='boolean')throw new HttpError(400,'Confirma la acción y actualiza la publicación.')
-      const expires=expiry(data.expiresAt)
+      if(Object.keys(data).some(k=>!['revision','confirmed','withdraw','highlighted','expiresAt','reason'].includes(k))||data.confirmed!==true||typeof data.withdraw!=='boolean'||typeof data.highlighted!=='boolean')throw new HttpError(400,'Confirma la acción y actualiza la publicación.')
+      const expires=expiry(data.expiresAt),reason=data.withdraw ? text(data.reason??'Eliminada por coordinación',5,240,'el motivo de eliminación') : null
       transaction(db,()=>{
         const row=db.prepare('SELECT revision,status FROM publications WHERE id=? AND admin_author_id IS NOT NULL').get(id)
         if(!row)throw new HttpError(404,'No se encontró la publicación de CAI.')
         if(row.revision!==revision||row.status==='retirada')throw new HttpError(409,'La publicación cambió o fue retirada. Actualiza antes de continuar.')
         if(expires&&Date.parse(expires)<=Date.now()&&!data.withdraw)throw new HttpError(400,'Elige una fecha futura o retira la publicación.')
-        db.prepare('UPDATE publications SET highlighted=?,expires_at=?,status=?,revision=revision+1 WHERE id=?').run(Number(data.highlighted),expires,data.withdraw?'retirada':String(row.status),id)
-        audit(admin,id,data.withdraw?'institutional.withdrawn':'institutional.updated')
+        db.prepare('UPDATE publications SET highlighted=?,expires_at=?,status=?,reason=?,revision=revision+1 WHERE id=?').run(Number(data.highlighted),expires,data.withdraw?'retirada':String(row.status),reason,id)
+        administrationAudit(db,admin,data.withdraw?'institutional.withdrawn':'institutional.updated',{id,...(reason?{reason}:{})})
       })
     },
   }

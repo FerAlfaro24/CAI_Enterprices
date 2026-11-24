@@ -68,7 +68,7 @@ test('Inicio conectado: contenido institucional, medios únicos y conversación 
     for(const actor of ['alice','bob'])assert.equal((await call(`/student/posts/${postId}/reaction`,'PATCH',{reaction:'love',revision:0},actor,{'Idempotency-Key':randomUUID()})).status,200)
     assert.equal((await feed())[0]!.engagement!.counts.love,2)
     const comments=commentsRepository(app.db)
-    for(const actor of ['alice','bob']){const item=comments.create(users[actor]!,postId,{body:'Comentario ficticio para la presentación.'},randomUUID());comments.decide(item.id,'approve',{revision:1,confirmed:true},admin)}
+    for(const actor of ['alice','bob']){const item=comments.create(users[actor]!,postId,{body:'Comentario ficticio para la presentación.'},randomUUID());if(item.status==='pendiente')comments.decide(item.id,'approve',{revision:item.revision,confirmed:true},admin)}
     assert.equal(comments.count(postId),2);assert.equal(comments.list(users.bob!,postId).items.length,2)
     const own=posts.create(users.alice!,{title:'Mi experiencia de prueba',body:'Texto ficticio que solo debe ver el grupo de Alice.',category:'experience'},randomUUID());posts.decide(own.id,1,'approve',admin,undefined,true)
     assert.equal((await feed('bob')).some(p=>p.id===own.id),true)

@@ -39,7 +39,7 @@ test('Moderación de comunidad: permisos, retiro y suspensiones temporales/perma
  const r=await call('/student/posts','POST',{title:'Conversación para moderar',body:'Un espacio de prueba para comentarios y convivencia.',category:'experience'},'bob');assert.equal(r.status,201)
  const post=(await r.json() as {post:OwnPost}).post
  assert.equal((await call('/posts/'+post.id+'/approve','POST',{revision:post.revision,confirmed:true})).status,200)
- const makeComment=async(author='alice')=>{const r=await call('/student/posts/'+post.id+'/comments','POST',{body:'Comentario ficticio de '+author},author);assert.equal(r.status,201);const comment=(await r.json() as {comment:OwnComment}).comment;assert.equal((await call('/comments/'+comment.id+'/approve','POST',{revision:comment.revision,confirmed:true})).status,200);return comment.id}
+ const makeComment=async(author='alice')=>{const r=await call('/student/posts/'+post.id+'/comments','POST',{body:'Comentario ficticio de '+author},author);assert.equal(r.status,201);const comment=(await r.json() as {comment:OwnComment}).comment;assert.equal(comment.status,'publicado');return comment.id}
  const first=await makeComment(),second=await makeComment(),bobComment=await makeComment('bob')
  const list=()=>json<{items:CommunityModerationComment[]}>('/community/posts/'+post.id+'/comments')
  const entry=async(id:string)=>(await list()).items.find(c=>c.id===id)!

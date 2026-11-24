@@ -111,7 +111,7 @@ export const publicationLimits = { titleMin: 4, titleMax: 100, bodyMin: 10, body
 export const publicationCategories = { achievement: 'Logro', experience: 'Experiencia' } as const
 export type PublicationDraft = { title: string; body: string; category: keyof typeof publicationCategories;badgeGrantId?:string }
 export type PublicationStatus = 'pendiente' | 'publicada' | 'rechazada' | 'retirada'
-export type PublicationDecision = 'approve' | 'reject' | 'undo'
+export type PublicationDecision = 'approve' | 'reject' | 'undo' | 'withdraw'
 export const reactionKinds = ['love', 'wellDone', 'congrats', 'amazing', 'funny'] as const
 export type ReactionKind = typeof reactionKinds[number]
 export type ReactionSummary = { counts: Record<ReactionKind, number>; myReaction: ReactionKind | null; revision: number }
@@ -125,7 +125,7 @@ export type OwnPost = PublishedPost & { status: PublicationStatus; revision: num
 export type ReviewPost = OwnPost & { studentId: string; studentName: string; program: string; group: string; authorActive: boolean; authorIsMinor: boolean }
 
 export type CommentStatus = 'pendiente' | 'publicado' | 'rechazado' | 'retirado'
-export type PublicComment = { id:string;body:string;author:GroupMember;createdAt:string }
+export type PublicComment = { id:string;body:string;author:GroupMember;createdAt:string;ownRevision?:number }
 export type OwnComment = PublicComment & { status:CommentStatus;revision:number;reason:string|null }
 export type CommentPage<T> = { items:T[];nextCursor:number|null }
 export type CommentCounts = Record<CommentStatus,number>

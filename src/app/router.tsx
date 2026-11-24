@@ -13,6 +13,7 @@ const AdminChallengesPage = lazy(() => import('../pages/AdminChallengesPage').th
 const AdminInboxPage = lazy(() => import('../pages/AdminInboxPage').then(module => ({ default: module.AdminInboxPage })))
 const AdminSettingsPage = lazy(() => import('../pages/AdminSettingsPage').then(module => ({ default: module.AdminSettingsPage })))
 const AdminCommunityPage = lazy(() => import('../pages/AdminCommunityPage').then(module => ({ default: module.AdminCommunityPage })))
+const AdminPublishPage = lazy(() => import('../pages/AdminPublishPage').then(module => ({ default: module.AdminPublishPage })))
 const AdminPostsPage = lazy(() => import('../pages/AdminPostsPage').then(module => ({ default: module.AdminPostsPage })))
 const ConnectedCommunity = lazy(() => import('../features/community/ConnectedCommunity').then(module => ({ default: module.ConnectedCommunity })))
 const CommunityPage = lazy(() => import('../pages/CommunityPage').then(module => ({ default: module.CommunityPage })))
@@ -60,6 +61,7 @@ export function AppRoutes() {
         <Route path="solicitudes" element={<AdminRequestsPage />} />
         <Route path="publicaciones" element={<AdminPostsPage />} />
         <Route path="comunidad" element={<AdminCommunityPage />} />
+        <Route path="crear-publicacion" element={<AdminPublishPage />} />
         <Route path="alumnos" element={<AdminStudentsPage />} />
         <Route path="configuracion" element={<AdminSettingsPage />} />
         <Route path="mensajes" element={<AdminInboxPage />} />

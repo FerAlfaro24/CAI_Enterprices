@@ -126,7 +126,17 @@ export function publications(db: Database) {
         const row = db.prepare(`${select} WHERE p.id = ?`).get(idOf(id, 'PUB')) as Row | undefined
         if (!row) throw new HttpError(404, 'No se encontró la publicación.')
         if (row.revision !== revision) throw new HttpError(409, 'Otra persona revisó esta publicación. Actualiza antes de decidir.')
-        if (row.status === 'retirada') throw new HttpError(409, 'El alumno retiró esta publicación. No se puede volver a publicar.')
+        if (row.status === 'retirada') throw new HttpError(409, 'Esta publicación fue eliminada de la comunidad. No se puede volver a publicar.')
+        if (decision === 'withdraw') {
+          if (row.admin_author_id !== null || row.status !== 'publicada') throw new HttpError(409, 'Solo puedes eliminar una publicación de alumno ya publicada.')
+          if (confirmed !== true) throw new HttpError(400, 'Confirma que quieres eliminar esta publicación de la comunidad.')
+          const explanation = field(reason, 'el motivo de eliminación', 5, 240)
+          db.prepare("UPDATE publications SET status='retirada',reason=?,published_at=NULL,revision=revision+1 WHERE id=?").run(explanation,row.id)
+          audit(row.id,'publication.withdraw',admin,null)
+          // La validación privada y las insignias no se borran al ocultar una publicación.
+          queueNotice(db,row.author_id,'Publicación eliminada de la comunidad','CAI eliminó una publicación. Consulta Mis publicaciones para ver el motivo privado.','publication-review')
+          return
+        }
         if (decision === 'undo' ? row.status === 'pendiente' : row.status !== 'pendiente') throw new HttpError(409, 'El estado de la publicación cambió. Actualiza antes de decidir.')
         if (decision === 'approve') {
           if(row.badge_grant_id&&!db.prepare("SELECT id FROM badge_grants WHERE id=? AND student_id=? AND status='active'").get(row.badge_grant_id,row.author_id))throw new HttpError(409,'La insignia fue retirada. Revisa su concesión antes de publicar la historia.')
