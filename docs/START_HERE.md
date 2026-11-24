@@ -1,6 +1,8 @@
 # CAI — empieza aquí
 
-**F1b + F2 comprobados — 23-11:** continuación `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
+**Estado vigente — 24-11-2026:** F3a comprobado en `feat/v1-community-moderation`, código `cb19d59` ([PR #31](https://github.com/FerAlfaro24/CAI_Enterprices/pull/31), borrador), desde `2129b5d` de F2. Administración → **Ver comunidad** permite recorrer publicaciones/fotos/comentarios, eliminar un comentario y suspender el acceso de su autor por 1/3/7/30 días o permanentemente, de forma independiente. Incluye suspensiones activas, levantamiento e historial. Esquema22; **307 pruebas de servidor y 90 comprobaciones UI** (45 Brave/45 Opera), lint/tipos/build correctos. [Entrega y límites](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). **Siguiente F3b:** comentarios inmediatos y borrado propio directo; la revisión previa sigue activa en esta entrega. Top pendiente del cliente; Google/correo reales y alojamiento pendientes. Sin migrar datos habituales ni actualizar/renovar la demo. Las notas fechadas anteriores son antecedentes, no la continuación vigente.
+
+**Entrega anterior F1b + F2 — 23-11:** rama `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
 
 
 **F1a implementado y comprobado — 23-11:** `feat/v1-access-usability`, código `ce3160d` (PR #28). Activación/recuperación de alumnos con mínimo8, sin composición obligatoria, controles independientes de mostrar/ocultar y coincidencia inmediata. 58 pruebas de servidor y 94 comprobaciones de navegador (47 Brave/47 Opera), lint/tipos/build correctos. Administración conserva mínimo15. Sin migración ni actualización del enlace remoto. Siguiente: F1b y validación conjunta con F2; Top pendiente del cliente.
@@ -9,13 +11,14 @@
 **Nuevo análisis de pruebas con amigos:** [F1–F6 y criterios de cierre](NEXT_STEPS.md#prioridad-vigente-observaciones-de-amigos-del-23-11-2026). Rama documental `docs/v1-friends-feedback-plan`; código funcional continúa en `c59ec6c`/PR #26. No confundir el plan con cambios ya implementados.
 
 
-**Actualizado: 23 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
+**Actualizado: 24 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
 
 ## Qué rama abrir
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-shared-community` | **Continuación vigente:** registro/comunidad comprobados juntos, código `3a7fdb3`, esquema21. [Entrega](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026). |
+| `feat/v1-community-moderation` | **Continuación vigente:** F3a, código `cb19d59`, esquema22, incluye F1/F2. [Entrega](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). |
+| `feat/v1-shared-community` | Entrega anterior: registro/comunidad comprobados juntos, código `3a7fdb3`, esquema21. [Entrega](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026). |
 | `feat/v1-registration-simplification` | Registro base `0247632`; punto intermedio que requiere F2, no adoptar solo. |
 | `feat/v1-access-usability` | Entrega anterior: F1a comprobada; [secuencia y criterios](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). Código funcional `ce3160d`. |
 | `fix/v1-open-preview-entry` | Última entrega funcional anterior: [entrada pública temporal](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026), incluye PR #25; esquema 20. |

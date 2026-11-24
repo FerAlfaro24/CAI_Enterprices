@@ -1,5 +1,7 @@
 # CAI — abrir y probar localmente
 
+**Actualización vigente F3a — 24-11:** La continuación es `feat/v1-community-moderation`, esquema22. Para QA aislada: `CAI_API_PORT`3276, ejecutar `node server/tests/community-moderation-browser-server.ts`, y vista compilada con proxy al mismo puerto. La fixture genera solo cuentas/material ficticios en `.local/tests`; nunca usar la base habitual. No ejecutar contra una instancia de API21. [Entrega](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Las cifras anteriores conservan su fecha/versión.
+
 **Actualización F1b/F2 — 23-11:** La rama vigente es `feat/v1-shared-community`, esquema21. Registro por Clase, sin grupo/tutor/matrícula manual; aprobación/activación conservadas. Generar fixtures nuevas para probar. No migrar la instalación habitual para reproducir las comprobaciones. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
 
 

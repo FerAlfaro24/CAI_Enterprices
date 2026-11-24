@@ -1,5 +1,18 @@
 # Guía sencilla de administración de CAI
 
+**Actualización vigente F3a — 24-11:** rama `feat/v1-community-moderation`. Abre **Ver comunidad** en el menú: allí puedes leer las publicaciones, ampliar fotografías y abrir sus comentarios. [Estado y pruebas](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Las notas anteriores describen sus entregas, no sustituyen esta actualización.
+
+## Moderar la convivencia
+
+1. En **Ver comunidad → Publicaciones**, abre **Ver comentarios** y selecciona **Moderar comentario** junto al autor.
+2. Elige **Eliminar este comentario**, **Suspender el acceso**, o ambas medidas. Eliminar por sí solo permite al alumno seguir entrando.
+3. Si suspendes, elige1,3,7 o30 días, o **Permanente**. Escribe el motivo, revisa la confirmación y guarda. Se cierran sus sesiones y cancelan sus enlaces de activación/recuperación. La suspensión impide entrar a toda la comunidad.
+4. Para revisar o terminar una medida, abre **Suspensiones activas → Levantar suspensión**, escribe el motivo y confirma. **Historial** conserva lo ocurrido y muestra si está activa, finalizada o levantada por coordinación.
+
+Al vencer una suspensión temporal, el alumno puede iniciar sesión otra vez si su inscripción está activa. Una suspensión manual en **Alumnos** se gestiona allí por separado. Los comentarios eliminados no regresan. Las publicaciones anteriores del alumno permanecen; esta medida bloquea su acceso, no borra todo su contenido. Si un enlace de activación quedó cancelado, prepara otro después de levantar la medida.
+
+Los comentarios **todavía pasan por revisión** en esta entrega. Quitaremos ese paso en F3b, ahora que las herramientas de convivencia están comprobadas. La pantalla no se actualiza en la demo anterior hasta adoptar expresamente esta versión.
+
 **Actualización F1b/F2 — 23-11:** Registro nuevo: revisar la Clase y los datos, aprobar y preparar el acceso; el menor no necesita el paso de tutor. La matrícula corresponde al folio automático. Grupos/tutores mostrados en expedientes anteriores son historial. Cambiar una clase conserva la comunidad compartida y exige volver a entrar. Retos usa calendario común; comentarios continúan en revisión hasta F3. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
 
 
@@ -9,6 +22,8 @@
 
 | Necesito… | Abro… |
 | --- | --- |
+| Leer la comunidad y moderar un comentario | Ver comunidad → Publicaciones → Ver comentarios |
+| Revisar o levantar suspensiones | Ver comunidad → Suspensiones activas / Historial |
 | Empezar por lo pendiente | Resumen → Tu mesa de trabajo |
 | Revisar el ingreso de una persona | Solicitudes de ingreso → Revisar solicitud |
 | Preparar el acceso | Alumnos → Ficha → Resumen y acceso |

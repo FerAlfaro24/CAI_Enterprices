@@ -1,5 +1,7 @@
 # CAI — preparación técnica de producción
 
+**Actualización vigente F3a — 24-11:** F3a requiere esquema22. El arranque productivo rechaza21 y versiones previas sin crearlas/migrarlas. Ensayar actualización en copia consistente y verificar respaldo/recuperación antes de adoptar. La migración aditiva incorpora suspensiones/historial; esta entrega no se desplegó ni cambió datos habituales. [Entrega](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Las cifras anteriores conservan su fecha/versión.
+
 **Actualización F1b/F2 — 23-11:** La entrega F1b/F2 requiere esquema21. El arranque productivo rechaza20 y no migra automáticamente; preparar copia/ensayo con el proceso de actualización antes de adoptar. El código de esta entrega no está desplegado; los ensayos productivos anteriores son evidencia histórica de su versión. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
 
 

@@ -1,5 +1,7 @@
 # CAI — sitio institucional, comunidad y administración
 
+**Estado vigente — 24-11-2026:** F3a comprobado en `feat/v1-community-moderation`, código `cb19d59` ([PR #31](https://github.com/FerAlfaro24/CAI_Enterprices/pull/31), borrador), desde `2129b5d` de F2. Administración → **Ver comunidad** permite recorrer publicaciones/fotos/comentarios, eliminar un comentario y suspender el acceso de su autor por 1/3/7/30 días o permanentemente, de forma independiente. Incluye suspensiones activas, levantamiento e historial. Esquema22; **307 pruebas de servidor y 90 comprobaciones UI** (45 Brave/45 Opera), lint/tipos/build correctos. [Entrega y límites](docs/NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). **Siguiente F3b:** comentarios inmediatos y borrado propio directo; la revisión previa sigue activa en esta entrega. Top pendiente del cliente; Google/correo reales y alojamiento pendientes. Sin migrar datos habituales ni actualizar/renovar la demo. Las notas fechadas anteriores son antecedentes, no la continuación vigente.
+
 **Registro y comunidad compartida comprobados:** `feat/v1-shared-community`, código `3a7fdb3`, esquema21. [Entrega, pruebas y adopción](docs/NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).294 pruebas de servidor/98 de navegador; la demostración remota conserva la versión anterior.
 
 

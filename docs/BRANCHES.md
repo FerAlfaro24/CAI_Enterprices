@@ -1,6 +1,8 @@
 # CAI — inventario de ramas
 
-**F1b + F2 comprobados — 23-11:** continuación `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
+**Estado vigente — 24-11-2026:** F3a comprobado en `feat/v1-community-moderation`, código `cb19d59` ([PR #31](https://github.com/FerAlfaro24/CAI_Enterprices/pull/31), borrador), desde `2129b5d` de F2. Administración → **Ver comunidad** permite recorrer publicaciones/fotos/comentarios, eliminar un comentario y suspender el acceso de su autor por 1/3/7/30 días o permanentemente, de forma independiente. Incluye suspensiones activas, levantamiento e historial. Esquema22; **307 pruebas de servidor y 90 comprobaciones UI** (45 Brave/45 Opera), lint/tipos/build correctos. [Entrega y límites](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). **Siguiente F3b:** comentarios inmediatos y borrado propio directo; la revisión previa sigue activa en esta entrega. Top pendiente del cliente; Google/correo reales y alojamiento pendientes. Sin migrar datos habituales ni actualizar/renovar la demo. Las notas fechadas anteriores son antecedentes, no la continuación vigente.
+
+**Entrega anterior F1b + F2 — 23-11:** rama `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
 
 
 **F1a implementado y comprobado — 23-11:** `feat/v1-access-usability`, código `ce3160d` (PR #28). Activación/recuperación de alumnos con mínimo8, sin composición obligatoria, controles independientes de mostrar/ocultar y coincidencia inmediata. 58 pruebas de servidor y 94 comprobaciones de navegador (47 Brave/47 Opera), lint/tipos/build correctos. Administración conserva mínimo15. Sin migración ni actualización del enlace remoto. Siguiente: F1b y validación conjunta con F2; Top pendiente del cliente.
@@ -16,9 +18,10 @@
 
 ## Qué utilizar
 
-- **Continuación vigente:** `feat/v1-shared-community`, código `3a7fdb3`, esquema21, incluye F1b/F1a y cierre conjunto.
+- **Continuación vigente:** `feat/v1-community-moderation`, código `cb19d59`, esquema22; incluye F1a/F1b/F2 y F3a. Base inmediata `2129b5d`; siguiente F3b.
+- **Base inmediata F3a:** `feat/v1-shared-community`, cierre `2129b5d`, código F2 `3a7fdb3`, esquema21 (PR #30).
 - **Base de registro:** `feat/v1-registration-simplification`, código `0247632`; etapa intermedia, requiere F2.
-- **Acceso anterior:** `feat/v1-access-usability`, creada desde `12b088b` de PR #27; F1a implementada en `ce3160d`, con preparación y evidencia en PR #28. F1b/F2 ya creadas; F3–F6 permanecen planificadas.
+- **Acceso anterior:** `feat/v1-access-usability`, creada desde `12b088b` de PR #27; F1a implementada en `ce3160d`, con preparación y evidencia en PR #28. F1b/F2 ya creadas; F3a comprobada; F3b–F6 permanecen planificadas.
 - **Entrega anterior:** `fix/v1-remote-registration-guidance`, código `146e061`, base `2f6a04f` de PR #24. [Alta propia](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026); esquema/permisos conservados.
 - **Administración anterior:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`. [Administración](ADMIN_USABILITY_REVIEW.md), 272 API y 370 UI; sin cambios de esquema/permisos.
 - **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md); esquema 20, 272 API y 144 UI; datos habituales sin migrar.

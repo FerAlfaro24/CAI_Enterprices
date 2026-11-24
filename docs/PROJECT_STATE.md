@@ -1,6 +1,8 @@
 # CAI — estado vigente
 
-**F1b + F2 comprobados — 23-11:** continuación `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
+**Estado vigente — 24-11-2026:** F3a comprobado en `feat/v1-community-moderation`, código `cb19d59` ([PR #31](https://github.com/FerAlfaro24/CAI_Enterprices/pull/31), borrador), desde `2129b5d` de F2. Administración → **Ver comunidad** permite recorrer publicaciones/fotos/comentarios, eliminar un comentario y suspender el acceso de su autor por 1/3/7/30 días o permanentemente, de forma independiente. Incluye suspensiones activas, levantamiento e historial. Esquema22; **307 pruebas de servidor y 90 comprobaciones UI** (45 Brave/45 Opera), lint/tipos/build correctos. [Entrega y límites](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). **Siguiente F3b:** comentarios inmediatos y borrado propio directo; la revisión previa sigue activa en esta entrega. Top pendiente del cliente; Google/correo reales y alojamiento pendientes. Sin migrar datos habituales ni actualizar/renovar la demo. Las notas fechadas anteriores son antecedentes, no la continuación vigente.
+
+**Entrega anterior F1b + F2 — 23-11:** rama `feat/v1-shared-community`, código `3a7fdb3`, sobre `0247632` de `feat/v1-registration-simplification` y F1a `ce3160d`. Registro con Clase (Inglés/Francés/Español), folio automático y menores sin paso de tutor; comunidad y retos comunes entre clases, con datos personales/borradores privados. Esquema21, 294 pruebas de servidor y98 de navegador (49 Brave/49 Opera), lint/tipos/build correctos. Sin actualizar la demo ni datos habituales. Siguiente F3a (moderación/baneos), después F3b (comentarios directos). Top pendiente del cliente.
 
 
 **F1a implementado y comprobado — 23-11:** `feat/v1-access-usability`, código `ce3160d` (PR #28). Activación/recuperación de alumnos con mínimo8, sin composición obligatoria, controles independientes de mostrar/ocultar y coincidencia inmediata. 58 pruebas de servidor y 94 comprobaciones de navegador (47 Brave/47 Opera), lint/tipos/build correctos. Administración conserva mínimo15. Sin migración ni actualización del enlace remoto. Siguiente: F1b y validación conjunta con F2; Top pendiente del cliente.
@@ -39,7 +41,7 @@
 
 ## Referencias de continuación
 
-- **Continuación vigente:** `feat/v1-shared-community`, código `3a7fdb3`, esquema21, incluye F1b/F1a y cierre conjunto.
+- **Continuación vigente:** `feat/v1-community-moderation`, código `cb19d59`, esquema22; incluye F1a/F1b/F2 y F3a. Base inmediata `2129b5d`; siguiente F3b.
 - **Base de registro:** `feat/v1-registration-simplification`, código `0247632`; etapa intermedia, requiere F2.
 - **Acceso anterior:** `feat/v1-access-usability`, base documental `12b088b`; código funcional `ce3160d`, F1a comprobada.
 - **Entrega de registro anterior:** `fix/v1-remote-registration-guidance`, código `146e061`, desde `2f6a04f` de PR #24.
@@ -76,9 +78,9 @@ Los SHAs y relaciones de todas las ramas al inicio de la auditoría están en BR
 | Panel v1.0 | Datos/acciones conectados, pendientes, alumnos y moderación | `src/layouts/AdminLayout.tsx`, `src/features/admin/`; no es otro dashboard de demo. |
 | Grupos/ajustes | Catálogo, asignación, archivo y pausas persistentes | `server/administration.ts`; catálogo/material final por confirmar con CAI. |
 | Comunidad | Inicio con fotos autorizadas, avisos destacados, historias, perfiles y notificaciones privadas | `src/features/community/ConnectedCommunity.tsx`, `server/public-profiles.ts`; sin expedientes ajenos públicos. |
-| Publicaciones | Alumnos: texto/logros moderados por grupo. Equipo CAI: historia/aviso/álbum, hasta 12 fotos, destinatarios, destacado, vencimiento y retirada | `server/publications.ts`, `server/institutional-posts.ts`; [guía vigente](COMMUNITY_HOME_STORIES.md). |
+| Publicaciones | Alumnos: texto/logros compartidos con toda la comunidad tras aprobación. Equipo CAI: historia/aviso/álbum, hasta 12 fotos, destinatarios, destacado, vencimiento y retirada | `server/publications.ts`, `server/institutional-posts.ts`; [guía vigente](COMMUNITY_HOME_STORIES.md). |
 | Reacciones | Cinco opciones, selección propia, contadores, pausa y reintentos | `server/reactions.ts`; [147 API/134 navegador en su entrega](v1-community-reactions.md). |
-| Comentarios | Premoderación, paginación, motivos privados, retirada y pausas global/por historia | `server/comments.ts`; [163 API/228 navegador en su entrega](v1-community-comments.md). |
+| Comentarios | Premoderación todavía activa; moderación contextual F3a, eliminación, suspensiones por días/permanentes y levantamiento/historial; F3b siguiente | `server/comments.ts`; [163 API/228 navegador en su entrega](v1-community-comments.md). |
 | Imágenes | Cuatro públicas y seis privadas oficiales; fotos nuevas en borrador, álbumes vinculados y una conversación; Galería respeta grupo/comunidad, retirada y vencimiento | `server/gallery.ts`, `server/official-media.ts`; [guía vigente](OFFICIAL_MEDIA.md). El [informe original](v1-private-gallery.md) corresponde al alcance anterior por grupo. No es vídeo. |
 | Retos | 180 preguntas/45 temas; tres diarias, calendario/banco administrable, respuesta única, puntos/constancia y repaso privados | `server/challenge-bank.ts`, `server/challenges.ts`; [179 API/142 navegador en su entrega](v1-community-challenges.md). Fecha America/Mexico_City. |
 | Insignias | 21; condiciones progresivas de logros/Retos/publicaciones, concesiones históricas y correcciones conservadas | `server/badges.ts`, `shared/badges.ts`; [193 API y matriz 234 en su entrega](v1-community-badges.md). |

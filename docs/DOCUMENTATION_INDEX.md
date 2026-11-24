@@ -2,6 +2,8 @@
 
 **Actualizado: 22-11-2026, revisión de administración.** 68 archivos Markdown: incluye la revisión de comunidad y el diagnóstico/evidencia del panel. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.
 
+**Continuación funcional vigente — 24-11:** F3a, moderación y suspensiones, código `cb19d59`/PR #31. [Entrega y siguiente F3b](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Los informes técnicos conservan el alcance y las pruebas de su fecha.
+
 ## Cómo leer
 
 - **Vigente:** entradas, estado, decisiones, ramas y requisitos actuales.

@@ -1,5 +1,27 @@
 # CAI — próximos pasos vigentes
 
+## Entrega F3a: moderación y suspensiones — 24-11-2026
+
+**Implementada y comprobada**, código `cb19d59`, rama `feat/v1-community-moderation`, desde `2129b5d` de `feat/v1-shared-community` (F2/PR #30). Incluye F1a/F1b/F2. Esta es la continuación; `release/cai-demo-v1.0` conserva la referencia visual y `main` sigue sin actualizar. No fusionar ramas acumulativas de nuevo.
+
+### Comportamiento y límites
+
+- **Ver comunidad** en el menú de administración: publicaciones comunes, fotos ampliables, conversación y paginación de veinte elementos. Sesión propia de administración, sin entrar como alumno. No amplía la audiencia de fotografías históricas privadas.
+- En cada comentario: **Moderar comentario**. Eliminarlo y suspender al autor son decisiones independientes; se pueden aplicar juntas de forma atómica. Motivo y confirmación obligatorios. La cuenta no se bloquea por eliminar solamente su comentario.
+- Suspensión del acceso completo por 1/3/7/30 días o permanente; el servicio valida cualquier duración entera de1 a365 días. El plazo corre desde su aplicación, no desde medianoche. Se cancelan sesiones de alumno/Google y enlaces de activación/recuperación; no basta cambiar de navegador ni usar Google. Los controles externos de Google se ensayaron con identidades ficticias, sin configurar el proveedor real.
+- **Suspensiones activas** permite levantar una medida con motivo y confirmación; **Historial** conserva las medidas y su estado, incluidas las activas. El vencimiento se comprueba en cada acceso desde el servidor, sin depender de que un navegador permanezca abierto. Después de vencer/levantar se exige iniciar sesión de nuevo.
+- La sanción de comunidad es independiente del estado manual del expediente: no activa una inscripción suspendida por coordinación. No elimina otras publicaciones ni oculta automáticamente el historial público del alumno. Un comentario retirado no reaparece al vencer o levantar la medida.
+- Esquema22 aditivo: `student_restrictions` y `community_moderation_actions`, registro administrativo, idempotencia y revisiones. El arranque productivo exige22 y rechaza bases previas sin migrarlas; preparar actualización/recuperación en copia separada antes de adoptar. Cambiar de rama no revierte la base.
+- **F3b sigue pendiente:** los comentarios continúan con revisión previa. Siguiente: publicar inmediatamente los nuevos y permitir borrar los propios junto al comentario; retirar bandeja/contadores/textos de revisión, sin republicar antiguos rechazados/retirados. Top sin autorización del cliente; F4–F6 pendientes.
+
+### Evidencia nueva
+
+- **307 pruebas de servidor**, cero fallos/canceladas/omitidas, con `npm.cmd run test:api`. Incluye 13 resultados de moderación: permisos/origen, motivo/duración/revisión/confirmación, idempotencia, cancelación de sesión administrativa durante el cuerpo, combinación atómica, expiración/permanencia/levantamiento, suspensión manual independiente, activación/recuperación/Google, paginación con autores inactivos, migración21→22, respaldo/reinicio. Suites anteriores actualizadas solo para el nuevo esquema y sus fixtures de migración.
+- **90 comprobaciones UI**, 45 Brave y 45 Opera, contextos aislados: menú, paginación de publicaciones, fotos privadas ampliadas, eliminación independiente, suspensión temporal/permanente, cierre de sesión abierta/rechazo del reingreso, levantamiento/historial, cancelación/foco/teclado,1440/768/375/320 y temas claro/oscuro. Sin errores inesperados de consola/ejecución. Inspección adicional de capturas de escritorio y diálogo móvil. Verificador `scripts/check-community-moderation.browser.mjs` y fixture `server/tests/community-moderation-browser-server.ts`.
+- ESLint, revisión de tipos, build, sintaxis del verificador y `git diff --check` correctos. El acceso real a Google, correo y alojamiento no se probaron ni se afirman configurados.
+
+Fixture nueva `.local/tests/moderation-browser-x43Q9Z`, API3276/vista compilada4636, evidencia y accesos ficticios fuera de Git. No se abrió/migró `.local/cai.sqlite`, no se actualizó/renovó la copia remota ni se publicaron datos de alumnos. Los procesos de QA se cierran al terminar. La aceptación de uso por coordinación real continúa pendiente.
+
 ## Entrega F1b y F2: registro y comunidad compartida — 23-11-2026
 
 **Cierre conjunto comprobado.** Base del registro `0247632` en `feat/v1-registration-simplification`; integración completa `3a7fdb3` en **`feat/v1-shared-community`, continuación vigente**. Ambas incluyen F1a. La rama del registro es un punto intermedio: usar la integración F2 para adoptar o mostrar registro sin grupos. No actualizar main/release ni fusionar PR automáticamente.
@@ -29,7 +51,7 @@ Modo local migra como antes; **producción exige esquema21 preparado previamente
 - **98 comprobaciones UI nuevas**,49 Brave y49 Opera: registro real de menor/adulto de clases distintas, clase obligatoria, tres pasos, aprobación en panel sin tutor, activación de ocho letras, directorio/ingresos/perfil cruzados, publicación aprobada visible en otra cuenta, preguntas comunes y cambio de clase sin perder acceso social/progreso.1440/768/375/320 y temas claro/oscuro; sin errores inesperados de ejecución/consola. Las dos respuestas401 esperadas al intentar entrar sin cuenta se reconocen únicamente durante esa comprobación de acceso.
 - ESLint, tipos/build y sintaxis de verificador correctos. Verificador `scripts/check-shared-community.browser.mjs`; el verificador de registro remoto se adaptó al formulario nuevo para cuando se adopte esta versión. No ejecutarlo contra la demo anterior suponiendo que ya fue actualizada.
 
-QA nueva `.local/tests/final-review-M6WPr3` con API3272/vista compilada4632; evidencia, accesos y capturas fuera de Git. Se cerraron únicamente esos dos procesos de QA al terminar. No se reinició ni renovó la demo remota, no se aplicó migración a `.local/cai.sqlite` ni a su copia de presentación, y no se publicaron datos de alumnos. Google/correo reales, F3–F6 y aceptación humana de esta entrega siguen pendientes.
+QA nueva `.local/tests/final-review-M6WPr3` con API3272/vista compilada4632; evidencia, accesos y capturas fuera de Git. Se cerraron únicamente esos dos procesos de QA al terminar. No se reinició ni renovó la demo remota, no se aplicó migración a `.local/cai.sqlite` ni a su copia de presentación, y no se publicaron datos de alumnos. Google/correo reales, F3–F6 y aceptación humana seguían pendientes en ese corte; ver la entrega F3a posterior al inicio.
 
 
 ## Entrega F1a: activación y contraseñas — 23-11-2026
@@ -59,8 +81,8 @@ Ya se crearon las ramas F1a, F1b y F2. Las demás se crearán desde la punta com
 | F1a | Implementada y comprobada (`ce3160d`) | `feat/v1-access-usability` | Activación/recuperación de alumno con mínimo8, mostrar/ocultar y coincidencia. Independiente de la reorganización de grupos. |
 | F1b | Integrada en F2 (`0247632`) | `feat/v1-registration-simplification` | Clase, matrícula automática y registro normal de menores. Prepara contratos y migración compatible; aceptación conjunta con F2. |
 | F2 | Comprobada (`3a7fdb3`) | `feat/v1-shared-community` | Autorizaciones sociales comunes, miembros/fechas, fotos y asignación diaria sin grupo. Comprobar F1b+F2 antes de cambiar la copia de demostración. |
-| F3a | Planificada, después de F2 | `feat/v1-community-moderation` | Vista de comunidad para admin, eliminación contextual y suspensiones temporales/permanentes. Conservar controles de sesión. |
-| F3b | Planificada, después de F3a | `feat/v1-direct-comments` | Comentarios inmediatos, borrar propios, quitar revisión previa y sus contadores. Abrirlos una vez comprobadas las herramientas de moderación. |
+| F3a | Comprobada (`cb19d59`) | `feat/v1-community-moderation` | Vista de comunidad para admin, eliminación contextual y suspensiones temporales/permanentes. Conservar controles de sesión. |
+| F3b | Siguiente, herramientas F3a comprobadas | `feat/v1-direct-comments` | Comentarios inmediatos, borrar propios, quitar revisión previa y sus contadores. Abrirlos una vez comprobadas las herramientas de moderación. |
 | F4a | Planificada | `feat/v1-learning-form-simplification` | Logros simples, límites compartidos mayores y campos opcionales; no romper publicación derivada o insignias. |
 | F4b | Planificada | `feat/v1-publisher-notice-carousel` | Crear publicación como sección principal, eliminación administrativa, avisos con fotos y carrusel exclusivo cada5s. |
 | F5 | Planificada | `feat/v1-daily-challenges-refresh` | Retos comunes más claros/divertidos, calendario CDMX y progreso personal. Sin Top; decidir banco lingüístico antes de ampliar idiomas. |

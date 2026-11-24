@@ -1,5 +1,7 @@
 # Administración — revisión de uso
 
+**Ampliación F3a — 24-11:** Ver comunidad, moderación contextual y sanciones temporales/permanentes comprobadas en `cb19d59`. [Entrega, pruebas y límites](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026) · [Uso](guia-administracion.md#moderar-la-convivencia).90 comprobaciones nuevas de UI y 307 pruebas de servidor. El diagnóstico del panel que sigue corresponde a su versión anterior; no duplicar su implementación ni presentar estas pruebas automáticas como aceptación humana.
+
 **22 de noviembre de 2026.** Entrega en `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`. Alcance autorizado: analizar, probar y mejorar el uso del panel conservando funciones, permisos y datos habituales. Fixtures nuevas, no producción.
 
 ## Diagnóstico inicial comprobado
