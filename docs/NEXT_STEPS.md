@@ -1,5 +1,8 @@
 # CAI — próximos pasos vigentes
 
+**23-11, entrada pública autorizada:** continuación `fix/v1-open-preview-entry`, desde `cb84099` de PR #25. [Prueba temporal sin contraseña adicional](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026): misma base y claves; enlace nuevo y vencimiento original conservado. Portada/registro libres, comunidad/administración/fotos privadas con cuenta. 13 pruebas de entrada y 33 comprobaciones HTTPS nuevas, tipos/lint correctos. No renovar la ventana implícitamente.
+
+
 **23-11, preferencia posterior:** amigos crean su propia solicitud en `/registro`, coordinación aprueba y comparte activación para que elijan contraseña. [Recorrido comprobado](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026). Repartir las instrucciones de registro actualizadas, conservar la misma ventana temporal y recoger incidencias reales. Las cuentas preasignadas ya no son la vía de esta prueba; no saltar aprobación ni implementar correo/Google automáticamente.
 
 **23-11, en curso:** prueba con amigos autorizada en copia HTTPS temporal de la versión actual. [Alcance y comprobaciones](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026). Siguiente acción humana: repartir una cuenta por persona, probar en sus dispositivos/redes y anotar incidencias. Moderación y actualización cada 15 segundos conservadas; no empezar Google/alojamiento definitivo por esta activación. No renovar automáticamente el máximo de 24 horas.

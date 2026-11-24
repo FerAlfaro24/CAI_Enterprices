@@ -1,5 +1,8 @@
 # CAI — sitio institucional, comunidad y administración
 
+**23-11, entrada pública autorizada:** continuación `fix/v1-open-preview-entry`, desde `cb84099` de PR #25. [Prueba temporal sin contraseña adicional](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026): misma base y claves; enlace nuevo y vencimiento original conservado. Portada/registro libres, comunidad/administración/fotos privadas con cuenta. 13 pruebas de entrada y 33 comprobaciones HTTPS nuevas, tipos/lint correctos. No renovar la ventana implícitamente.
+
+
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
 **Estado al 23 de noviembre de 2026:** aplicación integrada, SQLite esquema 20. **Continuar en `fix/v1-remote-registration-guidance`**, código `146e061`, desde `2f6a04f` de PR #24. [Registro propio en prueba remota](docs/REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026): solicitud, aprobación y activación para elegir contraseña, con textos adecuados al enlace compartido. 24 API dirigidas y 17 HTTPS nuevas, lint/tipos/build. Incluye [administración revisada](docs/ADMIN_USABILITY_REVIEW.md) y las funciones de comunidad anteriores; sus cifras conservan su propio corte. Aceptación humana, servicios reales e infraestructura definitiva pendientes. Las fotos y accesos de la copia temporal están fuera de Git. `main` es antigua y `release/cai-demo-v1.0` conserva la referencia visual congelada.

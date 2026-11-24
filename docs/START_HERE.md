@@ -1,12 +1,13 @@
 # CAI — empieza aquí
 
-**Actualizado: 22 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
+**Actualizado: 23 de noviembre de 2026.** Recuperación del proyecto sin conversaciones de ChatGPT. Distinguir funciones locales, referencia visual, propuestas y producción pendiente.
 
 ## Qué rama abrir
 
 | Referencia | Uso |
 | --- | --- |
-| `fix/v1-remote-registration-guidance` / código `146e061` | **Continuación actual:** [Alta propia en prueba remota](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026), incluye administración; esquema 20. |
+| `fix/v1-open-preview-entry` | **Continuación actual:** [entrada pública temporal](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026), incluye PR #25; esquema 20. |
+| `fix/v1-remote-registration-guidance` / código `146e061` | Entrega anterior: [Alta propia en prueba remota](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026), incluye administración; esquema 20. |
 | `feat/v1-admin-usability-review` / código `e255f91` | Administración anterior: [Administración revisada](ADMIN_USABILITY_REVIEW.md); esquema 20. |
 | `feat/v1-photo-viewer-notification-history` / código `bb7b8f6` | Entrega anterior: [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md), esquema 20. |
 | `style/v1-final-interface-polish` / código `5bd4c2a` | Entrega anterior: Primera pasada visual de comunidad/página pública/panel. [Entrega](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). |
@@ -50,7 +51,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/fix/v1-remote-registration-guidance
+git switch --track origin/fix/v1-open-preview-entry
 code .
 npm.cmd ci
 ```

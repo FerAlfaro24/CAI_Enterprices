@@ -1,4 +1,4 @@
-/** Entrada temporal: solo frontend compilado y API, siempre tras autenticación. */
+/** Entrada temporal: frontend compilado y API; la barrera adicional es opcional y explícita. */
 import { createServer, request as upstreamRequest, type IncomingMessage, type ServerResponse } from 'node:http'
 import { createHash, timingSafeEqual } from 'node:crypto'
 import { readFile, realpath, stat } from 'node:fs/promises'
@@ -13,6 +13,7 @@ type PreviewOptions = {
   username: string
   password: string
   expiresAt: number
+  entryMode?: 'password' | 'open'
 }
 
 const mime: Record<string, string> = {
@@ -30,9 +31,11 @@ const banner = '<aside role="note" style="padding:10px 16px;background:#102552;c
 export function createPreviewHandler(options: PreviewOptions) {
   const origin = productionPolicy(options.origin)
   if (origin.mode !== 'production') throw Error('Se requiere HTTPS.')
-  if (options.password.length < 20 || !/^[a-z0-9-]+$/i.test(options.username)) throw Error('Acceso temporal inválido.')
+  const entryMode = options.entryMode ?? 'password'
+  if (!['password', 'open'].includes(entryMode)) throw Error('Modo de entrada inválido.')
+  if (entryMode === 'password' && (options.password.length < 20 || !/^[a-z0-9-]+$/i.test(options.username))) throw Error('Acceso temporal inválido.')
   const root = resolve(options.directory), host = new URL(origin.publicOrigin).host
-  const expected = createHash('sha256').update('Basic ' + Buffer.from(`${options.username}:${options.password}`).toString('base64')).digest()
+  const expected = entryMode === 'password' ? createHash('sha256').update('Basic ' + Buffer.from(`${options.username}:${options.password}`).toString('base64')).digest() : null
   const attempts = new Map<string, { count: number; until: number }>()
   const reply = (response: ServerResponse, code: number, message: string) => {
     response.writeHead(code, { ...securityHeaders, 'Content-Type': 'text/plain; charset=utf-8' })
@@ -50,7 +53,7 @@ export function createPreviewHandler(options: PreviewOptions) {
       if (typeof ip !== 'string' || !isIP(ip)) return reply(response, 403, 'No se pudo verificar la conexión.')
       const authorization = request.headers.authorization ?? ''
       const supplied = createHash('sha256').update(authorization).digest()
-      if (!timingSafeEqual(supplied, expected)) {
+      if (expected && !timingSafeEqual(supplied, expected)) {
         // La primera visita sin Authorization es el desafío normal del navegador,
         // no un fallo de contraseña. Contar solo claves incorrectas evita bloquear
         // a visitantes legítimos que comparten IP durante la presentación.
@@ -109,7 +112,7 @@ export function createPreviewHandler(options: PreviewOptions) {
         ...securityHeaders, 'Content-Type': mime[extension || '.html']!,
         'Content-Security-Policy': "default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
       })
-      response.end((extension || '.html') === '.html' ? bytes.toString('utf8').replace('<body>', '<body>' + banner) : bytes)
+      response.end((extension || '.html') === '.html' ? bytes.toString('utf8').replace('<body>', '<body>' + (entryMode==='password'?banner:banner.replace('Demostración privada de CAI','Prueba temporal de CAI'))) : bytes)
     } catch {
       if (!response.headersSent) reply(response, 500, 'No se pudo cargar la demostración.')
       else response.destroy()
