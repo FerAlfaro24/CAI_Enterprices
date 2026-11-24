@@ -1,5 +1,7 @@
 # Guía sencilla de administración de CAI
 
+**Actualización vigente F5 — 24-11:** continuación `feat/v1-daily-challenges-refresh`, código `258abfb`/PR #34. Los alumnos ven las tres actividades comunes de inglés, cuándo se renuevan, sus puntos diarios/acumulados y cada acierto/error. Pueden repasar errores sin volver a puntuar. **Retos de inglés → Calendario/Banco** y la pausa administrativa conservan su funcionamiento; pausar no borra el progreso ni el cuaderno. Se mantiene inglés para toda la comunidad, también si la inscripción dice Francés/Español. Top/ranking pendiente del cliente. [Entrega y pruebas](NEXT_STEPS.md#entrega-f5-retos-diarios-y-progreso-personal--24-11-2026). La demo anterior todavía no contiene esta versión.
+
 **Actualización vigente F3b/F4 — 24-11:** rama `feat/v1-publisher-notice-carousel`, código `5b6d31c`, [PR #32](https://github.com/FerAlfaro24/CAI_Enterprices/pull/32). Las notas siguientes de F3a y revisiones anteriores conservan su fecha; esta actualización define el recorrido actual.
 
 ## Publicar, avisar y moderar ahora

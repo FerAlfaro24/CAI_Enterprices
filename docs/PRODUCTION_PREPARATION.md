@@ -1,5 +1,7 @@
 # CAI — preparación técnica de producción
 
+**Actualización vigente F5 — 24-11:** F5 conserva esquema 22 sin migración. Añade metadatos de renovación al snapshot; el servidor conserva la autoridad de fecha/permiso/respuesta. Probar y desplegar frontend/API de la misma entrega cuando se autorice adoptar; esta tarea no configuró TLS, proveedor, dominio, Google ni correo reales. [Entrega vigente](NEXT_STEPS.md#entrega-f5-retos-diarios-y-progreso-personal--24-11-2026).
+
 **Actualización vigente F3b/F4 — 24-11:** F4 mantiene esquema 22, sin migración nueva. Los comentarios nuevos se publican al enviar y requieren las herramientas F3a de moderación ya incluidas. El arranque productivo conserva sus requisitos22/origen/proxy/cookies/datos privados. Ningún proveedor, TLS, Google o correo real fue configurado por esta entrega. [Entrega vigente](NEXT_STEPS.md#entrega-f3b-y-f4-logros-comentarios-y-publicador--24-11-2026).
 
 **Actualización vigente F3a — 24-11:** F3a requiere esquema 22. El arranque productivo rechaza21 y versiones previas sin crearlas/migrarlas. Ensayar actualización en copia consistente y verificar respaldo/recuperación antes de adoptar. La migración aditiva incorpora suspensiones/historial; esta entrega no se desplegó ni cambió datos habituales. [Entrega](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Las cifras anteriores conservan su fecha/versión.

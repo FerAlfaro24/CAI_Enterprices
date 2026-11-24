@@ -2,6 +2,8 @@
 
 # Retos diarios de inglés: implementación y comprobación
 
+**Ampliación F5 comprobada — 24-11:** `258abfb`/PR #34, rama `feat/v1-daily-challenges-refresh`, incluye las entregas anteriores. Renovación CDMX desde servidor, puntos diarios/acumulados, resultados por actividad, resumen y filtro de repaso privados; 331 pruebas de servidor/134 UI, lint/tipos/build. Se conservan 180 preguntas/45 temas, +5/+10, intentos/historial y esquema 22. [Comportamiento, evidencia y límites actuales](NEXT_STEPS.md#entrega-f5-retos-diarios-y-progreso-personal--24-11-2026). La implementación y las cifras que siguen son el informe histórico original.
+
 Rama acumulativa `feat/v1-community-challenges`, desde `46466b7` (comentarios/reacciones ya conectados). Puntos de retorno: `fbb1545` servicio/migración/banco/pruebas y `e14eda7` interfaz/administración/recorridos. Base visual oficial v1.0 conservada. Comprobación local con datos ficticios; no despliegue ni prueba con alumnos reales.
 
 ## Qué se entregó

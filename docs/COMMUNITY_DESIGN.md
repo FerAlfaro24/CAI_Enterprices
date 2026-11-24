@@ -1,5 +1,7 @@
 # Comunidad CAI: diseño e interacciones
 
+**Actualización vigente F5 — 24-11:** F5 aclara el ciclo de tres actividades de inglés, separa puntos diarios/acumulados, presenta aciertos/errores por actividad y facilita repaso privado. Se conservaron identidad CAI, banco, puntuación y celebraciones accesibles; no se creó Top. El diseño y las pruebas anteriores corresponden a sus versiones. [Entrega vigente](NEXT_STEPS.md#entrega-f5-retos-diarios-y-progreso-personal--24-11-2026).
+
 **Actualización vigente F3b/F4 — 24-11:** F4a simplifica Logros y amplía sus límites; F4b deja un carrusel exclusivo de avisos vigentes cada 5s y conserva fotos/álbumes normales en feed/Galería. F3b publica comentarios nuevos al enviar y muestra borrado propio. No reintroducir el carrusel mixto ni los pasos de registro anteriores por seguir una sección histórica. [Entrega vigente](NEXT_STEPS.md#entrega-f3b-y-f4-logros-comentarios-y-publicador--24-11-2026).
 
 **Observaciones posteriores del 22-11:** implementadas [fotos ampliadas, error visible en Retos y notificaciones Sin leer/Historial](COMMUNITY_FEEDBACK.md). Esa entrega modifica también servidor/esquema 20; las cifras de la primera pasada de abajo conservan su corte.
