@@ -1,5 +1,7 @@
 # CAI — pruebas y lectura de evidencia
 
+**Alta propia remota, 23-11:** 24 API dirigidas y **17 comprobaciones HTTPS nuevas**: formulario público, solicitud pendiente, aprobación desde panel, activación con contraseña propia y entrada/recarga como nuevo alumno. Tipos/lint/build. [Alcance](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026). Sin repetir matrices históricas completas ni Google/correo reales.
+
 **Prueba remota con amigos, 23-11:** 11 pruebas de entrada y **24 comprobaciones HTTPS reales nuevas** con dos cuentas de alumno y coordinación en contextos Brave aislados. Sincronización automática entre sesiones, autenticación/fotos/recarga y protección de fuentes/datos. Build correcto. [Detalle y límites](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026); no sumar las matrices antiguas ni afirmar probados los dispositivos físicos de amigos.
 
 **Administración, 22-11:** 272 API de suite completa y **370 UI**: 344 del recorrido (172 Brave/172 Opera) y 26 dirigidas finales (13 por navegador). Tipos/lint/build. [Alcance, intentos y límites](ADMIN_USABILITY_REVIEW.md); no sumar matrices históricas.

@@ -4,7 +4,7 @@
 
 **23-11, prueba con amigos:** [copia HTTPS nueva](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026) activada con autorización específica por máximo 24 horas, sobre código actual de administración. Nueve cuentas ficticias con claves individuales, seis fotos oficiales y base separada. 11 pruebas de entrada y 24 comprobaciones HTTPS nuevas; sincronización automática entre dos cuentas comprobada. URL/accesos/vencimiento en metadatos privados, no Git. Validación desde dispositivos y redes reales de amigos pendiente. No equivale a despliegue definitivo ni renueva la demo vieja.
 
-**Actualizado: 22 de noviembre de 2026, revisión de administración.** Continuación `feat/v1-admin-usability-review`, base `c3d4d82` de PR #22; código `e255f91`. [Entrega](ADMIN_USABILITY_REVIEW.md): mesa de trabajo, configuración por tareas, ficha dividida, búsqueda/filtros y revisión de fotos. **272 API y 370 UI** (344 recorrido + 26 dirigidas finales), tipos/lint/build; nueve secciones revisadas. Servidor/esquema/permisos sin cambios, SQLite 20. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md) · [Guía del panel](guia-administracion.md). Aceptación humana pendiente.
+**Actualizado: 23 de noviembre de 2026, registro propio de amigos.** Continuación `fix/v1-remote-registration-guidance`, código `146e061`, base `2f6a04f` de PR #24. [Recorrido vigente](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026): solicitud propia, aprobación y contraseña elegida al activar. 24 API dirigidas y 17 HTTPS nuevas, lint/tipos/build. Servidor, permisos y esquema 20 conservados. Las 272 API/370 UI de administración pertenecen a su entrega anterior; no se repitieron completas. [Inicio](START_HERE.md) · [Ramas](BRANCHES.md) · [Próximos pasos](NEXT_STEPS.md).
 
 **Cierre visual anterior:** 454 comprobaciones UI y 108 de Logros en la entrega de PR #21; no son una matriz repetida hoy. La nueva tanda cubre específicamente los tres cambios solicitados.
 
@@ -24,7 +24,8 @@
 
 ## Referencias de continuación
 
-- **Continuación actual:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`.
+- **Continuación actual:** `fix/v1-remote-registration-guidance`, código `146e061`, desde `2f6a04f` de PR #24.
+- **Administración anterior:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`.
 - **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, código `bb7b8f6`, esquema 20.
 - **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`.
 - **Logros anterior:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`, código `5349283`.

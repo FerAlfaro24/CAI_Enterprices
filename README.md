@@ -2,7 +2,7 @@
 
 **Empieza por [docs/START_HERE.md](docs/START_HERE.md).** Permite recuperar el proyecto sin conversaciones de ChatGPT: rama, instalación, pruebas y decisiones pendientes.
 
-**Estado al 22 de noviembre de 2026:** aplicación integrada, SQLite esquema 20. **Continuar en `feat/v1-admin-usability-review`**, desde `c3d4d82` de PR #22; código `e255f91`. [Administración revisada](docs/ADMIN_USABILITY_REVIEW.md): tareas directas, configuración por apartados, ficha clara, búsqueda/filtros y fotos en moderación. 272 API y 370 comprobaciones UI de esta entrega. Incluye las correcciones de fotos/Retos/notificaciones y las funciones anteriores. [Guía para coordinación](docs/guia-administracion.md). Aceptación humana, servicios externos e infraestructura definitiva pendientes; fotos privadas fuera de Git. `main` es antigua y `release/cai-demo-v1.0` conserva la referencia visual congelada.
+**Estado al 23 de noviembre de 2026:** aplicación integrada, SQLite esquema 20. **Continuar en `fix/v1-remote-registration-guidance`**, código `146e061`, desde `2f6a04f` de PR #24. [Registro propio en prueba remota](docs/REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026): solicitud, aprobación y activación para elegir contraseña, con textos adecuados al enlace compartido. 24 API dirigidas y 17 HTTPS nuevas, lint/tipos/build. Incluye [administración revisada](docs/ADMIN_USABILITY_REVIEW.md) y las funciones de comunidad anteriores; sus cifras conservan su propio corte. Aceptación humana, servicios reales e infraestructura definitiva pendientes. Las fotos y accesos de la copia temporal están fuera de Git. `main` es antigua y `release/cai-demo-v1.0` conserva la referencia visual congelada.
 
 ## Qué funciona localmente
 
@@ -24,7 +24,7 @@ GitHub muestra este repositorio como público al 19-11-2026. Para operaciones au
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-admin-usability-review
+git switch --track origin/fix/v1-remote-registration-guidance
 code .
 npm.cmd ci
 ```
