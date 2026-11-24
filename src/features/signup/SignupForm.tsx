@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type ReactNode, type Ref } from 'react'
 import { Link } from 'react-router'
+import { isValidStudentPassword, studentPasswordHint, studentPasswordPolicy } from '../../../shared/student-password'
 import { useDemoStore } from '../../app/demoStore'
 import type { AccessRequest } from '../admin/data/mockData'
 import { nextRequestId } from '../admin/state'
@@ -52,8 +53,7 @@ const steps = [
 ] as const
 
 const passwordRules = [
-  { label: 'Al menos 8 caracteres', test: (value: string) => value.length >= 8 },
-  { label: 'Una letra y un número', test: (value: string) => /[a-zA-Z]/.test(value) && /\d/.test(value) },
+  { label: studentPasswordHint, test: isValidStudentPassword },
 ]
 
 export type GoogleSignup = { email: string; onSubmitted: () => void }
@@ -110,7 +110,7 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
       else if (v.filledBy === 'tutor' && age >= 18) next.filledBy = 'Los alumnos mayores de edad llenan su propia solicitud.'
       if (!isEmail(v.email.trim())) next.email = 'Escribe un correo con formato válido, por ejemplo demo@example.test.'
       if (!local) {
-        if (!passwordRules.every(({ test }) => test(v.password))) next.password = 'La contraseña debe tener al menos 8 caracteres, una letra y un número.'
+        if (!isValidStudentPassword(v.password)) next.password = studentPasswordHint
         else if (v.confirm !== v.password) next.confirm = 'Las contraseñas no coinciden.'
       }
       if (!v.program) next.program = 'Selecciona el programa en el que está inscrito.'
@@ -291,14 +291,14 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
           <div className={s.row}>
             <Field label="Contraseña" htmlFor={`${id}-password`} error={err('password')} errorId={`${id}-password-error`}>
               <div className={s['password-wrap']}>
-                <input {...fieldProps('password', true)} type={showPassword ? 'text' : 'password'} autoComplete="off" maxLength={64} value={values.password} onChange={onText('password')} />
+                <input {...fieldProps('password', true)} type={showPassword ? 'text' : 'password'} autoComplete="off" maxLength={studentPasswordPolicy.maxLength} value={values.password} onChange={onText('password')} />
                 <button type="button" className={s.reveal} aria-pressed={showPassword} aria-controls={`${id}-password`} onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? 'Ocultar' : 'Mostrar'}
                 </button>
               </div>
             </Field>
             <Field label="Confirmar contraseña" htmlFor={`${id}-confirm`} error={err('confirm')} errorId={`${id}-confirm-error`}>
-              <input {...fieldProps('confirm')} type={showPassword ? 'text' : 'password'} autoComplete="off" maxLength={64} value={values.confirm} onChange={onText('confirm')} />
+              <input {...fieldProps('confirm')} type={showPassword ? 'text' : 'password'} autoComplete="off" maxLength={studentPasswordPolicy.maxLength} value={values.confirm} onChange={onText('confirm')} />
             </Field>
           </div>
           <ul className={s.rules} id={`${id}-password-hint`}>

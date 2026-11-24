@@ -16,7 +16,7 @@ test('Recuperación: respuesta uniforme, permisos, enlaces y revocación', async
   const address = app.server.address(); assert.ok(address && typeof address === 'object')
   const base = `http://127.0.0.1:${address.port}`
   const repo = accessRepository(app.db), mail = notices(app.db), accounts = studentAccounts(app.db)
-  const password = 'Contraseña ficticia inicial 2026', next = 'Contraseña ficticia renovada 2026'
+  const password = 'Contraseña ficticia inicial 2026', next = 'ijklmnop'
   const encoded = await hashPassword(password)
   const admin = Number(app.db.prepare("INSERT INTO admin_users(email,name,password_hash,role) VALUES ('admin@example.test','Coordinación',?,'admin')").run(encoded).lastInsertRowid)
   const receipt = repo.submit(validateSubmission({firstName:'Alumno',lastName:'Prueba',birthDate:'2000-01-01',filledBy:'alumno',email:'recovery@example.test',program:'Business English',group:'Mar y jue · 19:30',displayName:'Alumno P.',avatarColor:'#1f56d6',visibility:'privado',message:'',guardianConsent:false,acceptRules:true,acceptPrivacy:true}),randomUUID())
@@ -34,7 +34,13 @@ test('Recuperación: respuesta uniforme, permisos, enlaces y revocación', async
   const token = () => new URLSearchParams(mail.previewRecovery(Number(notice.id),admin).path.split('#')[1]).get('token')!
   const old = token(), current = token()
   await assert.rejects(mail.changePassword(old,next),/enlace/)
-  await assert.rejects(mail.changePassword(current,'corta'),/15/)
+  await t.test('la recuperación admite ocho letras sin números y rechaza longitudes inválidas sin consumir el enlace', async () => {
+    for (const invalid of ['corta', 'abcdefg', '', '        ', 'abcdefg ', '🙂'.repeat(7), 'a'.repeat(129)]) {
+      await assert.rejects(mail.changePassword(current,invalid),/8 a 128/)
+    }
+    assert.equal((await call('/recovery/reset',{token:current,password:next,confirm:'diferente'})).status,400)
+    assert.equal(app.db.prepare('SELECT count(*) AS n FROM password_resets').get()!.n,1)
+  })
   const user = await accounts.login('recovery@example.test',password); assert.ok(user)
   const session = accounts.start(user)
   const changed = await call('/recovery/reset',{token:current,password:next,confirm:next},session)

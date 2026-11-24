@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router'
+import { Check, Eye, EyeOff, X } from 'lucide-react'
+import { isValidStudentPassword, studentPasswordHint, studentPasswordPolicy } from '../../../shared/student-password'
 import { AccessFrame } from '../login/AccessFrame'
 import { adminRecoveryApi, adminTeamApi, ApiError, studentApi } from './api'
 import s from '../login/login.module.css'
@@ -15,6 +17,12 @@ function ActivationForm({ token, recovery, admin, adminActivation }: { token: st
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
+  const [password, setPassword] = useState(''), [confirm, setConfirm] = useState('')
+  const [showPassword, setShowPassword] = useState(false), [showConfirm, setShowConfirm] = useState(false)
+  const minimum = admin ? 15 : studentPasswordPolicy.minLength
+  const matches = password === confirm
+  const passwordHint = admin ? 'Elige una contraseña de 15 a 128 caracteres. Puede ser una frase fácil de recordar.' : studentPasswordHint
+  const clearPasswords = () => { setPassword(''); setConfirm(''); setShowPassword(false); setShowConfirm(false) }
   const [uncertain,setUncertain]=useState(false)
   const sending=useRef(false)
   const heading = useRef<HTMLHeadingElement>(null)
@@ -28,15 +36,13 @@ function ActivationForm({ token, recovery, admin, adminActivation }: { token: st
     event.preventDefault()
     if (sending.current) return
     const form = event.currentTarget
-    const values = new FormData(form)
-    const password = String(values.get('password'))
-    const confirm = String(values.get('confirm'))
-    if ([...password].length < 15 || password.trim().length < 15) { setError('Elige una contraseña de al menos 15 caracteres. Puedes usar una frase.'); return }
+    const valid = admin ? [...password].length >= 15 && password.trim().length >= 15 && password.length <= 128 : isValidStudentPassword(password)
+    if (!valid) { setError(passwordHint); return }
     if (password !== confirm) { setError('Las contraseñas no coinciden.'); return }
     sending.current=true;setBusy(true); setError('')
-    try { await (adminActivation ? adminTeamApi.activate : admin ? adminRecoveryApi.reset : recovery ? studentApi.resetPassword : studentApi.activate)(token, password, confirm); form.reset(); setDone(true) }
+    try { await (adminActivation ? adminTeamApi.activate : admin ? adminRecoveryApi.reset : recovery ? studentApi.resetPassword : studentApi.activate)(token, password, confirm); form.reset(); clearPasswords(); setDone(true) }
     catch (error) {
-      if (admin && error instanceof ApiError && (error.status===0 || error.status>=500 || (error.status>=200 && error.status<300))) {form.reset();setUncertain(true)}
+      if (admin && error instanceof ApiError && (error.status===0 || error.status>=500 || (error.status>=200 && error.status<300))) {form.reset();clearPasswords();setUncertain(true)}
       else setError(error instanceof Error ? error.message : 'No se pudo activar la cuenta.')
     }
     finally { sending.current=false;setBusy(false) }
@@ -57,11 +63,18 @@ function ActivationForm({ token, recovery, admin, adminActivation }: { token: st
           <p role="alert">Necesitas un enlace {recovery ? 'de recuperación' : 'de activación'} válido. Pídeselo a coordinación de CAI.</p>
           <Link to={adminActivation?'/admin':admin?'/recuperar-acceso-administrativo':'/login'}>{adminActivation?'Volver al acceso administrativo':admin?'Solicitar otro enlace':'Volver al acceso de alumnos'}</Link>
         </> : <form aria-label={adminActivation?'Activar cuenta administrativa':admin?'Recuperar contraseña administrativa':recovery ? "Cambiar contraseña de alumno" : "Activar cuenta de alumno"} onSubmit={(event) => { void submit(event) }} aria-busy={busy}>
-          <p className={s.lead}>Elige una contraseña de 15 a 128 caracteres. Puede ser una frase fácil de recordar.</p>
+          <p className={s.lead} id="activation-password-help">{passwordHint}</p>
           <label htmlFor="activation-password">Nueva contraseña</label>
-          <input id="activation-password" name="password" type="password" disabled={busy} autoComplete="new-password" minLength={15} maxLength={128} required />
+          <div className={s.password}>
+            <input id="activation-password" name="password" type={showPassword ? 'text' : 'password'} disabled={busy} autoComplete="new-password" minLength={minimum} maxLength={studentPasswordPolicy.maxLength} required value={password} aria-describedby="activation-password-help" onChange={event => { setPassword(event.target.value); setError('') }} />
+            <button type="button" className={s.reveal} disabled={busy} aria-label={showPassword ? 'Ocultar nueva contraseña' : 'Mostrar nueva contraseña'} aria-pressed={showPassword} aria-controls="activation-password" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}</button>
+          </div>
           <label htmlFor="activation-confirm">Confirma tu contraseña</label>
-          <input id="activation-confirm" name="confirm" type="password" disabled={busy} autoComplete="new-password" minLength={15} maxLength={128} required />
+          <div className={s.password}>
+            <input id="activation-confirm" name="confirm" type={showConfirm ? 'text' : 'password'} disabled={busy} autoComplete="new-password" minLength={minimum} maxLength={studentPasswordPolicy.maxLength} required value={confirm} aria-invalid={confirm.length > 0 && !matches ? true : undefined} aria-describedby="activation-password-match" onChange={event => { setConfirm(event.target.value); setError('') }} />
+            <button type="button" className={s.reveal} disabled={busy} aria-label={showConfirm ? 'Ocultar confirmación' : 'Mostrar confirmación'} aria-pressed={showConfirm} aria-controls="activation-confirm" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}</button>
+          </div>
+          <p id="activation-password-match" role="status" className={s.passwordMatch} data-matches={confirm.length > 0 ? matches : undefined}>{confirm.length > 0 && <>{matches ? <Check size={18} aria-hidden="true" /> : <X size={18} aria-hidden="true" />}{matches ? 'Las contraseñas coinciden.' : 'Las contraseñas todavía no coinciden.'}</>}</p>
           {error && <p role="alert">{error}</p>}
           <button className={s.primary} type="submit" disabled={busy}>{busy ? 'Guardando…' : recovery ? 'Guardar nueva contraseña' : 'Activar mi cuenta'}</button>
         </form>}

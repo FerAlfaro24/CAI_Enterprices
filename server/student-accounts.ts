@@ -6,6 +6,7 @@ import { transaction, type Database } from './database.ts'
 import { HttpError } from './validation.ts'
 import { publicProfileId } from './public-profiles.ts'
 import { localCookies, sessionCookie, sessionCookieName, type CookiePolicy } from './session-cookie.ts'
+import { isValidStudentPassword, studentPasswordHint } from '../shared/student-password.ts'
 
 const cookieName = 'cai_student_session'
 const sessionSeconds = 8 * 60 * 60
@@ -29,8 +30,8 @@ function idOf(id: string) {
 }
 
 function validPassword(password: unknown): asserts password is string {
-  if (typeof password !== 'string' || [...password].length < 15 || password.length > 128 || password.trim().length < 15) {
-    throw new HttpError(400, 'Elige una contraseña de 15 a 128 caracteres. Puedes usar una frase.')
+  if (!isValidStudentPassword(password)) {
+    throw new HttpError(400, studentPasswordHint)
   }
 }
 

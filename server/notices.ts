@@ -1,4 +1,5 @@
 import { isImportantNotice } from '../shared/notice-policy.ts'
+import { isValidStudentPassword, studentPasswordHint } from '../shared/student-password.ts'
 import { createHash, randomBytes } from 'node:crypto'
 import { hashPassword } from './auth.ts'
 import { transaction, type Database } from './database.ts'
@@ -77,7 +78,7 @@ export function notices(db: Database) {
       })
     },
     async changePassword(token: unknown, password: unknown) {
-      if (typeof password !== 'string' || [...password].length < 15 || password.trim().length < 15 || password.length > 128) throw new HttpError(400, 'Elige una contraseña de 15 a 128 caracteres. Puedes usar una frase.')
+      if (!isValidStudentPassword(password)) throw new HttpError(400, studentPasswordHint)
       reset(token)
       const encoded = await hashPassword(password)
       transaction(db, () => {
