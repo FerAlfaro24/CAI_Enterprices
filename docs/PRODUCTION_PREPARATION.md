@@ -1,8 +1,10 @@
 # CAI — preparación técnica de producción
 
-**Actualización vigente F3a — 24-11:** F3a requiere esquema22. El arranque productivo rechaza21 y versiones previas sin crearlas/migrarlas. Ensayar actualización en copia consistente y verificar respaldo/recuperación antes de adoptar. La migración aditiva incorpora suspensiones/historial; esta entrega no se desplegó ni cambió datos habituales. [Entrega](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Las cifras anteriores conservan su fecha/versión.
+**Actualización vigente F3b/F4 — 24-11:** F4 mantiene esquema 22, sin migración nueva. Los comentarios nuevos se publican al enviar y requieren las herramientas F3a de moderación ya incluidas. El arranque productivo conserva sus requisitos22/origen/proxy/cookies/datos privados. Ningún proveedor, TLS, Google o correo real fue configurado por esta entrega. [Entrega vigente](NEXT_STEPS.md#entrega-f3b-y-f4-logros-comentarios-y-publicador--24-11-2026).
 
-**Actualización F1b/F2 — 23-11:** La entrega F1b/F2 requiere esquema21. El arranque productivo rechaza20 y no migra automáticamente; preparar copia/ensayo con el proceso de actualización antes de adoptar. El código de esta entrega no está desplegado; los ensayos productivos anteriores son evidencia histórica de su versión. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
+**Actualización vigente F3a — 24-11:** F3a requiere esquema 22. El arranque productivo rechaza21 y versiones previas sin crearlas/migrarlas. Ensayar actualización en copia consistente y verificar respaldo/recuperación antes de adoptar. La migración aditiva incorpora suspensiones/historial; esta entrega no se desplegó ni cambió datos habituales. [Entrega](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Las cifras anteriores conservan su fecha/versión.
+
+**Actualización F1b/F2 — 23-11:** La entrega F1b/F2 requiere esquema 21. El arranque productivo rechaza20 y no migra automáticamente; preparar copia/ensayo con el proceso de actualización antes de adoptar. El código de esta entrega no está desplegado; los ensayos productivos anteriores son evidencia histórica de su versión. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
 
 
 **Actualización del 22-11:** [notificaciones e historial](COMMUNITY_FEEDBACK.md) incorporan esquema 20; preflight vigente exige 1–20. Migración local aditiva explícita al adoptar esta rama; producción sigue sin migrar al arrancar. No abrir bases habituales para pruebas.

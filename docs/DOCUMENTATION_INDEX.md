@@ -2,7 +2,7 @@
 
 **Actualizado: 22-11-2026, revisión de administración.** 68 archivos Markdown: incluye la revisión de comunidad y el diagnóstico/evidencia del panel. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.
 
-**Continuación funcional vigente — 24-11:** F3a, moderación y suspensiones, código `cb19d59`/PR #31. [Entrega y siguiente F3b](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Los informes técnicos conservan el alcance y las pruebas de su fecha.
+**Continuación funcional vigente — 24-11:** F3b/F4 integrados, `5b6d31c`/PR #32; incluye Logros `dac485f`/PR #33 y F3a/PR #31. [Entrega y siguiente F5](NEXT_STEPS.md#entrega-f3b-y-f4-logros-comentarios-y-publicador--24-11-2026). Los informes técnicos conservan el alcance y las pruebas de su fecha.
 
 ## Cómo leer
 

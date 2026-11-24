@@ -1,5 +1,7 @@
 # Comunidad CAI: diseño e interacciones
 
+**Actualización vigente F3b/F4 — 24-11:** F4a simplifica Logros y amplía sus límites; F4b deja un carrusel exclusivo de avisos vigentes cada 5s y conserva fotos/álbumes normales en feed/Galería. F3b publica comentarios nuevos al enviar y muestra borrado propio. No reintroducir el carrusel mixto ni los pasos de registro anteriores por seguir una sección histórica. [Entrega vigente](NEXT_STEPS.md#entrega-f3b-y-f4-logros-comentarios-y-publicador--24-11-2026).
+
 **Observaciones posteriores del 22-11:** implementadas [fotos ampliadas, error visible en Retos y notificaciones Sin leer/Historial](COMMUNITY_FEEDBACK.md). Esa entrega modifica también servidor/esquema 20; las cifras de la primera pasada de abajo conservan su corte.
 
 **19-11-2026 · `feat/v1-community-playful-design`, desde `4cdae44` de PR #15.** Prioridad nueva autorizada: hacer más atractiva la comunidad, con identidad propia, fondo sutil, respuestas visuales y celebraciones. El usuario amplió expresamente a perfil, notificaciones y Retos, con colores/puntuación/confeti inspirados en experiencias de aprendizaje lúdicas. La muestra conserva las reglas, puntos y autorizaciones reales existentes.

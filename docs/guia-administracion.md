@@ -1,5 +1,17 @@
 # Guía sencilla de administración de CAI
 
+**Actualización vigente F3b/F4 — 24-11:** rama `feat/v1-publisher-notice-carousel`, código `5b6d31c`, [PR #32](https://github.com/FerAlfaro24/CAI_Enterprices/pull/32). Las notas siguientes de F3a y revisiones anteriores conservan su fecha; esta actualización define el recorrido actual.
+
+## Publicar, avisar y moderar ahora
+
+- **Crear publicación** está en el menú principal. Elige **Publicación normal** para experiencias/fotos o **Aviso de CAI** para información importante. Escribe título/texto, añade imágenes opcionales, revisa los permisos y confirma. Las publicaciones nuevas son para todos los alumnos aprobados; las fotos históricas privadas no se amplían al seleccionar otras imágenes.
+- Las fotos de una publicación normal también están en Galería, con la misma conversación. Los avisos tienen su propio carrusel en Inicio, empezando por el más reciente y pasando cada 5 segundos. No necesitas marcar Destacar en Inicio. Puedes pausar; con un solo aviso no hay avance y sin avisos se oculta el carrusel.
+- En **Publicaciones**, filtra por estado y autor para ver alumnos o Equipo CAI. Una tarjeta publicada ofrece **Eliminar**: escribe un motivo privado y confirma. **Eliminadas de la comunidad** conserva el registro; ya no aparece para alumnos ni se restaura automáticamente. Los logros privados validados y las insignias no se borran.
+- Los alumnos **comentan al enviar**, sin aprobación previa, y pueden **Eliminar mi comentario** desde la conversación. La antigua cola de comentarios ya no aparece. Usa **Ver comunidad → Ver comentarios → Moderar comentario** para eliminar contenido o aplicar una suspensión, como se explica abajo. Los antiguos rechazados, retirados o retenidos no se republican.
+- Los Logros de alumnos tienen nombre, aprendizaje, palabras/frases opcionales e imágenes. Los campos pueden estar vacíos si son opcionales. Se revisa lo enviado para publicar o para validación privada; guardarlo por su cuenta no lo hace público. El motivo de una revisión permanece privado.
+
+[Entrega, pruebas y límites](NEXT_STEPS.md#entrega-f3b-y-f4-logros-comentarios-y-publicador--24-11-2026). El código probado todavía no se adoptó en la demo anterior ni en una instalación real.
+
 **Actualización vigente F3a — 24-11:** rama `feat/v1-community-moderation`. Abre **Ver comunidad** en el menú: allí puedes leer las publicaciones, ampliar fotografías y abrir sus comentarios. [Estado y pruebas](NEXT_STEPS.md#entrega-f3a-moderación-y-suspensiones--24-11-2026). Las notas anteriores describen sus entregas, no sustituyen esta actualización.
 
 ## Moderar la convivencia
@@ -11,7 +23,7 @@
 
 Al vencer una suspensión temporal, el alumno puede iniciar sesión otra vez si su inscripción está activa. Una suspensión manual en **Alumnos** se gestiona allí por separado. Los comentarios eliminados no regresan. Las publicaciones anteriores del alumno permanecen; esta medida bloquea su acceso, no borra todo su contenido. Si un enlace de activación quedó cancelado, prepara otro después de levantar la medida.
 
-Los comentarios **todavía pasan por revisión** en esta entrega. Quitaremos ese paso en F3b, ahora que las herramientas de convivencia están comprobadas. La pantalla no se actualiza en la demo anterior hasta adoptar expresamente esta versión.
+En la entrega histórica F3a los comentarios todavía pasaban por revisión. F3b ya quitó ese paso; usa el recorrido vigente del inicio. La pantalla no se actualiza en la demo anterior hasta adoptar expresamente esta versión.
 
 **Actualización F1b/F2 — 23-11:** Registro nuevo: revisar la Clase y los datos, aprobar y preparar el acceso; el menor no necesita el paso de tutor. La matrícula corresponde al folio automático. Grupos/tutores mostrados en expedientes anteriores son historial. Cambiar una clase conserva la comunidad compartida y exige volver a entrar. Retos usa calendario común; comentarios continúan en revisión hasta F3. [Detalle vigente](NEXT_STEPS.md#entrega-f1b-y-f2-registro-y-comunidad-compartida--23-11-2026).
 
@@ -24,6 +36,8 @@ Los comentarios **todavía pasan por revisión** en esta entrega. Quitaremos ese
 | --- | --- |
 | Leer la comunidad y moderar un comentario | Ver comunidad → Publicaciones → Ver comentarios |
 | Revisar o levantar suspensiones | Ver comunidad → Suspensiones activas / Historial |
+| Crear una publicación o aviso | Crear publicación |
+| Eliminar contenido ya publicado | Publicaciones → Publicadas → Eliminar |
 | Empezar por lo pendiente | Resumen → Tu mesa de trabajo |
 | Revisar el ingreso de una persona | Solicitudes de ingreso → Revisar solicitud |
 | Preparar el acceso | Alumnos → Ficha → Resumen y acceso |
