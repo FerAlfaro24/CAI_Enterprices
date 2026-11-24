@@ -1,5 +1,18 @@
 # Presentación remota protegida de CAI
 
+## Entrada pública temporal — 23 de noviembre de 2026
+
+El usuario autorizó quitar la contraseña adicional. La portada, registro y pantallas de acceso son públicas; comunidad, expediente, administración y fotografías privadas siguen requiriendo su cuenta y permisos. El modo predeterminado del lanzador mantiene Basic; `--open-entry` lo desactiva explícitamente para esta prueba autorizada.
+
+Se detuvo únicamente el proceso remoto anterior y se reanudó **la misma copia** con `npm.cmd run demo:remote -- --resume --open-entry`. El enlace cambió; cuentas, claves individuales, solicitudes, fotos y vencimiento original se conservaron. No se ejecutó la creación de otra base ni la renovación de contraseñas. Reanudar una ventana vencida se rechaza. Detener primero la instancia temporal que se vaya a reemplazar; nunca reiniciar servicios habituales. Antes de compartir, consultar los metadatos locales y probar el renderizado.
+
+La ventana termina el **24-11-2026 a las 19:35, Ciudad de México**. La computadora debe permanecer encendida y conectada. URL e instrucciones actualizadas solo en metadatos y carpeta privada; no en Git. Vercel y producción definitiva siguen sin cambios.
+
+Verificación nueva: **13 pruebas de entrada correctas**, incluidos modos protegido/abierto, origen, archivos internos, proxy y vencimiento; **33 comprobaciones HTTPS en Brave sin credenciales Basic**: 17 del registro completo y 16 de portada, cuenta anterior, seis fotos y rechazo de datos privados para visitantes. Tipos y ESLint correctos. La cuenta sintética CAI-0013 quedó suspendida al concluir. No se repitió la matriz general ni compatibilidad Opera: no se cambió la interfaz.
+
+Comprobadores reutilizables: `scripts/check-open-preview.browser.mjs` y `scripts/check-remote-registration.browser.mjs`; reciben accesos únicamente en ejecución privada. El segundo omite Basic cuando los metadatos indican `entryMode: open`.
+
+
 **19-11-2026 · rama `feat/v1-remote-demo`, desde `d7ef781` de PR #14.** Solicitud del usuario: mostrar desde otra ubicación la comunidad actual con fotos oficiales e interacciones ficticias, sin contratar aún el alojamiento definitivo.
 
 ## Prueba con amigos — 23 de noviembre de 2026

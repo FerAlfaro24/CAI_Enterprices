@@ -1,5 +1,8 @@
 # CAI — estado vigente
 
+**23-11, entrada pública autorizada:** continuación `fix/v1-open-preview-entry`, desde `cb84099` de PR #25. [Prueba temporal sin contraseña adicional](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026): misma base y claves; enlace nuevo y vencimiento original conservado. Portada/registro libres, comunidad/administración/fotos privadas con cuenta. 13 pruebas de entrada y 33 comprobaciones HTTPS nuevas, tipos/lint correctos. No renovar la ventana implícitamente.
+
+
 **23-11, alta propia elegida:** [registro completo de amigos](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026), en `fix/v1-remote-registration-guidance`. Mismo enlace temporal/vencimiento, con solicitud propia, aprobación y activación para elegir contraseña. 24 API dirigidas y 17 comprobaciones HTTPS nuevas, lint/tipos/build. No se envían correos ni se usa Google real; validación humana pendiente. Código administrativo previo incluido, sin cambios de esquema o permisos.
 
 **23-11, prueba con amigos:** [copia HTTPS nueva](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026) activada con autorización específica por máximo 24 horas, sobre código actual de administración. Nueve cuentas ficticias con claves individuales, seis fotos oficiales y base separada. 11 pruebas de entrada y 24 comprobaciones HTTPS nuevas; sincronización automática entre dos cuentas comprobada. URL/accesos/vencimiento en metadatos privados, no Git. Validación desde dispositivos y redes reales de amigos pendiente. No equivale a despliegue definitivo ni renueva la demo vieja.

@@ -1,6 +1,6 @@
 export async function checkRemoteRegistration(browser,{access,filesDir}) {
  const base=access.origin,results=[],errors=[],contexts=[]
- const create=async()=>{const c=await browser.newContext({httpCredentials:access.gate,viewport:{width:1440,height:1000},locale:'es-MX',reducedMotion:'reduce'});c.setDefaultTimeout(20000);contexts.push(c);return c}
+ const create=async()=>{const c=await browser.newContext({...(access.entryMode==='open'?{}:{httpCredentials:access.gate}),viewport:{width:1440,height:1000},locale:'es-MX',reducedMotion:'reduce'});c.setDefaultTimeout(20000);contexts.push(c);return c}
  const check=(value,label)=>{if(!value)throw Error(label);results.push(label)}
  const api=async(c,path,method='GET',data)=>{const r=await c.request.fetch(base+'/api/local'+path,{method,data,headers:{Origin:base}});if(!r.ok())throw Error(path+' HTTP '+r.status());return r.json()}
  let admin,id

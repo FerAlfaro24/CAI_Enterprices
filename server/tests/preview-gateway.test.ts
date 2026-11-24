@@ -4,7 +4,7 @@ import { createServer, request, type Server } from 'node:http'
 import { mkdir, mkdtemp, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { once } from 'node:events'
-import { createPreviewGateway } from '../preview-gateway.ts'
+import { createPreviewGateway, createPreviewHandler } from '../preview-gateway.ts'
 
 const origin = 'https://presentacion.example.test'
 const password = 'Clave de ejemplo solo para esta prueba 2026'
@@ -91,6 +91,36 @@ test('Entrada de presentación: acceso, fuentes, origen, proxy, vencimiento y ci
       const expired = createPreviewGateway(); expired.configure({ ...options, expiresAt: Date.now() - 1 })
       const expiredPort = await listen(expired.server)
       try { assert.equal((await send(expiredPort, '/community')).status, 410) } finally { await close(expired.server) }
+    })
+    await t.test('Entrada abierta explícita conserva las restricciones y no desafía con Basic', async () => {
+      const open = createPreviewGateway()
+      open.configure({ ...options, entryMode: 'open' })
+      const openPort = await listen(open.server)
+      const anonymous = { authorization: '' }
+      try {
+        for (const path of ['/', '/registro', '/login', '/admin', '/assets/app.js']) {
+          const result = await send(openPort, path, anonymous)
+          assert.equal(result.status, 200, path)
+          assert.equal(result.headers['www-authenticate'], undefined)
+          assert.equal(result.headers['cache-control'], 'no-store')
+        }
+        const result = await send(openPort, '/api/local/student/me', { ...anonymous, cookie: '__Host-cai_student=session', 'x-forwarded-for': '203.0.113.100' })
+        const data = JSON.parse(result.text)
+        assert.equal(data.headers.cookie, '__Host-cai_student=session')
+        assert.equal(data.headers.authorization, undefined)
+        assert.equal(data.headers['x-forwarded-for'], '198.51.100.24')
+        for (const path of ['/.git/config', '/.local/cai.sqlite', '/server/app.ts', '/assets/app.js.map']) assert.equal((await send(openPort, path, anonymous)).status, 404)
+        assert.equal((await send(openPort, '/', { ...anonymous, host: 'evil.example.test' })).status, 403)
+        assert.equal((await send(openPort, '/api/local/student/session', anonymous, 'POST')).status, 403)
+        assert.equal((await send(openPort, '/api/local/health', { ...anonymous, 'sec-fetch-site': 'cross-site' })).status, 403)
+      } finally { await close(open.server) }
+    })
+    await t.test('Entrada abierta vence igualmente y modos desconocidos fallan cerrados', async () => {
+      const expired = createPreviewGateway()
+      expired.configure({ ...options, entryMode: 'open', expiresAt: Date.now() - 1 })
+      const expiredPort = await listen(expired.server)
+      try { assert.equal((await send(expiredPort, '/', { authorization: '' })).status, 410) } finally { await close(expired.server) }
+      assert.throws(() => createPreviewHandler({ ...options, entryMode: 'invalid' as 'open' }))
     })
   } finally { await close(gateway.server); await close(upstream) }
 })

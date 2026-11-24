@@ -1,5 +1,8 @@
 # CAI — inventario de ramas
 
+**23-11, entrada pública autorizada:** continuación `fix/v1-open-preview-entry`, desde `cb84099` de PR #25. [Prueba temporal sin contraseña adicional](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026): misma base y claves; enlace nuevo y vencimiento original conservado. Portada/registro libres, comunidad/administración/fotos privadas con cuenta. 13 pruebas de entrada y 33 comprobaciones HTTPS nuevas, tipos/lint correctos. No renovar la ventana implícitamente.
+
+
 **Corte remoto: 17-11-2026, antes de corregir PR #9.** Se verificaron **37 ramas reales**, excluyendo el alias origin/HEAD y siguiendo la paginación del conector. Git fetch confirmó sus puntas y permitió revisar relaciones/parches/árboles. Los SHAs son fotografías del inicio de esta auditoría; la rama documental avanza en la propia PR.
 
 ## Qué utilizar
