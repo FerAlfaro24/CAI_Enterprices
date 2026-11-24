@@ -1,5 +1,8 @@
 # CAI — estado vigente
 
+**Confirmación posterior del usuario:** resto del plan F1–F6 aprobado como alcance; **Top/clasificación pendiente de consultar al cliente, sin autorización para implementarlo todavía**. Retos diarios siguen incluidos. Ningún cambio funcional aplicado por esta confirmación.
+
+
 **23-11, pruebas humanas recibidas y analizadas:** rama documental `docs/v1-friends-feedback-plan`, código funcional intacto `c59ec6c` de PR #26. [Plan vigente F1–F6](NEXT_STEPS.md#prioridad-vigente-observaciones-de-amigos-del-23-11-2026): registro/clase, comunidad común, comentarios directos y sanciones, Logros/publicador/avisos, Retos/top, Google/correo. Cambios pendientes, no implementados ni probados todavía. Causas contrastadas con código; sin migraciones, reinicios o cambio de datos de prueba. Prioriza estas observaciones sobre N3 anterior.
 
 
