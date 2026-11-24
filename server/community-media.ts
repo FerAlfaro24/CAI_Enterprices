@@ -3,7 +3,7 @@ import type { GalleryItem, StudentUser } from './contracts.ts'
 
 export const livePublication = `p.status='publicada' AND (p.expires_at IS NULL OR p.expires_at>strftime('%Y-%m-%dT%H:%M:%fZ','now')) AND
   (p.admin_author_id IS NOT NULL OR EXISTS (SELECT 1 FROM requests r JOIN students s ON s.request_id=r.id
-   WHERE r.id=p.author_id AND r.status='aprobada' AND s.status='activo' AND json_extract(r.payload,'$.program')=p.program AND json_extract(r.payload,'$.group')=p.group_name))`
+   WHERE r.id=p.author_id AND r.status='aprobada' AND s.status='activo' AND (p.audience='community' OR (json_extract(r.payload,'$.program')=p.program AND json_extract(r.payload,'$.group')=p.group_name))))`
 export const publicationAudience = `(p.audience='community' OR (p.program=? AND p.group_name=? AND p.group_name<>'Por asignar'))`
 export const imageAudience = `(g.audience='community' OR (g.program=? AND g.group_name=? AND g.group_name<>'Por asignar'))`
 export function galleryItem(row: Record<string, unknown>): GalleryItem {

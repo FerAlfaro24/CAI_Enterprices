@@ -52,7 +52,7 @@ export function publications(db: Database) {
   const available = (row: Row) => {
     if(row.admin_author_id!==null)return true
     const profile = JSON.parse(row.payload) as Submission
-    return row.request_status === 'aprobada' && row.student_status === 'activo' && profile.group !== 'Por asignar' && profile.program === row.program && profile.group === row.group_name
+    return row.request_status === 'aprobada' && row.student_status === 'activo' && (row.audience === 'community' || (profile.group !== 'Por asignar' && profile.program === row.program && profile.group === row.group_name))
   }
   const visible = (user:StudentUser,id:string) => {
     const profile = activeProfile(user)
@@ -66,7 +66,6 @@ export function publications(db: Database) {
     create(user: StudentUser, draft: PublicationDraft, key: string): OwnPost {
       return transaction(db, () => {
         const profile = activeProfile(user)
-        if (profile.group === 'Por asignar') throw new HttpError(409, 'CAI debe asignarte un grupo antes de que envíes publicaciones.')
         const author = idOf(user.id, 'CAI')
         const existing = db.prepare(`${select} WHERE p.author_id = ? AND p.idempotency_key = ?`).get(author, key) as Row | undefined
         if (existing) {
@@ -79,7 +78,7 @@ export function publications(db: Database) {
           if(!db.prepare("SELECT id FROM badge_grants WHERE id=? AND student_id=? AND status='active'").get(badgeGrant,author))throw new HttpError(409,'La insignia debe ser tuya y estar activa para compartirla.')
           if(db.prepare("SELECT id FROM publications WHERE badge_grant_id=? AND status IN ('pendiente','publicada')").get(badgeGrant))throw new HttpError(409,'Ya tienes una historia de esta insignia publicada o en revisión. Consulta Mis publicaciones.')
         }
-        const result = db.prepare('INSERT INTO publications(author_id,idempotency_key,title,body,category,program,group_name,created_at,badge_grant_id) VALUES (?,?,?,?,?,?,?,?,?)').run(author, key, draft.title, draft.body, draft.category, profile.program, profile.group, new Date().toISOString(),badgeGrant)
+        const result = db.prepare('INSERT INTO publications(audience,author_id,idempotency_key,title,body,category,program,group_name,created_at,badge_grant_id) VALUES (?,?,?,?,?,?,?,?,?,?)').run('community', author, key, draft.title, draft.body, draft.category, profile.program, profile.group, new Date().toISOString(),badgeGrant)
         const id = Number(result.lastInsertRowid)
         audit(id, 'publication.submitted', null, author)
         return ownPost(db.prepare(`${select} WHERE p.id = ?`).get(id) as Row)

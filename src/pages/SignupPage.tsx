@@ -10,7 +10,7 @@ import s from '../features/signup/signup.module.css'
 
 const benefits = [
   { title: 'Comparte tus logros', text: 'Publica tus avances, certificaciones y experiencias en inglés.' },
-  { title: 'Celebra con tu grupo', text: 'Conoce lo que logran tus compañeros y maestros.' },
+  { title: 'Celebra en comunidad', text: 'Conoce lo que logran tus compañeros y maestros.' },
   { title: 'Un espacio cuidado', text: 'CAI revisa cada solicitud y cada publicación antes de mostrarla.' },
 ]
 
@@ -22,7 +22,7 @@ export function SignupPage({ local: localOption = false, google }: { local?: boo
     <DemoStoreProvider>
     <div className={s.page}>
       <a className={s['skip-link']} href="#signup-content">Saltar al formulario</a>
-      {local ? <aside className={s['local-notice']}>{google ? 'Completa los datos del alumno y espera la aprobación de CAI. La autorización del tutor, cuando corresponde, se revisa por separado.' : 'Primero envía tu solicitud. CAI debe aprobarla y compartirte un enlace para que elijas tu contraseña. Por ahora no se envían correos automáticos.'}</aside> : <PrototypeNotice />}
+      {local ? <aside className={s['local-notice']}>{google ? 'Completa los datos del alumno y espera la aprobación de CAI. Todos los alumnos aprobados comparten la comunidad.' : 'Primero envía tu solicitud. CAI debe aprobarla y compartirte un enlace para que elijas tu contraseña. Por ahora no se envían correos automáticos.'}</aside> : <PrototypeNotice />}
       <div className={s.layout}>
         <aside className={s.aside} aria-label="Sobre la comunidad CAI">
           <Link to="/" className={s.brand}>

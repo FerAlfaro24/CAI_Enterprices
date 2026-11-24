@@ -49,7 +49,7 @@ export function ConnectedComments({post,autoFocus=false}:{post:Post;autoFocus?:b
   sending.current=true;setBusy(true);setError('');setNotice('')
   try{
    await commentsApi.create(post.id,text,attempt.current.key);if(!mounted.current)return
-   attempt.current=null;setBody('');setTab('mine');setNotice('Enviado a revisión. Tu grupo lo verá después de la aprobación de CAI.');await read();await refresh()
+   attempt.current=null;setBody('');setTab('mine');setNotice('Enviado a revisión. La comunidad lo verá después de la aprobación de CAI.');await read();await refresh()
   }catch(e){if(mounted.current){setError(e instanceof Error?e.message:'No confirmamos el envío. Conservamos tu comentario para reintentar.');if(e instanceof ApiError&&[0,500,502,503,504].includes(e.status))setError('No pudimos confirmar el envío. Conservamos tu texto; puedes reintentar el mismo comentario sin duplicarlo.');if(e instanceof ApiError&&e.status===401)fail(e)}}
   finally{sending.current=false;if(mounted.current)setBusy(false)}
  }

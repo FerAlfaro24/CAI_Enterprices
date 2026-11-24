@@ -164,12 +164,12 @@ export function learningRepository(db: Database) {
                 if (item.revision !== revision || item.state !== 'completed' || item.review === 'pending')
                     throw new HttpError(409, 'Completa el logro y carga su estado actual antes de enviarlo.');
                 if (data.share) {
-                    if (owner.profile.group === 'Por asignar' || !administration(db).settings().submissionsOpen)
-                        throw new HttpError(409, 'Necesitas un grupo y que los envíos estén abiertos para publicar.');
+                    if (!administration(db).settings().submissionsOpen)
+                        throw new HttpError(409, 'CAI pausó los nuevos envíos de publicaciones.');
                     if (post && ['pendiente', 'publicada'].includes(String(post.status)))
                         throw new HttpError(409, 'Este logro ya está compartido o en revisión.');
                     const draft = validatePublication({ title: item.title, category: 'achievement', body: `${item.practice}\n\nLo que aprendí: ${item.expression}\nMi ejemplo: ${item.example}` });
-                    const publication = Number(db.prepare("INSERT INTO publications(author_id,idempotency_key,title,body,category,program,group_name,created_at) VALUES (?,?,?,?,?,?,?,?)").run(owner.id, randomUUID(), draft.title, draft.body, 'achievement', owner.profile.program, owner.profile.group, at()).lastInsertRowid);
+                    const publication = Number(db.prepare("INSERT INTO publications(audience,author_id,idempotency_key,title,body,category,program,group_name,created_at) VALUES ('community',?,?,?,?,?,?,?,?)").run(owner.id, randomUUID(), draft.title, draft.body, 'achievement', owner.profile.program, owner.profile.group, at()).lastInsertRowid);
                     db.prepare("INSERT INTO publication_audit(publication_id,student_id,action,created_at) VALUES (?,?,'publication.submitted',?)").run(publication, owner.id, at());
                     db.prepare('UPDATE learning_achievements SET publication_id=? WHERE id=?').run(publication, id);
                 }

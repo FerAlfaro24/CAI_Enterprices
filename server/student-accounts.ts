@@ -112,12 +112,11 @@ export function studentAccounts(db: Database, cookies: CookiePolicy = localCooki
     group(user: StudentUser): GroupMember[] {
       const own = db.prepare(`${accountQuery} AND r.id = ?`).get(idOf(user.id)) as AccountRow | undefined
       if (!own) throw new HttpError(401, 'Tu sesión terminó o el acceso no está disponible.')
-      const profile = JSON.parse(own.payload) as Submission
-      if (profile.group === 'Por asignar') return []
-      const rows = db.prepare(`${accountQuery} ORDER BY r.id`).all() as AccountRow[]
-      return rows.flatMap((row) => {
-        const p = JSON.parse(row.payload) as Submission
-        return p.program === profile.program && p.group === profile.group ? [{ id: publicProfileId(db, row.id), displayName: p.displayName, avatarColor: p.avatarColor }] : []
+      const rows = db.prepare(`SELECT r.id,r.payload,s.joined_at FROM requests r JOIN students s ON s.request_id=r.id
+        WHERE r.status='aprobada' AND s.status='activo' ORDER BY s.joined_at DESC,r.id DESC`).all()
+      return rows.map(row => {
+        const p = JSON.parse(String(row.payload)) as Submission
+        return { id: publicProfileId(db, Number(row.id)), displayName: p.displayName, avatarColor: p.avatarColor, joinedAt: String(row.joined_at) }
       })
     },
   }

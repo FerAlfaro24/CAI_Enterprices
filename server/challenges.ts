@@ -56,12 +56,13 @@ export function challengesRepository(db:Database,clock:()=>Date=()=>new Date()) 
   // Día absoluto: mismo contenido por día/área en todos los grupos y tras reiniciar.
   return pool.length?pool[(ordinal(day)+slot*13)%pool.length]!:null
  }
- const ensure=(day:string,profile:Submission)=>{
+ const shared={program:'',group:''}
+ const ensure=(day:string)=>{
   for(let slot=0;slot<3;slot++){
-   if(db.prepare('SELECT id FROM daily_challenges WHERE day=? AND program=? AND group_name=? AND slot=?').get(day,profile.program,profile.group,slot))continue
+   if(db.prepare('SELECT id FROM daily_challenges WHERE day=? AND program=? AND group_name=? AND slot=?').get(day,shared.program,shared.group,slot))continue
    const item=automatic(day,slot);if(!item)continue
    const {revision:_,status:__,source:___,...question}=item;void _;void __;void ___
-   db.prepare("INSERT INTO daily_challenges(day,program,group_name,slot,bank_id,content_json,state,source) VALUES (?,?,?,?,?,?,'published','automatic')").run(day,profile.program,profile.group,slot,item.id,JSON.stringify(question))
+   db.prepare("INSERT INTO daily_challenges(day,program,group_name,slot,bank_id,content_json,state,source) VALUES (?,?,?,?,?,?,'published','automatic')").run(day,shared.program,shared.group,slot,item.id,JSON.stringify(question))
   }
  }
  const progress=(student:number,day:string):ChallengeProgress=>{
@@ -73,7 +74,7 @@ export function challengesRepository(db:Database,clock:()=>Date=()=>new Date()) 
   return {points:rows.reduce((n,row)=>n+Number(row.points),0),answered:rows.reduce((n,row)=>n+Number(row.n),0),correct:rows.reduce((n,row)=>n+Number(row.correct),0),participatedDays:rows.length,completedDays:complete.length,currentStreak,longestStreak,todayAnswered:Number(rows.find(row=>row.day===day)?.n??0)}
  }
  const scheduleItem=(row:Assignment):ChallengeSchedule=>({id:'Q-'+row.id,day:row.day,slot:row.slot,program:row.program,group:row.group_name,revision:row.revision,state:row.state,question:JSON.parse(row.content_json) as ChallengeDefinition,source:row.source,attempts:Number(db.prepare('SELECT COUNT(*) AS n FROM challenge_attempts WHERE assignment_id=?').get(row.id)!.n)})
- const group=(id:number)=>{const row=db.prepare("SELECT * FROM course_groups WHERE id=? AND name!='Por asignar'").get(id);if(!row)throw new HttpError(404,'Elige un grupo con horario asignado.');return row}
+ const group=(id:number)=>{if(id!==0)throw new HttpError(400,'Los retos son comunes; no selecciones un grupo.');return {program:'',name:'',active:1}}
  const calendar=(dayValue:unknown,groupId:number)=>{
   const day=validDay(dayValue),audience=group(groupId),rows=db.prepare('SELECT * FROM daily_challenges WHERE day=? AND program=? AND group_name=? ORDER BY slot').all(day,String(audience.program),String(audience.name)) as Assignment[]
   const items:ChallengeSchedule[]=[]
@@ -89,14 +90,14 @@ export function challengesRepository(db:Database,clock:()=>Date=()=>new Date()) 
   bank,controls,calendar,
   snapshot(user:StudentUser):ChallengeSnapshot {
    return transaction(db,()=>{
-    const {id,profile}=active(user),day=today(),needsGroup=profile.group==='Por asignar'
-    if(!needsGroup&&controls().enabled)ensure(day,profile)
+    const {id}=active(user),day=today(),needsGroup=false
+    if(controls().enabled)ensure(day)
     const attempted=db.prepare('SELECT * FROM challenge_attempts WHERE student_id=? AND day=? ORDER BY slot').all(id,day) as Attempt[]
-    const rows=needsGroup?[]:db.prepare("SELECT * FROM daily_challenges WHERE day=? AND program=? AND group_name=? AND state='published' ORDER BY slot").all(day,profile.program,profile.group) as Assignment[]
+    const rows=db.prepare("SELECT * FROM daily_challenges WHERE day=? AND program=? AND group_name=? AND state='published' ORDER BY slot").all(day,shared.program,shared.group) as Assignment[]
     const items:DailyQuestion[]=[]
     for(let slot=0;slot<3;slot++){
      const attempt=attempted.find(item=>item.slot===slot),row=attempt?get(attempt.assignment_id):rows.find(item=>item.slot===slot)
-     if(row)items.push(publicQuestion(row,attempt??null,row.program!==profile.program||row.group_name!==profile.group))
+     if(row)items.push(publicQuestion(row,attempt??null,row.program!==shared.program||row.group_name!==shared.group))
     }
     return {day,timeZone:challengeTimeZone,enabled:controls().enabled,needsGroup,items,progress:progress(id,day)}
    })
@@ -107,10 +108,10 @@ export function challengesRepository(db:Database,clock:()=>Date=()=>new Date()) 
    if(!/^[a-f0-9-]{36}$/i.test(key))throw new HttpError(400,'Falta el identificador de tu respuesta.')
    const fingerprint=JSON.stringify([qid,revision,data.answerIndex])
    return transaction(db,()=>{
-    const {id:student,profile}=active(user),previous=db.prepare('SELECT * FROM challenge_attempts WHERE student_id=? AND request_key=?').get(student,key) as Attempt|undefined
+    const {id:student}=active(user),previous=db.prepare('SELECT * FROM challenge_attempts WHERE student_id=? AND request_key=?').get(student,key) as Attempt|undefined
     if(previous){if(previous.fingerprint!==fingerprint)throw new HttpError(409,'Este envío ya se recibió con otra respuesta. Actualiza tus retos.');return result(previous,get(previous.assignment_id))}
     const row=get(qid),question=JSON.parse(row.content_json) as ChallengeDefinition
-    if(profile.group==='Por asignar'||row.program!==profile.program||row.group_name!==profile.group)throw new HttpError(404,'El reto ya no está disponible para tu grupo.')
+    if(row.program!==shared.program||row.group_name!==shared.group)throw new HttpError(404,'Este reto pertenece al historial anterior de un grupo.')
     if(row.day!==today()||row.state!=='published'||row.revision!==revision||!controls().enabled)throw new HttpError(409,'El reto cambió, terminó o está pausado. Actualiza antes de responder.')
     if(Number(data.answerIndex)>=question.options.length)throw new HttpError(400,'Elige una opción válida.')
     if(db.prepare('SELECT id FROM challenge_attempts WHERE student_id=? AND day=? AND slot=?').get(student,row.day,row.slot))throw new HttpError(409,'Ya respondiste esta pregunta del día. Puedes revisar tu explicación.')
@@ -146,7 +147,7 @@ export function challengesRepository(db:Database,clock:()=>Date=()=>new Date()) 
   },
   schedule(value:unknown,admin:number) {
    const data=record(value),day=validDay(data.day)
-   if(Object.keys(data).some(key=>!['day','groupId','slot','bankId','revision','state'].includes(key))||!Number.isInteger(data.groupId)||!Number.isInteger(data.slot)||Number(data.slot)<0||Number(data.slot)>2||typeof data.state!=='string'||!['published','archived'].includes(data.state)||typeof data.bankId!=='string'||!Number.isInteger(data.revision)||Number(data.revision)<0)throw new HttpError(400,'Revisa la fecha, el grupo y la pregunta.')
+   if(Object.keys(data).some(key=>!['day','groupId','slot','bankId','revision','state'].includes(key))||!Number.isInteger(data.groupId)||!Number.isInteger(data.slot)||Number(data.slot)<0||Number(data.slot)>2||typeof data.state!=='string'||!['published','archived'].includes(data.state)||typeof data.bankId!=='string'||!Number.isInteger(data.revision)||Number(data.revision)<0)throw new HttpError(400,'Revisa la fecha y la pregunta del calendario común.')
    if(day<today()||ordinal(day)>ordinal(today())+90)throw new HttpError(400,'Programa desde hoy y hasta los próximos 90 días.')
    return transaction(db,()=>{
     const audience=group(Number(data.groupId)),row=db.prepare('SELECT * FROM daily_challenges WHERE day=? AND program=? AND group_name=? AND slot=?').get(day,String(audience.program),String(audience.name),Number(data.slot)) as Assignment|undefined

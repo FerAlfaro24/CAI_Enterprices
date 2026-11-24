@@ -64,14 +64,14 @@ test('Inicio conectado: contenido institucional, medios únicos y conversación 
     }
     assert.equal((await call(photo.imagePath.replace('/api/local',''),'GET',undefined,'none')).status,401)
   })
-  await t.test('reacciones y comentarios reales se comparten en comunidad; historias del grupo siguen aisladas',async()=>{
+  await t.test('reacciones y comentarios reales se comparten en comunidad; historias de alumnos comparten audiencia',async()=>{
     for(const actor of ['alice','bob'])assert.equal((await call(`/student/posts/${postId}/reaction`,'PATCH',{reaction:'love',revision:0},actor,{'Idempotency-Key':randomUUID()})).status,200)
     assert.equal((await feed())[0]!.engagement!.counts.love,2)
     const comments=commentsRepository(app.db)
     for(const actor of ['alice','bob']){const item=comments.create(users[actor]!,postId,{body:'Comentario ficticio para la presentación.'},randomUUID());comments.decide(item.id,'approve',{revision:1,confirmed:true},admin)}
     assert.equal(comments.count(postId),2);assert.equal(comments.list(users.bob!,postId).items.length,2)
     const own=posts.create(users.alice!,{title:'Mi experiencia de prueba',body:'Texto ficticio que solo debe ver el grupo de Alice.',category:'experience'},randomUUID());posts.decide(own.id,1,'approve',admin,undefined,true)
-    assert.equal((await feed('bob')).some(p=>p.id===own.id),false)
+    assert.equal((await feed('bob')).some(p=>p.id===own.id),true)
     assert.deepEqual(app.db.prepare('PRAGMA foreign_key_check').all(),[])
   })
   await t.test('destacados con revisión; no se sobrescriben cambios de otra sesión',async()=>{
@@ -83,7 +83,7 @@ test('Inicio conectado: contenido institucional, medios únicos y conversación 
   await t.test('retirada elimina la historia, su álbum y sus bytes de todas las vistas; conserva conversación',async()=>{
     const row=posts.institutional()[0]!
     official.update(Number(postId.slice(4)),{revision:row.revision,confirmed:true,withdraw:true,highlighted:false,expiresAt:null},admin)
-    assert.equal((await feed('bob')).length,0);assert.equal(gallery.forStudent(users.alice!).length,0)
+    assert.equal((await feed('bob')).some(item=>item.id===postId),false);assert.equal(gallery.forStudent(users.alice!).length,0)
     assert.equal((await call(photo.imagePath.replace('/api/local',''),'GET',undefined,'alice')).status,404)
     assert.equal(app.db.prepare('SELECT COUNT(*) AS n FROM post_comments').get()!.n,2)
     assert.throws(()=>commentsRepository(app.db).list(users.alice!,postId),/no está disponible/)

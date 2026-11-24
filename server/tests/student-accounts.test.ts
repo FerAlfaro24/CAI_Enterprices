@@ -103,14 +103,14 @@ test('Cuentas de alumnos: activación, permisos, grupos y revocación', async (t
     assert.equal((await call(`/students/${bob}/invitation`, 'POST', { revision: 1 }, 'student')).status, 401)
     assert.equal((await call('/requests')).status, 200)
   })
-  await t.test('el directorio de grupo omite otros grupos y todos los datos administrativos', async () => {
+  await t.test('el directorio comparte alumnos aprobados y omite datos administrativos', async () => {
     assert.equal((await activate(await invite(bob))).status, 200)
     assert.equal((await activate(await invite(carol))).status, 200)
     const response = await call('/student/group', 'GET', undefined, 'student')
     assert.equal(response.status, 200)
     const { members } = await response.json() as { members: GroupMember[] }
-    assert.deepEqual(members.map((m) => m.displayName), ['Alumna P.', 'Compañero P.'])
-    assert.ok(members.every((member) => Object.keys(member).sort().join(',') === 'avatarColor,displayName,id'))
+    assert.deepEqual(members.map((m) => m.displayName).sort(), ['Alumna P.', 'Compañero P.', 'OtroGrupo P.'].sort())
+    assert.ok(members.every((member) => Object.keys(member).sort().join(',') === 'avatarColor,displayName,id,joinedAt'))
     assert.ok(!JSON.stringify(members).includes('@'))
   })
   await t.test('activar otra cuenta cierra la sesión previa de alumno sin cerrar coordinación', async () => {

@@ -42,7 +42,7 @@ export interface CommunityConnection {
 export function publicMember(profile: GroupMember): Member {
   return { id: profile.id, alias: profile.displayName, institution:profile.id==='cai-team',
     initials: profile.displayName.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('').toUpperCase(),
-    color: 'blue', avatarColor: profile.avatarColor, joinedAt: '', badge: '', bio: '' }
+    color: 'blue', avatarColor: profile.avatarColor, joinedAt: profile.joinedAt ?? '', badge: '', bio: '' }
 }
 
 export function feedPost(post: import('../local-access/api').PublishedPost): Post {
