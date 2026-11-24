@@ -16,13 +16,13 @@ const benefits = [
 
 export function SignupPage({ local: localOption = false, google }: { local?: boolean; google?: GoogleSignup }) {
   const local = localOption || Boolean(google)
-  useEffect(() => { document.title = 'Solicitar acceso · Comunidad CAI · Prototipo' }, [])
+  useEffect(() => { document.title = 'Solicitar acceso · Comunidad CAI' }, [])
 
   return (
     <DemoStoreProvider>
     <div className={s.page}>
       <a className={s['skip-link']} href="#signup-content">Saltar al formulario</a>
-      {local ? <aside className={s['local-notice']}>{google ? 'Integración local de prueba. Completa los datos del alumno y espera la aprobación de CAI. No se envían correos.' : 'Pruebas locales: usa datos ficticios. La solicitud se guarda en este equipo. CAI debe aprobarla y preparar tu enlace de activación; no se envían correos.'}</aside> : <PrototypeNotice />}
+      {local ? <aside className={s['local-notice']}>{google ? 'Completa los datos del alumno y espera la aprobación de CAI. La autorización del tutor, cuando corresponde, se revisa por separado.' : 'Primero envía tu solicitud. CAI debe aprobarla y compartirte un enlace para que elijas tu contraseña. Por ahora no se envían correos automáticos.'}</aside> : <PrototypeNotice />}
       <div className={s.layout}>
         <aside className={s.aside} aria-label="Sobre la comunidad CAI">
           <Link to="/" className={s.brand}>
@@ -39,7 +39,7 @@ export function SignupPage({ local: localOption = false, google }: { local?: boo
               ))}
             </ul>
           </div>
-          <p className={s['aside-note']}>{google ? 'Google confirma la cuenta utilizada. CAI revisa por separado los datos del alumno y su inscripción.' : local ? 'Prueba con datos ficticios y guardado local. Entrarás después de la aprobación y la activación de tu cuenta.' : 'Prototipo: usa datos ficticios. No se crean cuentas ni se guarda información.'}</p>
+          <p className={s['aside-note']}>{google ? 'Google confirma la cuenta utilizada. CAI revisa por separado los datos del alumno y su inscripción.' : local ? 'Tu acceso estará disponible después de que CAI apruebe la solicitud y actives tu cuenta.' : 'Prototipo: usa datos ficticios. No se crean cuentas ni se guarda información.'}</p>
         </aside>
 
         <main id="signup-content" tabIndex={-1} className={s.main}>

@@ -18,6 +18,18 @@ URL, vencimiento exacto, PID y carpeta privados están en `.local/tests/remote-d
 
 Verificador reproducible: `scripts/check-friends-preview.browser.mjs`, recibe `access` desde la ficha privada y `filesDir` de un directorio ignorado. La función requiere la copia ficticia y la cuenta Camila del seeder existente. La URL y las contraseñas nunca forman parte del verificador versionado. La computadora debe permanecer encendida/conectada; detener el proceso o perder el túnel corta el acceso y el máximo de 24 horas se aplica automáticamente. No reiniciar implícitamente ni extender esta autorización. Los datos de la copia se conservan al detenerla.
 
+## Registro propio de amigos — 23 de noviembre de 2026
+
+El usuario eligió que sus amigos creen sus propias cuentas para comprobar el alta completa. El punto de entrada es `/registro`, con la misma protección y ventana temporal autorizadas. No se reinició el túnel, cambió su origen o renovó el vencimiento. Las cuentas preasignadas anteriores no son necesarias para este recorrido; sus datos se conservaron.
+
+Recorrido vigente: cada persona envía una solicitud; coordinación la revisa/aprueba en Solicitudes; desde Alumnos → Ficha → Resumen y acceso prepara el enlace privado; el destinatario abre `/activar#token=…`, elige su propia contraseña y entra con el correo de la solicitud. No se envían correos automáticos ni se usa Google real. Para verse como compañeros de prueba, elegir el mismo programa/grupo. Los menores mantienen el requisito de autorización del tutor.
+
+Se corrigieron textos de `SignupPage`, `SignupForm` y `LocalInvitationDialog`: el formulario conectado explica aprobación/activación y los enlaces ya no afirman funcionar solo en el equipo anfitrión. Sin cambios de permisos, validación, contraseña mínima, esquema o API. El frontend compilado de la copia vigente se actualizó agregando recursos con hash y sustituyendo el índice al final; conserva los recursos anteriores para sesiones abiertas, además de la base y credenciales existentes. La copia del índice anterior queda fuera del directorio servido. No se publica Vite ni se actualizan las bases habituales.
+
+**Pruebas realmente ejecutadas:** 24 API dirigidas de cuentas/alineación Google simulada; lint/tipos/build; **17 comprobaciones HTTPS reales en Brave**, con alta de una persona ficticia nueva, llegada de solicitud al panel, estado pendiente, aprobación, enlace del dominio compartido, texto correcto, contraseña elegida por el visitante, token retirado de la dirección, login, identidad/grupo y sesión tras recargar; 375/320 sin desbordamiento y sin errores JS/consola inesperados. La cuenta sintética de verificación se suspendió al terminar. No confundir esos datos de QA con solicitudes de los amigos. No se ha comprobado Google/correo real ni los dispositivos físicos de amigos.
+
+Verificador `scripts/check-remote-registration.browser.mjs`: recibe accesos privados por argumento, usa solo una cuenta nueva `@example.test` y conserva el historial. Instrucciones actualizadas en los archivos privados `REGISTRO-PARA-AMIGOS.txt`, `ACCESOS-PARA-AMIGOS.txt` y `SOLO-PARA-TI-ADMIN.txt`; la lista de cuentas anteriores queda archivada localmente. No incluir URL, claves o enlaces de activación en Git. No reenviar cuentas preasignadas como instrucciones del alta propia.
+
 ## Estado comprobado
 
 - Implementados `server/preview-gateway.ts` y `scripts/remote-demo.mjs`; comando `npm.cmd run demo:remote`.

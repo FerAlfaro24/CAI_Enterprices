@@ -4,7 +4,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`. [Administración](ADMIN_USABILITY_REVIEW.md), 272 API y 370 UI; sin cambios de esquema/permisos.
+- **Continuación actual:** `fix/v1-remote-registration-guidance`, código `146e061`, base `2f6a04f` de PR #24. [Alta propia](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026); esquema/permisos conservados.
+- **Administración anterior:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`. [Administración](ADMIN_USABILITY_REVIEW.md), 272 API y 370 UI; sin cambios de esquema/permisos.
 - **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md); esquema 20, 272 API y 144 UI; datos habituales sin migrar.
 - **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`. [Cierre visual](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada), 454 UI y 108 regresión de Logros; sin cambios de servidor/esquema.
 - **Logros anterior:** `feat/v1-achievements-progressive-badges`, desde `0729cc5`; código `5349283`. [Logros/insignias/perfiles](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados), esquema 19, 261 API/108 navegador y ajuste final con 42 API pertinentes.
@@ -22,6 +23,8 @@
 - Main sigue en `a3c2569`, 74 commits detrás de la base; chore/v1-final-review está 15 detrás. Ninguna es la última línea conectada.
 
 ## Ramas añadidas después del corte
+
+`fix/v1-remote-registration-guidance` parte de `2f6a04f` de PR #24. Textos del alta conectada y enlaces privados corregidos para uso remoto, verificador completo de registro/aprobación/activación y evidencia. Sin cambios de API/reglas/esquema. [Entrega](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026).
 
 `test/v1-friends-remote-2026-11-23` parte de `cbf9a41` de PR #23. Registra la prueba temporal con amigos y un verificador HTTPS de sincronización/protección. Código de aplicación idéntico al cierre de administración; sin cambios de esquema/permisos ni datos habituales. Credenciales y URL activa fuera de Git. [Guía](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026).
 

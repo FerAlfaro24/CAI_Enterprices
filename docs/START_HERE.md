@@ -6,7 +6,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-admin-usability-review` / código `e255f91` | **Continuación actual:** [Administración revisada](ADMIN_USABILITY_REVIEW.md); esquema 20. |
+| `fix/v1-remote-registration-guidance` / código `146e061` | **Continuación actual:** [Alta propia en prueba remota](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026), incluye administración; esquema 20. |
+| `feat/v1-admin-usability-review` / código `e255f91` | Administración anterior: [Administración revisada](ADMIN_USABILITY_REVIEW.md); esquema 20. |
 | `feat/v1-photo-viewer-notification-history` / código `bb7b8f6` | Entrega anterior: [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md), esquema 20. |
 | `style/v1-final-interface-polish` / código `5bd4c2a` | Entrega anterior: Primera pasada visual de comunidad/página pública/panel. [Entrega](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada). |
 | `feat/v1-achievements-progressive-badges` / código `5349283` | Entrega anterior: Logros personales con imágenes, insignias progresivas y perfiles sociales. [Entrega](COMMUNITY_DESIGN.md#logros-insignias-y-perfiles-implementados). |
@@ -49,7 +50,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/feat/v1-admin-usability-review
+git switch --track origin/fix/v1-remote-registration-guidance
 code .
 npm.cmd ci
 ```
