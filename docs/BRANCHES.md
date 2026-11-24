@@ -1,5 +1,8 @@
 # CAI — inventario de ramas
 
+**Preparación lista, 23-11:** continuación de desarrollo `feat/v1-access-usability`, desde `12b088b` de PR #27; código funcional intacto `c59ec6c` de PR #26. [Orden, ramas, F1a y pruebas previstas](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). F1a lista para empezar; el resto planificado, Top pendiente del cliente. No hay funcionalidades nuevas ni pruebas de producto ejecutadas en esta preparación.
+
+
 **23-11, pruebas humanas recibidas y analizadas:** rama documental `docs/v1-friends-feedback-plan`, código funcional intacto `c59ec6c` de PR #26. [Plan vigente F1–F6](NEXT_STEPS.md#prioridad-vigente-observaciones-de-amigos-del-23-11-2026): registro/clase, comunidad común, comentarios directos y sanciones, Logros/publicador/avisos, Retos/top, Google/correo. Cambios pendientes, no implementados ni probados todavía. Causas contrastadas con código; sin migraciones, reinicios o cambio de datos de prueba. Prioriza estas observaciones sobre N3 anterior.
 
 
@@ -10,7 +13,8 @@
 
 ## Qué utilizar
 
-- **Continuación actual:** `fix/v1-remote-registration-guidance`, código `146e061`, base `2f6a04f` de PR #24. [Alta propia](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026); esquema/permisos conservados.
+- **Continuación de desarrollo:** `feat/v1-access-usability`, creada desde `12b088b` de PR #27; preparación de F1a, sin nuevas funciones. Código funcional `c59ec6c` de PR #26. Las otras ramas de F1b–F6 son planificadas, no creadas.
+- **Entrega anterior:** `fix/v1-remote-registration-guidance`, código `146e061`, base `2f6a04f` de PR #24. [Alta propia](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026); esquema/permisos conservados.
 - **Administración anterior:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`. [Administración](ADMIN_USABILITY_REVIEW.md), 272 API y 370 UI; sin cambios de esquema/permisos.
 - **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, desde `fb28061` de PR #21; código `bb7b8f6`. [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md); esquema 20, 272 API y 144 UI; datos habituales sin migrar.
 - **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`. [Cierre visual](COMMUNITY_DESIGN.md#cierre-visual-primera-pasada), 454 UI y 108 regresión de Logros; sin cambios de servidor/esquema.

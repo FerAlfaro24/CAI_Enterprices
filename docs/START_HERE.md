@@ -1,5 +1,8 @@
 # CAI — empieza aquí
 
+**Preparación lista, 23-11:** continuación de desarrollo `feat/v1-access-usability`, desde `12b088b` de PR #27; código funcional intacto `c59ec6c` de PR #26. [Orden, ramas, F1a y pruebas previstas](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). F1a lista para empezar; el resto planificado, Top pendiente del cliente. No hay funcionalidades nuevas ni pruebas de producto ejecutadas en esta preparación.
+
+
 **Nuevo análisis de pruebas con amigos:** [F1–F6 y criterios de cierre](NEXT_STEPS.md#prioridad-vigente-observaciones-de-amigos-del-23-11-2026). Rama documental `docs/v1-friends-feedback-plan`; código funcional continúa en `c59ec6c`/PR #26. No confundir el plan con cambios ya implementados.
 
 
@@ -9,7 +12,8 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `fix/v1-open-preview-entry` | **Continuación actual:** [entrada pública temporal](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026), incluye PR #25; esquema 20. |
+| `feat/v1-access-usability` | **Continuación de desarrollo:** F1a preparada; [secuencia y criterios](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). Código funcional todavía `c59ec6c`. |
+| `fix/v1-open-preview-entry` | Última entrega funcional anterior: [entrada pública temporal](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026), incluye PR #25; esquema 20. |
 | `fix/v1-remote-registration-guidance` / código `146e061` | Entrega anterior: [Alta propia en prueba remota](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026), incluye administración; esquema 20. |
 | `feat/v1-admin-usability-review` / código `e255f91` | Administración anterior: [Administración revisada](ADMIN_USABILITY_REVIEW.md); esquema 20. |
 | `feat/v1-photo-viewer-notification-history` / código `bb7b8f6` | Entrega anterior: [Fotos, Retos y notificaciones](COMMUNITY_FEEDBACK.md), esquema 20. |
@@ -54,7 +58,7 @@ Node >=24.12.0, npm >=10. GitHub muestra este repositorio como público al 19-11
 ```powershell
 git clone https://github.com/FerAlfaro24/CAI_Enterprices.git
 cd CAI_Enterprices
-git switch --track origin/fix/v1-open-preview-entry
+git switch --track origin/feat/v1-access-usability
 code .
 npm.cmd ci
 ```

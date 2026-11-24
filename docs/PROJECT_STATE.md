@@ -1,5 +1,8 @@
 # CAI — estado vigente
 
+**Preparación lista, 23-11:** continuación de desarrollo `feat/v1-access-usability`, desde `12b088b` de PR #27; código funcional intacto `c59ec6c` de PR #26. [Orden, ramas, F1a y pruebas previstas](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). F1a lista para empezar; el resto planificado, Top pendiente del cliente. No hay funcionalidades nuevas ni pruebas de producto ejecutadas en esta preparación.
+
+
 **Confirmación posterior del usuario:** resto del plan F1–F6 aprobado como alcance; **Top/clasificación pendiente de consultar al cliente, sin autorización para implementarlo todavía**. Retos diarios siguen incluidos. Ningún cambio funcional aplicado por esta confirmación.
 
 
@@ -33,7 +36,8 @@
 
 ## Referencias de continuación
 
-- **Continuación actual:** `fix/v1-remote-registration-guidance`, código `146e061`, desde `2f6a04f` de PR #24.
+- **Continuación de desarrollo:** `feat/v1-access-usability`, base documental `12b088b`; código funcional `c59ec6c`, F1a preparada sin implementar.
+- **Entrega de registro anterior:** `fix/v1-remote-registration-guidance`, código `146e061`, desde `2f6a04f` de PR #24.
 - **Administración anterior:** `feat/v1-admin-usability-review`, desde `c3d4d82` de PR #22; código `e255f91`.
 - **Comunidad anterior:** `feat/v1-photo-viewer-notification-history`, código `bb7b8f6`, esquema 20.
 - **Cierre visual anterior:** `style/v1-final-interface-polish`, desde `0b73032`, código `5bd4c2a`.
