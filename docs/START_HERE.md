@@ -1,6 +1,6 @@
 # CAI — empieza aquí
 
-**Preparación lista, 23-11:** continuación de desarrollo `feat/v1-access-usability`, desde `12b088b` de PR #27; código funcional intacto `c59ec6c` de PR #26. [Orden, ramas, F1a y pruebas previstas](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). F1a lista para empezar; el resto planificado, Top pendiente del cliente. No hay funcionalidades nuevas ni pruebas de producto ejecutadas en esta preparación.
+**F1a implementado y comprobado — 23-11:** `feat/v1-access-usability`, código `ce3160d` (PR #28). Activación/recuperación de alumnos con mínimo8, sin composición obligatoria, controles independientes de mostrar/ocultar y coincidencia inmediata. 58 pruebas de servidor y 94 comprobaciones de navegador (47 Brave/47 Opera), lint/tipos/build correctos. Administración conserva mínimo15. Sin migración ni actualización del enlace remoto. Siguiente: F1b y validación conjunta con F2; Top pendiente del cliente.
 
 
 **Nuevo análisis de pruebas con amigos:** [F1–F6 y criterios de cierre](NEXT_STEPS.md#prioridad-vigente-observaciones-de-amigos-del-23-11-2026). Rama documental `docs/v1-friends-feedback-plan`; código funcional continúa en `c59ec6c`/PR #26. No confundir el plan con cambios ya implementados.
@@ -12,7 +12,7 @@
 
 | Referencia | Uso |
 | --- | --- |
-| `feat/v1-access-usability` | **Continuación de desarrollo:** F1a preparada; [secuencia y criterios](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). Código funcional todavía `c59ec6c`. |
+| `feat/v1-access-usability` | **Continuación de desarrollo:** F1a comprobada; [secuencia y criterios](NEXT_STEPS.md#preparación-de-ejecución--23-11-2026). Código funcional `ce3160d`. |
 | `fix/v1-open-preview-entry` | Última entrega funcional anterior: [entrada pública temporal](REMOTE_DEMO.md#entrada-pública-temporal--23-de-noviembre-de-2026), incluye PR #25; esquema 20. |
 | `fix/v1-remote-registration-guidance` / código `146e061` | Entrega anterior: [Alta propia en prueba remota](REMOTE_DEMO.md#registro-propio-de-amigos--23-de-noviembre-de-2026), incluye administración; esquema 20. |
 | `feat/v1-admin-usability-review` / código `e255f91` | Administración anterior: [Administración revisada](ADMIN_USABILITY_REVIEW.md); esquema 20. |
