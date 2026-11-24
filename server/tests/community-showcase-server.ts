@@ -77,7 +77,7 @@ for(const [index,id]of shared.entries()){
   }
   for(const [n,body]of replies[index]!.entries()){
     const student=students[n+5]!,comment=comments.create(student,id,{body},randomUUID())
-    comments.decide(comment.id,'approve',{revision:comment.revision,confirmed:true},admin)
+    if(comment.status==='pendiente')comments.decide(comment.id,'approve',{revision:comment.revision,confirmed:true},admin)
   }
 }
 // Cronología ilustrativa de publicaciones de la demo; no atribuye fechas a las fotografías.

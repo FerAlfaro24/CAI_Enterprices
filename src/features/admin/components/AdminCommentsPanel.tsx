@@ -6,7 +6,7 @@ import type { CommentCounts, CommentHistory, CommentReview, CommentStatus } from
 import s from '../admin.module.css'
 
 const labels:Record<CommentStatus,string>={pendiente:'En revisión',publicado:'Publicados',rechazado:'No aprobados',retirado:'Retirados'}
-const historyLabels:Record<string,string>={'comment.submitted':'Enviado a revisión','comment.approve':'Aprobado','comment.reject':'No aprobado','comment.undo':'Devuelto a revisión','comment.withdraw':'Retirado por coordinación','comment.withdrawn':'Retirado por su autor','comment.held':'Nueva revisión de privacidad'}
+const historyLabels:Record<string,string>={'comment.published':'Publicado por su autor','comment.submitted':'Enviado a revisión (histórico)','comment.approve':'Aprobado','comment.reject':'No aprobado','comment.undo':'Devuelto a revisión','comment.withdraw':'Retirado por coordinación','comment.withdrawn':'Retirado por su autor','comment.held':'Nueva revisión de privacidad'}
 export function AdminCommentsPanel(){
  const {connection}=useAdmin(),fail=connection!.handleFailure,refresh=connection!.refresh
  const [status,setStatus]=useState<CommentStatus>('pendiente'),[items,setItems]=useState<CommentReview[]>([]),[next,setNext]=useState<number|null>(null)

@@ -55,7 +55,7 @@ const statusLabels: Record<Status, string> = {
   aprobada: 'Aprobada',
   rechazada: 'Rechazada',
   publicada: 'Publicada',
-  retirada: 'Retirada',
+  retirada: 'Eliminada de la comunidad',
   activo: 'Activo',
   suspendido: 'Suspendido',
 }

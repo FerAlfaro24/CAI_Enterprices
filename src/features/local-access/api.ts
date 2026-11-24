@@ -76,7 +76,7 @@ export const commentsApi = {
   list:(postId:string,before=0)=>call<import('../../../server/contracts').CommentPage<import('../../../server/contracts').PublicComment>&{commentsOpen:boolean}>(`/student/posts/${postId}/comments?before=${before}`),
   mine:(postId:string,before=0)=>call<import('../../../server/contracts').CommentPage<import('../../../server/contracts').OwnComment>>(`/student/posts/${postId}/comments/mine?before=${before}`),
   create:(postId:string,body:string,key:string)=>call<{comment:import('../../../server/contracts').OwnComment}>(`/student/posts/${postId}/comments`,'POST',{body},{'Idempotency-Key':key}),
-  withdraw:(comment:import('../../../server/contracts').OwnComment)=>call(`/student/comments/${comment.id}/withdraw`,'POST',{revision:comment.revision,confirmed:true}),
+  withdraw:(comment:Pick<import('../../../server/contracts').OwnComment,'id'|'revision'>)=>call(`/student/comments/${comment.id}/withdraw`,'POST',{revision:comment.revision,confirmed:true}),
   counts:()=>call<{counts:import('../../../server/contracts').CommentCounts}>('/comment-counts'),
   reviews:(status:import('../../../server/contracts').CommentStatus,before=0)=>call<import('../../../server/contracts').CommentPage<import('../../../server/contracts').CommentReview>&{counts:import('../../../server/contracts').CommentCounts}>(`/comments?status=${status}&before=${before}`),
   detail:(id:string)=>call<{comment:import('../../../server/contracts').CommentReview;history:import('../../../server/contracts').CommentHistory[]}>(`/comments/${id}`),
@@ -164,7 +164,7 @@ export type { GalleryItem, GalleryReview, GalleryUpload, ContactInquiry, Contact
 export const institutionalApi={
  list:()=>call<{posts:ReviewPost[]}>('/institutional-posts'),
  create:(draft:import('../../../server/contracts').InstitutionalDraft,key:string)=>call<{id:number}>('/institutional-posts','POST',draft,{'Idempotency-Key':key}),
- update:(post:ReviewPost,withdraw=false)=>call(`/institutional-posts/${post.id}`,'PATCH',{revision:post.revision,confirmed:true,withdraw,highlighted:withdraw?false:!post.highlighted,expiresAt:post.expiresAt??null}),
+ update:(post:ReviewPost,withdraw=false,reason?:string)=>call(`/institutional-posts/${post.id}`,'PATCH',{revision:post.revision,confirmed:true,withdraw,highlighted:withdraw?false:post.kind==='notice',expiresAt:post.expiresAt??null,...(reason?{reason}:{})}),
 }
 
 

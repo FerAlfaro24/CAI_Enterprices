@@ -47,7 +47,7 @@ test('Comunidad compartida: clases, privacidad, migración y retos comunes',asyn
   assert.ok((await json<{posts:PublishedPost[]}>('/student/posts','bob')).posts.some((p:{id:string})=>p.id===postId))
   app.db.prepare('UPDATE community_controls SET comments_open=1').run()
   assert.equal((await call('/student/posts/'+postId+'/comments','POST',{body:'¡También lo practicaré!'},'bob')).status,201)
-  assert.equal((await json<{items:unknown[]}>('/student/posts/'+postId+'/comments')).items.length,0,'Los comentarios conservan revisión hasta F3')
+  assert.equal((await json<{items:unknown[]}>('/student/posts/'+postId+'/comments')).items.length,1,'Los comentarios nuevos se publican al enviar')
   const profileId=(await json<{user:StudentUser}>('/student/me')).user.publicId
   assert.equal((await call('/student/members/'+profileId,'GET',undefined,'bob')).status,200)
  })

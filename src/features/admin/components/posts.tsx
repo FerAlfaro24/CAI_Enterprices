@@ -1,3 +1,4 @@
+import { DeletePublicationDialog } from './DeletePublicationDialog'
 import { useAdminModal } from '../useAdminModal'
 import { AdminReviewPhotos } from './AdminReviewPhotos'
 import { useId, useState } from 'react'
@@ -19,7 +20,9 @@ function MediaPlaceholder({ caption }: { caption: string }) {
 
 export function PostCard({ post, onReview }: { post: Post; onReview: () => void }) {
   const { dispatch, announce, connection } = useAdmin()
+  const [deleting,setDeleting]=useState(false)
   return (
+    <>
     <article className={cx(s.card, s.post)}>
       <div className={s['post-meta']}>
         <TypeTag type={post.type} />
@@ -46,6 +49,7 @@ export function PostCard({ post, onReview }: { post: Post; onReview: () => void 
         <button type="button" className={cx(s.btn, s['btn--ghost'], s['btn--sm'])} onClick={onReview}>
           <Icon name="eye" size={16} />Revisar<span className={s['sr-only']}> «{post.title}»</span>
         </button>
+        {connection&&post.status==='publicada'&&<button type="button" className={cx(s.btn,s['btn--ghost'],s['btn--sm'])} onClick={()=>setDeleting(true)}>Eliminar<span className={s['sr-only']}> «{post.title}»</span></button>}
         {!connection && post.status === 'pendiente' && !post.checks && (
           <button type="button" className={cx(s.btn, s['btn--approve'], s['btn--sm'])} onClick={() => {
             dispatch({ type: 'moderate', id: post.id, status: 'publicada' })
@@ -56,6 +60,8 @@ export function PostCard({ post, onReview }: { post: Post; onReview: () => void 
         )}
       </div>
     </article>
+    {deleting&&connection&&<DeletePublicationDialog title={post.title} onClose={()=>setDeleting(false)} onDelete={reason=>connection.moderate(post.id,'withdraw',reason,true)}/>}
+    </>
   )
 }
 
@@ -63,6 +69,7 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
   const ref = useAdminModal(Boolean(post))
   const { dispatch, announce, connection } = useAdmin()
   const [reason, setReason] = useState('')
+  const [deleting,setDeleting]=useState(false)
   const [checked, setChecked] = useState(false)
   const [error, setError] = useState(false)
   const reasonsId = useId()
@@ -70,6 +77,7 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
 
   const close = () => {
     if (connection?.busy) return
+    setDeleting(false)
     setReason('')
     setChecked(false)
     setError(false)
@@ -93,7 +101,7 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
   const cannotPublish = Boolean(connection && !raw?.authorActive)
 
   return (
-    <dialog
+    <> <dialog
       ref={ref}
       className={cx(s.dialog, s['dialog--wide'])}
       aria-labelledby="post-dialog-title"
@@ -118,10 +126,10 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
               <StatusBadge status={post.status} />
               {post.authorIsMinor && <span className={cx(s.tag, s['tag--minor'])}>Autor menor de edad</span>}
             </div>
-            {raw && <p>Grupo: {raw.group}</p>}
+            {raw && <p>{raw.audience==='community'?'Visible para toda la comunidad':`Audiencia histórica: ${raw.program} · ${raw.group}`}</p>}
             {raw&&raw.status!=='retirada'&&<Switch label="Recibir comentarios en esta historia" description="Pausar detiene nuevos comentarios. Conserva los publicados y permite retirar los propios." checked={raw.commentsOpen!==false} disabled={connection?.busy} onChange={open=>{void connection?.setCommentsOpen(raw,open)}}/>}
             <p style={{ margin: 0, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{post.body}</p>
-            {cannotPublish && <p className={s.alert}>El autor debe tener acceso activo y conservar el programa y grupo del envío para publicarlo.</p>}
+            {cannotPublish && <p className={s.alert}>El autor debe conservar su acceso activo y la audiencia autorizada del envío.</p>}
             {connection?.error && <p className={s.alert} role="alert">{connection.error}</p>}
             {raw?.photos&&<AdminReviewPhotos photos={raw.photos}/>}
             {post.media && <MediaPlaceholder caption={post.media.caption} />}
@@ -152,8 +160,9 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
             {post.status === 'rechazada' && post.rejectReason && (
               <p className={s.alert}>Rechazada por: {post.rejectReason}. {connection ? 'El alumno puede consultar este motivo en Mis publicaciones.' : 'El alumno vería este motivo en su perfil (simulado).'}</p>
             )}
+            {post.status === 'retirada' && post.rejectReason && <p className={s.alert}>Motivo de eliminación: {post.rejectReason}</p>}
             {post.status === 'publicada' && (
-              <p className={cx(s.alert, s['alert--ok'])}>{connection ? 'Publicada para el grupo autorizado en CAI Community, mientras el autor conserve su acceso y asignación.' : 'Publicada en la demo de este panel. No se envía al feed de CAI Community.'}</p>
+              <p className={cx(s.alert, s['alert--ok'])}>{connection ? 'Publicada en CAI Community para sus destinatarios autorizados.' : 'Publicada en la demo de este panel. No se envía al feed de CAI Community.'}</p>
             )}
           </div>
           <div className={s['dialog-foot']}>
@@ -172,19 +181,23 @@ export function PostDialog({ post, onClose }: { post: Post | null; onClose: () =
                   <Icon name="check" size={16} />Publicar
                 </button>
               </>
-            ) : post.status === 'retirada' ? <p>El autor retiró esta publicación. No se puede volver a publicar.</p> : (
-              <button type="button" className={cx(s.btn, s['btn--ghost'])} disabled={connection?.busy} onClick={() => {
+            ) : post.status === 'retirada' ? <p>Eliminada de la comunidad. Se conserva como registro y no se puede volver a publicar.</p> : (
+              <>
+              {!raw?.institutional&&<button type="button" className={cx(s.btn, s['btn--ghost'])} disabled={connection?.busy} onClick={() => {
                 if (connection) { void connection.moderate(post.id, 'undo').then(ok => { if (ok) close() }); return }
                 dispatch({ type: 'unmoderate', id: post.id })
                 announce(`Publicación «${post.title}» devuelta a revisión.`)
                 close()
               }}>
                 <Icon name="undo" size={16} />Devolver a revisión
-              </button>
+              </button>}
+              {connection&&post.status==='publicada'&&<button type="button" className={cx(s.btn,s['btn--reject'])} disabled={connection.busy} onClick={()=>setDeleting(true)}>Eliminar publicación</button>}
+              </>
             )}
           </div>
         </>
       )}
     </dialog>
+    {deleting&&post&&connection&&<DeletePublicationDialog title={post.title} onClose={()=>setDeleting(false)} onDelete={async reason=>{const ok=await connection.moderate(post.id,'withdraw',reason,true);if(ok)close();return ok}}/>} </>
   )
 }

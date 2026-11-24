@@ -499,7 +499,7 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     }
     const discussion=path.match(/^\/api\/local\/posts\/(PUB-\d+)\/comments$/)
     if(discussion&&method==='PATCH'){comments.configure(discussion[1]!,await protectedBody(),user.id);return json(response,200,{ok:true})}
-    const review = path.match(/^\/api\/local\/posts\/(PUB-\d+)\/(approve|reject|undo)$/)
+    const review = path.match(/^\/api\/local\/posts\/(PUB-\d+)\/(approve|reject|undo|withdraw)$/)
     if (review && method === 'POST') {
       const data = await protectedBody()
       if (Object.keys(data).some((key) => !['revision', 'reason', 'confirmed'].includes(key))) throw new HttpError(400, 'La revisión contiene datos no admitidos.')
