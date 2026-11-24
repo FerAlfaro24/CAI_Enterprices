@@ -23,6 +23,8 @@
 
 ## Ramas añadidas después del corte
 
+`test/v1-friends-remote-2026-11-23` parte de `cbf9a41` de PR #23. Registra la prueba temporal con amigos y un verificador HTTPS de sincronización/protección. Código de aplicación idéntico al cierre de administración; sin cambios de esquema/permisos ni datos habituales. Credenciales y URL activa fuera de Git. [Guía](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026).
+
 `feat/v1-admin-usability-review` parte de `c3d4d82` de PR #22. Revisión de nueve secciones administrativas, tareas/filtros/fichas y fotos de moderación, guía y QA independiente. [Entrega y límites](ADMIN_USABILITY_REVIEW.md). Conserva servidor/esquema 20, datos habituales y ramas oficiales; no fusionar automáticamente.
 
 `feat/v1-photo-viewer-notification-history` parte de `fb28061` de PR #21. Correcciones de fotos/Retos/notificaciones solicitadas el 22-11; migración 20 aditiva, visor sin recorte, distinción de acierto/error y lectura al cerrar con confirmación de importantes. Historial del alumno eliminable sin borrar registros administrativos. [Entrega](COMMUNITY_FEEDBACK.md). Sin fusión ni cambio de main/release o despliegue público.

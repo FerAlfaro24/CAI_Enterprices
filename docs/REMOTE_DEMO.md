@@ -2,6 +2,22 @@
 
 **19-11-2026 · rama `feat/v1-remote-demo`, desde `d7ef781` de PR #14.** Solicitud del usuario: mostrar desde otra ubicación la comunidad actual con fotos oficiales e interacciones ficticias, sin contratar aún el alojamiento definitivo.
 
+## Prueba con amigos — 23 de noviembre de 2026
+
+Nueva activación **autorizada expresamente** para un máximo de 24 horas, con Cloudflare, contraseña de entrada, las seis fotos oficiales y datos/cuentas ficticios. Código de administración actual `e255f91`, base documental `cbf9a41` de PR #23; registro en `test/v1-friends-remote-2026-11-23`. Los resultados del 19-11 de abajo son históricos y su URL ya venció.
+
+Se creó una fixture nueva sin la bandera de QA administrativa y una copia remota independiente con esquema 20, frontend compilado, origen HTTPS productivo y cookies seguras. La instalación habitual y las muestras locales anteriores se conservaron. El ejecutable portátil existente se contrastó con su SHA-256 ya verificado; no se instaló un servicio ni se modificó configuración del sistema.
+
+Nueve cuentas ficticias de alumnos, del mismo grupo, tienen contraseñas individuales renovadas **solo en la copia remota**. La cuenta del anfitrión y la administrativa se conservan separadas. Los accesos se reparten por persona: no enviar la lista completa al grupo ni compartir la contraseña administrativa. Hay dos accesos consecutivos: contraseña de entrada del navegador y cuenta de alumno dentro de la aplicación. Google/correo reales no son necesarios para este recorrido.
+
+**Comprobado ahora:** build; **11 pruebas de la entrada/proxy**; **24 comprobaciones HTTPS reales en Brave**, con dos contextos de alumnos distintos y un contexto administrativo. Incluyen protección anónima, cookie segura, login de dos cuentas del mismo grupo, reacción guardada en una y recibida automáticamente en otra, retirada también sincronizada, fotos completas/galería de seis, doble autorización de imágenes, 1440/375/320 sin desbordamiento, recarga, archivos privados bloqueados, panel más reciente, retos sin responder y consola sin errores inesperados. La reacción de comprobación quedó retirada. No se repitieron hoy las matrices completas de administración/comunidad ni la prueba HTTPS histórica de Opera.
+
+El refresco compartido existente consulta aproximadamente cada 15 segundos; no se implementaron WebSockets ni se quitó la moderación. Publicaciones y comentarios nuevos necesitan aprobación. No se han probado todavía los teléfonos y redes reales de los amigos; esa es la siguiente validación humana.
+
+URL, vencimiento exacto, PID y carpeta privados están en `.local/tests/remote-demo-latest.json`; los archivos `acceso-privado.json`, `ACCESOS-PARA-AMIGOS.txt` y `SOLO-PARA-TI-ADMIN.txt` viven en la carpeta privada indicada, fuera de Git. El archivo de amigos contiene datos para repartir individualmente; el segundo archivo es solo del anfitrión. No copiar esos contenidos a documentación pública.
+
+Verificador reproducible: `scripts/check-friends-preview.browser.mjs`, recibe `access` desde la ficha privada y `filesDir` de un directorio ignorado. La función requiere la copia ficticia y la cuenta Camila del seeder existente. La URL y las contraseñas nunca forman parte del verificador versionado. La computadora debe permanecer encendida/conectada; detener el proceso o perder el túnel corta el acceso y el máximo de 24 horas se aplica automáticamente. No reiniciar implícitamente ni extender esta autorización. Los datos de la copia se conservan al detenerla.
+
 ## Estado comprobado
 
 - Implementados `server/preview-gateway.ts` y `scripts/remote-demo.mjs`; comando `npm.cmd run demo:remote`.

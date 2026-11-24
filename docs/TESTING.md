@@ -1,5 +1,7 @@
 # CAI — pruebas y lectura de evidencia
 
+**Prueba remota con amigos, 23-11:** 11 pruebas de entrada y **24 comprobaciones HTTPS reales nuevas** con dos cuentas de alumno y coordinación en contextos Brave aislados. Sincronización automática entre sesiones, autenticación/fotos/recarga y protección de fuentes/datos. Build correcto. [Detalle y límites](REMOTE_DEMO.md#prueba-con-amigos--23-de-noviembre-de-2026); no sumar las matrices antiguas ni afirmar probados los dispositivos físicos de amigos.
+
 **Administración, 22-11:** 272 API de suite completa y **370 UI**: 344 del recorrido (172 Brave/172 Opera) y 26 dirigidas finales (13 por navegador). Tipos/lint/build. [Alcance, intentos y límites](ADMIN_USABILITY_REVIEW.md); no sumar matrices históricas.
 
 **Correcciones de comunidad, 22-11:** **272 API** (suite completa, incluye 10 subcasos nuevos y contenedor), **144 UI (72 Brave/72 Opera)** en fixtures nuevas, tipos/lint/build. [Evidencia, intentos y límites](COMMUNITY_FEEDBACK.md). Verificador `scripts/check-community-feedback.browser.mjs`. No sumar las tandas anteriores como si se hubieran repetido.
