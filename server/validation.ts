@@ -1,4 +1,5 @@
 import type { PublicCatalog, Submission } from './contracts.ts'
+import { isSchoolClass } from '../shared/school-classes.ts'
 import { accessRequests, students } from '../src/features/admin/data/mockData.ts'
 
 export class HttpError extends Error {
@@ -37,22 +38,24 @@ export function ageAt(birthDate: string, today = new Date()) {
 
 export function validateSubmission(value: unknown, now = new Date(), catalog?: PublicCatalog['groups']): Submission {
   const v = record(value)
-  const allowed = ['firstName', 'lastName', 'birthDate', 'email', 'filledBy', 'program', 'group', 'studentCode', 'displayName', 'avatarColor', 'visibility', 'message', 'guardian', 'guardianConsent', 'acceptRules', 'acceptPrivacy']
+  const allowed = ['className', 'firstName', 'lastName', 'birthDate', 'email', 'filledBy', 'program', 'group', 'studentCode', 'displayName', 'avatarColor', 'visibility', 'message', 'guardian', 'guardianConsent', 'acceptRules', 'acceptPrivacy']
   if (Object.keys(v).some((key) => !allowed.includes(key))) throw new HttpError(400, 'La solicitud contiene datos no admitidos.')
   const birthDate = text(v.birthDate, 'la fecha de nacimiento', 10, 10)
   const age = ageAt(birthDate, now)
   const minor = age < 18
-  if (!['alumno', 'tutor'].includes(String(v.filledBy)) || (age < 13 && v.filledBy !== 'tutor') || (!minor && v.filledBy !== 'alumno')) throw new HttpError(400, 'Revisa quién llena la solicitud.')
+  const simple = Object.hasOwn(v, 'className')
+  if (simple && (!isSchoolClass(v.className) || (v.program !== undefined && v.program !== v.className) || (v.group !== undefined && v.group !== '') || v.studentCode || v.guardian || v.guardianConsent === true || (v.filledBy !== undefined && v.filledBy !== 'alumno'))) throw new HttpError(400, 'Selecciona Inglés, Francés o Español. La matrícula se genera automáticamente; no se requiere grupo ni tutor.')
+  if (!simple && (!['alumno', 'tutor'].includes(String(v.filledBy)) || (age < 13 && v.filledBy !== 'tutor') || (!minor && v.filledBy !== 'alumno'))) throw new HttpError(400, 'Revisa quién llena la solicitud.')
   const email = text(v.email, 'el correo', 5, 160).toLowerCase()
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new HttpError(400, 'Revisa el correo electrónico.')
   if (v.acceptRules !== true || v.acceptPrivacy !== true) throw new HttpError(400, 'Debes aceptar las normas y el aviso de privacidad de prueba.')
-  if (typeof v.guardianConsent !== 'boolean') throw new HttpError(400, 'Revisa la autorización del tutor.')
+  if (!simple && typeof v.guardianConsent !== 'boolean') throw new HttpError(400, 'Revisa la autorización del tutor.')
   if (v.visibility !== 'privado' && v.visibility !== 'comunidad') throw new HttpError(400, 'Revisa la visibilidad del perfil.')
-  const program = text(v.program, 'el programa', 2, 100)
-  const group = text(v.group, 'el grupo', 2, 100)
+  const program = simple ? String(v.className) : text(v.program, 'el programa', 2, 100)
+  const group = simple ? '' : text(v.group, 'el grupo', 2, 100)
   const programs = new Set([...students, ...accessRequests].map((item) => item.program))
   const groups = students.filter((student) => student.program === program).map((student) => student.group)
-  if (catalog ? !catalog.some(item => item.program === program && item.name === group) : !programs.has(program) || (groups.length ? !groups.includes(group) : group !== 'Por asignar')) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
+  if (!simple && (catalog ? !catalog.some(item => item.program === program && item.name === group) : !programs.has(program) || (groups.length ? !groups.includes(group) : group !== 'Por asignar'))) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
   const firstName = text(v.firstName, 'el nombre', 2, 60)
   const lastName = text(v.lastName, 'los apellidos', 2, 80)
   const displayName = text(v.displayName, 'el nombre visible', 1, 141)
@@ -60,7 +63,7 @@ export function validateSubmission(value: unknown, now = new Date(), catalog?: P
   const safeNames = abbreviatedNames(firstName, lastName)
   if (minor && (v.visibility !== 'privado' || !safeNames.includes(displayName))) throw new HttpError(400, 'El perfil de un menor debe usar nombre abreviado y visibilidad privada.')
   let guardian: Submission['guardian']
-  if (minor) {
+  if (minor && !simple) {
     if (v.guardianConsent !== true) throw new HttpError(400, 'Falta la autorización inicial del tutor.')
     const g = record(v.guardian)
     const contact = text(g.contact, 'el contacto del tutor', 5, 120)
@@ -72,11 +75,12 @@ export function validateSubmission(value: unknown, now = new Date(), catalog?: P
   const avatarColor = text(v.avatarColor, 'el avatar', 7, 7)
   if (!/^#[a-f0-9]{6}$/i.test(avatarColor)) throw new HttpError(400, 'Revisa el color del avatar.')
   return {
-    firstName, lastName, birthDate, email, filledBy: v.filledBy as Submission['filledBy'],
+    ...(simple ? { className: v.className as NonNullable<Submission['className']> } : {}),
+    firstName, lastName, birthDate, email, filledBy: simple ? 'alumno' : v.filledBy as Submission['filledBy'],
     program, group,
     studentCode, displayName, avatarColor, visibility: v.visibility,
     message: text(v.message ?? '', 'el mensaje', 0, 240), guardian,
-    guardianConsent: minor, acceptRules: true, acceptPrivacy: true,
+    guardianConsent: minor && !simple, acceptRules: true, acceptPrivacy: true,
   }
 }
 

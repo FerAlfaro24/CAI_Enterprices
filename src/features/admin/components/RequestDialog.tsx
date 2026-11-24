@@ -52,7 +52,7 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
                 <h3 id="request-guide-title">Antes de decidir</h3>
                 <ol>
                   <li>Comprueba que el alumno esté inscrito en CAI y que sus datos sean correctos.</li>
-                  {request.ageGroup === 'menor' && <li>Confirma la autorización con su madre, padre o tutor antes de registrarla como recibida.</li>}
+                  {request.guardianConsent !== undefined && <li>Confirma la autorización con su madre, padre o tutor antes de registrarla como recibida.</li>}
                   <li>Aprueba para añadirlo al directorio de la demo o rechaza si la solicitud no corresponde.</li>
                 </ol>
                 <p>¿Faltan datos? Cierra este detalle: la solicitud seguirá pendiente.</p>
@@ -60,9 +60,9 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
             )}
             <dl className={s.details}>
               <dt>Estado</dt><dd><StatusBadge status={request.status} /></dd>
-              <dt>Programa</dt><dd>{request.program}</dd>
+              <dt>Clase o inscripción anterior</dt><dd>{request.program}</dd>
               <dt>Grupo de edad</dt><dd>{request.ageGroup === 'menor' ? 'Menor de edad' : 'Adulto'}</dd>
-              {request.ageGroup === 'menor' && (
+              {request.guardianConsent !== undefined && (
                 <><dt>Autorización del tutor</dt><dd>{request.guardianConsent === 'recibida' ? 'Recibida' : 'Pendiente'}</dd></>
               )}
               <dt>Origen</dt><dd>{request.source}</dd>
@@ -70,11 +70,11 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
                 <>
                   <dt>Llenada por</dt><dd>{applicant.filledBy === 'tutor' ? 'Madre, padre o tutor' : 'El alumno'}</dd>
                   <dt>Edad</dt><dd>{applicant.age} años</dd>
-                  <dt>Grupo</dt><dd>{applicant.group}</dd>
+                  {applicant.group && <><dt>Grupo anterior</dt><dd>{applicant.group}</dd></>}
                   <dt>Matrícula</dt><dd>{applicant.studentCode ?? 'No indicada'}</dd>
                   <dt>Correo</dt><dd>{applicant.email}</dd>
                   <dt>Nombre visible</dt><dd>{applicant.displayName}</dd>
-                  <dt>Perfil</dt><dd>{applicant.visibility === 'privado' ? 'Solo su grupo' : 'Toda la comunidad'}</dd>
+                  <dt>Perfil</dt><dd>{'Comunidad de alumnos aprobados'}</dd>
                   {applicant.guardian && (
                     <><dt>Tutor</dt><dd>{applicant.guardian.name} · {applicant.guardian.relationship}<br />{applicant.guardian.contact}</dd></>
                   )}
@@ -82,14 +82,14 @@ export function RequestDialog({ request, onClose }: { request: AccessRequest | n
               )}
             </dl>
             <blockquote className={s.quote}>{request.message}</blockquote>
-            {request.ageGroup === 'menor' && (
+            {request.guardianConsent !== undefined && (
               <p className={cx(s.alert, canApprove(request) && s['alert--ok'])}>
                 {canApprove(request)
                   ? 'Autorización del tutor registrada (simulada). Su perfil será privado por defecto.'
                   : 'No es posible aprobar a un menor sin la autorización de su padre, madre o tutor.'}
               </p>
             )}
-            {request.ageGroup === 'menor' && !canApprove(request) && request.status === 'pendiente' && (
+            {request.guardianConsent !== undefined && !canApprove(request) && request.status === 'pendiente' && (
               <button type="button" className={cx(s.btn, s['btn--ghost'], s['btn--sm'])} onClick={() => {
                 dispatch({ type: 'consent', id: request.id })
                 announce(`Autorización del tutor de ${request.name} registrada.`)

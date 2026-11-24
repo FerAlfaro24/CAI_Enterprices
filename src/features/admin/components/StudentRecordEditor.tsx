@@ -28,13 +28,14 @@ export function StudentRecordEditor({studentId}:{studentId:string}){
   const age=draft?ageFrom(draft.birthDate):null
   const minor=age!==null&&age<18
   const identityChanged=draft&&record&&['firstName','lastName','birthDate'].some(key=>draft[key as 'firstName'|'lastName'|'birthDate']!==record[key as 'firstName'|'lastName'|'birthDate'])
-  const needsConsent=minor&&record&&(!record.consentReference||identityChanged||JSON.stringify(draft?.guardian??null)!==JSON.stringify(record.guardian))
+  const requiresGuardian=minor&&record?.guardianRequired!==false
+  const needsConsent=requiresGuardian&&record&&(!record.consentReference||identityChanged||JSON.stringify(draft?.guardian??null)!==JSON.stringify(record.guardian))
   const preview=draft&&record?(minor?visibleName(draft.firstName,draft.lastName,record.displayName===visibleName(record.firstName,record.lastName,'initials')?'initials':'short'):record.displayName):''
   const busy=loading||connection.busy
   const submit=async(event:FormEvent<HTMLFormElement>)=>{
     event.preventDefault();if(!draft||sending.current||busy)return
     const values=new FormData(event.currentTarget)
-    const data:StudentRecordDraft={...draft,guardian:minor?draft.guardian:null,currentPassword:String(values.get('currentPassword')),confirmed:values.get('confirmed')==='on'}
+    const data:StudentRecordDraft={...draft,guardian:requiresGuardian?draft.guardian:null,currentPassword:String(values.get('currentPassword')),confirmed:values.get('confirmed')==='on'}
     const fingerprint=JSON.stringify({...data,currentPassword:undefined})
     if(attempt.current.fingerprint!==fingerprint)attempt.current={fingerprint,key:crypto.randomUUID()}
     sending.current=true;setError('');setMessage('')
@@ -55,9 +56,9 @@ export function StudentRecordEditor({studentId}:{studentId:string}){
         <label htmlFor={`${id}-first`}>Nombre del alumno</label><input id={`${id}-first`} value={draft.firstName} required minLength={2} maxLength={60} onChange={e=>setDraft({...draft,firstName:e.target.value})}/>
         <label htmlFor={`${id}-last`}>Apellidos del alumno</label><input id={`${id}-last`} value={draft.lastName} required minLength={2} maxLength={80} onChange={e=>setDraft({...draft,lastName:e.target.value})}/>
         <label htmlFor={`${id}-birth`}>Fecha de nacimiento</label><input id={`${id}-birth`} type="date" value={draft.birthDate} required onChange={e=>setDraft({...draft,birthDate:e.target.value})}/>
-        <label htmlFor={`${id}-code`}>Matrícula</label><input id={`${id}-code`} value={draft.studentCode} maxLength={12} onChange={e=>setDraft({...draft,studentCode:e.target.value})}/>
+        <label htmlFor={`${id}-code`}>Matrícula</label><input id={`${id}-code`} value={record.guardianRequired===false?record.id:draft.studentCode} readOnly={record.guardianRequired===false} maxLength={12} onChange={e=>setDraft({...draft,studentCode:e.target.value})}/>
         <p className={s['card-sub']}>Correo de acceso: {record.email}. Su corrección requiere verificar la identidad y el nuevo destinatario; aquí se conserva.</p>
-        {minor&&<><h4>Madre, padre o tutor</h4>{([{key:'name',label:'Nombre del tutor',max:100,min:3},{key:'relationship',label:'Parentesco',max:60,min:2},{key:'contact',label:'Contacto del tutor',max:120,min:5}] as const).map(field=><div className={s['record-field']} key={field.key}><label htmlFor={`${id}-${field.key}`}>{field.label}</label><input id={`${id}-${field.key}`} value={draft.guardian?.[field.key]??''} required minLength={field.min} maxLength={field.max} onChange={e=>setDraft({...draft,guardian:{...(draft.guardian??emptyGuardian),[field.key]:e.target.value}})}/></div>)}
+        {requiresGuardian&&<><h4>Madre, padre o tutor</h4>{([{key:'name',label:'Nombre del tutor',max:100,min:3},{key:'relationship',label:'Parentesco',max:60,min:2},{key:'contact',label:'Contacto del tutor',max:120,min:5}] as const).map(field=><div className={s['record-field']} key={field.key}><label htmlFor={`${id}-${field.key}`}>{field.label}</label><input id={`${id}-${field.key}`} value={draft.guardian?.[field.key]??''} required minLength={field.min} maxLength={field.max} onChange={e=>setDraft({...draft,guardian:{...(draft.guardian??emptyGuardian),[field.key]:e.target.value}})}/></div>)}
           <label htmlFor={`${id}-consent`}>Nueva referencia de autorización del tutor</label><input id={`${id}-consent`} value={draft.consentReference} required={!!needsConsent} minLength={8} maxLength={240} onChange={e=>setDraft({...draft,consentReference:e.target.value})}/>
           <p className={s['card-sub']}>{needsConsent?'Esta corrección requiere una nueva autorización comprobada y una referencia distinta de la anterior. Sus historias y comentarios publicados volverán a revisión.':'Solo completa la referencia si también renuevas la autorización.'} Referencia anterior: {record.consentReference||'Sin registrar'}.</p>
         </>}

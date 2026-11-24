@@ -15,6 +15,7 @@ export type GalleryReview = GalleryItem & { linkedPostId?:string; audience: 'gro
 export type GalleryUpload = { title: string; description: string; category: keyof typeof galleryCategories; alt: string; audience?: 'group' | 'community'; draft?:boolean; program: string; group: string; authorizationReference: string; confirmed: boolean; imageBase64: string }
 
 export interface Submission {
+  className?: import('../shared/school-classes.ts').SchoolClass
   firstName: string
   lastName: string
   birthDate: string
@@ -31,6 +32,10 @@ export interface Submission {
   guardianConsent: boolean
   acceptRules: boolean
   acceptPrivacy: boolean
+}
+
+export type SchoolRegistration = Omit<Submission, 'filledBy' | 'program' | 'group' | 'studentCode' | 'guardian' | 'guardianConsent' | 'className'> & {
+  className: import('../shared/school-classes.ts').SchoolClass
 }
 
 export interface LocalRequest {
@@ -76,7 +81,7 @@ export type StudentUser = {
   id: string; publicId: string; role: 'student'; name: string; displayName: string
   program: string; group: string; avatarColor: string
 }
-export type GroupMember = { id: string; displayName: string; avatarColor: string }
+export type GroupMember = { id: string; displayName: string; avatarColor: string; joinedAt?: string }
 export type StudentProfile = {
   displayName: string; avatarColor: string; revision: number; nameOptions: string[] | null
 }
@@ -88,7 +93,7 @@ export type StudentRecordValues = {
 }
 export type StudentRecordSnapshot = StudentRecordValues & {displayName:string;visibility:Submission['visibility'];consentReference:string|null}
 export type StudentRecord = StudentRecordSnapshot & {
-  id:string;revision:number;email:string;
+  id:string;revision:number;email:string;guardianRequired?:boolean;
   history:{id:number;actor:string;createdAt:string;reason:string;fields:string[];before:StudentRecordSnapshot;after:StudentRecordSnapshot}[]
 }
 export type StudentRecordDraft = StudentRecordValues & {revision:number;reason:string;consentReference:string;currentPassword:string;confirmed:boolean}

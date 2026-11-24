@@ -31,7 +31,7 @@ export function studentRecords(db:Database){
       const row=select(id),profile=JSON.parse(row.payload) as Submission
       const history=db.prepare(`SELECT c.id,c.created_at,c.reason,c.fields,c.before_json,c.after_json,u.name AS actor
         FROM student_record_changes c JOIN admin_users u ON u.id=c.actor_id WHERE c.request_id=? ORDER BY c.id DESC LIMIT 20`).all(row.id)
-      return {...snapshot(profile,row.reference),id,revision:row.revision,email:profile.email,
+      return {...snapshot(profile,row.reference),id,revision:row.revision,email:profile.email,guardianRequired:!profile.className,
         history:history.map(item=>({id:Number(item.id),actor:String(item.actor),createdAt:String(item.created_at),reason:String(item.reason),fields:JSON.parse(String(item.fields)) as string[],before:JSON.parse(String(item.before_json)) as StudentRecordSnapshot,after:JSON.parse(String(item.after_json)) as StudentRecordSnapshot}))}
     },
     async correct(request:IncomingMessage,id:string,value:unknown,key:string){
@@ -63,19 +63,21 @@ export function studentRecords(db:Database){
         if(previous){if(previous.request_id!==row.id||previous.fingerprint!==fingerprint)throw new HttpError(409,'Este envío ya se recibió con otros datos. Actualiza el expediente.');return}
         if(row.revision!==revision)throw new HttpError(409,'La ficha cambió en otra ventana. Carga el expediente actual antes de corregirlo.')
         const profile=JSON.parse(row.payload) as Submission,before=snapshot(profile,row.reference)
+        const requiresGuardian=minor&&!profile.className
+        if(profile.className&&(values.studentCode||values.guardian||reference))throw new HttpError(400,'Este expediente usa matrícula automática y no requiere autorización del tutor.')
         const safeNames=abbreviatedNames(values.firstName,values.lastName),oldNames=abbreviatedNames(profile.firstName,profile.lastName)
         const displayName=minor?(profile.displayName===oldNames[1]?safeNames[1]!:safeNames[0]!):profile.displayName
         // Se usa el mismo validador, preservando el grupo existente aunque esté archivado.
         // filledBy original es histórico: la adaptación solo sirve para validar el expediente corregido.
         const checked=validateSubmission({...profile,...values,guardian:values.guardian??undefined,studentCode:values.studentCode||undefined,
-          filledBy:minor?'tutor':'alumno',guardianConsent:minor,displayName,visibility:minor?'privado':profile.visibility},new Date(),[{id:0,program:profile.program,name:profile.group}])
+          filledBy:requiresGuardian?'tutor':'alumno',guardianConsent:requiresGuardian,displayName,visibility:minor?'privado':profile.visibility},new Date(),[{id:0,program:profile.program,name:profile.group}])
         const next:Submission={...profile,firstName:checked.firstName,lastName:checked.lastName,birthDate:checked.birthDate,studentCode:checked.studentCode,
-          guardian:checked.guardian,guardianConsent:minor,displayName,visibility:checked.visibility}
+          guardian:checked.guardian,guardianConsent:requiresGuardian,displayName,visibility:checked.visibility}
         const identityChanged=['firstName','lastName','birthDate'].some(field=>profile[field as 'firstName'|'lastName'|'birthDate']!==next[field as 'firstName'|'lastName'|'birthDate'])
         const guardianChanged=JSON.stringify(profile.guardian??null)!==JSON.stringify(next.guardian??null)
-        const needsConsent=minor&&(!row.reference||identityChanged||guardianChanged)
+        const needsConsent=requiresGuardian&&(!row.reference||identityChanged||guardianChanged)
         if(needsConsent&&(reference.length<8||reference===row.reference))throw new HttpError(400,'Registra una nueva referencia de autorización del tutor (8 a 240 caracteres), distinta de la anterior.')
-        const renewConsent=minor&&Boolean(reference)
+        const renewConsent=requiresGuardian&&Boolean(reference)
         if(renewConsent&&reference.length<8)throw new HttpError(400,'La referencia de autorización debe tener de 8 a 240 caracteres.')
         const after=snapshot(next,minor?(renewConsent?reference:row.reference):null)
         const changed=(Object.keys(before) as (keyof StudentRecordSnapshot)[]).filter(field=>JSON.stringify(before[field])!==JSON.stringify(after[field]))

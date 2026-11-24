@@ -96,7 +96,7 @@ export const localApi = {
   changePassword: (currentPassword: string, password: string, confirm: string) => call('/auth/password', 'POST', { currentPassword, password, confirm }),
   requests: () => call<{ requests: LocalRequest[] }>('/requests'),
   students: () => call<{ students: LocalStudent[] }>('/students'),
-  submit: (submission: Submission, key: string) => call<Receipt>('/requests', 'POST', submission, { 'Idempotency-Key': key }),
+  submit: (submission: Submission | import('../../../server/contracts').SchoolRegistration, key: string) => call<Receipt>('/requests', 'POST', submission, { 'Idempotency-Key': key }),
   decide: (request: LocalRequest, decision: RequestDecision, reference?: string) => call(`/requests/${request.id}/${decision}`, 'POST', { revision: request.revision, reference }),
   studentStatus: (student: LocalStudent, status: 'activo' | 'suspendido') => call(`/students/${student.id}`, 'PATCH', { revision: student.revision, status }),
   invite: (student: LocalStudent) => call<ActivationInvitation>(`/students/${student.id}/invitation`, 'POST', { revision: student.revision }),
@@ -154,7 +154,7 @@ export const googleApi = {
   challenge: () => call<{ clientId: string; nonce: string }>('/google/challenge', 'POST', {}),
   signIn: (credential: string) => call<{ destination: string }>('/google/signin', 'POST', { credential }),
   session: () => call<GoogleState>('/google/session'),
-  submit: (submission: Submission, key: string) => call<Receipt>('/google/profile', 'POST', submission, { 'Idempotency-Key': key }),
+  submit: (submission: Submission | import('../../../server/contracts').SchoolRegistration, key: string) => call<Receipt>('/google/profile', 'POST', submission, { 'Idempotency-Key': key }),
   enter: () => call<{ destination: string }>('/google/continue', 'POST', {}),
   logout: () => call('/google/logout', 'POST', {}),
 }

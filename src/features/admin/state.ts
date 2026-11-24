@@ -137,9 +137,9 @@ export function nextRequestId(requests: AccessRequest[]) {
   return `CAI-${String(max + 1).padStart(4, '0')}`
 }
 
-/** Un menor solo puede aprobarse con la autorización de su tutor registrada. */
+/** Se conserva la autorización de expedientes históricos, sin pedirla en el registro nuevo. */
 export function canApprove(request: AccessRequest) {
-  return request.ageGroup === 'adulto' || request.guardianConsent === 'recibida'
+  return request.guardianConsent !== 'pendiente'
 }
 
 const dateFormat = new Intl.DateTimeFormat('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })

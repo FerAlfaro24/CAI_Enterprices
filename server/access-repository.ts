@@ -1,3 +1,4 @@
+import { isSchoolClass } from '../shared/school-classes.ts'
 import type { LocalRequest, LocalStudent, Receipt, RequestDecision, RequestStatus, Submission } from './contracts.ts'
 import { transaction, type Database } from './database.ts'
 import { ageAt, HttpError } from './validation.ts'
@@ -19,10 +20,10 @@ function toRequest(row: RequestRow): LocalRequest {
   const minor = age < 18
   return {
     id: folio(row.id), name: `${p.firstName} ${p.lastName}`, program: p.program,
-    ageGroup: minor ? 'menor' : 'adulto', guardianConsent: minor ? row.confirmed_at ? 'recibida' : 'pendiente' : undefined,
+    ageGroup: minor ? 'menor' : 'adulto', guardianConsent: minor && !p.className ? row.confirmed_at ? 'recibida' : 'pendiente' : undefined,
     source: 'Formulario web', signInMethod: row.google_subject ? 'google' : 'password', submittedAt: row.created_at.slice(0, 10), message: p.message || 'Sin mensaje adicional.',
     status: row.status, revision: row.revision,
-    applicant: { filledBy: p.filledBy, email: p.email, age, group: p.group, studentCode: p.studentCode,
+    applicant: { filledBy: p.filledBy, email: p.email, age, group: p.group, studentCode: p.studentCode ?? (p.className ? folio(row.id) : undefined),
       displayName: p.displayName, avatarColor: p.avatarColor, visibility: p.visibility, guardian: p.guardian },
   }
 }
@@ -44,7 +45,7 @@ export function accessRepository(db: Database) {
           return { id: folio(existing.id), submittedAt: existing.created_at.slice(0, 10), status: 'pendiente' }
         }
         if (!administration(db).settings().registrationOpen) throw new HttpError(409, 'CAI pausó las nuevas solicitudes. Intenta más tarde o consulta con coordinación.')
-        if (!administration(db).groups().some(group => group.active && group.program === payload.program && group.name === payload.group)) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
+        if (!payload.className && !administration(db).groups().some(group => group.active && group.program === payload.program && group.name === payload.group)) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
         if (identity?.request_id !== null && identity?.request_id !== undefined) throw new HttpError(409, 'Tu cuenta de Google ya tiene una solicitud. Consulta su estado o contacta con CAI.')
         if (db.prepare("SELECT id FROM requests WHERE email = ? AND status IN ('pendiente','aprobada')").get(payload.email)) throw new HttpError(409, 'Ya hay una solicitud en revisión o aprobada con ese correo. Consulta con CAI.')
         const created = new Date().toISOString()
@@ -81,7 +82,7 @@ export function accessRepository(db: Database) {
             db.prepare('INSERT INTO consent_confirmations VALUES (?, ?, ?, ?)').run(key, actor, reference.trim(), new Date().toISOString())
             db.prepare('UPDATE requests SET revision = revision + 1 WHERE id = ?').run(key)
           } else {
-            if (decision === 'approve' && request.ageGroup === 'menor' && !row.confirmed_at) throw new HttpError(409, 'Primero confirma la autorización del tutor.')
+            if (decision === 'approve' && request.guardianConsent === 'pendiente') throw new HttpError(409, 'Primero confirma la autorización del tutor.')
             db.prepare('UPDATE requests SET status = ?, revision = revision + 1 WHERE id = ?').run(decision === 'approve' ? 'aprobada' : 'rechazada', key)
             if (decision === 'approve') db.prepare('INSERT INTO students(request_id, joined_at) VALUES (?, ?)').run(key, new Date().toISOString())
           }
@@ -126,21 +127,22 @@ export function accessRepository(db: Database) {
         if (student.revision !== revision) throw new HttpError(409, 'La ficha cambió en otra ventana. Actualiza antes de guardar.')
         if (confirmed !== true) throw new HttpError(400, 'Confirma el cambio de grupo y sus efectos antes de guardar.')
         const catalog = administration(db).groups().filter(item => item.active)
-        if (!catalog.some(item => item.program === program && (item.name === group || group === 'Por asignar'))) throw new HttpError(400, 'Elige un programa y grupo activo del catálogo.')
         const profile = JSON.parse(String(row.payload)) as Submission
+        if (profile.className ? !isSchoolClass(program) || group !== '' : !catalog.some(item => item.program === program && (item.name === group || group === 'Por asignar'))) throw new HttpError(400, 'Elige una clase válida o conserva una asignación anterior válida.')
         if (profile.program === program && profile.group === group) throw new HttpError(409, 'El alumno ya tiene esa asignación.')
         const before = { program: profile.program, group: profile.group }
+        if(profile.className && isSchoolClass(program))profile.className=program
         profile.program = String(program); profile.group = String(group)
         db.prepare('UPDATE requests SET payload = ?, revision = revision + 1 WHERE id = ?').run(JSON.stringify(profile), key)
         db.prepare('UPDATE students SET revision = revision + 1 WHERE request_id = ?').run(key)
         db.prepare('DELETE FROM student_sessions WHERE request_id = ?').run(key)
         db.prepare('DELETE FROM student_invitations WHERE request_id = ?').run(key)
         // Mantener la audiencia original de cada envío. Volver a un grupo no republica historias automáticamente.
-        holdAuthorComments(db,key,actor,'Cambio de grupo del autor; requiere nueva revisión.')
-        db.prepare("UPDATE publications SET status = CASE WHEN status = 'publicada' THEN 'pendiente' ELSE status END, published_at = NULL, revision = revision + 1 WHERE author_id = ? AND status <> 'retirada'").run(key)
+        if(!profile.className)holdAuthorComments(db,key,actor,'Cambio de grupo del autor; requiere nueva revisión.')
+        if(!profile.className)db.prepare("UPDATE publications SET status = CASE WHEN status = 'publicada' THEN 'pendiente' ELSE status END, published_at = NULL, revision = revision + 1 WHERE author_id = ? AND status <> 'retirada'").run(key)
         audit(actor, key, 'student.assigned')
         administrationAudit(db, actor, 'student.assigned', { id, before, after: { program, group } })
-        queueNotice(db, key, 'Cambio de grupo', 'CAI actualizó tu inscripción. Vuelve a entrar para consultar tu programa y grupo. Tus historias conservan su grupo de origen; las publicadas necesitan una nueva revisión.')
+        queueNotice(db, key, 'Cambio de inscripción', profile.className ? 'CAI actualizó tu clase. Vuelve a entrar; sigues compartiendo la misma comunidad.' : 'CAI actualizó tu inscripción. Vuelve a entrar para consultar los datos actuales.')
       })
     },
   }
