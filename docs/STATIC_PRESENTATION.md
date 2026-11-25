@@ -11,11 +11,15 @@ El usuario pidió conservar los atajos inferiores y recuperar el inicio de sesi�
 - El botón Continuar con Google abre una **simulación identificada de CAI**, sin SDK, cuentas, tokens o permisos reales de Google. Elegir Alumno de muestra lleva a comunidad. No presentarlo como prueba de autenticación real en Vercel; la conexión real sigue comprobada solo en la fixture local documentada en GOOGLE_EMAIL.
 - El adaptador comprueba las credenciales ficticias, rechaza valores incorrectos y descarta el texto de contraseña sin guardarlo. No acepta JWT reales en el recorrido simulado.
 
-Pruebas nuevas:23 checks Brave y23 Opera GX,46 en total, sobre la muestra compilada local. Formularios de ambos roles, rechazo de clave incorrecta, mostrar clave, entrada con cuentas ficticias, atajos, simulación Google/cancelación/foco, tamaños1440/768/375/320 y ausencia de errores o solicitudes a API/Google. Tipos/build/lint correctos; compilación real separada sin adaptador, clave ficticia o selector simulado. Capturas escritorio/móvil revisadas. Guion: `scripts/check-presentation-login.browser.mjs`. Las cifras públicas posteriores de esta guía corresponden al corte anterior hasta verificar el despliegue nuevo.
+Pruebas nuevas:23 checks Brave y23 Opera GX,46 en total, sobre la muestra compilada local. Formularios de ambos roles, rechazo de clave incorrecta, mostrar clave, entrada con cuentas ficticias, atajos, simulación Google/cancelación/foco, tamaños1440/768/375/320 y ausencia de errores o solicitudes a API/Google. Tipos/build/lint correctos; compilación real separada sin adaptador, clave ficticia o selector simulado. Capturas escritorio/móvil revisadas. Guion: `scripts/check-presentation-login.browser.mjs`. Las cifras del cierre público inicial más abajo conservan su corte anterior.
 
 Icono original descargado de [Google](https://developers.google.com/static/identity/images/g-logo.png), siguiendo su [referencia visual](https://developers.google.com/identity/branding-guidelines); no se modificó el logo ni el componente de Google real.
 
 Se repitió además el recorrido general actualizado en Brave:39 checks correctos sobre registro/revisión, publicaciones/carrusel, comentarios, fotos, Retos, Logros y reinicio. No se repitió el backend ni la autenticación real de Google.
+
+**Publicado y verificado el25-11:** código `2515bf7`, [PR#39](https://github.com/FerAlfaro24/CAI_Enterprices/pull/39). La sesión de Vercel disponible permitió promover la vista previa y observar **Ready** en [el despliegue público actualizado](https://vercel.com/feralfaro24/cai-enterprices/DkyQ8r71eXSy14mgC4jG996xRpLU), sin fusionar ramas ni cambiar main. Se dejó abierto [el login público](https://cai-enterprices.vercel.app/login) con formulario, Google de muestra y atajos.
+
+**23 comprobaciones públicas nuevas en Brave**, todas correctas, sobre ese origen HTTPS sin cuenta de Vercel: cuentas ficticias de ambos roles, credenciales incorrectas, mostrar clave, no persistir contraseñas, simulación Google/cancelación/foco, conservación de atajos y tamaños1440/768/375/320. Cero errores JS/consola y cero solicitudes a API/SDK/OAuth de Google. Esto acredita la simulación publicada; no es autenticación real de Google en Vercel.
 
 ## Versión y propósito
 
