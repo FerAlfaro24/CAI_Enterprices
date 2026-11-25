@@ -1,5 +1,8 @@
 # CAI — empieza aquí
 
+**Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
+
+
 ## Rama para continuar
 
 **`integration/cai-v1-completa-2026-11-25` es el punto integrado más completo al 25-11-2026.** Parte de `ae634d6` de Google/correo, que ya incluye la v1.0 y todos los avances funcionales posteriores. Las actualizaciones propias de la consolidación son documentales; no se vuelve a fusionar cada rama.

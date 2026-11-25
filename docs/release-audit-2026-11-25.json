@@ -1,0 +1,157 @@
+{
+  "date": "2026-11-25",
+  "candidateBranch": "release/cai-v1-candidate-2026-11-25",
+  "baseCommit": "04bb0df54ce1ec963eea6fd0f628c919bbd60e1a",
+  "presentationCommit": "7d489abb331ed508c767e604776750dbd4df5bda",
+  "laterCommits": [
+    "7d489ab docs: confirm illustrated community published and existing session retained",
+    "324b474 feat: illustrate six community stories and refresh demo notices",
+    "f4e1f90 docs: record real Google login verified on public Vercel site",
+    "3d1dc1e fix: use NodeNext import for Vercel function compilation",
+    "5968483 feat: verify real Google identity in Vercel presentation",
+    "9cc1583 docs: confirm restored demo login on public Vercel site",
+    "2515bf7 fix: restore presentation login with explicit Google preview",
+    "39816de docs: verify public CAI presentation without local servers",
+    "bf5a63d docs: record ready presentation and pending public activation",
+    "22e8a88 feat: add independent CAI presentation with fictional browser activity",
+    "c1bf677 docs: record Vercel build and remaining preview access",
+    "ead1f8b fix: route Vercel frontend pages without masking missing API"
+  ],
+  "classification": [
+    {
+      "path": "api/presentation-google.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "package.json",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "scripts/check-presentation-login.browser.mjs",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "scripts/check-static-presentation.browser.mjs",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "server/presentation-google.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "server/tests/presentation-google.test.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/app/App.tsx",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "src/assets/presentation/beatles.webp",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/assets/presentation/matilda.webp",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/community/components/PostCard.tsx",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "src/features/community/home/ConnectedPostCard.tsx",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "src/features/local-access/GoogleSignInButton.tsx",
+      "decision": "Prop hint para presentación; no requerido en conectada"
+    },
+    {
+      "path": "src/features/local-access/api.ts",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/PresentationLoginOptions.tsx",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/PresentationTools.tsx",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/PublicationReference.tsx",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/admin.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/community.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/content.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/credentials.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/google.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/presentation.module.css",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/requests.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/seed.json",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/features/presentation/store.ts",
+      "decision": "Exclusivo de presentación; conservar separado"
+    },
+    {
+      "path": "src/pages/LoginPage.tsx",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "src/pages/SignupPage.tsx",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    },
+    {
+      "path": "vercel.json",
+      "decision": "Integración/entrada a presentación o configuración de Vercel; conservar separado"
+    }
+  ],
+  "coreCodeDifferencesFromBase": [],
+  "clientApproval": "Presentación y diseño general según titular; no operación de producción ni Top/vídeos específicos",
+  "liveDataOpened": false,
+  "productionDeployed": false,
+  "validation": {
+    "codeCommit": "dade9d27bd00ecce07469bf3eb24e104ad0eed57",
+    "typecheck": true,
+    "connectedBuild": true,
+    "lint": true,
+    "manifestFiles": 405,
+    "hashesVerified": true,
+    "packageRuntimeImports": true,
+    "fixtureSchema": 23,
+    "initialStudents": 0,
+    "initialPublications": 0,
+    "productionStartup": true,
+    "invalidProtocolRejected": true,
+    "restartPersistence": true,
+    "realTLS": false,
+    "linuxServiceTemplatesExecuted": false,
+    "liveDataOpened": false,
+    "productionDeployed": false
+  }
+}

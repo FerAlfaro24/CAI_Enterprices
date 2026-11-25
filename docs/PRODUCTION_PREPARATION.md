@@ -1,5 +1,8 @@
 # CAI — preparación técnica de producción
 
+**Corte vigente de entrega25-11: esquema23 y Node24 >=24.12.0 <25.** Google y SMTP ya comprobados en fixtures locales F6; faltan configuraciones y prueba del alojamiento real. Las actualizaciones fechadas inferiores conservan sus cortes históricos. Procedimiento de entrega actual en [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md).
+
+
 **Actualización vigente F5 — 24-11:** F5 conserva esquema 22 sin migración. Añade metadatos de renovación al snapshot; el servidor conserva la autoridad de fecha/permiso/respuesta. Probar y desplegar frontend/API de la misma entrega cuando se autorice adoptar; esta tarea no configuró TLS, proveedor, dominio, Google ni correo reales. [Entrega vigente](NEXT_STEPS.md#entrega-f5-retos-diarios-y-progreso-personal--24-11-2026).
 
 **Actualización vigente F3b/F4 — 24-11:** F4 mantiene esquema 22, sin migración nueva. Los comentarios nuevos se publican al enviar y requieren las herramientas F3a de moderación ya incluidas. El arranque productivo conserva sus requisitos22/origen/proxy/cookies/datos privados. Ningún proveedor, TLS, Google o correo real fue configurado por esta entrega. [Entrega vigente](NEXT_STEPS.md#entrega-f3b-y-f4-logros-comentarios-y-publicador--24-11-2026).
@@ -49,7 +52,7 @@ El servidor requiere Node >=24.12.0, proceso persistente y disco privado persist
 | CAI_TRUST_PROXY | `loopback`; requiere el contrato anterior. |
 | CAI_API_PORT | Entero de 1024 a 65535; por defecto 3100, siempre en 127.0.0.1. |
 | CAI_DATA_DIR | Carpeta absoluta existente y privada; se resuelve su ubicación real. Debe estar separada del código: ninguna puede contener a la otra. No aceptar enlaces que la lleven al código/publicación. |
-| GOOGLE_CLIENT_ID | Opcional, formato de cliente web validado. Producción no lee .local/google.json. Google real sigue pendiente. |
+| GOOGLE_CLIENT_ID | Opcional, formato de cliente web validado. Producción no lee .local/google.json. Acceso real local comprobado en F6; pendiente origen y prueba del destino. |
 
 CAI_DATA_DIR contiene cai.sqlite, sus archivos WAL/SHM y backups. Su ubicación no se imprime en registros del servicio. Configurar derechos del usuario de servicio y copias: 0700/0600 cuando corresponda en POSIX, o ACL equivalente en Windows. **No se modificaron ni comprobaron permisos de un alojamiento real en esta tarea.** Las rutas de la plantilla son marcadores, no carpetas creadas por el agente.
 
@@ -60,7 +63,7 @@ Estos pasos son para el entorno nuevo aprobado, **no para ejecutarlos ahora cont
 1. Proporcionar carpeta privada y variables del proceso. Elegir responsable/correo administrativo de CAI y guardar una frase inicial de 15 a 128 caracteres en un archivo privado, de una línea, dentro de CAI_DATA_DIR.
 2. Solo para preparar una base nueva: definir CAI_BOOTSTRAP_EMAIL y CAI_BOOTSTRAP_PASSWORD_FILE con la ruta absoluta de ese archivo; ejecutar `npm.cmd run production:setup` (npm en un entorno sin PowerShell). No hay cuenta o contraseña predeterminada. No se imprime ni guarda la frase en documentación o logs.
 3. El comando reserva el archivo con creación exclusiva, aplica el esquema y guarda el hash del administrador. Si la base ya existe, se detiene antes de leer el archivo secreto. Una interrupción no autoriza borrar o reintentar sobre datos existentes: conservar la evidencia y revisar el estado.
-4. Ejecutar `npm.cmd run production:check`: comprobación de solo lectura, integridad, referencias, historial completo 1–18 y administrador activo. No crea, migra o restaura bases ni abre un puerto. Una versión anterior/futura o un hueco de migraciones bloquean el arranque; una actualización requiere respaldo y procedimiento explícito.
+4. Ejecutar `npm.cmd run production:check`: comprobación de solo lectura, integridad, referencias, historial completo 1–23 y administrador activo. No crea, migra o restaura bases ni abre un puerto. Una versión anterior/futura o un hueco de migraciones bloquean el arranque; una actualización requiere respaldo y procedimiento explícito.
 5. Ejecutar `npm.cmd run start:api` bajo el gestor de procesos del alojamiento. Arranca únicamente en loopback. El responsable retira las variables/archivo de bootstrap cuando el acceso quede custodiado por su canal privado; el programa no elimina archivos implícitamente.
 
 No usar local:setup, local:backup o google:setup como herramientas de producción: ahora se detienen si NODE_ENV=production antes de tocar .local. El acceso real de Google y la entrega real de correo se configurarán/prueban en su tanda; la recuperación pública no afirma que haya llegado un correo.
