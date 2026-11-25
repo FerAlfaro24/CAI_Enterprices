@@ -1,5 +1,7 @@
 # CAI — próximos pasos vigentes
 
+**Acceso de presentación — 25-11-2026:** publicar/verificar `fix/demo-login-google` para la nueva petición de conservar atajos y mostrar el login original con Google.46 checks locales nuevos correctos. Google es una simulación identificada en esta muestra; no conectar cuentas reales ni reinterpretarla como OAuth productivo. [Uso y pruebas](STATIC_PRESENTATION.md#actualización-del-acceso-25-11-2026).
+
 **Presentación pública cerrada — 25-11-2026:** [enlace habitual](https://cai-enterprices.vercel.app/) verificado sin cuenta de Vercel; portada/community/admin/login correctos y39 checks públicos nuevos Brave sin errores ni solicitudes a API local. La muestra ficticia independiente por navegador está disponible con la computadora apagada;78 checks locales Brave/Opera y build/lint anteriores conservados. No volver a pedir activación, elección de simulación o alojamiento para mostrar esta presentación. [Uso y límites](STATIC_PRESENTATION.md). Continuar trabajo real desde la integrada, conservando aparte la rama de muestra; no tratarla como producción con cuentas/datos compartidos.
 
 **Diagnóstico anterior de Vercel — 25-11-2026:** [VERCEL_PREVIEW](VERCEL_PREVIEW.md) conserva los404 y ausencia de API de la integrada antes de preparar la presentación. La elección de simulación y la corrección de rutas ya quedaron resueltas y comprobadas en la muestra pública; no repetirlas como pendientes. No confundir esta muestra con alojar el sistema real ni contratar servicios implícitamente.

@@ -1,5 +1,22 @@
 # CAI — presentación independiente de la computadora
 
+## Actualización del acceso, 25-11-2026
+
+El usuario pidió conservar los atajos inferiores y recuperar el inicio de sesión original para presentar también Google. Rama `fix/demo-login-google`, desde `39816de` de la muestra pública anterior.
+
+- `/login` vuelve a mostrar correo, contraseña, mostrar/ocultar clave y enlaces habituales.
+- `/login?cuenta=admin` permite mostrar el formulario administrativo aunque la muestra tenga una sesión ficticia abierta.
+- Los atajos Página principal, Alumno, Coordinación y Reiniciar se mantienen.
+- Cuentas **públicas y exclusivamente ficticias**: alumno `alumno@example.test`, coordinación `admin@example.test`; ambas usan `CaiDemo2026`. La ayuda permite rellenarlas. No son accesos del sistema real ni secretos.
+- El botón Continuar con Google abre una **simulación identificada de CAI**, sin SDK, cuentas, tokens o permisos reales de Google. Elegir Alumno de muestra lleva a comunidad. No presentarlo como prueba de autenticación real en Vercel; la conexión real sigue comprobada solo en la fixture local documentada en GOOGLE_EMAIL.
+- El adaptador comprueba las credenciales ficticias, rechaza valores incorrectos y descarta el texto de contraseña sin guardarlo. No acepta JWT reales en el recorrido simulado.
+
+Pruebas nuevas:23 checks Brave y23 Opera GX,46 en total, sobre la muestra compilada local. Formularios de ambos roles, rechazo de clave incorrecta, mostrar clave, entrada con cuentas ficticias, atajos, simulación Google/cancelación/foco, tamaños1440/768/375/320 y ausencia de errores o solicitudes a API/Google. Tipos/build/lint correctos; compilación real separada sin adaptador, clave ficticia o selector simulado. Capturas escritorio/móvil revisadas. Guion: `scripts/check-presentation-login.browser.mjs`. Las cifras públicas posteriores de esta guía corresponden al corte anterior hasta verificar el despliegue nuevo.
+
+Icono original descargado de [Google](https://developers.google.com/static/identity/images/g-logo.png), siguiendo su [referencia visual](https://developers.google.com/identity/branding-guidelines); no se modificó el logo ni el componente de Google real.
+
+Se repitió además el recorrido general actualizado en Brave:39 checks correctos sobre registro/revisión, publicaciones/carrusel, comentarios, fotos, Retos, Logros y reinicio. No se repitió el backend ni la autenticación real de Google.
+
 ## Versión y propósito
 
 Rama `demo/v1-vercel-presentation`, desde `c1bf677` de `fix/v1-vercel-navigation`, que conserva la integrada `04bb0df` y F1–F6. Presentación ficticia autorizada por el usuario el25-11: variada, sin servidor local y con cambios independientes por navegador. La versión conectada continúa en `integration/cai-v1-completa-2026-11-25`; no fusionar este modo en ella o main como si fuera producción.
@@ -10,7 +27,7 @@ Vercel usa `npm run build:presentation` en esta rama y sirve únicamente dist. L
 
 - Portada en `/`; comunidad directamente en `/community`; coordinación en `/admin`.
 - La barra inferior identifica la presentación y permite cambiar de área o reiniciar con confirmación.
-- `/login` ofrece entradas de muestra como alumno/coordinación, sin pedir correo o contraseña.
+- `/login` ofrece el formulario original con credenciales ficticias y un recorrido Google simulado; los atajos inferiores permiten explorar alumno/coordinación directamente.
 - Registro admite solo datos ficticios: las solicitudes se guardan en ese navegador y se revisan desde su propio panel.
 - Reacciones, comentarios inmediatos y borrado propio; fotos y visor; notificaciones; perfiles; Logros privados con imágenes; Retos actuales con aciertos/errores, puntos, repaso e insignias.
 - Coordinación puede revisar solicitudes/publicaciones y crear publicaciones normales o avisos que aparecen en el carrusel.
