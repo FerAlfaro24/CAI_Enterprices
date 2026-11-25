@@ -40,6 +40,6 @@ Secuencia para el servidor futuro:
 
 ## Evidencia y límites de esta candidata
 
-Pendiente de registrar la compilación y prueba del paquete. Las pruebas históricas de la integrada siguen documentadas en INTEGRATED_VERSION; no se vuelven a contar. No se modifica la base habitual ni la muestra pública.
+Validación completada sobre código dade9d2: tipos/build conectado y lint correctos; paquete405 archivos con SHA256 verificados, imports privados completos, base nueva esquema23 sin alumnos/publicaciones ficticios, arranque productivo, rechazo de protocolo incorrecto y persistencia al reiniciar. Prueba aislada en .local/tests, cerrada al terminar, sin SMTP/Google externos ni TLS real. No se repiten suites históricas. Las pruebas históricas de la integrada siguen documentadas en INTEGRATED_VERSION; no se vuelven a contar. No se modifica la base habitual ni la muestra pública.
 
 Caddy/systemd/DNS/HTTPS/SMTP/Google reales del destino y dependencias nativas Linux se comprobarán al disponer del servidor. El equipo actual es Windows: revisar una plantilla no equivale a instalarla o verificar su funcionamiento en Linux. La revisión de alojamiento está en [HOSTING_OPTIONS](HOSTING_OPTIONS.md).

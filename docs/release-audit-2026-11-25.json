@@ -134,5 +134,24 @@
   "coreCodeDifferencesFromBase": [],
   "clientApproval": "Presentación y diseño general según titular; no operación de producción ni Top/vídeos específicos",
   "liveDataOpened": false,
-  "productionDeployed": false
+  "productionDeployed": false,
+  "validation": {
+    "codeCommit": "dade9d27bd00ecce07469bf3eb24e104ad0eed57",
+    "typecheck": true,
+    "connectedBuild": true,
+    "lint": true,
+    "manifestFiles": 405,
+    "hashesVerified": true,
+    "packageRuntimeImports": true,
+    "fixtureSchema": 23,
+    "initialStudents": 0,
+    "initialPublications": 0,
+    "productionStartup": true,
+    "invalidProtocolRejected": true,
+    "restartPersistence": true,
+    "realTLS": false,
+    "linuxServiceTemplatesExecuted": false,
+    "liveDataOpened": false,
+    "productionDeployed": false
+  }
 }
