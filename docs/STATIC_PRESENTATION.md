@@ -43,8 +43,12 @@ Los módulos de presentación se cargan por importación dinámica: `store.ts` c
 
 Durante las pruebas se corrigió el formato de fecha de las solicitudes ficticias para ajustarlo al contrato del panel. Los primeros intentos del guion también ajustaron esperas de render y selección del visor; los78 anteriores corresponden a las tandas finales completas, no a los intentos fallidos. No repetir la suite histórica de servidor para sumar cifras: el backend no cambió.
 
-## Despliegue comprobado y acción pendiente
+## Despliegue público verificado
 
 Código `22e8a88`, [PR#38 en borrador](https://github.com/FerAlfaro24/CAI_Enterprices/pull/38). Vercel terminó de compilar y su bot informó **Ready** el25-11 para [este despliegue](https://vercel.com/feralfaro24/cai-enterprices/7WQBt8cEdgbZDoyhQREZf8E5j74C). El servidor ficticio utilizado para generar los datos ya fue detenido; su fixture se conserva.
 
-Se indicó al titular que puede activar esa versión con **Promote to Production** para servirla desde el enlace público habitual, sustituyendo el prototipo antiguo. No requiere fusionar main ni la integrada. Aún no se ha observado esa acción ni comprobado el render remoto: la vista previa nueva mantiene la protección de Vercel. No afirmar que la presentación pública ya funciona hasta verificar el origen publicado y su navegación desde un contexto sin acceso a Vercel.
+**Cierre público del25-11-2026:** tras la activación del titular, [la portada](https://cai-enterprices.vercel.app/), [comunidad](https://cai-enterprices.vercel.app/community), [coordinación](https://cai-enterprices.vercel.app/admin) y login se abrieron directamente con HTTP200 desde un contexto Brave nuevo, sin cuenta ni enlace privado de Vercel. Se observó la barra de presentación y el contenido actual. El prototipo antiguo del enlace habitual fue sustituido por la muestra ficticia; no se fusionaron main o la integrada.
+
+Se ejecutó además el guion completo contra ese origen HTTPS: **39 comprobaciones públicas nuevas en Brave**, todas correctas, sin errores de JavaScript/consola y cero solicitudes a API local. Incluye registro/revisión, publicación de aviso/carrusel, reacciones, comentarios/borrado, imagen ampliada, Logros con imagen, Retos/resultados/insignia, independencia entre navegadores, recarga, reinicio y tamaños1440/768/375/320. Las78 comprobaciones Brave/Opera anteriores siguen siendo locales; no afirmar que Opera se repitió sobre el despliegue público.
+
+Los servidores locales de exportación y de vista previa están cerrados; resultados y capturas se conservaron. Se puede compartir el enlace público con la computadora apagada. Cada navegador modifica su propia muestra; Google/correos/seguridad de producción y servicios persistentes reales siguen fuera de este despliegue.
