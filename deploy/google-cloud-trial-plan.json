@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "status": "planned-not-created",
+  "purpose": "Presentación temporal del sistema conectado para 2 o 3 personas",
+  "projectId": "wide-ceiling-515804-p4",
+  "billingGate": {
+    "requiredAccountType": "Free Trial activo con crédito disponible",
+    "paidUpgradeAuthorized": false,
+    "verifyBeforeCreatingResources": true,
+    "cardEntry": "Solo el titular directamente en Google",
+    "resourceEstimate": "Revisar estimación en consola antes de crear; el crédito cubre consumo elegible"
+  },
+  "proposedInstance": {
+    "name": "cai-piloto",
+    "zone": "us-central1-a",
+    "machineType": "e2-small",
+    "memoryGiB": 2,
+    "imageFamily": "debian-12",
+    "imageProject": "debian-cloud",
+    "bootDiskType": "pd-standard",
+    "bootDiskSizeGiB": 20,
+    "instanceCount": 1,
+    "externalAddress": "IPv4 efímera; mantener hasta terminar la presentación",
+    "serviceAccount": null,
+    "gpu": false,
+    "loadBalancer": false
+  },
+  "application": {
+    "runtime": "Node24 >=24.12.0 <25",
+    "schema": 23,
+    "publicPorts": [80, 443],
+    "apiBinding": "127.0.0.1:3100",
+    "publicOrigin": null,
+    "dataDirectory": "/var/lib/cai",
+    "publicDirectory": "/srv/cai/current/dist",
+    "domain": "Subdominio gratuito pendiente de registrar y comprobar con Google",
+    "mail": "Configuración SMTP privada; renovar credencial compartida antes de instalar"
+  },
+  "finish": {
+    "presentationDate": null,
+    "backupBeforeStopping": true,
+    "automaticDeletion": false,
+    "note": "Acordar fecha, respaldar y cerrar recursos al terminar; no programar borrado implícito."
+  }
+}

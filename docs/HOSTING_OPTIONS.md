@@ -1,5 +1,8 @@
 # CAI — opciones de alojamiento revisadas el25-11-2026
 
+**Prioridad sustituida por aclaración posterior:** el titular solo necesita una prueba temporal para2 o3 personas. Preparación autorizada de Google Cloud Free Trial en [GOOGLE_CLOUD_TRIAL](GOOGLE_CLOUD_TRIAL.md); la comparación inferior conserva el corte anterior para alojamiento duradero. No pasar a pago.
+
+
 ## Requisito del proyecto
 
 Presupuesto autorizado: solo opciones gratuitas por ahora. El código actual necesita Node24 persistente, una instancia, SQLite/WAL en disco privado persistente, proxy HTTPS local, correo saliente a Gmail y respaldos fuera del servidor. La selección es de compatibilidad; no se crearon cuentas ni contrataron servicios.
