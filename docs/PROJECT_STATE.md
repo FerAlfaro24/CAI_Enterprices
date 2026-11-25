@@ -1,5 +1,8 @@
 # CAI — estado vigente
 
+**Prueba temporal Google Cloud — 25-11:** `ops/cai-google-cloud-trial-2026-11-25`, desde candidata `b4a2f46`/PR#42. Titular aclara presentación final para2 o3 personas; autoriza preparar Free Trial, sin plan de pago. Plan revisable y pasos del titular en [GOOGLE_CLOUD_TRIAL](GOOGLE_CLOUD_TRIAL.md). Reutilizar paquete conectado ya comprobado. Cuenta/crédito/VM/dominio aún sin confirmar; el titular debe completar personalmente datos de pago y condiciones. La demo Vercel sigue disponible.
+
+
 **Candidata de entrega — 25-11-2026:** `release/cai-v1-candidate-2026-11-25`, desde `04bb0df` de la integrada. Cliente aprobó la presentación y diseño general, pendiente piloto con datos reales. Revisión de12 commits posteriores: funciones conectadas ya presentes; conservar adaptador y ejemplos de Vercel en su propia rama. Preparación portátil Node24/esquema23, plantillas de instalación y comparación de alojamiento gratuito. Sin adoptar bases ni modificar la muestra pública. [Candidata](RELEASE_CANDIDATE.md) y [alojamiento](HOSTING_OPTIONS.md). Validación completada sobre código dade9d2: tipos/build conectado y lint correctos; paquete405 archivos con SHA256 verificados, imports privados completos, base nueva esquema23 sin alumnos/publicaciones ficticios, arranque productivo, rechazo de protocolo incorrecto y persistencia al reiniciar. Prueba aislada en .local/tests, cerrada al terminar, sin SMTP/Google externos ni TLS real. No se repiten suites históricas.
 
 
@@ -155,3 +158,5 @@ La siguiente autorización llevó a la [preparación productiva](PRODUCTION_PREP
 ## Cómo actualizar este estado
 
 En cada entrega indicar fecha/base/commit, objetivo y componentes reutilizados, qué quedó implementado y comprobado, pruebas realizadas/no realizadas, efectos en datos/permisos, incidencias y siguiente tarea. No borrar evidencia previa; trasladar bitácoras extensas al historial, con enlace. NEXT_STEPS concentra prioridades; este archivo concentra hechos.
+
+**Pantalla observada25-11:** cuenta institucional CAI, proyecto CAI Comunidad, paso1 de2 de la prueba gratuita, país México. Google muestra300 USD/90 días y Sin cargos automáticos. No se pulsó Aceptar y continuar: requiere aceptación de condiciones del titular; después debe completar personalmente la verificación de pago. Prueba aún no activada, sin VM o red creadas. URL de continuación: https://console.cloud.google.com/freetrial/signup/tos?authuser=1&project=wide-ceiling-515804-p4.
