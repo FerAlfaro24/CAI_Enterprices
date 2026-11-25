@@ -19,7 +19,7 @@ Esta corrección permite cargar las pantallas del frontend. **No despliega el ba
 
 - Antes de editar: portada y error de comunidad observados en Brave aislado sobre la vista previa compartida; entradas directas y API comprobadas por HTTP.
 - Después de editar: JSON leído correctamente; `npm.cmd run build` terminó con tipos y compilación correctos; `git diff --check` correcto.
-- Falta validar las reescrituras en el despliegue nuevo de Vercel. No se ejecutaron de nuevo las pruebas de backend: no hay cambios de servidor, permisos, base o interfaz.
+- Vercel aceptó y compiló `ead1f8b`: su bot informó **Ready** en [PR #37](https://github.com/FerAlfaro24/CAI_Enterprices/pull/37), despliegue `F2qemZPtvHQ7SSGoFnZgKFNwzvuz`. El enlace compartido de la integrada no concede acceso a esta rama nueva: un contexto Brave nuevo terminó en login de Vercel. **Falta comprobar HTTP/render de las reescrituras nuevas con acceso compartido propio**, sin desactivar globalmente protección. No se ejecutaron de nuevo las pruebas de backend: no hay cambios de servidor, permisos, base o interfaz.
 - Datos habituales y copias anteriores sin abrir/migrar; sin cambios de main/release, contratación, credenciales ni protección de Vercel.
 
 ## Pendiente para una presentación sin computadora
