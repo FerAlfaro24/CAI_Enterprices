@@ -1,5 +1,9 @@
 # CAI — próximos pasos vigentes
 
+**Presentación autorizada — 25-11-2026:** usuario eligió explícitamente muestra interactiva ficticia e independiente por navegador. Preparada en `demo/v1-vercel-presentation`/PR#38, con78 checks finales y build/lint correctos; Vercel Ready para `22e8a88`. Pendiente que titular active Promote to Production en el despliegue indicado y verificar entonces portada/comunidad/panel desde fuera sin cuenta de Vercel. No sustituir la aplicación conectada ni contratar alojamiento. [Uso, separación y pruebas](STATIC_PRESENTATION.md). Queda resuelta la elección de simulación descrita en la revisión anterior.
+
+**Presentación gratuita en Vercel — 25-11-2026:** revisar [VERCEL_PREVIEW](VERCEL_PREVIEW.md). La vista previa integrada compartida abre portada, pero no tiene API y sus rutas directas devuelven404. `fix/v1-vercel-navigation` prepara la corrección de navegación; todavía requiere validación en Vercel. Antes de preparar una muestra independiente de la computadora, confirmar si se acepta simulación con datos ficticios por navegador o se necesitan pruebas reales entre dispositivos. No confundir arreglar rutas con alojar el sistema completo; no contratar servicios.
+
 ## Continuar desde la versión integrada del 25-11-2026
 
 Usar `integration/cai-v1-completa-2026-11-25` para las nuevas ramas de trabajo. [Cobertura y punto de partida](INTEGRATED_VERSION.md). Google y Gmail reales locales ya están comprobados y el código de F1–F6 está reunido; no rehacerlo ni fusionar de nuevo las ramas incluidas. Siguiente: rotar privadamente la credencial compartida y preparar/adoptar dominio/servidor/configuración institucional definitivos con respaldo, pruebas externas y aceptación de CAI. No renovar el túnel ni migrar bases habituales implícitamente. Top requiere decisión del cliente; vídeos opcionales sin implementar.

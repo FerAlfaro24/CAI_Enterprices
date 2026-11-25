@@ -1,5 +1,7 @@
 # CAI — sitio institucional, comunidad y administración
 
+**Esta rama es la presentación ficticia para Vercel:** `demo/v1-vercel-presentation`. Explorar `/community` como alumno o `/admin` como coordinación, sin contraseñas; los cambios son independientes por navegador. [Uso, compilación y límites](docs/STATIC_PRESENTATION.md). La versión conectada se conserva en la rama integrada descrita abajo; no confundirlas.
+
 ## Versión integrada más completa
 
 **Continuar en `integration/cai-v1-completa-2026-11-25`.** Esta rama reúne la v1.0 y todos los avances posteriores incorporados hasta `ae634d6`, incluidos Google y correos reales comprobados en local. No es todavía una entrega desplegada en producción.

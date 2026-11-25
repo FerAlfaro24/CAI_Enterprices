@@ -22,7 +22,7 @@ export function SignupPage({ local: localOption = false, google }: { local?: boo
     <DemoStoreProvider>
     <div className={s.page}>
       <a className={s['skip-link']} href="#signup-content">Saltar al formulario</a>
-      {local ? <aside className={s['local-notice']}>{google ? 'Completa los datos del alumno y espera la aprobación de CAI. Todos los alumnos aprobados comparten la comunidad.' : 'Primero envía tu solicitud. CAI debe aprobarla y compartirte un enlace para que elijas tu contraseña. Por ahora no se envían correos automáticos.'}</aside> : <PrototypeNotice />}
+      {local ? <aside className={s['local-notice']}>{import.meta.env.MODE === 'presentation' ? 'Presentación: usa únicamente datos ficticios. La solicitud se guarda solo en este navegador y puedes revisarla en Coordinación; no se envían correos.' : google ? 'Completa los datos del alumno y espera la aprobación de CAI. Todos los alumnos aprobados comparten la comunidad.' : 'Primero envía tu solicitud. CAI debe aprobarla y compartirte un enlace para que elijas tu contraseña. Por ahora no se envían correos automáticos.'}</aside> : <PrototypeNotice />}
       <div className={s.layout}>
         <aside className={s.aside} aria-label="Sobre la comunidad CAI">
           <Link to="/" className={s.brand}>

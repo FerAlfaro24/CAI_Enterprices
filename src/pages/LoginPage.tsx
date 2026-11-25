@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { ArrowRight, Eye, EyeOff, ShieldCheck } from 'lucide-react'
 import { localApi, studentApi, type LocalUser } from '../features/local-access/api'
 import { GoogleSignInButton } from '../features/local-access/GoogleSignInButton'
 import s from '../features/login/login.module.css'
 import { AccessFrame } from '../features/login/AccessFrame'
+const PresentationAccess = import.meta.env.MODE === 'presentation' ? lazy(() => import('../features/presentation/PresentationTools').then(module => ({ default: module.PresentationAccess }))) : null
 
-export function LoginPage({ admin=false,onAdminLogin,message }: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void;message?:string}) {
+export function LoginPage(props: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void;message?:string}) {
+  return PresentationAccess ? <Suspense fallback={<p role="status">Preparando presentación…</p>}><PresentationAccess admin={props.admin}/></Suspense> : <ConnectedLoginPage {...props}/>
+}
+function ConnectedLoginPage({ admin=false,onAdminLogin,message }: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void;message?:string}) {
   const navigate = useNavigate()
   const form = useRef<HTMLFormElement>(null)
   const heading = useRef<HTMLHeadingElement>(null)

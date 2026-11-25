@@ -1,5 +1,7 @@
 # CAI — índice y clasificación de toda la documentación
 
+[Presentación ficticia independiente para Vercel](STATIC_PRESENTATION.md) — rama separada autorizada el25-11, controles de muestra,78 checks UI finales y separación de la aplicación conectada. [Diagnóstico de navegación previo](VERCEL_PREVIEW.md).
+
 **Entrada vigente:** [START_HERE](START_HERE.md) y [versión integrada del25-11](INTEGRATED_VERSION.md). Los documentos README_HISTORY y START_HERE_HISTORY conservan instrucciones superadas; no son guías de arranque actuales.
 
 [Google/correo F6: estado y configuración](GOOGLE_EMAIL.md) — Google real local probado; recepción Gmail y alojamiento final pendientes.
