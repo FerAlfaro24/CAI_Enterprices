@@ -1,8 +1,10 @@
+import { readMailSettings } from './email-delivery.ts'
 import { readRuntimeConfig } from './runtime-config.ts'
 import { checkProductionDatabase } from './production-storage.ts'
 
 try {
   const config = readRuntimeConfig()
+  readMailSettings(config)
   checkProductionDatabase(config)
   console.info('Configuración y base preparadas para el contrato de proxy HTTPS local. No se abrieron puertos ni se aplicaron migraciones. Falta comprobar el alojamiento real.')
 } catch {

@@ -25,7 +25,7 @@ function loadGoogle() {
   return scriptPromise
 }
 
-export function GoogleSignInButton() {
+export function GoogleSignInButton({linkAccount=false}: {linkAccount?:boolean}) {
   const parent = useRef<HTMLDivElement>(null)
   const busyRef = useRef(false)
   const [busy, setBusy] = useState(false)
@@ -47,7 +47,7 @@ export function GoogleSignInButton() {
         callback: (data) => {
           if (!active || busyRef.current) return
           busyRef.current = true; setBusy(true); setError('')
-          void googleApi.signIn(data.credential).then(({ destination }) => {
+          void (linkAccount?googleApi.link(data.credential):googleApi.signIn(data.credential)).then(({ destination }) => {
             if (active) window.location.assign(destination)
           }).catch((error: unknown) => {
             if (!active) return
@@ -73,7 +73,7 @@ export function GoogleSignInButton() {
     }
     void prepare().catch((error: unknown) => { if (active) setError(error instanceof Error ? error.message : 'Google no está disponible.') })
     return () => { active = false; observer?.disconnect() }
-  }, [attempt])
+  }, [attempt,linkAccount])
   // Si CAI no ha configurado Google, el acceso habitual sigue disponible.
   if (!enabled) return null
   return (
@@ -81,7 +81,7 @@ export function GoogleSignInButton() {
       <div ref={parent} inert={busy} className={s.button} />
       {busy && <p role="status">Confirmando tu cuenta…</p>}
       {error && <><p role="alert">{error}</p><button type="button" onClick={() => setAttempt((value) => value + 1)}>Volver a cargar Google</button></>}
-      <p className={s.hint}>Completa tus datos y espera la aprobación de CAI la primera vez.</p>
+      <p className={s.hint}>{linkAccount?'Elige la cuenta de Google con el mismo correo de tu inscripción. Tu contraseña de CAI seguirá funcionando.':'Completa tus datos y espera la aprobación de CAI la primera vez.'}</p>
     </section>
   )
 }

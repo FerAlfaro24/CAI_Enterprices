@@ -1,5 +1,9 @@
 # CAI — próximos pasos vigentes
 
+## F6: Google real local y envío preparado — 24-11-2026
+
+[Implementación y pruebas](GOOGLE_EMAIL.md): rama `feat/v1-google-email-onboarding` desde `aabd5bc`, esquema23 en fixtures nuevas. Código de activación/recuperación por SMTP y vinculación Google de cuentas existentes comprobado; Google institucional real llegó a comunidad en localhost. **No marcar F6 terminado:** falta titular Google/2FA/credencial de aplicación, SMTP/recepción real y recorrido en un dominio final. El asistente de configuración guarda credencial local con entrada oculta; no pedir secretos en chat. Presentación activa sigue con F1–F5/esquema22, sin actualizar/migrar. Top sigue pendiente del cliente.
+
 ## Presentación solicitada — 24-11-2026
 
 Preparada una copia remota independiente con F1–F5 para la presentación del usuario; rama `test/v1-client-presentation-2026-11-24` desde `15d3a94`. [Estado, pruebas y vencimiento](REMOTE_DEMO.md#presentación-actualizada--24-de-noviembre-de-2026). Cierra el 25-11 a las 10:12 CDMX; no renovar automáticamente. Tras la presentación, recoger observaciones humanas y retomar F6 Google/correo institucionales y alojamiento final; Top espera decisión del cliente. No dar por probados los dispositivos físicos o el correo real.

@@ -184,3 +184,5 @@ export type ModerationAuthor = {studentId:string;displayName:string;studentRevis
 export type CommunityModerationPost = PublishedPost & {moderation:ModerationAuthor|null}
 export type CommunityModerationComment = PublicComment & {revision:number;moderation:ModerationAuthor}
 export type CommunityModerationAction = {studentRevision:number;commentRevision?:number;removeComment:boolean;suspend:boolean;durationDays:number|null;reason:string;confirmed:boolean}
+
+export type AccountEmailStatus = { id:number; kind:'activation'|'recovery'|'google-approved'; state:'pending'|'sending'|'accepted'|'failed'|'cancelled'; revision:number; attempts:number; createdAt:string; acceptedAt:string|null }

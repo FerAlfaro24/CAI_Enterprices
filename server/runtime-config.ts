@@ -6,7 +6,7 @@ import { validClientId } from './google-auth.ts'
 
 export type RequestPolicy = { mode: 'local' } | { mode: 'production'; publicOrigin: string; trustedProxy: 'loopback' }
 export type RuntimeConfig = {
-  policy: RequestPolicy; host: '127.0.0.1'; port: number; databasePath: string; dataDirectory: string; googleClientId?: string
+  policy: RequestPolicy; host: '127.0.0.1'; port: number; databasePath: string; dataDirectory: string; googleClientId?: string; mailConfigPath?: string
 }
 export const projectDirectory = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 export const localPolicy: RequestPolicy = { mode: 'local' }
@@ -35,7 +35,7 @@ export function readRuntimeConfig(env: Readonly<Record<string, string | undefine
   if (!/^\d+$/.test(portText) || !Number.isInteger(port) || port < 1024 || port > 65535) throw Error('CAI_API_PORT debe ser un puerto entre 1024 y 65535.')
   if (env.NODE_ENV !== 'production') {
     if (env.CAI_PUBLIC_ORIGIN || env.CAI_DATA_DIR || env.CAI_TRUST_PROXY) throw Error('La configuración de producción requiere NODE_ENV=production; no se mezclarán entornos.')
-    return { policy: localPolicy, host: '127.0.0.1', port, databasePath: resolve(codeDirectory, '.local/cai.sqlite'), dataDirectory: resolve(codeDirectory, '.local') }
+    return { policy: localPolicy, host: '127.0.0.1', port, databasePath: resolve(codeDirectory, '.local/cai.sqlite'), dataDirectory: resolve(codeDirectory, '.local'), mailConfigPath: env.CAI_MAIL_CONFIG }
   }
   if (!env.CAI_PUBLIC_ORIGIN || env.CAI_TRUST_PROXY !== 'loopback') throw Error('Producción requiere CAI_PUBLIC_ORIGIN HTTPS y CAI_TRUST_PROXY=loopback.')
   const policy = productionPolicy(env.CAI_PUBLIC_ORIGIN)
@@ -49,5 +49,5 @@ export function readRuntimeConfig(env: Readonly<Record<string, string | undefine
   if (isWithin(code, dataDirectory) || isWithin(dataDirectory, code)) throw Error('Los datos de producción y el código deben estar en carpetas separadas, sin contenerse ni enlazarse entre sí.')
   const googleClientId = env.GOOGLE_CLIENT_ID || undefined
   if (googleClientId && !validClientId(googleClientId)) throw Error('GOOGLE_CLIENT_ID no tiene un formato válido.')
-  return { policy, host: '127.0.0.1', port, dataDirectory, databasePath: join(dataDirectory, 'cai.sqlite'), googleClientId }
+  return { policy, host: '127.0.0.1', port, dataDirectory, databasePath: join(dataDirectory, 'cai.sqlite'), googleClientId, mailConfigPath: env.CAI_MAIL_CONFIG }
 }

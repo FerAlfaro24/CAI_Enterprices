@@ -72,6 +72,7 @@ export function notices(db: Database) {
         const notice = db.prepare("SELECT request_id FROM local_notices WHERE id = ? AND kind = 'recovery'").get(id) as { request_id: number } | undefined
         const account = notice && db.prepare(`${eligible} AND r.id = ?`).get(notice.request_id) as { id: number; password_hash: string } | undefined
         if (!account) throw new HttpError(409, 'El alumno debe tener una cuenta con contraseña aprobada y activa. Google se recupera desde Google.')
+        db.prepare("UPDATE account_emails SET state='cancelled',revision=revision+1 WHERE request_id=? AND kind='recovery' AND state IN ('pending','sending')").run(account.id)
         const token = randomBytes(32).toString('hex'), expiresAt = Date.now() + 15 * 60_000
         db.prepare('INSERT INTO password_resets VALUES (?,?,?,?) ON CONFLICT(request_id) DO UPDATE SET token_hash = excluded.token_hash, expires_at = excluded.expires_at, password_version = excluded.password_version').run(account.id, hash(token), expiresAt, account.password_hash)
         db.prepare("INSERT INTO audit_log(actor_id,request_id,action,created_at) VALUES (?,?,'recovery.previewed',?)").run(admin, account.id, new Date().toISOString())

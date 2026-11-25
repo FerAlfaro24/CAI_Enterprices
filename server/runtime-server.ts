@@ -1,3 +1,4 @@
+import { readMailSettings, smtpDelivery } from './email-delivery.ts'
 import { createApplication } from './app.ts'
 import { readGoogleClientId } from './google-config.ts'
 import { checkProductionDatabase } from './production-storage.ts'
@@ -6,13 +7,16 @@ import { type OperationalLog } from './operational-log.ts'
 import { join } from 'node:path'
 
 export async function startRuntime(config: RuntimeConfig, options: { log?: OperationalLog; shutdownMilliseconds?: number } = {}) {
+  const mailSettings = readMailSettings(config)
+  const email = mailSettings ? smtpDelivery(mailSettings) : undefined
   if (config.policy.mode === 'production') checkProductionDatabase(config)
   const clientId = config.policy.mode === 'production' ? config.googleClientId : readGoogleClientId(join(config.dataDirectory, 'google.json'))
-  const app = createApplication(config.databasePath, { clientId }, { runtime: config.policy, log: options.log, officialMediaDirectory: join(config.dataDirectory, 'official-media') })
+  const app = createApplication(config.databasePath, { clientId }, { runtime: config.policy, log: options.log, emailDelivery: email?.deliver, adminRecoveryDelivery: email ? message => email.deliver({...message,kind:'admin-recovery'}) : undefined, officialMediaDirectory: join(config.dataDirectory, 'official-media') })
   await new Promise<void>((resolve, reject) => {
     app.server.once('error', reject)
     app.server.listen(config.port, config.host, () => { app.server.off('error', reject); resolve() })
   })
+  app.server.once('close', () => email?.close())
   let stopping: Promise<void> | undefined
   const stop = () => {
     stopping ??= new Promise<void>((resolve, reject) => {

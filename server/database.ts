@@ -1,3 +1,4 @@
+import { migrateAccountEmail } from './account-email-migration.ts'
 import { migrateCommunityModeration } from './community-moderation-migration.ts'
 import { migrateNoticeHistory } from './notice-history-migration.ts'
 import { migrateSharedCommunity } from './shared-community-migration.ts'
@@ -318,6 +319,7 @@ export function migrateDatabase(db: DatabaseSync) {
   migrateNoticeHistory(db)
   migrateSharedCommunity(db)
   migrateCommunityModeration(db)
+  migrateAccountEmail(db)
   return db
 }
 

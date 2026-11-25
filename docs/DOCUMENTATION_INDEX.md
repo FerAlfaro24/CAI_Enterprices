@@ -1,5 +1,7 @@
 # CAI — índice y clasificación de toda la documentación
 
+[Google/correo F6: estado y configuración](GOOGLE_EMAIL.md) — Google real local probado; recepción Gmail y alojamiento final pendientes.
+
 **Actualizado: 22-11-2026, revisión de administración.** 68 archivos Markdown: incluye la revisión de comunidad y el diagnóstico/evidencia del panel. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.
 
 **Continuación funcional vigente — 24-11:** F5, Retos diarios/progreso/repaso, `258abfb`/PR #34. Incluye F3b/F4, Logros y entregas anteriores. [Entrega y siguiente F6](NEXT_STEPS.md#entrega-f5-retos-diarios-y-progreso-personal--24-11-2026). Los informes técnicos conservan el alcance y las pruebas de su fecha.
