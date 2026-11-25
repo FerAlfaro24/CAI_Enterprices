@@ -10,7 +10,7 @@ export async function checkStaticPresentation(browser, {baseURL, filesDir, label
     await page.goto(baseURL+'/community');await page.getByRole('heading',{name:'Tu comunidad, al día.',exact:true}).waitFor()
     check(await page.getByRole('complementary',{name:'Controles de la presentación'}).isVisible(),'Muestra identificada y sin acceso con contraseña')
     check(await page.locator('[data-social-post]').count()>=6,'Inicio con publicaciones variadas')
-    check(await page.getByRole('heading',{name:'Tu comunidad, en un solo lugar',exact:true}).isVisible(),'Carrusel institucional con avisos actuales')
+    check(await page.getByRole('heading',{name:'En tu próxima clase, trae algo que contar 💬',exact:true}).isVisible(),'Carrusel institucional con avisos actuales')
     await page.screenshot({path:filesDir+'/presentation-'+label+'-desktop.png',fullPage:false})
     const post=page.locator('[data-social-post]').first(),title=await post.locator('h3').innerText()
     const reaction=post.locator('[data-reaction-id=love]'),before=Number(await reaction.locator('b').innerText())

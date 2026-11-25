@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useCommunity } from '../context'
 import { categoryLabels, reactionOptions } from '../data/fixtures'
 import { getMember } from '../data/members'
@@ -11,6 +11,7 @@ import { CommunityIcon } from './ui'
 import { MemberLink } from './MemberLink'
 import { ReactionsBar } from './ReactionsBar'
 import { SharedBadge } from '../achievements/SharedBadge'
+const PublicationReference = import.meta.env.MODE === 'presentation' ? lazy(() => import('../../presentation/PublicationReference')) : null
 
 export function PostCard({ post, initialCommentsOpen = false }: { post: Post; initialCommentsOpen?: boolean }) {
   const { state, dispatch, connection } = useCommunity()
@@ -28,6 +29,7 @@ export function PostCard({ post, initialCommentsOpen = false }: { post: Post; in
       </header>
       <h2 id={`post-title-${post.id}`} className={s.postTitle}>{post.title}</h2>
       <p className={s.postBody}>{post.body}</p>
+      {PublicationReference && <Suspense fallback={null}><PublicationReference postId={post.id} /></Suspense>}
       <SharedBadge post={post}/>
       {post.milestone && <div className={s.milestone}><span aria-hidden="true">✦</span><div><small>UN PASO QUE CUENTA</small><strong>{post.milestone.label}</strong><p>{post.milestone.detail}</p></div><CommunityIcon name="award" size={36} /></div>}
       {post.event && <div className={s.eventCard}><div className={s.eventDate}><strong>{post.event.day}</strong><span>{post.event.month}</span></div><div><strong>{post.event.detail}</strong><p>Escenario de muestra · Sin registro real</p></div></div>}
