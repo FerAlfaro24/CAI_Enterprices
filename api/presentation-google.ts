@@ -1,4 +1,4 @@
-import { createPresentationGoogle } from '../server/presentation-google.ts'
+import { createPresentationGoogle } from '../server/presentation-google.js'
 
 const handle = createPresentationGoogle()
 export const GET = handle
