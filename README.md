@@ -1,6 +1,6 @@
 # CAI — sitio institucional, comunidad y administración
 
-**Esta rama prepara Google real en la presentación de Vercel:** `feat/demo-real-google`. Conserva atajos, formulario y cuentas ficticias; añade identificación oficial de Google verificada en una función del servidor. El contenido sigue siendo de muestra por navegador, sin inscripción ni administración escolar reales. Origen/publicación/prueba real pendientes; [estado y límites](docs/STATIC_PRESENTATION.md).
+**Esta rama publica Google real en la presentación de Vercel:** `feat/demo-real-google`/PR#40. [Abrir inicio de sesión](https://cai-enterprices.vercel.app/login). Acceso oficial, retorno/recarga/cierre comprobados con la cuenta institucional y16 checks públicos adicionales. Conserva los atajos, formulario y cuentas ficticias. Contenido independiente por navegador, sin inscripción ni administración escolar reales. [Estado, pruebas y límites](docs/STATIC_PRESENTATION.md).
 
 ## Versión integrada más completa
 

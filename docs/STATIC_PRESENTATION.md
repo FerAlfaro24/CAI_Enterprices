@@ -1,24 +1,24 @@
 # CAI — presentación independiente de la computadora
 
-## Google real para la presentación — preparación del 25-11-2026
+## Google real publicado en Vercel — 25-11-2026
 
-Rama `feat/demo-real-google`, desde `9cc1583` de `fix/demo-login-google`. Sustituye el selector simulado por el botón oficial de Google y una función independiente en Vercel. Las secciones anteriores sobre Google simulado describen la entrega previa y quedan superadas para esta rama.
+Rama `feat/demo-real-google` / [PR#40](https://github.com/FerAlfaro24/CAI_Enterprices/pull/40), desde `9cc1583`; código funcional `5968483` y corrección de compilación NodeNext `3d1dc1e`. [Inicio de sesión público](https://cai-enterprices.vercel.app/login), [despliegue Ready](https://vercel.com/feralfaro24/cai-enterprices/5hSXkEPQnvfpv6pRAhzjX2iJhATY). Promovido sin fusionar ramas ni cambiar main/release/integrada; sin servicios de pago nuevos. El origen fue autorizado expresamente por el titular y guardado en el cliente institucional, conservando localhost. La verificación adicional solicitada por Vercel se completó; sus códigos no se guardan en archivos.
 
-- `api/presentation-google.ts` / `server/presentation-google.ts`: configuración pública, desafío aleatorio, verificación oficial de ID token, consulta de sesión y cierre. Solo acepta el origen HTTPS canónico `https://cai-enterprices.vercel.app`; las previews no admiten OAuth.
-- Se comprueban firma, audiencia, emisor, caducidad, correo verificado y nonce ligado al navegador. Escrituras con origen exacto y JSON, desafío en cookie HttpOnly/Secure/__Host/SameSite=Strict, cuerpo limitado, cookies duplicadas rechazadas y respuestas sin caché ni datos personales.
-- La sesión usa el propio token firmado por Google en cookie HttpOnly, hasta el menor de su caducidad o30 minutos desde su emisión. No hay nueva clave privada ni una base de identidades. No se escribe el correo/nombre/token en localStorage, contenido de muestra, URL o registros de aplicación.
-- La barra consulta la sesión verificada en el servidor, permite cerrar Google y mantiene Página principal/Alumno/Coordinación/Reiniciar. Las cuentas ficticias siguen disponibles. Identificarse con Google NO crea una inscripción, aprobación de alumno o permiso administrativo real.
-- Solo las llamadas de identificación usan la nueva función; registro, publicaciones y panel siguen siendo muestras independientes por navegador. SMTP y base escolar permanecen fuera de este despliegue. Las contraseñas de muestra no viajan al servidor.
+**Prueba real completada:** botón oficial de Google → selector oficial → cuenta institucional → retorno a `/community` → estado «Cuenta de Google verificada» obtenido del servidor. El estado volvió a aparecer al recargar; se comprobó el cierre mediante «Salir de Google». No se sustituyó el SDK ni el verificador en este recorrido. Al terminar quedó abierto el login público y la sesión de CAI usada para esta prueba quedó cerrada. No se cerró globalmente la cuenta Google del titular.
 
-Pruebas realizadas antes de publicar:11 pruebas nuevas de servidor,48 comprobaciones de interfaz (24 Brave+24 Opera GX) y39 de regresión general Brave; tipos/build/lint correctos. Interfaz ensayada con SDK/verificador sustituidos, explícitamente NO como evidencia de Google real. Se comprobaron1440/768/375/320 y capturas móvil/escritorio. La compilación conectada separada no incluye el adaptador, endpoint o credenciales ficticias. No se abrió ninguna base escolar.
+**Pruebas públicas nuevas,16 en Brave:** función/configuración JSON200, sesión anónima, respuestas sin caché, rechazo de origen ajeno, desafío real/cookie segura, rechazo de JWT falso por el verificador real, SDK oficial visible, tamaños1440/375/320, cuenta ficticia/contenido variado y ausencia de errores JavaScript. No se usó otra cuenta personal para probar OAuth. Las11 pruebas de servidor,48 UI con proveedor sustituido (24 Brave+24 Opera GX) y39 de regresión general son la tanda local anterior de esta misma entrega, separada de la autenticación real. Tipos/build/lint correctos; compilación conectada sin adaptador demo. Vista previa local4816 cerrada.
 
-Pendiente de esta entrega: autorizar el origen en el cliente Google institucional, desplegar/promover la rama y ejecutar una prueba real de Google en el dominio público. No afirmar que ya está operativo por pasar las fixtures.
+**Qué es real:** únicamente la identificación Google. `api/presentation-google.ts` usa la biblioteca oficial para firma/audiencia/emisor/caducidad, correo verificado y nonce del navegador. POST requiere origen exacto/JSON; cuerpo limitado y cookies duplicadas rechazadas. Desafío de5 minutos en cookie __Host/Secure/HttpOnly/SameSite=Strict. La sesión conserva el token firmado en cookie HttpOnly hasta su caducidad o30 minutos desde emisión; no usa nuevas claves privadas. API sin caché y sin devolver correo/nombre/token al contenido de muestra. Las previews rechazan OAuth: usar siempre el dominio canónico.
 
-Referencias: [verificación oficial de Google](https://developers.google.com/identity/gsi/web/guides/verify-google-id-token), [funciones de Vercel](https://vercel.com/docs/functions/functions-api-reference). No se añaden dependencias, facturación ni servicios de correo.
+**Qué sigue siendo ficticio:** inscripción, aprobación, alumno mostrado, coordinación, publicaciones, comentarios y progreso permanecen independientes por navegador. Entrar con Google no concede permisos escolares ni crea una matrícula real. Los atajos y cuentas ficticias se conservan; la cuenta institucional no se copia a los perfiles ni al localStorage de la comunidad. Las contraseñas de muestra no salen del navegador. SMTP y la base escolar no están desplegados en esta presentación.
 
+No volver a implementar el selector Google simulado ni pedir nuevamente autorización del origen. Pendiente para el sistema definitivo: alojamiento persistente del backend/base/archivos, dominio definitivo, correo y configuración institucional de producción, rotación privada prevista y aceptación de CAI. No fusionar el modo de presentación como backend de producción. Top pendiente del cliente.
 
+Referencias: [verificación de Google](https://developers.google.com/identity/gsi/web/guides/verify-google-id-token), [funciones Vercel](https://vercel.com/docs/functions/functions-api-reference). Solo se solicitan scopes básicos openid/email/profile: [Google documenta la excepción de usuarios de prueba para este acceso básico](https://support.google.com/cloud/answer/15549945?hl=en). No se cambió el estado público de la aplicación ni se añadieron permisos de Gmail; no se comprobó OAuth con otras cuentas o políticas de Workspace.
 
 ## Actualización del acceso, 25-11-2026
+
+**Antecedente: este selector simulado quedó sustituido por Google real en la entrega superior.**
 
 El usuario pidió conservar los atajos inferiores y recuperar el inicio de sesión original para presentar también Google. Rama `fix/demo-login-google`, desde `39816de` de la muestra pública anterior.
 
@@ -49,7 +49,7 @@ Vercel usa `npm run build:presentation` en esta rama y sirve únicamente dist. L
 
 - Portada en `/`; comunidad directamente en `/community`; coordinación en `/admin`.
 - La barra inferior identifica la presentación y permite cambiar de área o reiniciar con confirmación.
-- `/login` ofrece el formulario original con credenciales ficticias y un recorrido Google simulado; los atajos inferiores permiten explorar alumno/coordinación directamente.
+- `/login` ofrece el formulario original con credenciales ficticias y acceso real de Google a la presentación; los atajos inferiores permiten explorar alumno/coordinación directamente.
 - Registro admite solo datos ficticios: las solicitudes se guardan en ese navegador y se revisan desde su propio panel.
 - Reacciones, comentarios inmediatos y borrado propio; fotos y visor; notificaciones; perfiles; Logros privados con imágenes; Retos actuales con aciertos/errores, puntos, repaso e insignias.
 - Coordinación puede revisar solicitudes/publicaciones y crear publicaciones normales o avisos que aparecen en el carrusel.
@@ -60,15 +60,15 @@ Los datos se guardan en localStorage bajo `cai-presentation-v1`. Borrar el almac
 
 `seed.json` contiene90 respuestas de ejemplo, generadas a partir de una fixture nueva de `community-showcase-server --client-presentation`, más ejemplos ficticios de lectura, música y series. Hay once personajes de alumnos y solicitudes de muestra; el Inicio añade una publicación propia, reacciones/comentarios y ejemplos de notificaciones. Se reutilizan las pantallas actuales, no la demo histórica de octubre.
 
-Las imágenes privadas de convivencias/cumpleaños y sus blobs no se exportan: se sustituyeron las referencias por las cuatro fotografías oficiales que ya estaban autorizadas para la página pública. No hay bases, cookies, contraseñas, credenciales de Google/SMTP ni archivos de .local en el paquete. Las imágenes añadidas por el visitante permanecen en su navegador y pueden alcanzar su cuota de almacenamiento; el guardado falla con explicación si no caben.
+Las imágenes privadas de convivencias/cumpleaños y sus blobs no se exportan: se sustituyeron las referencias por las cuatro fotografías oficiales que ya estaban autorizadas para la página pública. No hay bases, cookies exportadas, contraseñas o credenciales privadas de Google/SMTP ni archivos de .local en el paquete. El ID público del cliente Google se configura expresamente en la función. Las imágenes añadidas por el visitante permanecen en su navegador y pueden alcanzar su cuota de almacenamiento; el guardado falla con explicación si no caben.
 
 Google, envíos de correo, contraseñas/equipo reales y edición de expedientes no se simulan. Algunas acciones administrativas avanzadas muestran un mensaje indicando que no están incluidas; no afirman cambios inexistentes. Este adaptador no mide permisos, seguridad ni entrega de correos de producción. No implementar Top ni vídeos por esta presentación.
 
 ## Separación de la aplicación real
 
-`import.meta.env.MODE === 'presentation'` activa el adaptador únicamente al compilar. Un parámetro de URL no puede habilitarlo. `npm run build` conserva la aplicación conectada y se comprobó que sus JS compilados excluyen los marcadores, datos y adaptador de esta presentación. Ningún cambio de servidor, base, sesiones reales o dependencias.
+`import.meta.env.MODE === 'presentation'` activa el adaptador únicamente al compilar. Un parámetro de URL no puede habilitarlo. `npm run build` conserva la aplicación conectada y se comprobó que sus JS compilados excluyen los marcadores, datos y adaptador de esta presentación. La base y el backend escolar no cambian. Esta rama añade únicamente la función y sesión independiente de identificación Google descrita arriba, sin nuevas dependencias.
 
-Los módulos de presentación se cargan por importación dinámica: `store.ts` conserva datos, fechas y renovación de Retos; `community.ts` simula la actividad del alumno; `admin.ts` las operaciones administrativas; `requests.ts` enlaza esos comportamientos con el contrato actual; `PresentationTools.tsx` aporta entradas/controles. Las llamadas desconocidas fallan de forma explícita y nunca recurren a fetch.
+Los módulos de presentación se cargan por importación dinámica: `store.ts` conserva datos, fechas y renovación de Retos; `community.ts` simula la actividad del alumno; `admin.ts` las operaciones administrativas; `requests.ts` enlaza esos comportamientos con el contrato actual; `PresentationTools.tsx` aporta entradas/controles. Las llamadas desconocidas fallan de forma explícita; solo las operaciones de identificación Google y cierre usan la función independiente de Vercel.
 
 ## Comprobaciones realizadas
 
@@ -90,4 +90,4 @@ Código `22e8a88`, [PR#38 en borrador](https://github.com/FerAlfaro24/CAI_Enterp
 
 Se ejecutó además el guion completo contra ese origen HTTPS: **39 comprobaciones públicas nuevas en Brave**, todas correctas, sin errores de JavaScript/consola y cero solicitudes a API local. Incluye registro/revisión, publicación de aviso/carrusel, reacciones, comentarios/borrado, imagen ampliada, Logros con imagen, Retos/resultados/insignia, independencia entre navegadores, recarga, reinicio y tamaños1440/768/375/320. Las78 comprobaciones Brave/Opera anteriores siguen siendo locales; no afirmar que Opera se repitió sobre el despliegue público.
 
-Los servidores locales de exportación y de vista previa están cerrados; resultados y capturas se conservaron. Se puede compartir el enlace público con la computadora apagada. Cada navegador modifica su propia muestra; Google/correos/seguridad de producción y servicios persistentes reales siguen fuera de este despliegue.
+Los servidores locales de exportación y de vista previa están cerrados; resultados y capturas se conservaron. Se puede compartir el enlace público con la computadora apagada. Cada navegador modifica su propia muestra. Este cierre inicial precede a Google real, añadido y comprobado en la entrega superior; correos, permisos escolares y servicios persistentes reales continúan fuera de este despliegue.

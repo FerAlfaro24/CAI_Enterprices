@@ -1,9 +1,8 @@
 # CAI — inventario de ramas
 
-**En preparación — Google real en presentación (25-11):** `feat/demo-real-google`, desde `9cc1583`. Botón oficial y verificación en Vercel, sin base escolar ni permisos reales de coordinación; atajos y datos ficticios conservados.11 pruebas de servidor,48 UI con proveedor sustituido y39 de regresión; tipos/build/lint y aislamiento correctos. Pendientes origen Google, publicación y prueba real. [Detalles](STATIC_PRESENTATION.md#google-real-para-la-presentación--preparación-del-25-11-2026).
+**Google real de presentación publicado y probado — 25-11:** `feat/demo-real-google`/PR#40, código `3d1dc1e`, desde `9cc1583`. [Login público](https://cai-enterprices.vercel.app/login) con SDK oficial y verificador Vercel, cuenta institucional/retorno/estado verificado/recarga/cierre comprobados.16 checks públicos nuevos Brave;11 servidor/48 UI con proveedor sustituido/39 regresión locales anteriores, tipos/build/lint e aislamiento correctos. Atajos y datos ficticios conservados; no hay inscripción ni permisos escolares reales en Vercel. [Guía vigente](STATIC_PRESENTATION.md#google-real-publicado-en-vercel--25-11-2026). No pedir nuevamente promoción o autorización del origen.
 
-
-**Acceso de muestra — 25-11-2026:** `fix/demo-login-google`, desde `39816de` de `demo/v1-vercel-presentation`: login original, credenciales ficticias por rol y recorrido Google simulado, conservando todos los atajos. No cambia servidor ni la integrada. [Detalle](STATIC_PRESENTATION.md#actualización-del-acceso-25-11-2026).
+**Antecedente de login simulado — 25-11-2026:** `fix/demo-login-google`, desde `39816de` de `demo/v1-vercel-presentation`: login original, credenciales ficticias por rol y recorrido Google simulado, conservando todos los atajos. No cambia servidor ni la integrada. [Detalle](STATIC_PRESENTATION.md#actualización-del-acceso-25-11-2026).
 
 **Presentación independiente — 25-11-2026:** `demo/v1-vercel-presentation`, desde `c1bf677` de la corrección de navegación, incluye toda la integrada y el adaptador ficticio que el usuario solicitó para Vercel. La configuración de esta rama compila exclusivamente la presentación. No fusionarla como producción ni confundirla con la continuación conectada. [Guía](STATIC_PRESENTATION.md).
 
