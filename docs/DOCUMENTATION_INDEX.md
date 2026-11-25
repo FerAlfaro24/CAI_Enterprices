@@ -1,5 +1,7 @@
 # CAI — índice y clasificación de toda la documentación
 
+**Entrada vigente:** [START_HERE](START_HERE.md) y [versión integrada del25-11](INTEGRATED_VERSION.md). Los documentos README_HISTORY y START_HERE_HISTORY conservan instrucciones superadas; no son guías de arranque actuales.
+
 [Google/correo F6: estado y configuración](GOOGLE_EMAIL.md) — Google real local probado; recepción Gmail y alojamiento final pendientes.
 
 **Actualizado: 22-11-2026, revisión de administración.** 68 archivos Markdown: incluye la revisión de comunidad y el diagnóstico/evidencia del panel. Cada archivo tiene una entrada. Los antecedentes no se convierten en tareas vigentes.

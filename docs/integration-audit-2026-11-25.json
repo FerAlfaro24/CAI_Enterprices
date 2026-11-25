@@ -1,0 +1,536 @@
+{
+  "dateMexicoCity": "2026-11-25",
+  "integratedBranch": "integration/cai-v1-completa-2026-11-25",
+  "sourceCommit": "ae634d6727e926e5795bae1b42f602ba5fcf679d",
+  "sourceTree": "93a550d5ae19d592c45bcf4e1b56e29950d07921",
+  "historicalV1": {
+    "branch": "release/cai-demo-v1.0",
+    "commit": "f3ba46b25f41803a07b4577abec19573188ef791",
+    "isAncestor": true
+  },
+  "protectedRefs": {
+    "main": "a3c2569d0fc6ca7f8153ee0ec2c6a362aec53881",
+    "release/cai-demo-v1.0": "f3ba46b25f41803a07b4577abec19573188ef791",
+    "origin/main": "a3c2569d0fc6ca7f8153ee0ec2c6a362aec53881",
+    "origin/release/cai-demo-v1.0": "f3ba46b25f41803a07b4577abec19573188ef791"
+  },
+  "remoteBranchesCheckedBeforePublishing": 64,
+  "coverageCounts": {
+    "ancestor": 61,
+    "patch-equivalent": 2,
+    "historical-foundation-documents": 1
+  },
+  "localBranchesChecked": 58,
+  "localBranches": [
+    "chore/v1-final-review",
+    "chore/v1-stabilization",
+    "chore/v1-tooling-audit",
+    "docs/auditoria-v1-integracion",
+    "docs/continuidad-auditoria-2026-11-17",
+    "docs/v1-community-expansion",
+    "docs/v1-friends-feedback-plan",
+    "docs/v1-learning-adventures-plan",
+    "feat/admin-guided-requests",
+    "feat/google-signin-onboarding",
+    "feat/local-access-backend",
+    "feat/local-password-recovery",
+    "feat/local-publications-moderation",
+    "feat/student-account-activation",
+    "feat/v1-access-usability",
+    "feat/v1-achievements-progressive-badges",
+    "feat/v1-admin-account-security",
+    "feat/v1-admin-recovery",
+    "feat/v1-admin-team",
+    "feat/v1-admin-usability-review",
+    "feat/v1-community-badges",
+    "feat/v1-community-challenges",
+    "feat/v1-community-comments",
+    "feat/v1-community-connected",
+    "feat/v1-community-header-highlights",
+    "feat/v1-community-home-stories",
+    "feat/v1-community-moderation",
+    "feat/v1-community-playful-design",
+    "feat/v1-community-reactions",
+    "feat/v1-community-social-feed",
+    "feat/v1-daily-challenges-refresh",
+    "feat/v1-google-email-onboarding",
+    "feat/v1-groups-settings",
+    "feat/v1-inbox-recovery-contact",
+    "feat/v1-learning-form-simplification",
+    "feat/v1-official-media",
+    "feat/v1-photo-viewer-notification-history",
+    "feat/v1-private-gallery",
+    "feat/v1-production-preparation",
+    "feat/v1-publisher-notice-carousel",
+    "feat/v1-registration-simplification",
+    "feat/v1-remote-demo",
+    "feat/v1-shared-community",
+    "feat/v1-student-profile",
+    "feat/v1-student-record",
+    "feat/v1-unified-navigation",
+    "fix/v1-dev-preview-cache",
+    "fix/v1-gallery-all-photos",
+    "fix/v1-open-preview-entry",
+    "fix/v1-remote-registration-guidance",
+    "integration/cai-v1-completa-2026-11-25",
+    "integration/cai-v1-connected",
+    "main",
+    "release/cai-demo-v1.0",
+    "style/v1-final-interface-polish",
+    "test/v1-client-presentation-2026-11-24",
+    "test/v1-friends-remote-2026-11-23",
+    "test/v1-integral-review-2026-11-17"
+  ],
+  "remoteBranches": [
+    {
+      "branch": "origin/chore/project-foundation",
+      "commit": "e3ac8fd6268d50f4e4d663f2def31683b33d38b9",
+      "date": "2026-10-17 15:40:34 -0600",
+      "subject": "docs: introduce CAI project and prototype scope",
+      "coverage": "historical-foundation-documents"
+    },
+    {
+      "branch": "origin/chore/v1-final-review",
+      "commit": "fee87d14c3ac98df4e2d69a4d927dc8584478b17",
+      "date": "2026-11-12 14:24:45 -0600",
+      "subject": "docs: record final local review and CAI handoff checklist",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/chore/v1-stabilization",
+      "commit": "7daa6231fed2caee4d783dbbef7895e80c72e138",
+      "date": "2026-11-12 08:48:02 -0600",
+      "subject": "docs: record stabilization checks and local administration guides",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/chore/v1-tooling-audit",
+      "commit": "9274dc90aa0ff28a4b5743e9e39cc19789094c5b",
+      "date": "2026-11-12 13:45:59 -0600",
+      "subject": "docs: verify tooling advisories and record unresolved compatible update",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/docs/auditoria-v1-integracion",
+      "commit": "be90193a436395fc5f5640985f33d4307635fe8c",
+      "date": "2026-11-11 22:12:15 -0600",
+      "subject": "docs: prioritize autonomous work and defer human dependencies",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/docs/continuidad-auditoria-2026-11-17",
+      "commit": "b55cd503c1bd9955d70ffdf42527ce4cb8711841",
+      "date": "2026-11-17 15:47:50 -0600",
+      "subject": "docs: reconcile project continuity with latest functional version",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/docs/v1-community-expansion",
+      "commit": "e1b2a0fccc81bda9109f960c0079bdd58f5973e1",
+      "date": "2026-11-12 17:41:53 -0600",
+      "subject": "docs: scope connected community expansion and admin-only video",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/docs/v1-friends-feedback-plan",
+      "commit": "12b088ba21631a8a397e43687a215c40bf9ff633",
+      "date": "2026-11-23 21:34:11 -0600",
+      "subject": "docs: reservar clasificacion para decision del cliente",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/docs/v1-learning-adventures-plan",
+      "commit": "0729cc5b13119b30af9162bfe7cd9c2b20bf1237",
+      "date": "2026-11-19 16:26:29 -0600",
+      "subject": "docs: separar logros privados e insignias progresivas",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/admin-dashboard",
+      "commit": "f38b17c720a7e946d66b2f18cc7e68817d7a2ef0",
+      "date": "2026-10-17 21:51:57 -0600",
+      "subject": "feat: agregar solicitud de acceso de alumnos por pasos",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/admin-guided-requests",
+      "commit": "a54e4019b25aa56f8b793b5e2c2a4cb74281292b",
+      "date": "2026-11-11 17:00:31 -0600",
+      "subject": "feat(admin): guiar la revisión de solicitudes de ingreso",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/auth-pages",
+      "commit": "f38b17c720a7e946d66b2f18cc7e68817d7a2ef0",
+      "date": "2026-10-17 21:51:57 -0600",
+      "subject": "feat: agregar solicitud de acceso de alumnos por pasos",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/community",
+      "commit": "a6d9603faefa423a7079357f584590fb61cc0175",
+      "date": "2026-10-18 13:26:53 -0600",
+      "subject": "feat(community): completar inicio, retos, galeria y logros",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/community-visual-polish",
+      "commit": "12cf1ce92520afbfb175ba9b187290a9ef3e2922",
+      "date": "2026-10-18 23:19:01 -0600",
+      "subject": "test(community): cerrar auditoria integral fase 6.4",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/frontend-foundation",
+      "commit": "eca282fe73a35a9149110e08a9f0f59354bdb35e",
+      "date": "2026-10-17 16:29:29 -0600",
+      "subject": "feat: initialize CAI frontend foundation",
+      "coverage": "patch-equivalent"
+    },
+    {
+      "branch": "origin/feat/google-signin-onboarding",
+      "commit": "35cfe1c8a6a38e6087ba973a3c0245b877ce479c",
+      "date": "2026-11-11 18:24:51 -0600",
+      "subject": "feat: prepare Google sign-in with required CAI approval",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/landing-page",
+      "commit": "a37bb0834c5d20ab0f389496033525bf242d4a63",
+      "date": "2026-10-17 17:23:44 -0600",
+      "subject": "feat: implementar página institucional de CAI",
+      "coverage": "patch-equivalent"
+    },
+    {
+      "branch": "origin/feat/local-access-backend",
+      "commit": "f3f07b97b7a871316a8ed053debacffefa47a45e",
+      "date": "2026-11-11 17:25:36 -0600",
+      "subject": "feat(backend): guardar solicitudes y alumnos con acceso administrativo local",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/local-password-recovery",
+      "commit": "1b84fb303dfe86b403a2aca6f11571d480c6d163",
+      "date": "2026-11-11 21:35:21 -0600",
+      "subject": "feat: add local password recovery and notification inbox",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/local-publications-moderation",
+      "commit": "a60d0a6a54a3b892b443e3f085abc7ec4a1fca63",
+      "date": "2026-11-11 19:43:53 -0600",
+      "subject": "feat: persist student publications and guided moderation",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/student-account-activation",
+      "commit": "e92fff8a347c00c2c0a778e36ed5be0ffe9faff5",
+      "date": "2026-11-11 17:55:07 -0600",
+      "subject": "feat(auth): activar cuentas de alumnos y aplicar permisos locales",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-access-usability",
+      "commit": "f0191478a48b676f635c8fe0c73a65cd24d4b061",
+      "date": "2026-11-23 21:50:26 -0600",
+      "subject": "docs: registrar cierre probado de activacion y contrasenas",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-achievements-progressive-badges",
+      "commit": "0b730329aa8617637bb8fd4e0283e6626c535408",
+      "date": "2026-11-19 16:59:54 -0600",
+      "subject": "docs: registrar logros conectados, reglas y pruebas de entrega",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-admin-account-security",
+      "commit": "34b78b4d10babd529fa53cee39d4613bc984344b",
+      "date": "2026-11-12 09:33:46 -0600",
+      "subject": "docs: record own admin account security and delivery steps",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-admin-recovery",
+      "commit": "88ef627c19338ccde34b2ec63df8a7fb4f084c67",
+      "date": "2026-11-12 10:26:46 -0600",
+      "subject": "docs: record tested admin recovery and deferred real email delivery",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-admin-team",
+      "commit": "7e404a38e75f9969c3662de656805aad5f9250ee",
+      "date": "2026-11-12 11:06:23 -0600",
+      "subject": "docs: record admin team workflow verification and remaining work",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-admin-usability-review",
+      "commit": "cbf9a414c1f3e5cae7e5fe1275654be847ebd74c",
+      "date": "2026-11-22 22:08:09 -0600",
+      "subject": "docs: actualizar guía y evidencia de administración",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-badges",
+      "commit": "bdef066fae18eda0cfb27c15c5df40215334953a",
+      "date": "2026-11-12 21:35:49 -0600",
+      "subject": "docs(plan): prioritize remaining delivery work for three weeks",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-challenges",
+      "commit": "980a1ec736a1421e95525b0877d4d309b801a907",
+      "date": "2026-11-12 20:44:24 -0600",
+      "subject": "docs(challenges): record learning scope, verified progress and administration guide",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-comments",
+      "commit": "46466b78a39e88ee73a09dcd9a573ab68db116eb",
+      "date": "2026-11-12 19:18:14 -0600",
+      "subject": "docs: record moderated comments and next challenge integration",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-connected",
+      "commit": "9a5ef81fc4824638af877ea919df67fd9ff04fd3",
+      "date": "2026-11-11 23:02:55 -0600",
+      "subject": "docs: record verified community integration checkpoints",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-header-highlights",
+      "commit": "3b368e8f3a0428f5f7f4c453db555c5537a6bf6e",
+      "date": "2026-11-19 15:43:39 -0600",
+      "subject": "docs: registrar cabecera unificada y 122 comprobaciones",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-home-stories",
+      "commit": "f9c3c1ac73df7640b59374cd4b158faab5cd315b",
+      "date": "2026-11-19 10:36:52 -0600",
+      "subject": "docs: record visual community home and client presentation",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-moderation",
+      "commit": "b9d79551c7cd8164dab2960e48b53dd48e19a92a",
+      "date": "2026-11-24 08:58:36 -0600",
+      "subject": "docs: registrar F3a y siguiente entrega de comentarios directos",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-playful-design",
+      "commit": "d6e66fd076d652c693f5957a0912c45862a2b808",
+      "date": "2026-11-19 14:38:52 -0600",
+      "subject": "docs: registrar plan visual y 130 comprobaciones de comunidad",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-reactions",
+      "commit": "edba92faf8d22e47f4614353c98609a62e6d7c4d",
+      "date": "2026-11-12 18:04:57 -0600",
+      "subject": "docs: record connected reactions and next community work",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-community-social-feed",
+      "commit": "ffb323d6b108e871dc9c44f86a72315fca7d86a6",
+      "date": "2026-11-19 15:11:05 -0600",
+      "subject": "docs: registrar revisión social y 124 comprobaciones",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-daily-challenges-refresh",
+      "commit": "15d3a941040d55ab8a4145bb35acb0a9fb9b2149",
+      "date": "2026-11-24 10:00:27 -0600",
+      "subject": "docs: registrar mejora F5 de retos y siguiente integración institucional",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-google-email-onboarding",
+      "commit": "ae634d6727e926e5795bae1b42f602ba5fcf679d",
+      "date": "2026-11-25 00:00:54 -0600",
+      "subject": "test: verify real Gmail activation and recovery delivery",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-groups-settings",
+      "commit": "e083c8fd480a1746eed70da1b6e69e66f3baed86",
+      "date": "2026-11-11 23:33:24 -0600",
+      "subject": "docs: record group settings integration checkpoints",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-inbox-recovery-contact",
+      "commit": "db45ac6ccb96a9f8689ffaf127d0234673f4d299",
+      "date": "2026-11-12 00:04:15 -0600",
+      "subject": "docs: record inbox recovery and contact checkpoints",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-learning-form-simplification",
+      "commit": "dac485f6a5547992d9eaa0efaf8e8c834a8544db",
+      "date": "2026-11-24 09:07:44 -0600",
+      "subject": "feat: simplify learning achievements and expand text limits",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-official-media",
+      "commit": "422b4d25cad2fcf992f8a0ad442f25079aa68e6a",
+      "date": "2026-11-19 09:33:41 -0600",
+      "subject": "docs: record official media installation and private delivery",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-photo-viewer-notification-history",
+      "commit": "c3d4d826fd436a1f5de03b4075537d20fcae9063",
+      "date": "2026-11-22 19:34:16 -0600",
+      "subject": "docs: registrar fotos, retos y notificaciones con evidencia de pruebas",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-private-gallery",
+      "commit": "361e23a039e6952ecaae56f8631311c8f78efe3f",
+      "date": "2026-11-12 00:49:26 -0600",
+      "subject": "docs: record private gallery checks and next integration step",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-production-preparation",
+      "commit": "d4102478c687a86d47618b43a907a25731300c1d",
+      "date": "2026-11-17 17:47:32 -0600",
+      "subject": "docs: record production preparation and deployment contract",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-publisher-notice-carousel",
+      "commit": "5f5ce0afefd30ad7d8c3ee2290f43d5686b027cb",
+      "date": "2026-11-24 09:32:27 -0600",
+      "subject": "docs: registrar cierre F3b y F4 y siguiente mejora de retos",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-registration-simplification",
+      "commit": "0247632fa7cc94f5516580448fad9bf0047efd60",
+      "date": "2026-11-23 22:38:06 -0600",
+      "subject": "feat: simplificar registro por clase con matricula automatica",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-remote-demo",
+      "commit": "4cdae44aeb296824d422885c53287b42c8203ae8",
+      "date": "2026-11-19 13:58:06 -0600",
+      "subject": "feat: preparar demostración remota temporal y protegida",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-shared-community",
+      "commit": "2129b5d6769f0743fc919821563eee67398aab16",
+      "date": "2026-11-23 23:04:07 -0600",
+      "subject": "docs: registrar cierre conjunto de registro y comunidad compartida",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-student-profile",
+      "commit": "d8df768f8c507aecb1b8f0b37d8db5ffed84e5fb",
+      "date": "2026-11-12 09:59:53 -0600",
+      "subject": "docs: record student profile scope verification and remaining work",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-student-record",
+      "commit": "c712abbf23a9dc5d56abe456a2c1177910374f3f",
+      "date": "2026-11-12 12:38:58 -0600",
+      "subject": "docs: record student record correction scope verification and next steps",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/feat/v1-unified-navigation",
+      "commit": "5405c1c4404cd716c3e71a9b0f877e212bdcbaf6",
+      "date": "2026-11-12 02:05:24 -0600",
+      "subject": "docs: record unified navigation checks and stabilization priorities",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/fix/v1-dev-preview-cache",
+      "commit": "3971284f30110eb054f0d3616899ddafe97e3683",
+      "date": "2026-11-12 22:12:27 -0600",
+      "subject": "fix(dev): isolate web optimization cache from model checks",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/fix/v1-gallery-all-photos",
+      "commit": "d7ef78145e74f74c81dab35012ba6786e04b782e",
+      "date": "2026-11-19 11:03:23 -0600",
+      "subject": "fix: mostrar todas las fotos de galería por defecto",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/fix/v1-open-preview-entry",
+      "commit": "c59ec6c78d3cd5cb340e17fa58b3698483dbc58d",
+      "date": "2026-11-23 20:11:56 -0600",
+      "subject": "fix: abrir entrada temporal conservando cuentas y vencimiento",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/fix/v1-remote-registration-guidance",
+      "commit": "cb840994d916868c8414e4616e51fe77653096f9",
+      "date": "2026-11-23 19:57:15 -0600",
+      "subject": "docs: fijar continuidad del registro propio comprobado",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/integration/cai-v1-connected",
+      "commit": "cf12d8ad6f1cb539e86ab07bc2c281a72364b5f8",
+      "date": "2026-11-11 22:40:14 -0600",
+      "subject": "docs: track progress checkpoints and community integration checklist",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/main",
+      "commit": "a3c2569d0fc6ca7f8153ee0ec2c6a362aec53881",
+      "date": "2026-10-17 17:28:03 -0600",
+      "subject": "feat: implementar página institucional de CAI (#8)",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/release/cai-demo-v1.0",
+      "commit": "f3ba46b25f41803a07b4577abec19573188ef791",
+      "date": "2026-10-19 10:02:52 -0600",
+      "subject": "feat(cai): integrar prototipo completo version 1.0 demo",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/style/v1-final-interface-polish",
+      "commit": "fb280614769380ec81cbb3112a2396218ffbb5c1",
+      "date": "2026-11-22 15:23:16 -0600",
+      "subject": "docs: registrar cierre visual y recorridos comprobados",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/test/v1-client-presentation-2026-11-24",
+      "commit": "aabd5bc6b6f59ca8c1177a0c60584af816da88cd",
+      "date": "2026-11-24 11:36:43 -0600",
+      "subject": "test: prepare updated CAI client presentation",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/test/v1-friends-remote-2026-11-23",
+      "commit": "2f6a04ff68f276422c81047dff032e74d3382587",
+      "date": "2026-11-23 19:42:36 -0600",
+      "subject": "test: verificar acceso y sincronización en prueba remota con amigos",
+      "coverage": "ancestor"
+    },
+    {
+      "branch": "origin/test/v1-integral-review-2026-11-17",
+      "commit": "95e53e258fb95ca0331b1f18fd5ca5947d253aa7",
+      "date": "2026-11-17 16:38:42 -0600",
+      "subject": "docs: record integral review results and next production preparation",
+      "coverage": "ancestor"
+    }
+  ],
+  "runtimeFilesComparedAgainst": "ae634d6727e926e5795bae1b42f602ba5fcf679d",
+  "privateMaterial": "Excluded: credentials, SQLite, six private gallery photos, test mailboxes and access links remain outside Git."
+}

@@ -1,5 +1,9 @@
 # CAI — próximos pasos vigentes
 
+## Continuar desde la versión integrada del 25-11-2026
+
+Usar `integration/cai-v1-completa-2026-11-25` para las nuevas ramas de trabajo. [Cobertura y punto de partida](INTEGRATED_VERSION.md). Google y Gmail reales locales ya están comprobados y el código de F1–F6 está reunido; no rehacerlo ni fusionar de nuevo las ramas incluidas. Siguiente: rotar privadamente la credencial compartida y preparar/adoptar dominio/servidor/configuración institucional definitivos con respaldo, pruebas externas y aceptación de CAI. No renovar el túnel ni migrar bases habituales implícitamente. Top requiere decisión del cliente; vídeos opcionales sin implementar.
+
 ## Siguiente: adopción final tras Google y Gmail reales locales
 
 [Cierre real de entrega de correo](GOOGLE_EMAIL.md#cierre-de-prueba-real-de-gmail--24-11-2026): dos correos recibidos en Gmail, activación/login/recuperación/uso único comprobados con cuenta institucional y alumno ficticio. No rehacer el transporte ni pedir de nuevo cuenta o 2FA por un estado anterior. Faltan rotar privadamente la credencial que se compartió en chat, adoptar en dominio/alojamiento final y comprobar allí orígenes de Google, datos/esquema23, envío y accesos desde otros dispositivos. No renovar el túnel ni migrar bases existentes implícitamente. Top sigue esperando al cliente. La configuración SMTP no debe incluirse en frontend o Git.
