@@ -1,0 +1,11 @@
+.git/
+.local/
+.playwright-mcp/
+node_modules/
+dist/
+coverage/
+reference/
+.env
+.env.*
+!.env.example
+*.log

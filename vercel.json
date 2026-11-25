@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/registro", "destination": "/index.html" },
+    { "source": "/registro-local", "destination": "/index.html" },
+    { "source": "/activar", "destination": "/index.html" },
+    { "source": "/recuperar", "destination": "/index.html" },
+    { "source": "/recuperar-acceso", "destination": "/index.html" },
+    { "source": "/recuperar-acceso-administrativo", "destination": "/index.html" },
+    { "source": "/recuperar-administracion", "destination": "/index.html" },
+    { "source": "/activar-administracion", "destination": "/index.html" },
+    { "source": "/mi-inscripcion", "destination": "/index.html" },
+    { "source": "/solicitud-google", "destination": "/index.html" },
+    { "source": "/community", "destination": "/index.html" },
+    { "source": "/admin/:path*", "destination": "/index.html" },
+    { "source": "/gestion/:path*", "destination": "/index.html" },
+    { "source": "/alumnos/:path*", "destination": "/index.html" }
+  ]
+}
