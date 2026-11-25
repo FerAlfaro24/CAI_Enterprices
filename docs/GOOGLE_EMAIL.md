@@ -1,6 +1,27 @@
 # Google y correo de acceso — F6
 
-## Estado al 24-11-2026
+## Cierre de prueba real de Gmail — 24-11-2026
+
+**Google y correo reales comprobados en muestras locales independientes.** Desde `9dc2a61` de esta misma rama/PR #36, se añadió `scripts/check-live-account-email.browser.mjs` para verificar el envío por fases sin destinatarios o credenciales en código. No se cambia el alcance del Top ni se inicia alojamiento definitivo.
+
+El titular activó 2FA y creó una credencial de aplicación. Se configuró SMTP privado con TLS y se verificó conexión sin mandar un correo de prueba adicional. Después, una fixture nueva `onboarding-browser-server.ts 4684 3292 --smtp`, esquema23 y sin identidades Google, completó:
+
+1. Registro de alumno ficticio con el correo institucional expresamente autorizado.
+2. Aprobación desde administración y aceptación del correo por SMTP.
+3. **Recepción real en la bandeja de entrada de Gmail**, asunto «Tu solicitud de CAI fue aprobada»; botón del mensaje abierto y formulario de activación comprobado en el navegador integrado.
+4. Activación y login con contraseña CAI de prueba, usando el mismo enlace emitido por el servidor en el mensaje.
+5. Solicitud de recuperación y segundo mensaje **recibido en Gmail**, asunto «Recupera tu acceso a CAI»; botón recibido abierto y formulario comprobado.
+6. Cambio de contraseña desde el enlace emitido, contraseña anterior rechazada, entrada con la nueva y reutilización del enlace rechazada.
+
+Solo se enviaron **dos mensajes reales**, ambos a la misma cuenta institucional del remitente; no se escribieron a amigos, alumnos u otros destinatarios. Los pasos de activación/contraseña se comprobaron en Brave aislado con los enlaces capturados privadamente del mismo envío; el navegador integrado verificó los mensajes de Gmail y abrió sus botones reales. No se afirma que se haya introducido la contraseña en el formulario abierto por Gmail. Las13 comprobaciones nuevas de Brave terminaron sin errores de consola/JS. Las351 servidor y52 UI de la preparación anterior no se repitieron, pues no cambió el código del producto.
+
+Credencial/configuración únicamente en `.local`, ignorada por Git y con ACL limitada al propietario/SYSTEM; referencia privada en `.local/tests/f6-smtp-config-reference.json`. Nunca copiar contenido de ese archivo a Git, capturas o documentación. La credencial fue compartida por el titular en la conversación: **requiere sustitución antes de la entrega definitiva**, sin volver a pegarla en chat. No se revocó automáticamente para no alterar sus accesos ni se garantiza que un secreto compartido sea adecuado para producción.
+
+Fixture y evidencia en `.local/tests/onboarding-smtp-latest.json` y `.local/tests/f6-results.json`; las bases habituales/demo no se abrieron ni migraron. Se cerró únicamente el proceso SMTP de QA tras finalizar, conservando archivos y buzón. Los enlaces usados ya quedaron consumidos. No presentar localhost como disponible para otras computadoras.
+
+**Pendientes de adopción final:** rotación privada de la credencial, dominio/servidor permanentes, configuración de sus orígenes y estado de publicación de Google, adopción controlada del esquema23 y configuración privada en ese entorno, y repetir allí recepción/enlaces desde otros dispositivos. La copia remota histórica22 sigue conservada y su enlace inactivo; no se reactivó ni renovó. F6 local está comprobado; la operación pública todavía no.
+
+## Preparación anterior — 24-11-2026 (antes de la credencial SMTP)
 
 Rama `feat/v1-google-email-onboarding`, código `5da4eb4`, [PR #36](https://github.com/FerAlfaro24/CAI_Enterprices/pull/36) en borrador, desde `aabd5bc` de la presentación actualizada. **Preparación técnica implementada; cierre externo pendiente.** La copia de presentación conserva F1–F5/esquema22 y ventana original. En la comprobación del 24-11 a las23:33 CDMX, los PID remotos anteriores no estaban activos y su dominio ya no resolvía; no se cambió ni reanudó el túnel y no se determinó la causa del cierre. No afirmar que el enlace sigue disponible. No se modificó su frontend/base/proceso, main, release o Vercel. La nueva rama requiere esquema23 en fixtures nuevas; no arrancarla contra la base habitual ni la copia remota para migrarlas implícitamente.
 
@@ -47,7 +68,7 @@ $env:CAI_MAIL_CONFIG = 'C:/RUTA/PRIVADA/smtp.json'
 
 La cuenta/recuperación/2FA deben quedar bajo control de CAI. No usar credenciales personales, publicar el JSON, pegarlo en frontend ni enviarlo a GitHub. Cambiar la contraseña de Google puede revocar credenciales de aplicación; coordinar rotación y verificar de nuevo.
 
-## Prueba real de entrega pendiente
+## Procedimiento de prueba real (ejecutado en el cierre de arriba)
 
 1. El responsable completa en Google la verificación de identidad, 2FA y credencial para la aplicación. La pestaña de contraseñas de aplicación solicita confirmar identidad; no se introdujo una contraseña por el agente.
 2. Guardar credencial directamente en archivo privado y comprobar conexión SMTP. Esta comprobación no demuestra recepción.
@@ -55,7 +76,7 @@ La cuenta/recuperación/2FA deben quedar bajo control de CAI. No usar credencial
 4. Registrar datos de alumno ficticio con ese correo → aprobar → verificar recepción real en Gmail (incluido Spam) → abrir el enlace → elegir clave y entrar. Repetir recuperación, caducidad/uso único/fallo/reenvío. Solo después marcar correo real comprobado.
 5. Para despliegue definitivo configurar dominio HTTPS estable, orígenes/clientes de Google y estado de publicación adecuados; validar desde otros dispositivos y completar textos/permisos de CAI. No convertir el túnel temporal en alojamiento ni publicar OAuth para todos implícitamente.
 
-## Evidencia de esta entrega
+## Evidencia de la preparación anterior
 
 - Suite completa **346/346** correcta tras integrar correo y vinculación; bloque posterior de configuración privada **5/5**, total351 resultados distintos. Las pasadas previas fallaron por expectativas de esquema22 en fixtures históricas; se ajustaron esos escenarios y se repitió la suite sin fallos. No se eliminó ni ignoró ningún test.
 - Navegador **52 comprobaciones finales**,26 Brave/26 Opera, contextos aislados: alta/aprobación, activación desde buzón simulado, login, recuperación, contraseña anterior inválida, uso único, estado fallido sin perder aprobación, alternativas manuales, vinculación Google simulada conservando la cuenta, privacidad,1440/768/375/320 y consola sin errores. Las pasadas intermedias23+23 no se suman a la final. Se corrigió la espera del verificador para consultar la sesión después de completar respuesta/navegación de vinculación, no durante su revocación/renovación.
