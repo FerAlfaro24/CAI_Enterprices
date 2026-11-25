@@ -38,17 +38,19 @@ export function useAdminConnection() {
     if(writing.current)return false
     writing.current=true;setBusy(true);setError('');setNotice('')
     try {
+      let resultNotice='Cambio guardado.'
       if(action.type==='reset') {await refresh();return true}
       if(action.type==='decide'||action.type==='undo'||action.type==='consent') {
         const request=requests.find(r=>r.id===action.id)
         if(!request)throw new Error('Actualiza la solicitud antes de decidir.')
-        await localApi.decide(request,action.type==='undo'?'undo':action.type==='consent'?'consent':action.status==='aprobada'?'approve':'reject',reference)
+        const outcome=await localApi.decide(request,action.type==='undo'?'undo':action.type==='consent'?'consent':action.status==='aprobada'?'approve':'reject',reference) as {emailQueued?:boolean}
+        if(outcome.emailQueued)resultNotice='Solicitud aprobada. El correo quedó pendiente de envío; consulta su estado en la ficha del alumno.'
       } else if(action.type==='suspend'||action.type==='reactivate') {
         const student=students.find(s=>s.id===action.id)
         if(!student)throw new Error('Actualiza la ficha antes de cambiar el acceso.')
         await localApi.studentStatus(student,action.type==='suspend'?'suspendido':'activo')
       } else throw new Error('Esta función todavía no está conectada. No se guardaron cambios.')
-      setNotice('Cambio guardado en el servidor local.');await refresh();return true
+      setNotice(resultNotice);await refresh();return true
     } catch(error) {failure(error);if(error instanceof ApiError&&error.status===409){await refresh();setError(error.message)}return false}
     finally {writing.current=false;setBusy(false)}
   }

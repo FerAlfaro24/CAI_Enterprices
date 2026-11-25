@@ -2,6 +2,8 @@
 
 ## Presentación actualizada — 24 de noviembre de 2026
 
+**Última comprobación — 24-11,23:33 CDMX:** los PID de la instancia anterior ya no estaban activos y el dominio devolvió ENOTFOUND. Copia y accesos conservados, vencimiento original25-11,10:12. No se determinó la causa ni se reanudó/renovó el túnel. Para reanudar conservar datos/vencimiento y usar código compatible con esquema22 de la rama de presentación, no F6/esquema23 sobre esa base. No entregar el enlace anterior como activo sin nueva verificación.
+
 Nueva presentación solicitada expresamente hoy por el usuario, máximo 24 horas. Rama `test/v1-client-presentation-2026-11-24`, desde `15d3a94` de F5 (`258abfb`/PR #34). Incluye F1–F5 completos; no se fusionan ramas intermedias ni se cambia main/release o Vercel. Esta sección sustituye como estado operativo las ventanas históricas de abajo.
 
 Se creó una fixture nueva con `server/tests/community-showcase-server.ts 4240 3340 --client-presentation` y luego una copia remota independiente con `scripts/remote-demo.mjs --open-entry`. Solo frontend compilado y API; esquema22, origen HTTPS productivo y cookies seguras. Portada/registro libres, comunidad/administración/fotos con cuenta propia. Datos habituales y copias anteriores conservados, sin migrarlos. El lanzador portátil existente no instala servicios ni cambia configuración del sistema.

@@ -52,7 +52,7 @@ test('Material oficial: importación recuperable, audiencia y privacidad', async
 
   await t.test('migración 16 a 17 mantiene permisos y reintentos de imágenes existentes', async () => {
     groupImage = await repository.create(draft,'legacy-test',()=>admin)
-    app.db.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22; DELETE FROM migrations WHERE version=21; DELETE FROM migrations WHERE version=20; DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17;')
+    app.db.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DROP TABLE IF EXISTS account_emails; DELETE FROM migrations WHERE version=23; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22; DELETE FROM migrations WHERE version=21; DELETE FROM migrations WHERE version=20; DROP TABLE learning_audit; DROP TABLE learning_images; DROP TABLE learning_achievements; DELETE FROM migrations WHERE version=19; DROP TABLE publication_images; ALTER TABLE gallery_images DROP COLUMN draft; DELETE FROM migrations WHERE version=18; DROP INDEX gallery_community_audience; ALTER TABLE gallery_images DROP COLUMN audience; DELETE FROM migrations WHERE version=17;')
     migrateDatabase(app.db)
     assert.equal((await repository.create(draft,'legacy-test',()=>admin)).id,groupImage.id)
     assert.equal(repository.list()[0]!.audience,'group')
@@ -101,7 +101,7 @@ test('Material oficial: importación recuperable, audiencia y privacidad', async
       await assert.rejects(repository.create({...draft,...invalid},randomUUID(),()=>admin))
     }
     const copy=await backupLocalDatabase(path,join(directory,'backups')), before=await readFile(copy)
-    assert.equal((await verifyLocalBackup(copy)).schema,22)
+    assert.equal((await verifyLocalBackup(copy)).schema,23)
     assert.equal((await verifyLocalBackup(copy)).images,7)
     assert.deepEqual(await readFile(copy),before)
   })

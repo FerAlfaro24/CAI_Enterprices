@@ -104,17 +104,17 @@ test('Notificaciones: cierre, prioridad, historial privado y migración aditiva'
     assert.ok(notices(app.db).forStudent(users.alice!).filter(n=>n.kind==='publication-review').every(n=>n.important&&!n.read))
   })
   await t.test('reinicio y copia conservan lectura y borrado; coordinación conserva registros',async()=>{
-    const before=await inbox(),adminBefore=notices(app.db).list(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,22)
+    const before=await inbox(),adminBefore=notices(app.db).list(),copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,23)
     await close();app=createApplication(copy);await start();assert.deepEqual(await inbox(),before);assert.deepEqual(notices(app.db).list(),adminBefore)
     assert.ok(app.db.prepare('SELECT student_dismissed_at FROM local_notices WHERE id=?').get(ordinary)!.student_dismissed_at)
   })
   await t.test('migración desde 19 preserva IDs, lecturas y revisiones administrativas',async()=>{
     const copy=await backupLocalDatabase(path,join(directory,'legacy-copies'))
     const legacy=openDatabase(copy),before=legacy.prepare('SELECT id,request_id,subject,student_seen_at,acknowledged FROM local_notices ORDER BY id').all()
-    legacy.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22; DELETE FROM migrations WHERE version=21; DELETE FROM migrations WHERE version=20');legacy.close()
+    legacy.exec('DROP INDEX student_notice_inbox; ALTER TABLE local_notices DROP COLUMN important; ALTER TABLE local_notices DROP COLUMN student_dismissed_at; DROP TABLE IF EXISTS account_emails; DELETE FROM migrations WHERE version=23; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22; DELETE FROM migrations WHERE version=21; DELETE FROM migrations WHERE version=20');legacy.close()
     assert.equal((await verifyLocalBackup(copy)).schema,19)
     const migrated=openDatabase(copy)
-    try{assert.deepEqual(migrated.prepare('SELECT id,request_id,subject,student_seen_at,acknowledged FROM local_notices ORDER BY id').all(),before);assert.equal(migrated.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,22);assert.equal(migrated.prepare('SELECT important FROM local_notices WHERE id=?').get(ordinary)!.important,0);assert.equal(migrated.prepare('SELECT important FROM local_notices WHERE id=?').get(important)!.important,1);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM local_notices WHERE student_dismissed_at IS NOT NULL').get()!.n,0)}finally{migrated.close()}
+    try{assert.deepEqual(migrated.prepare('SELECT id,request_id,subject,student_seen_at,acknowledged FROM local_notices ORDER BY id').all(),before);assert.equal(migrated.prepare('SELECT MAX(version) AS n FROM migrations').get()!.n,23);assert.equal(migrated.prepare('SELECT important FROM local_notices WHERE id=?').get(ordinary)!.important,0);assert.equal(migrated.prepare('SELECT important FROM local_notices WHERE id=?').get(important)!.important,1);assert.equal(migrated.prepare('SELECT COUNT(*) AS n FROM local_notices WHERE student_dismissed_at IS NOT NULL').get()!.n,0)}finally{migrated.close()}
     const again=openDatabase(copy);assert.equal(again.prepare('SELECT COUNT(*) AS n FROM migrations WHERE version=20').get()!.n,1);again.close()
   })
 })

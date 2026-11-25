@@ -55,7 +55,7 @@ test('Práctica diaria: renovación autorizada, resultados y continuidad',async 
  })
  await t.test('reiniciar conserva reloj de prueba, progreso y resultados sin otra migración',()=>{
   const before=repo.snapshot(user);app.db.close();app=createApplication(path);repo=challengesRepository(app.db,()=>time)
-  assert.deepEqual(repo.snapshot(user),before);assert.equal(app.db.prepare('SELECT max(version) AS n FROM migrations').get()!.n,22)
+  assert.deepEqual(repo.snapshot(user),before);assert.equal(app.db.prepare('SELECT max(version) AS n FROM migrations').get()!.n,23)
  })
  await t.test('lectura de renovación redondea minutos y no fabrica un plazo',()=>{
   assert.equal(renewalLabel(1),'En 1 min');assert.equal(renewalLabel(60*60000),'En 1 h');assert.equal(renewalLabel(61*60000),'En 1 h 1 min');assert.equal(renewalLabel(0),'Ya es un nuevo día de práctica');assert.ok(renewalLabel(NaN).includes('Ciudad de México'))

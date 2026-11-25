@@ -1,3 +1,4 @@
+import { accountEmail, type AccountMailDelivery } from './account-email.ts'
 import { communityModeration } from './community-moderation.ts'
 import { learningRepository } from './learning.ts'
 import { socialProfiles } from './social-profiles.ts'
@@ -52,13 +53,15 @@ function json(response: ServerResponse, status: number, data: unknown) {
   response.end(JSON.stringify(data))
 }
 
-export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date;runtime?:RequestPolicy;log?:OperationalLog;officialMediaDirectory?:string;demonstration?:boolean} = {}) {
+export function createApplication(databasePath: string, googleOptions: GoogleOptions = {}, options: {emailDelivery?: AccountMailDelivery;adminRecoveryDelivery?: AdminRecoveryDelivery;challengeClock?:()=>Date;runtime?:RequestPolicy;log?:OperationalLog;officialMediaDirectory?:string;demonstration?:boolean} = {}) {
   const policy = validateRequestPolicy(options.runtime ?? localPolicy)
   if(options.demonstration&&policy.mode!=='local')throw Error('La demostración de comunidad solo puede ejecutarse en local.')
   const cookies = { secure: policy.mode === 'production' }
   const log = options.log ?? (policy.mode === 'production' ? event => console.info(JSON.stringify(event)) : undefined)
   const db = openDatabase(databasePath)
-  const access = accessRepository(db)
+  const emails = accountEmail(db, options.emailDelivery)
+  const access = accessRepository(db, emails.enabled ? emails.approved : undefined)
+  const dispatchEmail = () => setImmediate(() => { void emails.deliverPending().catch(() => console.error('No se pudo procesar la entrega de cuentas.')) })
   const auth = authRepository(db, cookies)
   const studentAuth = studentAccounts(db, cookies)
   const google = googleAccounts(db, googleOptions, cookies)
@@ -95,13 +98,14 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       db.prepare('SELECT 1').get()
       return json(response, 200, { status: 'ok' })
     }
+    if (path === '/api/local/delivery/config' && method === 'GET') return json(response, 200, { enabled:emails.enabled, adminEnabled:Boolean(options.adminRecoveryDelivery) })
     if (path === '/api/local/catalog' && method === 'GET') return json(response, 200, config.publicCatalog())
     if (path === '/api/local/admin-recovery/request' && method === 'POST') {
       limit(`admin-recovery:${clientAddress}`,10,15*60_000)
       const data=await body(request)
       if (Object.keys(data).some(key=>key!=='email') || typeof data.email!=='string' || data.email.length>160 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) throw new HttpError(400,'Escribe un correo válido.')
       recovery.request(data.email.trim())
-      json(response,202,{message:policy.mode === 'local' ? adminRecoveryMessage : 'Si el correo corresponde a una cuenta administrativa, se preparará su recuperación. Consulta con coordinación para recibir ayuda. No se ha cambiado ninguna contraseña.'})
+      json(response,202,{message:options.adminRecoveryDelivery ? 'Si el correo corresponde a una cuenta administrativa, recibirás un enlace de recuperación. Revisa también Spam. No se ha cambiado ninguna contraseña.' : policy.mode === 'local' ? adminRecoveryMessage : 'Si el correo corresponde a una cuenta administrativa, se preparará su recuperación. Consulta con coordinación para recibir ayuda. No se ha cambiado ninguna contraseña.'})
       // La entrega ocurre fuera de la respuesta pública; ninguna URL privada vuelve al solicitante.
       setImmediate(()=>{void recovery.deliverPending().catch(()=>console.error('No se pudo procesar la entrega administrativa.'))})
       return
@@ -133,8 +137,8 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       limit(`recovery:${clientAddress}`, 10, 15 * 60_000)
       const data = await body(request)
       if (Object.keys(data).some((key) => key !== 'email') || typeof data.email !== 'string' || data.email.length > 160 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) throw new HttpError(400, 'Escribe un correo válido.')
-      mail.requestRecovery(data.email.trim())
-      return json(response, 202, { message: policy.mode === 'local' ? 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. En estas pruebas locales no se envían correos; consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' : 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. Si necesitas ayuda, consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' })
+      if (emails.enabled) { emails.requestRecovery(data.email.trim()); dispatchEmail() } else mail.requestRecovery(data.email.trim())
+      return json(response, 202, { message: emails.enabled ? 'Si existe una cuenta con contraseña aprobada y activa, recibirás un enlace de recuperación. Revisa también Spam. Si entras con Google, recupera tu cuenta desde Google.' : policy.mode === 'local' ? 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. En estas pruebas locales no se envían correos; consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' : 'Si existe una cuenta con contraseña aprobada y activa, se preparará su recuperación. Si necesitas ayuda, consulta con coordinación. Si entras con Google, recupera tu cuenta desde Google.' })
     }
     if (path === '/api/local/recovery/reset' && method === 'POST') {
       limit(`reset:${clientAddress}`, 20, 15 * 60_000)
@@ -159,6 +163,23 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       const user = studentAuth.forGoogle(result.subject)
       response.setHeader('Set-Cookie', [...result.cookies, studentAuth.end(request), ...(user ? [studentAuth.start(user)] : [])])
       return json(response, 200, { destination: user ? '/community' : '/solicitud-google' })
+    }
+    if (path === '/api/local/student/google' && method === 'GET') {
+      const member=studentAuth.session(request)
+      if(!member)throw new HttpError(401,'Inicia sesión para consultar tu cuenta.')
+      return json(response,200,{enabled:google.config().enabled,linked:Boolean(db.prepare('SELECT subject FROM google_identities WHERE request_id=?').get(Number(member.id.slice(4))))})
+    }
+    if (path === '/api/local/student/google/link' && method === 'POST') {
+      limit(`google-link:${clientAddress}`,20,15*60_000)
+      const member=studentAuth.session(request)
+      if(!member)throw new HttpError(401,'Entra primero con tu contraseña de CAI para vincular tu cuenta.')
+      const data=await body(request)
+      if(Object.keys(data).some(key=>key!=='credential'))throw new HttpError(400,'Revisa el acceso con Google.')
+      const result=await google.signIn(request,data.credential,{requestId:Number(member.id.slice(4)),isCurrent:()=>studentAuth.session(request)?.id===member.id})
+      const linked=studentAuth.forGoogle(result.subject)
+      if(!linked||linked.id!==member.id)throw new HttpError(401,'No pudimos vincular la cuenta. Vuelve a entrar.')
+      response.setHeader('Set-Cookie',[...result.cookies,studentAuth.end(request),studentAuth.start(linked)])
+      return json(response,200,{destination:'/community'})
     }
     if (path === '/api/local/google/session' && method === 'GET') return json(response, 200, google.state(request))
     if (path === '/api/local/google/logout' && method === 'POST') {
@@ -506,6 +527,16 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
       posts.decide(review[1]!, revisionOf(data.revision), review[2] as PublicationDecision, user.id, data.reason, data.confirmed)
       return json(response, 200, { ok: true })
     }
+    const emailStatus = path.match(/^\/api\/local\/students\/(CAI-\d+)\/access-email$/)
+    if (emailStatus && method === 'GET') return json(response, 200, emails.forStudent(emailStatus[1]!))
+    if (emailStatus && method === 'POST') {
+      limit(`account-email:${user.id}`, 30, 60 * 60_000)
+      const data = await protectedBody()
+      if (Object.keys(data).some(key => key !== 'revision')) throw new HttpError(400, 'Revisa el envío de acceso.')
+      const result = emails.resend(emailStatus[1]!, revisionOf(data.revision), user.id)
+      dispatchEmail()
+      return json(response, 202, result)
+    }
     const invite = path.match(/^\/api\/local\/students\/(CAI-\d+)\/invitation$/)
     if (invite && method === 'POST') {
       const data = await protectedBody()
@@ -515,7 +546,8 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
     if (decision && method === 'POST') {
       const data = await protectedBody()
       access.decide(decision[1]!, revisionOf(data.revision), decision[2] as RequestDecision, user.id, typeof data.reference === 'string' ? data.reference : undefined)
-      return json(response, 200, { ok: true })
+      if (decision[2] === 'approve') dispatchEmail()
+      return json(response, 200, { ok: true, emailQueued: decision[2] === 'approve' && emails.enabled })
     }
     const student = path.match(/^\/api\/local\/students\/(CAI-\d+)$/)
     if (student && method === 'PATCH') {
@@ -550,9 +582,9 @@ export function createApplication(databasePath: string, googleOptions: GoogleOpt
   })
   server.requestTimeout = 15_000
   server.headersTimeout = 10_000
-  server.on('listening',()=>{void recovery.deliverPending().catch(()=>console.error('No se pudo procesar la entrega administrativa.'))})
+  server.on('listening',()=>{dispatchEmail();void recovery.deliverPending().catch(()=>console.error('No se pudo procesar la entrega administrativa.'))})
   let closed = false
-  const dispose = () => { if (!closed) { closed = true; recovery.stop(); db.close() } }
+  const dispose = () => { if (!closed) { closed = true; emails.stop(); recovery.stop(); db.close() } }
   server.on('close', dispose)
   server.on('error', () => { if (!server.listening) dispose() })
   return { server, db }

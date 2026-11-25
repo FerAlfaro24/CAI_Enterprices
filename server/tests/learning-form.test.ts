@@ -65,6 +65,6 @@ test('Logros simples: mínimos, límites completos, privacidad y publicación si
   const pending=repo.reviews().items.find(x=>x.id===item.id)!
   repo.decide(item.id,{revision:pending.revision,decision:'approve',reason:'Revisión ficticia del aprendizaje',confirmed:true},admin)
   assert.ok(badgesRepository(app.db).snapshot(student).grants.some(x=>x.badge.id==='book-buddy'))
-  assert.equal(app.db.prepare('SELECT max(version) AS n FROM migrations').get()!.n,22)
+  assert.equal(app.db.prepare('SELECT max(version) AS n FROM migrations').get()!.n,23)
  })
 })

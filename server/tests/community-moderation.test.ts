@@ -49,7 +49,7 @@ test('Moderación de comunidad: permisos, retiro y suspensiones temporales/perma
  let temporary:StudentRestriction
  await t.test('migración21→22 conserva cuentas, publicaciones y comentarios',()=>{
   const before={requests:app.db.prepare('SELECT * FROM requests').all(),accounts:app.db.prepare('SELECT * FROM student_accounts').all(),posts:app.db.prepare('SELECT * FROM publications').all(),comments:app.db.prepare('SELECT * FROM post_comments').all()}
-  app.db.exec('DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22;')
+  app.db.exec('DROP TABLE IF EXISTS account_emails; DELETE FROM migrations WHERE version=23; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22;')
   migrateDatabase(app.db);migrateDatabase(app.db)
   for(const [name,rows] of Object.entries(before)){const table=name==='accounts'?'student_accounts':name==='posts'?'publications':name==='comments'?'post_comments':name;assert.deepEqual(app.db.prepare('SELECT * FROM '+table).all(),rows)}
   assert.deepEqual(app.db.prepare('PRAGMA foreign_key_check').all(),[])
@@ -148,7 +148,7 @@ test('Moderación de comunidad: permisos, retiro y suspensiones temporales/perma
   }finally{fixture.db.close()}
  })
  await t.test('respaldo/reinicio conservan suspensiones, historial y rechazo del acceso',async()=>{
-  const copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,22)
+  const copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,23)
   const before=await restrictions('history');await close();app=createApplication(path);await start()
   assert.deepEqual(await restrictions('history'),before);assert.equal((await login('bob')).status,403);assert.equal((await list()).items.length,1)
  })

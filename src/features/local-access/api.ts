@@ -150,6 +150,8 @@ export const noticeApi = {
 }
 
 export const googleApi = {
+  account: () => call<{enabled:boolean;linked:boolean}>('/student/google'),
+  link: (credential:string) => call<{destination:string}>('/student/google/link','POST',{credential}),
   config: () => call<{ enabled: boolean; clientId: string | null }>('/google/config'),
   challenge: () => call<{ clientId: string; nonce: string }>('/google/challenge', 'POST', {}),
   signIn: (credential: string) => call<{ destination: string }>('/google/signin', 'POST', { credential }),
@@ -186,4 +188,10 @@ export const communityModerationApi={
  restrictions:(history=false,before=0)=>call<{items:import('../../../server/contracts').StudentRestriction[];nextCursor:number|null}>(`/community/restrictions?view=${history?'history':'active'}&before=${before}`),
  apply:(author:import('../../../server/contracts').ModerationAuthor,comment:import('../../../server/contracts').CommunityModerationComment|undefined,data:import('../../../server/contracts').CommunityModerationAction,key:string)=>call(`/community/students/${author.studentId}${comment?'/comments/'+comment.id:''}/moderate`,'POST',data,{'Idempotency-Key':key}),
  revoke:(item:import('../../../server/contracts').StudentRestriction,reason:string)=>call(`/community/restrictions/${item.id}/revoke`,'POST',{revision:item.revision,reason,confirmed:true}),
+}
+
+export const accountEmailApi = {
+ config: () => call<{enabled:boolean;adminEnabled:boolean}>('/delivery/config'),
+ status: (id:string) => call<{enabled:boolean;delivery:import('../../../server/contracts').AccountEmailStatus|null}>(`/students/${id}/access-email`),
+ resend: (student:LocalStudent) => call<{enabled:boolean;delivery:import('../../../server/contracts').AccountEmailStatus|null}>(`/students/${student.id}/access-email`,'POST',{revision:student.revision}),
 }

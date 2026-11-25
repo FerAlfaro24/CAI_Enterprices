@@ -76,7 +76,7 @@ test('Comunidad compartida: clases, privacidad, migración y retos comunes',asyn
   const legacyAssignment=app.db.prepare("INSERT INTO daily_challenges(day,program,group_name,slot,bank_id,content_json,state,source) SELECT day,'Programa anterior','Grupo anterior',slot,bank_id,content_json,state,source FROM daily_challenges WHERE id=?").run(Number(assigned.assignment_id))
   app.db.prepare('UPDATE challenge_attempts SET assignment_id=? WHERE student_id=? AND slot=0').run(Number(legacyAssignment.lastInsertRowid),Number(ids.alice!.slice(4)))
   const before={requests:app.db.prepare('SELECT * FROM requests').all(),accounts:app.db.prepare('SELECT * FROM student_accounts').all(),comments:app.db.prepare('SELECT * FROM post_comments').all(),attempts:app.db.prepare('SELECT * FROM challenge_attempts').all(),images:app.db.prepare('SELECT * FROM learning_images').all()}
-  app.db.exec("UPDATE publications SET audience='group' WHERE admin_author_id IS NULL; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22; DELETE FROM migrations WHERE version=21;")
+  app.db.exec("UPDATE publications SET audience='group' WHERE admin_author_id IS NULL; DROP TABLE IF EXISTS account_emails; DELETE FROM migrations WHERE version=23; DROP TABLE community_moderation_actions; DROP TABLE student_restrictions; DELETE FROM migrations WHERE version=22; DELETE FROM migrations WHERE version=21;")
   const objects=app.db.prepare("SELECT sql FROM sqlite_schema WHERE tbl_name='publications' AND type IN ('index','trigger') AND sql IS NOT NULL").all()
   const legacy=oldDefinition.replace(/^CREATE TABLE (?:"publications"|publications)/,'CREATE TABLE publications_legacy').replace("AND kind='story'","AND audience='group' AND kind='story'")
   app.db.exec('PRAGMA foreign_keys=OFF; BEGIN IMMEDIATE;');app.db.exec(legacy)
@@ -99,7 +99,7 @@ test('Comunidad compartida: clases, privacidad, migración y retos comunes',asyn
   const global=(await json<ChallengeSnapshot>('/student/challenges','bob')).items[0]!;assert.equal((await call('/student/challenges/'+global.id+'/answer','POST',{revision:global.revision,answerIndex:0})).status,409)
  })
  await t.test('respaldo y reinicio conservan comunidad, permisos, puntos y sesiones',async()=>{
-  const copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,22)
+  const copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,23)
   await close();app=createApplication(path,{},options);await start()
   assert.ok((await json<{posts:PublishedPost[]}>('/student/posts','bob')).posts.some((p:{id:string})=>p.id===postId));assert.equal((await json<ChallengeSnapshot>('/student/challenges')).progress.correct,1)
   assert.equal((await fetch(base+privateImage,{headers:{Cookie:cookies.bob}})).status,404)

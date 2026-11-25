@@ -28,7 +28,7 @@ function toRequest(row: RequestRow): LocalRequest {
   }
 }
 
-export function accessRepository(db: Database) {
+export function accessRepository(db: Database, onApproved?: (id:number, actor:number) => void) {
   const audit = (actor: number | null, id: number, action: string) => db.prepare('INSERT INTO audit_log(actor_id, request_id, action, created_at) VALUES (?, ?, ?, ?)').run(actor, id, action, new Date().toISOString())
   return {
     submit(payload: Submission, key: string, googleSubject?: string): Receipt {
@@ -87,8 +87,9 @@ export function accessRepository(db: Database) {
             if (decision === 'approve') db.prepare('INSERT INTO students(request_id, joined_at) VALUES (?, ?)').run(key, new Date().toISOString())
           }
         }
+        if (decision === 'approve') onApproved?.(key, actor)
         audit(actor, key, `request.${decision}`)
-        if (decision === 'approve' || decision === 'reject') queueNotice(db, key, 'Revisión de tu solicitud', decision === 'approve' ? 'CAI aprobó tu solicitud. Usa tu cuenta de Google o consulta con coordinación para activar tu acceso por contraseña.' : 'CAI revisó tu solicitud. Consulta con coordinación e indica tu folio para conocer el siguiente paso.')
+        if (decision === 'approve' || decision === 'reject') queueNotice(db, key, 'Revisión de tu solicitud', decision === 'approve' ? onApproved ? 'CAI aprobó tu solicitud. Usa tu cuenta de Google o revisa tu correo para recibir el enlace de activación.' : 'CAI aprobó tu solicitud. Usa tu cuenta de Google o consulta con coordinación para activar tu acceso por contraseña.' : 'CAI revisó tu solicitud. Consulta con coordinación e indica tu folio para conocer el siguiente paso.')
       })
     },
     students(): LocalStudent[] {

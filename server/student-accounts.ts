@@ -58,6 +58,7 @@ export function studentAccounts(db: Database, cookies: CookiePolicy = localCooki
         if (!student || !available(key)) throw new HttpError(409, 'Solo puedes preparar acceso para un alumno aprobado y activo.')
         if (student.revision !== revision) throw new HttpError(409, 'El alumno cambió en otra ventana. Vuelve a cargar sus datos.')
         if (activated(key)) throw new HttpError(409, 'El alumno ya tiene acceso configurado, con Google o contraseña.')
+        db.prepare("UPDATE account_emails SET state='cancelled',revision=revision+1 WHERE request_id=? AND kind='activation' AND state IN ('pending','sending')").run(key)
         const token = randomBytes(32).toString('hex')
         const expiresAt = Date.now() + 24 * 60 * 60_000
         db.prepare('INSERT INTO student_invitations VALUES (?, ?, ?, ?) ON CONFLICT(request_id) DO UPDATE SET token_hash = excluded.token_hash, expires_at = excluded.expires_at, created_by = excluded.created_by').run(key, hashToken(token), expiresAt, actor)

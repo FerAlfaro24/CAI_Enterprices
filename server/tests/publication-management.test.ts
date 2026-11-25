@@ -83,7 +83,7 @@ test('Publicador, avisos exclusivos y eliminación administrativa con historial'
   assert.equal(status,401);assert.ok(posts.feed(bob).some(x=>x.id===student.id))
  })
  await t.test('respaldo y reinicio conservan eliminaciones e historial sin migrar esquema',async()=>{
-  const copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,22)
+  const copy=await backupLocalDatabase(path,join(directory,'copies'));assert.equal((await verifyLocalBackup(copy)).schema,23)
   const before=app.db.prepare('SELECT id,status,reason,revision FROM publications ORDER BY id').all();await close();app=createApplication(path);await start();assert.deepEqual(app.db.prepare('SELECT id,status,reason,revision FROM publications ORDER BY id').all(),before)
  })
 })

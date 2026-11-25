@@ -71,7 +71,7 @@ export function googleAccounts(db: Database, options: GoogleOptions, cookies: Co
       db.prepare('INSERT INTO google_challenges VALUES (?, ?)').run(hash(nonce), Date.now() + 5 * 60_000)
       return { nonce, clientId, cookie: cookie(challengeCookie, nonce, 300) }
     },
-    async signIn(request: IncomingMessage, credential: unknown) {
+    async signIn(request: IncomingMessage, credential: unknown, link?: {requestId:number;isCurrent:()=>boolean}) {
       enabled()
       const nonce = tokenFrom(request, challengeName)
       const challenge = () => nonce && db.prepare('SELECT token_hash FROM google_challenges WHERE token_hash = ? AND expires_at > ?').get(hash(nonce), Date.now())
@@ -84,11 +84,23 @@ export function googleAccounts(db: Database, options: GoogleOptions, cookies: Co
         // Revalidar tras la operación de red: un reto caducado o ya consumido no sirve.
         if (!challenge()) throw new HttpError(401, 'El acceso caducó o ya se utilizó. Vuelve a continuar con Google.')
         const existing = db.prepare('SELECT request_id FROM google_identities WHERE subject = ?').get(verified.subject)
+        if (link) {
+          const owner = db.prepare("SELECT email FROM requests WHERE id=? AND status='aprobada'").get(link.requestId)
+          const bound = db.prepare('SELECT subject FROM google_identities WHERE request_id=?').get(link.requestId)
+          if (!link.isCurrent() || !owner) throw new HttpError(401, 'Tu sesión terminó durante la vinculación. Vuelve a entrar.')
+          if (String(owner.email).toLowerCase() !== verified.email.toLowerCase()) throw new HttpError(409, 'Usa la cuenta de Google con el mismo correo de tu inscripción.')
+          if ((existing?.request_id !== null && existing?.request_id !== undefined && existing.request_id !== link.requestId) || (bound && bound.subject !== verified.subject)) throw new HttpError(409, 'La cuenta de Google ya está vinculada. Consulta con coordinación.')
+        }
         // Nunca unir automáticamente cuentas por coincidencia de correo.
-        if (!existing && db.prepare("SELECT id FROM requests WHERE email = ? AND status IN ('pendiente','aprobada')").get(verified.email.toLowerCase())) throw new HttpError(409, 'Ya hay una solicitud con este correo. Usa tu acceso original o consulta con CAI para vincular tu cuenta.')
+        if (!link && !existing && db.prepare("SELECT id FROM requests WHERE email = ? AND status IN ('pendiente','aprobada')").get(verified.email.toLowerCase())) throw new HttpError(409, 'Ya hay una solicitud con este correo. Usa tu acceso original o consulta con CAI para vincular tu cuenta.')
         db.prepare('DELETE FROM google_challenges WHERE token_hash = ?').run(hash(nonce!))
         db.prepare(`INSERT INTO google_identities(subject, email, created_at) VALUES (?, ?, ?)
           ON CONFLICT(subject) DO UPDATE SET email = excluded.email`).run(verified.subject, verified.email.toLowerCase(), new Date().toISOString())
+        if (link) {
+          db.prepare('UPDATE google_identities SET request_id=? WHERE subject=?').run(link.requestId, verified.subject)
+          db.prepare('UPDATE requests SET revision=revision+1 WHERE id=?').run(link.requestId)
+          db.prepare("INSERT INTO audit_log(request_id,action,created_at) VALUES (?,'account.google_linked',?)").run(link.requestId,new Date().toISOString())
+        }
         const cleared = end(request)
         const token = randomBytes(32).toString('hex')
         db.prepare('DELETE FROM google_sessions WHERE expires_at <= ?').run(Date.now())
