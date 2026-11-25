@@ -1,4 +1,5 @@
 import initial from './seed.json'
+import { improvePresentationContent } from './content'
 import aula from '../../assets/official/aula.webp'
 import online from '../../assets/official/practica-online.webp'
 import materiales from '../../assets/official/materiales.webp'
@@ -8,7 +9,7 @@ import type { BadgeSnapshot, CommentPage, GalleryReview, GroupMember, PublishedP
 
 const key = 'cai-presentation-v1'
 const media: Record<string, string> = { '@media/aula': aula, '@media/online': online, '@media/materiales': materiales, '@media/actividad': actividad }
-export type PresentationStore = { version: 1; data: Record<string, unknown>; student: boolean; admin: boolean; sequence: number }
+export type PresentationStore = { version: 1; contentRevision?: number; data: Record<string, unknown>; student: boolean; admin: boolean; sequence: number }
 let current: PresentationStore | undefined
 
 export function value<T>(store: PresentationStore, path: string): T {
@@ -81,6 +82,7 @@ function fresh(): PresentationStore {
   })
   value<ChallengeSnapshot>(store, '/student/challenges').day = ''
   renewPractice(store)
+  improvePresentationContent(store)
   return store
 }
 export function renewPractice(store: PresentationStore) {
@@ -105,6 +107,7 @@ export function readStore() {
       if (parsed?.version === 1 && parsed.data?.['/student/me'] && Number.isFinite(parsed.sequence)) current = parsed
     } catch { /* Una muestra local dañada puede regenerarse; nunca contiene datos reales. */ }
     current ??= fresh()
+    if (improvePresentationContent(current)) commitStore(current)
   }
   renewPractice(current)
   return current

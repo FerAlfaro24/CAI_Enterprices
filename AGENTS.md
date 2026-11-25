@@ -1,5 +1,7 @@
 # CAI — instrucciones vigentes para agentes
 
+Presentación vigente: `feat/demo-community-content`/PR#41, código `324b474`, desde `f4e1f90`. Seis publicaciones ilustradas, comentarios contextuales y dos avisos actualizados; Google real conservado. Publicada Ready y observada al recargar la muestra existente, seis imágenes/enlace/sesión intacta. Ver STATIC_PRESENTATION, sección final. No pedir reinicio ni nueva promoción. Tipos/build/lint y revisión breve1440/375 correctos; no se repitieron suites históricas.
+
 Google real en Vercel publicado y comprobado: `feat/demo-real-google`/PR#40, código `3d1dc1e`. Leer docs/STATIC_PRESENTATION.md, bloque superior vigente. Origen autorizado y promoción Ready completados; SDK/verificador reales con cuenta institucional, retorno/estado/recarga/cierre comprobados.16 checks públicos nuevos y11 servidor/48 UI de fixture/39 regresión locales anteriores. No pedir otra promoción, origen o Google simulado. Datos escolares siguen ficticios por navegador; backend/base/SMTP reales no desplegados.
 
 ## Antes de trabajar
