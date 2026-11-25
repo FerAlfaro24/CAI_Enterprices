@@ -1,5 +1,8 @@
 # CAI — sitio institucional, comunidad y administración
 
+**Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](docs/HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
+
+
 ## Versión integrada más completa
 
 **Continuar en `integration/cai-v1-completa-2026-11-25`.** Esta rama reúne la v1.0 y todos los avances posteriores incorporados hasta `ae634d6`, incluidos Google y correos reales comprobados en local. No es todavía una entrega desplegada en producción.

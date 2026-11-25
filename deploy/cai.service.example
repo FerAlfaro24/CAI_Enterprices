@@ -1,0 +1,26 @@
+# Plantilla Linux; no instalada ni validada con systemd en este equipo Windows.
+[Unit]
+Description=CAI Comunidad API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=cai
+Group=cai
+WorkingDirectory=/srv/cai/current
+EnvironmentFile=/etc/cai/cai.env
+ExecStartPre=/usr/bin/node /srv/cai/current/server/production-check.ts
+ExecStart=/usr/bin/node /srv/cai/current/server/index.ts
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=25
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cai
+
+[Install]
+WantedBy=multi-user.target

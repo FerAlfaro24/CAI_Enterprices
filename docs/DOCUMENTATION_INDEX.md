@@ -100,3 +100,8 @@ Los informes conservan cifras/exclusiones de su corte. La última preparación p
 ## Mantener este índice
 
 Al añadir o retirar un documento, actualizar su fila/clase y los enlaces de entrada en la misma PR. Al modificar funciones, actualizar primero estado y próximos pasos y después el informe especializado. No actualizar cifras históricas como si se hubieran vuelto a ejecutar. Comprobar enlaces locales/anclas y que el diff de una tarea documental siga sin cambios de aplicación.
+
+## Preparación de entrega25-11
+
+- [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md): rama candidata, paquete y siguiente instalación.
+- [HOSTING_OPTIONS](HOSTING_OPTIONS.md): requisitos y proveedores gratuitos revisados.

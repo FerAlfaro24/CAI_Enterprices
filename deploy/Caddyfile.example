@@ -1,0 +1,35 @@
+# Plantilla para Caddy y Node en la MISMA máquina; no se aplicó a un servidor.
+# CAI_DOMAIN: dominio canónico sin esquema, idéntico al host de CAI_PUBLIC_ORIGIN.
+# Definirlo en el proceso de Caddy; no colocar claves o contraseñas en este archivo.
+{$CAI_DOMAIN} {
+    root * /srv/cai/current/dist
+    encode zstd gzip
+    header X-Content-Type-Options nosniff
+    header Referrer-Policy no-referrer
+    header X-Frame-Options DENY
+
+    @private path /.git* /.env* /.local* /server* /shared* /src* /node_modules* /deploy*
+    respond @private 404
+
+    @api path /api/local /api/local/*
+    handle @api {
+        reverse_proxy 127.0.0.1:3100 {
+            header_up Host {$CAI_DOMAIN}
+            header_up X-Forwarded-Proto https
+            header_up X-Forwarded-For {http.request.remote.host}
+            header_up -X-Forwarded-Host
+            header_up -Forwarded
+        }
+    }
+    # Nunca convertir API o assets ausentes en HTML.
+    handle /api/* {
+        respond 404
+    }
+    handle /assets/* {
+        file_server
+    }
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+}
