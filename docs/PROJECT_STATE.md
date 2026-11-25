@@ -158,3 +158,5 @@ La siguiente autorización llevó a la [preparación productiva](PRODUCTION_PREP
 ## Cómo actualizar este estado
 
 En cada entrega indicar fecha/base/commit, objetivo y componentes reutilizados, qué quedó implementado y comprobado, pruebas realizadas/no realizadas, efectos en datos/permisos, incidencias y siguiente tarea. No borrar evidencia previa; trasladar bitácoras extensas al historial, con enlace. NEXT_STEPS concentra prioridades; este archivo concentra hechos.
+
+**Pantalla observada25-11:** cuenta institucional CAI, proyecto CAI Comunidad, paso1 de2 de la prueba gratuita, país México. Google muestra300 USD/90 días y Sin cargos automáticos. No se pulsó Aceptar y continuar: requiere aceptación de condiciones del titular; después debe completar personalmente la verificación de pago. Prueba aún no activada, sin VM o red creadas. URL de continuación: https://console.cloud.google.com/freetrial/signup/tos?authuser=1&project=wide-ceiling-515804-p4.

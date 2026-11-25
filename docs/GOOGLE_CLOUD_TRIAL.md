@@ -38,3 +38,5 @@ Configuración y guía preparadas. Pendiente inspeccionar la pantalla real de Go
 - [Crear VM Debian](https://docs.cloud.google.com/compute/docs/instances/create-vm-from-public-image).
 - [Cuenta de servicio de VM](https://docs.cloud.google.com/compute/docs/access/service-accounts).
 - [SMTP465/587 desde VM](https://docs.cloud.google.com/compute/docs/tutorials/sending-mail): compatibles con el transporte existente, pendiente prueba real del destino.
+
+**Pantalla observada25-11:** cuenta institucional CAI, proyecto CAI Comunidad, paso1 de2 de la prueba gratuita, país México. Google muestra300 USD/90 días y Sin cargos automáticos. No se pulsó Aceptar y continuar: requiere aceptación de condiciones del titular; después debe completar personalmente la verificación de pago. Prueba aún no activada, sin VM o red creadas. URL de continuación: https://console.cloud.google.com/freetrial/signup/tos?authuser=1&project=wide-ceiling-515804-p4.

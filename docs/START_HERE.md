@@ -1,5 +1,8 @@
 # CAI — empieza aquí
 
+**Paso actual del piloto:** rama `ops/cai-google-cloud-trial-2026-11-25`, desde candidata `b4a2f46`. Titular autoriza preparar Google Cloud Free Trial para presentación temporal2/3 personas, sin pasar a pago. Leer [GOOGLE_CLOUD_TRIAL](GOOGLE_CLOUD_TRIAL.md). Paso1/2 institucional/México/oferta observado; el titular debe aceptar condiciones y completar verificación de tarjeta. No hay prueba activada ni VM; continuar después de su respuesta, comprobar Free Trial/crédito y no volver a elegir Oracle por notas históricas.
+
+
 **Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
 
 
