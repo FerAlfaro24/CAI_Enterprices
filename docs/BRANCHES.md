@@ -1,5 +1,7 @@
 # CAI — inventario de ramas
 
+**Presentación independiente — 25-11-2026:** `demo/v1-vercel-presentation`, desde `c1bf677` de la corrección de navegación, incluye toda la integrada y el adaptador ficticio que el usuario solicitó para Vercel. La configuración de esta rama compila exclusivamente la presentación. No fusionarla como producción ni confundirla con la continuación conectada. [Guía](STATIC_PRESENTATION.md).
+
 **Rama puntual — 25-11-2026:** `fix/v1-vercel-navigation`, desde `04bb0df` de la integrada: configuración de reescrituras Vite y exclusión de archivos privados en cargas CLI. Sin cambios de producto/base ni alojamiento de API. [Diagnóstico y límites](VERCEL_PREVIEW.md). La integrada sigue como base completa; no se ha fusionado esta corrección.
 
 **Continuación integrada — 25-11-2026:** usar `integration/cai-v1-completa-2026-11-25`, desde `ae634d6`. Reúne la v1.0 y los avances posteriores F1–F6. La [auditoría de integración](INTEGRATED_VERSION.md) examinó64 ramas remotas:61 antecesoras,2 parches equivalentes ya incorporados y1 rama documental inicial sustituida; todas las58 ramas locales revisadas incluidas por ascendencia. No hay cambios de código de producto frente a la base. Esquema23 para fixtures nuevas; servicios/datos privados y main/release conservados. Estado funcional, pruebas heredadas y límites se describen en la guía integrada; todavía faltan rotación privada, adopción en servidor/dominio y aceptación final.

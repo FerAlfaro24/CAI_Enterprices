@@ -26,6 +26,7 @@ export const adminTeamApi={
 }
 
 async function call<T>(path: string, method = 'GET', body?: unknown, headers?: Record<string, string>): Promise<T> {
+  if (import.meta.env.MODE === 'presentation') return (await import('../presentation/requests')).presentationRequest<T>(path, method, body)
   let response: Response
   try {
     response = await fetch(`/api/local${path}`, {

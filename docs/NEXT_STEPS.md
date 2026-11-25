@@ -1,5 +1,7 @@
 # CAI — próximos pasos vigentes
 
+**Presentación autorizada — 25-11-2026:** usuario eligió explícitamente muestra interactiva ficticia e independiente por navegador. Preparada en `demo/v1-vercel-presentation`, con78 checks finales y build/lint correctos. Publicar y verificar la vista previa y su enlace compartido propio; no sustituir la aplicación conectada ni contratar alojamiento. [Uso, separación y pruebas](STATIC_PRESENTATION.md). Queda resuelta la elección de simulación descrita en la revisión anterior.
+
 **Presentación gratuita en Vercel — 25-11-2026:** revisar [VERCEL_PREVIEW](VERCEL_PREVIEW.md). La vista previa integrada compartida abre portada, pero no tiene API y sus rutas directas devuelven404. `fix/v1-vercel-navigation` prepara la corrección de navegación; todavía requiere validación en Vercel. Antes de preparar una muestra independiente de la computadora, confirmar si se acepta simulación con datos ficticios por navegador o se necesitan pruebas reales entre dispositivos. No confundir arreglar rutas con alojar el sistema completo; no contratar servicios.
 
 ## Continuar desde la versión integrada del 25-11-2026

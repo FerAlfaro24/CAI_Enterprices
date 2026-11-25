@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:presentation": "vite --mode presentation",
     "dev:local": "node scripts/dev-local.mjs",
     "dev:api": "node --watch server/index.ts",
     "demo:remote": "node scripts/remote-demo.mjs",
@@ -22,6 +23,7 @@
     "google:setup": "node server/google-setup.ts",
     "test:api": "node --test server/tests/*.test.ts",
     "build": "npm run typecheck && vite build",
+    "build:presentation": "npm run typecheck && vite build --mode presentation",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint . --max-warnings 0"
