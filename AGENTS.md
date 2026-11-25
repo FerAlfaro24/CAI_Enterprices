@@ -2,6 +2,8 @@
 
 ## Antes de trabajar
 
+Nueva petición de acceso25-11: `fix/demo-login-google`, desde `39816de`, restaura correo/contraseña y Google simulado en la presentación, conservando atajos.46 checks locales nuevos Brave/Opera, tipos/build/lint y aislamiento de compilación real correctos; leer [actualización](docs/STATIC_PRESENTATION.md#actualización-del-acceso-25-11-2026). No afirmar Google real en Vercel: la simulación está identificada y solo admite el marcador ficticio. Credenciales públicas de la muestra en su guía, nunca usar las reales. Pendiente desplegar/verificar este corte nuevo; las pruebas públicas inferiores corresponden al anterior.
+
 Presentación pública verificada el25-11: `demo/v1-vercel-presentation`/PR#38, desde `c1bf677`, es una muestra ficticia independiente por navegador autorizada. Leer [STATIC_PRESENTATION](docs/STATIC_PRESENTATION.md). `https://cai-enterprices.vercel.app/` abre portada/community/admin/login sin cuenta de Vercel;39 checks públicos nuevos Brave, cero errores/peticiones a API local;78 checks locales Brave/Opera y tipos/build/lint anteriores. Servidores locales cerrados. No volver a pedir activación o elección de simulación. La integrada permanece como versión conectada; no fusionar la configuración de presentación en main/integrada. Solo fotos públicas previas, sin fotos privadas/SMTP/Google reales. Verificar disponibilidad antes de compartir en sesiones posteriores.
 
 1. Leer [START_HERE](docs/START_HERE.md), [PROJECT_STATE](docs/PROJECT_STATE.md), [BRANCHES](docs/BRANCHES.md) y [NEXT_STEPS](docs/NEXT_STEPS.md). Las instrucciones nuevas del usuario prevalecen. [DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md) clasifica el resto.

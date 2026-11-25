@@ -1,5 +1,7 @@
 # CAI — inventario de ramas
 
+**Acceso de muestra — 25-11-2026:** `fix/demo-login-google`, desde `39816de` de `demo/v1-vercel-presentation`: login original, credenciales ficticias por rol y recorrido Google simulado, conservando todos los atajos. No cambia servidor ni la integrada. [Detalle](STATIC_PRESENTATION.md#actualización-del-acceso-25-11-2026).
+
 **Presentación independiente — 25-11-2026:** `demo/v1-vercel-presentation`, desde `c1bf677` de la corrección de navegación, incluye toda la integrada y el adaptador ficticio que el usuario solicitó para Vercel. La configuración de esta rama compila exclusivamente la presentación. No fusionarla como producción ni confundirla con la continuación conectada. [Guía](STATIC_PRESENTATION.md).
 
 **Rama puntual — 25-11-2026:** `fix/v1-vercel-navigation`, desde `04bb0df` de la integrada: configuración de reescrituras Vite y exclusión de archivos privados en cargas CLI. Sin cambios de producto/base ni alojamiento de API. [Diagnóstico y límites](VERCEL_PREVIEW.md). La integrada sigue como base completa; no se ha fusionado esta corrección.

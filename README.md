@@ -1,6 +1,6 @@
 # CAI — sitio institucional, comunidad y administración
 
-**Esta rama es la presentación ficticia para Vercel:** `demo/v1-vercel-presentation`. Explorar `/community` como alumno o `/admin` como coordinación, sin contraseñas; los cambios son independientes por navegador. [Uso, compilación y límites](docs/STATIC_PRESENTATION.md). La versión conectada se conserva en la rama integrada descrita abajo; no confundirlas.
+**Esta rama actualiza el acceso de la presentación ficticia para Vercel:** `fix/demo-login-google`. Conserva los atajos a `/community` y `/admin`, y recupera el formulario en `/login` con cuentas ficticias y Google simulado identificado. Los cambios son independientes por navegador. [Uso, credenciales de muestra y límites](docs/STATIC_PRESENTATION.md). La versión conectada se conserva en la rama integrada descrita abajo; no confundirlas.
 
 ## Versión integrada más completa
 

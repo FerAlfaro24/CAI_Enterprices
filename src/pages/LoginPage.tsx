@@ -1,14 +1,16 @@
 import { lazy, Suspense, useEffect, useRef, useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link, useNavigate, useSearchParams } from 'react-router'
 import { ArrowRight, Eye, EyeOff, ShieldCheck } from 'lucide-react'
 import { localApi, studentApi, type LocalUser } from '../features/local-access/api'
 import { GoogleSignInButton } from '../features/local-access/GoogleSignInButton'
 import s from '../features/login/login.module.css'
 import { AccessFrame } from '../features/login/AccessFrame'
-const PresentationAccess = import.meta.env.MODE === 'presentation' ? lazy(() => import('../features/presentation/PresentationTools').then(module => ({ default: module.PresentationAccess }))) : null
+const PresentationLoginOptions = import.meta.env.MODE === 'presentation' ? lazy(() => import('../features/presentation/PresentationLoginOptions').then(module => ({ default: module.PresentationLoginOptions }))) : null
 
 export function LoginPage(props: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void;message?:string}) {
-  return PresentationAccess ? <Suspense fallback={<p role="status">Preparando presentación…</p>}><PresentationAccess admin={props.admin}/></Suspense> : <ConnectedLoginPage {...props}/>
+  const [params] = useSearchParams()
+  const admin = props.admin || (import.meta.env.MODE === 'presentation' && params.get('cuenta') === 'admin')
+  return <ConnectedLoginPage {...props} admin={admin}/>
 }
 function ConnectedLoginPage({ admin=false,onAdminLogin,message }: {admin?:boolean;onAdminLogin?:(user:LocalUser)=>void;message?:string}) {
   const navigate = useNavigate()
@@ -29,7 +31,7 @@ function ConnectedLoginPage({ admin=false,onAdminLogin,message }: {admin?:boolea
     const data=new FormData(event.currentTarget)
     setBusy(true);setError('')
     try {
-      if(admin) {const {user}=await localApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();onAdminLogin?.(user)}
+      if(admin) {const {user}=await localApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();if(onAdminLogin)onAdminLogin(user);else navigate('/admin')}
       else {await studentApi.login(String(data.get('email')),String(data.get('password')));form.current?.reset();navigate('/community')}
     }catch(error){setError(error instanceof Error?error.message:'No pudimos iniciar sesión.')}
     finally{setBusy(false)}
@@ -40,7 +42,11 @@ function ConnectedLoginPage({ admin=false,onAdminLogin,message }: {admin?:boolea
           <h1 ref={heading} tabIndex={-1}>Qué gusto verte<br />de nuevo.</h1>
           <p className={s.lead}>Entra y sigue compartiendo tu camino.</p>
           <p className={s.notice} id="login-demo-notice"><ShieldCheck size={20} aria-hidden="true" /><span><strong>{admin ? 'Administración CAI' : 'Comunidad CAI'}</strong>{admin ? 'Acceso para el equipo de coordinación.' : 'Entra con tu cuenta aprobada para seguir aprendiendo y compartiendo.'}</span></p>
-          {!admin && <GoogleSignInButton />}
+          {PresentationLoginOptions ? <Suspense fallback={null}><PresentationLoginOptions admin={admin} onFill={(email,password)=>{
+            const emailInput=form.current?.elements.namedItem('email'),passwordInput=form.current?.elements.namedItem('password')
+            if(emailInput instanceof HTMLInputElement)emailInput.value=email
+            if(passwordInput instanceof HTMLInputElement)passwordInput.value=password
+          }}/></Suspense> : !admin && <GoogleSignInButton />}
           {message && <p role="status">{message}</p>}
           <form ref={form} onSubmit={(event)=>{void submit(event)}} aria-busy={busy} aria-label={admin?'Acceso de administración':'Acceso de alumnos'} aria-describedby="login-demo-notice">
             <label htmlFor="login-email">Correo electrónico</label>
@@ -55,6 +61,6 @@ function ConnectedLoginPage({ admin=false,onAdminLogin,message }: {admin?:boolea
           </form>
           {!admin && <><p className={s.signup}>¿Es tu primera visita? <Link to="/registro">Solicita tu acceso</Link></p><p className={s.footnote}><Link to="/recuperar-acceso">Olvidé mi contraseña</Link></p></>}
           {admin&&<p className={s.footnote}><Link to="/recuperar-acceso-administrativo">Olvidé mi contraseña</Link></p>}
-          <p className={s.footnote}><Link to={admin?'/login':'/admin'}>{admin?'Acceso de alumnos':'Acceso de administración'}</Link></p>
+          <p className={s.footnote}><Link to={admin?'/login':import.meta.env.MODE==='presentation'?'/login?cuenta=admin':'/admin'}>{admin?'Acceso de alumnos':'Acceso de administración'}</Link></p>
   </AccessFrame>
 }
