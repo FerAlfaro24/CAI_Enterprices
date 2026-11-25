@@ -4,6 +4,7 @@ import { communityGet, communityWrite, feed, reviews, user } from './community'
 import { adminWrite } from './admin'
 import { commitStore, readStore, value, type PresentationStore } from './store'
 import { presentationCredentials } from './credentials'
+import { presentationGoogle } from './google'
 
 function get(store: PresentationStore, pathname: string, query: URLSearchParams): unknown {
   if (pathname === '/google/config' || pathname === '/student/google') return { enabled: false, clientId: null, linked: false }
@@ -46,9 +47,15 @@ function moderation(store: PresentationStore, author: GroupMember) {
   return { studentId, displayName: author.displayName, studentRevision: student?.revision ?? 1, restriction: value<{ items: StudentRestriction[] }>(store, '/community/restrictions').items.find(item => item.studentId === studentId && item.status === 'active') ?? null }
 }
 
-/** Adaptador exclusivo de la compilación de presentación: nunca hace fetch ni guarda contraseñas. */
+/** Datos de muestra independientes; únicamente la identificación de Google usa servidor. */
 export async function presentationRequest<T>(path: string, method: string, input?: unknown): Promise<T> {
   const url = new URL(path, 'https://presentation.invalid'), state = readStore()
+  if (['/google/config', '/google/challenge', '/google/signin', '/google/logout'].includes(url.pathname)) {
+    const result = await presentationGoogle<T>(url.pathname.slice('/google/'.length), method, input)
+    if (url.pathname === '/google/signin') { const store = structuredClone(state); store.student = true; commitStore(store) }
+    return result
+  }
+  if (url.pathname === '/student/logout') await presentationGoogle('logout', 'POST', {})
   if (method === 'GET') return structuredClone(get(state, url.pathname, url.searchParams)) as T
   const store = structuredClone(state), body = (input ?? {}) as Record<string, unknown>
   let result: unknown
@@ -57,9 +64,6 @@ export async function presentationRequest<T>(path: string, method: string, input
     if (body.email !== account.email || body.password !== account.password) throw new ApiError(401, 'Usa el correo y la contraseña de la cuenta de muestra que aparecen en esta pantalla.')
     if (url.pathname === '/auth/login') { store.admin = true; result = { user: value<{ user: unknown }>(store, '/auth/session').user } }
     else { store.student = true; result = { user: user(store) } }
-  } else if (url.pathname === '/google/signin') {
-    if (body.credential !== 'presentation-only') throw new ApiError(400, 'Esta muestra no acepta credenciales reales de Google.')
-    store.student = true; result = { destination: '/community' }
   } else if (url.pathname === '/auth/logout') { store.admin = false; result = {} }
   else if (url.pathname === '/student/logout') { store.student = false; result = {} }
   else if (['/recovery/request', '/admin-recovery/request'].includes(url.pathname)) result = { message: 'Esta presentación no envía correos. Usa los accesos de muestra para continuar.' }

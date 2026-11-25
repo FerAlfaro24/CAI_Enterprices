@@ -1,5 +1,23 @@
 # CAI — presentación independiente de la computadora
 
+## Google real para la presentación — preparación del 25-11-2026
+
+Rama `feat/demo-real-google`, desde `9cc1583` de `fix/demo-login-google`. Sustituye el selector simulado por el botón oficial de Google y una función independiente en Vercel. Las secciones anteriores sobre Google simulado describen la entrega previa y quedan superadas para esta rama.
+
+- `api/presentation-google.ts` / `server/presentation-google.ts`: configuración pública, desafío aleatorio, verificación oficial de ID token, consulta de sesión y cierre. Solo acepta el origen HTTPS canónico `https://cai-enterprices.vercel.app`; las previews no admiten OAuth.
+- Se comprueban firma, audiencia, emisor, caducidad, correo verificado y nonce ligado al navegador. Escrituras con origen exacto y JSON, desafío en cookie HttpOnly/Secure/__Host/SameSite=Strict, cuerpo limitado, cookies duplicadas rechazadas y respuestas sin caché ni datos personales.
+- La sesión usa el propio token firmado por Google en cookie HttpOnly, hasta el menor de su caducidad o30 minutos desde su emisión. No hay nueva clave privada ni una base de identidades. No se escribe el correo/nombre/token en localStorage, contenido de muestra, URL o registros de aplicación.
+- La barra consulta la sesión verificada en el servidor, permite cerrar Google y mantiene Página principal/Alumno/Coordinación/Reiniciar. Las cuentas ficticias siguen disponibles. Identificarse con Google NO crea una inscripción, aprobación de alumno o permiso administrativo real.
+- Solo las llamadas de identificación usan la nueva función; registro, publicaciones y panel siguen siendo muestras independientes por navegador. SMTP y base escolar permanecen fuera de este despliegue. Las contraseñas de muestra no viajan al servidor.
+
+Pruebas realizadas antes de publicar:11 pruebas nuevas de servidor,48 comprobaciones de interfaz (24 Brave+24 Opera GX) y39 de regresión general Brave; tipos/build/lint correctos. Interfaz ensayada con SDK/verificador sustituidos, explícitamente NO como evidencia de Google real. Se comprobaron1440/768/375/320 y capturas móvil/escritorio. La compilación conectada separada no incluye el adaptador, endpoint o credenciales ficticias. No se abrió ninguna base escolar.
+
+Pendiente de esta entrega: autorizar el origen en el cliente Google institucional, desplegar/promover la rama y ejecutar una prueba real de Google en el dominio público. No afirmar que ya está operativo por pasar las fixtures.
+
+Referencias: [verificación oficial de Google](https://developers.google.com/identity/gsi/web/guides/verify-google-id-token), [funciones de Vercel](https://vercel.com/docs/functions/functions-api-reference). No se añaden dependencias, facturación ni servicios de correo.
+
+
+
 ## Actualización del acceso, 25-11-2026
 
 El usuario pidió conservar los atajos inferiores y recuperar el inicio de sesión original para presentar también Google. Rama `fix/demo-login-google`, desde `39816de` de la muestra pública anterior.

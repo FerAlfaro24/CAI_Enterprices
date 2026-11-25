@@ -1,5 +1,7 @@
 # CAI — instrucciones vigentes para agentes
 
+Google real de presentación en preparación: rama `feat/demo-real-google`, desde `9cc1583`. Leer el bloque vigente de docs/STATIC_PRESENTATION.md. SDK oficial y función Vercel aislada de base escolar.11 servidor/48 UI con proveedor sustituido/39 regresión correctos; faltan origen, publicación y prueba real. Las notas de Google simulado inferiores son históricas para esta rama. No afirmar autenticación real por las fixtures.
+
 ## Antes de trabajar
 
 Login público actualizado25-11: `fix/demo-login-google`/PR#39, código `2515bf7`, desde `39816de`, restaura correo/contraseña y Google simulado, conservando atajos. Publicado/Ready y23 checks públicos nuevos Brave correctos;46 locales Brave/Opera, regresión39, tipos/build/lint y aislamiento de compilación real. Leer [actualización](docs/STATIC_PRESENTATION.md#actualización-del-acceso-25-11-2026); no pedir nueva promoción. No afirmar Google real en Vercel: la simulación está identificada y solo admite marcador ficticio. Credenciales públicas en la guía, nunca usar las reales; la conexión real se conserva aparte.

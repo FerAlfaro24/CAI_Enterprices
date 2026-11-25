@@ -1,5 +1,8 @@
 # CAI — próximos pasos vigentes
 
+**En preparación — Google real en presentación (25-11):** `feat/demo-real-google`, desde `9cc1583`. Botón oficial y verificación en Vercel, sin base escolar ni permisos reales de coordinación; atajos y datos ficticios conservados.11 pruebas de servidor,48 UI con proveedor sustituido y39 de regresión; tipos/build/lint y aislamiento correctos. Pendientes origen Google, publicación y prueba real. [Detalles](STATIC_PRESENTATION.md#google-real-para-la-presentación--preparación-del-25-11-2026).
+
+
 **Acceso de presentación cerrado — 25-11-2026:** `fix/demo-login-google`/PR#39 publicado en el enlace habitual; login original y atajos conservados.23 checks públicos nuevos Brave,46 locales Brave/Opera y regresión39 correctos, además de tipos/build/lint y aislamiento de compilación real. No pedir otra promoción. Google es una simulación identificada; su autenticación real sigue pendiente en el alojamiento definitivo. [Uso y pruebas](STATIC_PRESENTATION.md#actualización-del-acceso-25-11-2026).
 
 **Presentación pública cerrada — 25-11-2026:** [enlace habitual](https://cai-enterprices.vercel.app/) verificado sin cuenta de Vercel; portada/community/admin/login correctos y39 checks públicos nuevos Brave sin errores ni solicitudes a API local. La muestra ficticia independiente por navegador está disponible con la computadora apagada;78 checks locales Brave/Opera y build/lint anteriores conservados. No volver a pedir activación, elección de simulación o alojamiento para mostrar esta presentación. [Uso y límites](STATIC_PRESENTATION.md). Continuar trabajo real desde la integrada, conservando aparte la rama de muestra; no tratarla como producción con cuentas/datos compartidos.
