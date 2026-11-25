@@ -26,12 +26,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ['*.{js,ts}', 'server/**/*.ts'],
+    files: ['*.{js,ts}', 'server/**/*.ts', 'api/**/*.ts'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },
   {
-    files: ['*.ts', 'server/**/*.ts'],
+    files: ['*.ts', 'server/**/*.ts', 'api/**/*.ts'],
     // Las firmas de tipos se revisan con la regla TypeScript, no con la de JavaScript.
     rules: { 'no-unused-vars': 'off' },
   },

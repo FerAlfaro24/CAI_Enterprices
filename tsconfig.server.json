@@ -17,5 +17,5 @@
     "noUncheckedIndexedAccess": true,
     "erasableSyntaxOnly": true
   },
-  "include": ["server"]
+  "include": ["server", "api"]
 }

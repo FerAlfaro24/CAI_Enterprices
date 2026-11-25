@@ -1,6 +1,6 @@
 # CAI — sitio institucional, comunidad y administración
 
-**Esta rama actualiza el acceso de la presentación ficticia para Vercel:** `fix/demo-login-google`. Conserva los atajos a `/community` y `/admin`, y recupera el formulario en `/login` con cuentas ficticias y Google simulado identificado. Los cambios son independientes por navegador. [Uso, credenciales de muestra y límites](docs/STATIC_PRESENTATION.md). La versión conectada se conserva en la rama integrada descrita abajo; no confundirlas.
+**Esta rama publica Google real en la presentación de Vercel:** `feat/demo-real-google`/PR#40. [Abrir inicio de sesión](https://cai-enterprices.vercel.app/login). Acceso oficial, retorno/recarga/cierre comprobados con la cuenta institucional y16 checks públicos adicionales. Conserva los atajos, formulario y cuentas ficticias. Contenido independiente por navegador, sin inscripción ni administración escolar reales. [Estado, pruebas y límites](docs/STATIC_PRESENTATION.md).
 
 ## Versión integrada más completa
 

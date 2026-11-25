@@ -1,5 +1,8 @@
 # CAI — empieza aquí
 
+**Presentación pública:** `feat/demo-real-google`/PR#40 sirve https://cai-enterprices.vercel.app/login con Google real comprobado y contenido ficticio independiente por navegador. Ver [guía vigente](STATIC_PRESENTATION.md). La rama integrada inferior conserva el sistema escolar conectado; no fusionar en ella la configuración de presentación.
+
+
 ## Rama para continuar
 
 **`integration/cai-v1-completa-2026-11-25` es el punto integrado más completo al 25-11-2026.** Parte de `ae634d6` de Google/correo, que ya incluye la v1.0 y todos los avances funcionales posteriores. Las actualizaciones propias de la consolidación son documentales; no se vuelve a fusionar cada rama.

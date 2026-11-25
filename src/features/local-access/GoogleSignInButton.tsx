@@ -25,7 +25,7 @@ function loadGoogle() {
   return scriptPromise
 }
 
-export function GoogleSignInButton({linkAccount=false}: {linkAccount?:boolean}) {
+export function GoogleSignInButton({linkAccount=false, hint}: {linkAccount?:boolean; hint?:string}) {
   const parent = useRef<HTMLDivElement>(null)
   const busyRef = useRef(false)
   const [busy, setBusy] = useState(false)
@@ -81,7 +81,7 @@ export function GoogleSignInButton({linkAccount=false}: {linkAccount?:boolean}) 
       <div ref={parent} inert={busy} className={s.button} />
       {busy && <p role="status">Confirmando tu cuenta…</p>}
       {error && <><p role="alert">{error}</p><button type="button" onClick={() => setAttempt((value) => value + 1)}>Volver a cargar Google</button></>}
-      <p className={s.hint}>{linkAccount?'Elige la cuenta de Google con el mismo correo de tu inscripción. Tu contraseña de CAI seguirá funcionando.':'Completa tus datos y espera la aprobación de CAI la primera vez.'}</p>
+      <p className={s.hint}>{hint ?? (linkAccount?'Elige la cuenta de Google con el mismo correo de tu inscripción. Tu contraseña de CAI seguirá funcionando.':'Completa tus datos y espera la aprobación de CAI la primera vez.')}</p>
     </section>
   )
 }
