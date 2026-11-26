@@ -1,5 +1,7 @@
 # CAI — sitio institucional, comunidad y administración
 
+**Alojamiento vigente — 25-11:** [piloto Railway](docs/RAILWAY_PILOT.md), rama `ops/cai-railway-pilot-2026-11-25`, basada en la candidata conectada. Prueba gratuita verificada; instalación/despliegue y autorizaciones de Google/correo pendientes. Presentación prevista para el lunes30, 2–3 personas. Vercel continúa aparte.
+
 **Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](docs/HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
 
 

@@ -1,5 +1,7 @@
 # CAI — empieza aquí
 
+**Paso actual — 25-11:** continuar el [piloto Railway](RAILWAY_PILOT.md) en `ops/cai-railway-pilot-2026-11-25`, desde candidata `b4a2f46`. Prueba gratuita/cuenta verificada comprobadas; GitHub App preparada solo para CAI, pendiente autorización. Código comprobado localmente, aún sin servidor/dominio publicados. Sustituye Google Cloud detenido por RFC y Oracle histórico. No activar pago ni sustituir Vercel.
+
 **Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
 
 

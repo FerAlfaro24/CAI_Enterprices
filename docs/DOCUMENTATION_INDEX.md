@@ -1,5 +1,7 @@
 # CAI — índice y clasificación de toda la documentación
 
+[RAILWAY_PILOT](RAILWAY_PILOT.md) — alojamiento vigente para el lunes30: cuenta/prueba verificadas, código local comprobado; despliegue y Google/Gmail externos pendientes. Sustituye las recomendaciones históricas de alojamiento para esta presentación.
+
 **Entrada vigente:** [START_HERE](START_HERE.md) y [versión integrada del25-11](INTEGRATED_VERSION.md). Los documentos README_HISTORY y START_HERE_HISTORY conservan instrucciones superadas; no son guías de arranque actuales.
 
 [Google/correo F6: estado y configuración](GOOGLE_EMAIL.md) — Google real local probado; recepción Gmail y alojamiento final pendientes.

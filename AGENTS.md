@@ -1,5 +1,7 @@
 # CAI — instrucciones vigentes para agentes
 
+**Piloto vigente — 25-11:** `ops/cai-railway-pilot-2026-11-25`, desde candidata `b4a2f46`. El titular eligió Railway para presentar el lunes30, 2–3 personas y solo gratis. Cuenta verificada/Trial 30 días o5USD comprobados; instalar GitHub App solo en CAI requiere confirmación pendiente. Leer [RAILWAY_PILOT](docs/RAILWAY_PILOT.md) antes de desplegar. Sustituye Google Cloud detenido por RFC y Oracle histórico. Una réplica y volumen /data, sin proxy TCP ni servicios ajenos en el entorno. Conservar API loopback y Vercel; no activar pago ni usar datos habituales. Gmail HTTPS preparado, no autorizado/probado real. No usar la contraseña SMTP compartida ni afirmar piloto publicado antes de comprobar servicio y navegador.
+
 **Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](docs/HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
 
 

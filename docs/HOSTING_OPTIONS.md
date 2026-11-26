@@ -1,5 +1,7 @@
 # CAI — opciones de alojamiento revisadas el25-11-2026
 
+**Elección posterior vigente:** Railway Trial para presentar el lunes30 a 2–3 personas. Registro completado personalmente y cuenta verificada con30 días o5USD comprobados. [RAILWAY_PILOT](RAILWAY_PILOT.md) registra configuración y autorizaciones pendientes; aún no hay piloto publicado. Sustituye Oracle recomendado abajo; Google Cloud quedó detenido por RFC. Railway conserva SQLite con volumen0,5GB, pero requiere correo HTTPS (SMTP bloqueado). No prometer gratuidad ilimitada ni activar pago.
+
 ## Requisito del proyecto
 
 Presupuesto autorizado: solo opciones gratuitas por ahora. El código actual necesita Node24 persistente, una instancia, SQLite/WAL en disco privado persistente, proxy HTTPS local, correo saliente a Gmail y respaldos fuera del servidor. La selección es de compatibilidad; no se crearon cuentas ni contrataron servicios.

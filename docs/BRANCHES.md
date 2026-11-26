@@ -1,5 +1,7 @@
 # CAI — inventario de ramas
 
+**Alojamiento vigente — 25-11:** `ops/cai-railway-pilot-2026-11-25`, desde candidata `b4a2f46`. Contenedor Node24, proxy/volumen y Gmail HTTPS, sin adaptador ficticio. No fusionar implícitamente. [Estado y permisos pendientes](RAILWAY_PILOT.md). Sustituye para el piloto a `ops/cai-google-cloud-trial-2026-11-25`/PR#43 (RFC bloqueado, sin VM).
+
 **Candidata de entrega — 25-11-2026:** `release/cai-v1-candidate-2026-11-25`, desde `04bb0df` de la integrada. Cliente aprobó la presentación y diseño general, pendiente piloto con datos reales. Revisión de12 commits posteriores: funciones conectadas ya presentes; conservar adaptador y ejemplos de Vercel en su propia rama. Preparación portátil Node24/esquema23, plantillas de instalación y comparación de alojamiento gratuito. Sin adoptar bases ni modificar la muestra pública. [Candidata](RELEASE_CANDIDATE.md) y [alojamiento](HOSTING_OPTIONS.md). Validación completada sobre código dade9d2: tipos/build conectado y lint correctos; paquete405 archivos con SHA256 verificados, imports privados completos, base nueva esquema23 sin alumnos/publicaciones ficticios, arranque productivo, rechazo de protocolo incorrecto y persistencia al reiniciar. Prueba aislada en .local/tests, cerrada al terminar, sin SMTP/Google externos ni TLS real. No se repiten suites históricas.
 
 
