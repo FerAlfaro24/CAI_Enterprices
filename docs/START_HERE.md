@@ -1,6 +1,6 @@
 # CAI — empieza aquí
 
-**Paso actual — 25-11:** continuar el [piloto Railway](RAILWAY_PILOT.md) en `ops/cai-railway-pilot-2026-11-25`, desde candidata `b4a2f46`, PR#44. Prueba gratuita y GitHub comprobados; proyecto/servicio/volumen/configuración preparados, con19 cambios pendientes de publicación. Sin servidor/dominio conectados todavía. Configurar mediante panel: railway.json no admitido para servicios nuevos. Sustituye Google Cloud/RFC y Oracle histórico. No activar pago ni sustituir Vercel.
+**Paso actual — 25-11:** continuar [piloto Railway](RAILWAY_PILOT.md), rama `ops/cai-railway-pilot-2026-11-25`, PR#44. [Enlace conectado](https://cai-piloto-production.up.railway.app/), código desplegado `ad075df`: web/registro, base23 persistente, reinicio y respaldo comprobados. Falta cerrar Google (origen guardado pero SDK lo rechaza), Gmail API y pruebas administrativas completas. La exportación de contraseña inicial requiere respuesta explícita pendiente; no eludir el bloqueo. Configuración mediante panel; no railway.json, facturación, cambios en Vercel ni datos habituales.
 
 **Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
 
@@ -29,7 +29,7 @@ Node >=24.12.0 y npm >=10. Para un clon existente, comprobar `git status`, guard
 
 [RUN_LOCAL](RUN_LOCAL.md) explica cómo iniciar una fixture nueva de comunidad, separada de `.local/cai.sqlite`, con cuenta exclusivamente ficticia. No ejecutar setup o backend sobre una instalación previa para probar la rama. La versión actual requiere esquema23 en sus nuevas fixtures; las bases antiguas no retroceden al cambiar de rama.
 
-Rutas: `/` portada, `/registro` solicitud, `/login` alumno, `/community` comunidad protegida, `/admin` panel. El alumno necesita aprobación y acceso activado; administrar no crea una sesión de alumno. Verificar renderizado además de HTTP. No hay un servidor o enlace público que se mantenga activo por tener esta documentación.
+Rutas: `/` portada, `/registro` solicitud, `/login` alumno, `/community` comunidad protegida, `/admin` panel. El alumno necesita aprobación y acceso activado; administrar no crea una sesión de alumno. Verificar renderizado además de HTTP. El piloto Railway indicado arriba ya está publicado; los servidores de pruebas locales no se mantienen activos por tener esta documentación.
 
 ## Qué está integrado
 
