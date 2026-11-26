@@ -48,4 +48,12 @@ test('Railway: contrato del edge, API loopback, cookies y contenido privado', as
     for (const path of ['/server/runtime-config.ts', '/.env', '/.git/config', '/.local/cai.sqlite', '/shared/classes.ts', '/assets/missing.js', '/api/missing', '/%2e%2e%2fprivate.json', '/src/features/admin/data/mockData.ts']) assert.equal((await call(path)).status, 404, path)
     assert.equal((await call('/login', 'POST', {})).status, 405)
   })
+  await t.test('HTML permite validar el origen de Google; API y recursos conservan no-referrer', async () => {
+    for (const path of ['/login', '/registro', '/community']) {
+      assert.equal((await call(path)).headers['referrer-policy'], 'strict-origin-when-cross-origin')
+    }
+    assert.equal((await call('/api/local/health')).headers['referrer-policy'], 'no-referrer')
+    assert.equal((await call('/assets/app.js')).headers['referrer-policy'], 'no-referrer')
+    assert.equal((await call('/.env')).headers['referrer-policy'], 'no-referrer')
+  })
 })

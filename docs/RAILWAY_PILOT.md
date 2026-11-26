@@ -28,6 +28,12 @@ La desactivación posterior de bootstrap se aplicó en `aff10769-a2cc-4a7d-acc6-
 - Respaldo creado y verificado con las funciones existentes, ejecutadas como UID/GID1000 en el contenedor Linux. Resultado: esquema23,1 solicitud,0 alumnos,0 cuentas,0 publicaciones,0 imágenes. Está en `/data/backups`; aún no hay copia fuera de Railway ni restauración comprobada allí.
 - No se han probado administración autenticada, aprobación/activación/correo/recuperación hospedados, Google real exitoso, fotos privadas o interacción entre dos usuarios. No presentar estas comprobaciones parciales como sistema listo al100%.
 
+## Diagnóstico y corrección de Google — 26-11, CDMX
+
+La configuración del origen escolar sí estaba guardada. Se aisló la causa del rechazo: el HTML del proxy enviaba Referrer-Policy: no-referrer, que dejaba el iframe de Google sin el origen requerido. Prueba A/B en Brave aislado sobre la misma página: cambiar únicamente esa cabecera a strict-origin-when-cross-origin hizo que /gsi/button pasara de400 a200, sin errores nuevos. Solo el dominio viaja entre sitios; API/recursos privados conservan no-referrer. Recomendación oficial: https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid#
+
+Corrección en server/railway-proxy.ts y regresión en server/tests/railway-proxy.test.ts:6 resultados correctos (5 subpruebas y conjunto), tipos y ESLint correctos. Publicación y acceso real sin interceptación todavía pendientes en este punto de control. No habilita Gmail ni exporta la contraseña inicial; ambas confirmaciones siguen pendientes. La plantilla Caddy y los gateways históricos no se han aplicado a Railway ni forman parte de este despliegue.
+
 ## Archivos y contrato del alojamiento
 
 - `deploy/railway/Dockerfile`: compilación conectada en Node24, dependencias Linux de producción y solo las constantes de src que importa el backend. Sin copiar node_modules de Windows.

@@ -81,6 +81,9 @@ export function createRailwayProxy(options: { publicOrigin: string; apiPort: num
     }
     const metadata = await stat(file)
     response.writeHead(200, { 'Content-Type': mime[extname(file).toLowerCase()] ?? 'application/octet-stream', 'Content-Length': metadata.size,
+      // Google valida el origen del iframe de acceso. Entre sitios solo viaja el
+      // dominio; API, archivos privados y recursos mantienen no-referrer.
+      ...(extname(file).toLowerCase() === '.html' ? { 'Referrer-Policy': 'strict-origin-when-cross-origin' } : {}),
       'Cache-Control': decoded.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : 'no-cache' })
     if (request.method === 'HEAD') return response.end()
     await pipeline(createReadStream(file), response)
