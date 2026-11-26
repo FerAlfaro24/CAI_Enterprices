@@ -9,15 +9,16 @@ La elección de Railway sustituye la preparación de Google Cloud: el alta de fa
 ## Estado observado, sin inferir despliegue
 
 - El titular completó personalmente el acceso GitHub/Railway.
-- Railway → Plans muestra cuenta **verificada**, Trial Plan y **30 días o 5 USD de crédito**, lo que ocurra primero; panel indica 0,5 GB RAM y 2 vCPU por servicio. El panel de la cuenta es la referencia para sus límites, no una estimación de documentación.
-- Instalación de Railway App preparada con **Only select repositories → FerAlfaro24/CAI_Enterprices**, sin confirmar. Solicita lectura de metadata/correos y escritura de código, actions, administración, checks, estados, despliegues, PR y workflows. Hace falta autorización en ese punto antes de pulsar Install & Authorize.
-- Aún no hay proyecto/servicio/volumen/dominio de CAI creados en Railway ni Gmail API autorizado. No hay enlace conectado que compartir todavía.
+- Railway → Plans muestra cuenta **verificada**, Trial Plan y **30 días o 5 USD de crédito**, lo que ocurra primero. Plans indicó 0,5GB RAM, pero el servicio nuevo muestra límite de **1GB RAM y2vCPU**; registrar ambas observaciones y usar el límite del servicio, sin asumir que sea consumo constante.
+- El titular completó la conexión de Railway App: el repositorio CAI ya aparece disponible. No se pulsó Install & Authorize por el agente. La selección previa se limitó a **Only select repositories → FerAlfaro24/CAI_Enterprices**.
+- Proyecto aislado creado y servicio vacío `cai-piloto` configurado. Repositorio/rama, volumen privado `/data`, dominio por generar, variables y comprobaciones están **preparados como cambios pendientes**, no desplegados. No existe todavía un enlace conectado que compartir. Gmail API y nuevo origen escolar siguen pendientes.
+- Revisión de19 cambios preparados: rama `ops/cai-railway-pilot-2026-11-25`, Dockerfile `deploy/railway/Dockerfile`, sondeo `/healthz`/120s,3 reintentos, una réplica US West (California), suspensión por inactividad para ahorrar crédito, volumen y5 variables. El panel asignó `us-west1` al volumen y `us-west2` a la réplica; comprobar compatibilidad efectiva al aplicar, sin migrar datos previos (el volumen es nuevo y vacío).
 
 ## Archivos y contrato del alojamiento
 
 - `deploy/railway/Dockerfile`: compilación conectada en Node24, dependencias Linux de producción y solo las constantes de src que importa el backend. Sin copiar node_modules de Windows.
 - `.dockerignore`: lista positiva; excluye bases, .local, .git, claves, logs y tests. Nunca copiar la carpeta local completa al alojamiento.
-- `railway.json`: una réplica, Dockerfile explícito y sondeo `/healthz`; máximo tres reintentos de arranque fallido. Configurar variables **antes** de iniciar el servicio.
+- Configuración del panel: una réplica, builder Dockerfile/ruta `deploy/railway/Dockerfile`, sondeo `/healthz`/120s y máximo3 reintentos. El panel informa que Config as Code ya no admite servicios nuevos desde28-08-2026 y que los existentes terminan01-12-2026. Se retiró el `railway.json` inicial; no confiar en que ese archivo configure este servicio. No añadir IaC ni dependencias solo para esta prueba. Revisar los valores explícitos del panel antes de desplegar.
 - `server/railway-start.ts`: exige volumen montado en `/data`, producción y origen HTTPS. No cae en disco efímero. Si inicia como root, prepara el directorio y baja a UID/GID1000 antes de abrir datos o conexiones.
 - Bootstrap solo si falta la base y `CAI_INITIALIZE_EMPTY=true`; crea una base nueva esquema23 y acceso administrativo aleatorio guardado únicamente en `/data/initial-admin-password.txt` (0600). No imprime accesos ni cambia los ya existentes. Tras comprobar la primera preparación, retirar esa variable. La recuperación administrativa por correo permite que el titular elija su contraseña sin copiar la inicial al chat.
 - `server/railway-proxy.ts`: publica exclusivamente dist y reenvía `/api/local` a la API loopback. Comprueba host, HTTPS y X-Real-IP válido; reconstruye las cabeceras de confianza y conserva Origin/CSRF/cookies seguras. Archivos fuente, rutas ocultas y API inexistente no devuelven HTML.
@@ -31,13 +32,13 @@ Variables de ejecución, nunca build args o variables VITE:
 
 ```text
 PORT=8080
-CAI_PUBLIC_ORIGIN=https://DOMINIO-ASIGNADO.up.railway.app
+CAI_PUBLIC_ORIGIN=https://${{RAILWAY_PUBLIC_DOMAIN}}
 CAI_BOOTSTRAP_EMAIL=CORREO-INSTITUCIONAL
 CAI_INITIALIZE_EMPTY=true
 GOOGLE_CLIENT_ID=ID-PUBLICO-DEL-ACCESO-ESCOLAR
 ```
 
-El Dockerfile define NODE_ENV=production, CAI_DATA_DIR=/data, CAI_TRUST_PROXY=loopback y CAI_API_PORT=3100. Railway debe montar su volumen persistente de 0,5 GB en `/data`, publicar el puerto8080 por HTTP/HTTPS y mantener una réplica. No agregar PostgreSQL u otro servicio: se conserva SQLite/WAL actual. No activar Hobby/Pro, tarjeta ni dominio comprado.
+El origen usa la referencia de Railway al dominio que generará al aplicar; comprobar su resolución al arrancar. El Dockerfile define NODE_ENV=production, CAI_DATA_DIR=/data, CAI_TRUST_PROXY=loopback y CAI_API_PORT=3100. Railway debe montar su volumen persistente de0,5GB en `/data`, publicar el puerto8080 por HTTP/HTTPS y mantener una réplica. Suspensión por inactividad activada; la primera solicitud tras dormir puede tardar. No agregar PostgreSQL u otro servicio: se conserva SQLite/WAL actual. No activar Hobby/Pro, tarjeta ni dominio comprado.
 
 ## Gmail por HTTPS
 
@@ -55,8 +56,8 @@ Tipos, build conectado y lint correctos. No se ejecutó Docker/Linux (Docker no 
 
 ## Orden para terminar
 
-1. Confirmar instalación GitHub App limitada a CAI; guardar/push de esta rama y PR en borrador, sin fusionar.
-2. Crear proyecto aislado, servicio de esta rama y volumen `/data`; revisar Trial/crédito/límites y variables antes de desplegar. Obtener dominio y origen canónico.
+1. Conexión GitHub y código guardados: PR#44 en borrador, sin fusionar. No volver a solicitar la instalación ya completada.
+2. Confirmar publicación y aplicar los cambios preparados en el proyecto aislado. Revisar Trial/crédito/límites, volumen `/data`, resolución del origen y puerto8080. Obtener el dominio definitivo.
 3. Validar compilación Linux/sharp, volumen, arranque, TLS, cabeceras y navegación en Brave; probar reinicio conservando datos y preparar respaldo fuera del servidor. No compartir link antes de comprobar renderizado.
 4. Autorizar nuevo origen escolar en Google y permiso de envío de la cuenta institucional cuando los cambios estén preparados. Probar correos reales a cuenta institucional y recorrido registro→aprobación→activación→entrada y recuperación.
 5. Prueba con dos dispositivos y 2–3 participantes autorizados; fotos oficiales privadas solo mediante instalación protegida, sin convertirlas en assets públicos. No copiar bases anteriores ni inventar ejemplos dentro del piloto conectado.
@@ -66,6 +67,7 @@ Tipos, build conectado y lint correctos. No se ejecutó Docker/Linux (Docker no 
 
 - [Plan/prueba Railway](https://docs.railway.com/pricing/free-plan): créditos, verificación y vencimiento.
 - [Volúmenes](https://docs.railway.com/volumes/reference): persistencia y 0,5GB en Free/Trial.
+- [Variables y referencia al dominio](https://docs.railway.com/variables/reference); [Config as Code](https://docs.railway.com/config-as-code), contrastado con el aviso específico del panel del servicio nuevo.
 - [Cabeceras del edge](https://docs.railway.com/networking/public-networking/specs-and-limits): X-Real-IP, protocolo y host.
 - [Correo saliente](https://docs.railway.com/networking/outbound-networking): bloqueo SMTP y APIs HTTPS.
 - [Envío Gmail](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send) y [scopes](https://developers.google.com/workspace/gmail/api/auth/scopes).
