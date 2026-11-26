@@ -36,6 +36,14 @@ La configuración del origen escolar sí estaba guardada. Se aisló la causa del
 
 Corrección en server/railway-proxy.ts y regresión en server/tests/railway-proxy.test.ts:6 resultados correctos (5 subpruebas y conjunto), tipos y ESLint correctos. Corrección publicada como `c9c0ff0` y despliegue Active `da8775b4-ff33-440a-b02a-ab08b13227e5`. Brave sin interceptación confirmó cabecera HTML correcta y /gsi/button200 con solo el origen como Referer. API /ready200/no-referrer y /students401 sin sesión. La petición401 fue deliberada y aparece como error de recurso esperado en consola; no es un fallo nuevo del acceso. En navegador institucional, Google identificó realmente la cuenta y CAI abrió el formulario pendiente de datos, conservado al recargar. No se enviaron datos de alumno, ni se aprobaron cuentas o probó acceso completo a comunidad. No habilita Gmail ni exporta la contraseña inicial; ambas confirmaciones siguen pendientes. La plantilla Caddy y los gateways históricos no se han aplicado a Railway ni forman parte de este despliegue.
 
+## Gmail API y cliente creados por el titular — 26-11
+
+El titular continuó manualmente en Google. Comprobado: Gmail API muestra Estado Habilitada y el cliente «CAI Gmail - piloto Railway 2026-11-25» existe, tipo Escritorio, creado26-11. ID público: `534198422441-gcbh2fipj6i1fmtse5cl31999ntccd5o.apps.googleusercontent.com`. No volver a habilitar la API, crear otro cliente ni repetir la aceptación que el titular ya completó.
+
+El detalle del cliente tiene «Información y resumen» → «Descargar JSON»; usar ese cliente existente. No se descargó ni guardó su JSON por el agente ni se obtuvo un refresh token. Falta consentimiento institucional de solo envío, instalación privada y comprobación real. La API pública de CAI confirmó200 con enabled:false y adminEnabled:false; habilitar la API de Google no activa por sí solo el correo de CAI.
+
+La comprobación del chat no contiene respuesta explícita a las preguntas previas de exportación; «creo que ya, checa» acredita la petición de revisar lo realizado, no autoriza por sí sola exportar contraseñas. No reintentar la descarga administrativa previamente rechazada ni obtenerla por otra vía. Preparar una confirmación concreta para descargar/usar privadamente tanto /data/initial-admin-password.txt de Railway como el JSON del cliente existente, sin chat/Git, y continuar con la pantalla real de consentimiento Gmail tras recibirla.
+
 ## Archivos y contrato del alojamiento
 
 - `deploy/railway/Dockerfile`: compilación conectada en Node24, dependencias Linux de producción y solo las constantes de src que importa el backend. Sin copiar node_modules de Windows.
@@ -80,7 +88,7 @@ Tipos, build conectado y lint correctos en la preparación anterior. Docker loca
 
 1. Google de identificación ya comprobado en Railway el26-11: conservar el origen guardado y la corrección del HTML. No recrear cliente ni volver a pedir el mismo permiso de origen. La inscripción/aprobación y entrada de alumno siguen por probar con los siguientes pasos.
 2. Obtener respuesta explícita a la descarga privada de la contraseña inicial para QA administrativo, o completar primero correo y recuperación del titular. No mostrar secretos en chat/Git ni eludir el bloqueo.
-3. Completar Gmail API sin facturación: aceptar las condiciones mostradas, crear el cliente separado preparado y guardar su JSON privadamente con permiso. Después, conceder solo identificación básica y `gmail.send` a la cuenta institucional, con confirmación ante la pantalla real de Google.
+3. Gmail API y cliente de escritorio ya creados por el titular, sin activar facturación. Usar el cliente existente indicado arriba; pedir únicamente el permiso pendiente para descargar/usar privadamente su JSON. Después, conceder solo identificación básica y `gmail.send` a la cuenta institucional, con confirmación ante la pantalla real de Google.
 4. El asistente local `scripts/configure-gmail-oauth.mjs` está preparado para un cliente **de escritorio**, PKCE, state, retorno loopback temporal, comprobación de identidad/cuenta y rechazo de scopes extra. Guarda únicamente en una subcarpeta privada de `.local`, sin sobrescribir; en Windows limita ACL a propietario/SYSTEM. Sintaxis Node, tipos y ESLint comprobados; una prueba nueva verifica PKCE/scopes/state, rechazo de GET con sesión ajena, POST y Host ajeno, sin tokens guardados ni conexión a Google. Primer intento bloqueado por EACCES local; ejecución autorizada correcta. Flujo OAuth real todavía no ejecutado. No envía mensajes ni imprime tokens. Uso tras autorizar el cliente:
 
    ```powershell
