@@ -1,4 +1,6 @@
-# CAI — piloto gratuito en Railway, 25-11-2026
+# CAI — piloto gratuito en Railway
+
+**Estado vigente — 26-11:** web y Google real comprobados. Corrección `c9c0ff0`, despliegue `da8775b4-ff33-440a-b02a-ab08b13227e5` Active; estado anterior de rechazo documentado abajo como antecedente. Falta Gmail y el recorrido administrativo/alumno completo, pendientes de autorizaciones explícitas. Vercel/datos habituales conservados.
 
 ## Continuación y autorización
 
@@ -30,9 +32,9 @@ La desactivación posterior de bootstrap se aplicó en `aff10769-a2cc-4a7d-acc6-
 
 ## Diagnóstico y corrección de Google — 26-11, CDMX
 
-La configuración del origen escolar sí estaba guardada. Se aisló la causa del rechazo: el HTML del proxy enviaba Referrer-Policy: no-referrer, que dejaba el iframe de Google sin el origen requerido. Prueba A/B en Brave aislado sobre la misma página: cambiar únicamente esa cabecera a strict-origin-when-cross-origin hizo que /gsi/button pasara de400 a200, sin errores nuevos. Solo el dominio viaja entre sitios; API/recursos privados conservan no-referrer. Recomendación oficial: https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid#
+La configuración del origen escolar sí estaba guardada. Se aisló la causa del rechazo: el HTML del proxy enviaba Referrer-Policy: no-referrer, que dejaba el iframe de Google sin el origen requerido. Prueba A/B en Brave aislado sobre la misma página: cambiar únicamente esa cabecera a strict-origin-when-cross-origin hizo que /gsi/button pasara de400 a200, sin errores nuevos. Solo el dominio viaja entre sitios; API/recursos privados conservan no-referrer. Recomendación oficial: https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
 
-Corrección en server/railway-proxy.ts y regresión en server/tests/railway-proxy.test.ts:6 resultados correctos (5 subpruebas y conjunto), tipos y ESLint correctos. Publicación y acceso real sin interceptación todavía pendientes en este punto de control. No habilita Gmail ni exporta la contraseña inicial; ambas confirmaciones siguen pendientes. La plantilla Caddy y los gateways históricos no se han aplicado a Railway ni forman parte de este despliegue.
+Corrección en server/railway-proxy.ts y regresión en server/tests/railway-proxy.test.ts:6 resultados correctos (5 subpruebas y conjunto), tipos y ESLint correctos. Corrección publicada como `c9c0ff0` y despliegue Active `da8775b4-ff33-440a-b02a-ab08b13227e5`. Brave sin interceptación confirmó cabecera HTML correcta y /gsi/button200 con solo el origen como Referer. API /ready200/no-referrer y /students401 sin sesión. La petición401 fue deliberada y aparece como error de recurso esperado en consola; no es un fallo nuevo del acceso. En navegador institucional, Google identificó realmente la cuenta y CAI abrió el formulario pendiente de datos, conservado al recargar. No se enviaron datos de alumno, ni se aprobaron cuentas o probó acceso completo a comunidad. No habilita Gmail ni exporta la contraseña inicial; ambas confirmaciones siguen pendientes. La plantilla Caddy y los gateways históricos no se han aplicado a Railway ni forman parte de este despliegue.
 
 ## Archivos y contrato del alojamiento
 
@@ -76,7 +78,7 @@ Tipos, build conectado y lint correctos en la preparación anterior. Docker loca
 
 ## Orden para terminar
 
-1. Resolver el rechazo del origen por el SDK de Google, conservando el origen ya guardado y sin repetir autorizaciones del mismo cambio.
+1. Google de identificación ya comprobado en Railway el26-11: conservar el origen guardado y la corrección del HTML. No recrear cliente ni volver a pedir el mismo permiso de origen. La inscripción/aprobación y entrada de alumno siguen por probar con los siguientes pasos.
 2. Obtener respuesta explícita a la descarga privada de la contraseña inicial para QA administrativo, o completar primero correo y recuperación del titular. No mostrar secretos en chat/Git ni eludir el bloqueo.
 3. Completar Gmail API sin facturación: aceptar las condiciones mostradas, crear el cliente separado preparado y guardar su JSON privadamente con permiso. Después, conceder solo identificación básica y `gmail.send` a la cuenta institucional, con confirmación ante la pantalla real de Google.
 4. El asistente local `scripts/configure-gmail-oauth.mjs` está preparado para un cliente **de escritorio**, PKCE, state, retorno loopback temporal, comprobación de identidad/cuenta y rechazo de scopes extra. Guarda únicamente en una subcarpeta privada de `.local`, sin sobrescribir; en Windows limita ACL a propietario/SYSTEM. Sintaxis Node, tipos y ESLint comprobados; una prueba nueva verifica PKCE/scopes/state, rechazo de GET con sesión ajena, POST y Host ajeno, sin tokens guardados ni conexión a Google. Primer intento bloqueado por EACCES local; ejecución autorizada correcta. Flujo OAuth real todavía no ejecutado. No envía mensajes ni imprime tokens. Uso tras autorizar el cliente:

@@ -1,6 +1,6 @@
 # CAI — opciones de alojamiento revisadas el25-11-2026
 
-**Elección vigente:** Railway Trial ya publica el [piloto conectado](https://cai-piloto-production.up.railway.app/) para lunes30, 2–3 personas. Cuenta verificada; panel mostró30 días o5USD. SQLite/volumen y persistencia tras reinicio comprobados; [RAILWAY_PILOT](RAILWAY_PILOT.md) registra evidencia y Google/Gmail pendientes. Sustituye Oracle recomendado abajo; Google Cloud detenido por RFC. Sin pagos ni promesa de gratuidad ilimitada. SMTP bloqueado; proveedor Gmail HTTPS preparado, aún deshabilitado.
+**Elección vigente — 26-11:** Railway Trial publica el [piloto conectado](https://cai-piloto-production.up.railway.app/) para lunes30, 2–3 personas. SQLite/volumen/reinicio y Google real de identificación comprobados; Gmail API y pruebas administrativas pendientes. [RAILWAY_PILOT](RAILWAY_PILOT.md) conserva evidencia y límites de crédito. Sin pagos ni promesa de gratuidad ilimitada. Oracle/Google Cloud de abajo son antecedentes, no alternativas que deban desplegarse otra vez.
 
 ## Requisito del proyecto
 
