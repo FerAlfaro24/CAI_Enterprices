@@ -1,6 +1,35 @@
 # CAI — piloto gratuito en Railway
 
-**Estado vigente — 26-11:** web y Google real comprobados. Corrección `c9c0ff0`, despliegue `da8775b4-ff33-440a-b02a-ab08b13227e5` Active; estado anterior de rechazo documentado abajo como antecedente. Falta Gmail y el recorrido administrativo/alumno completo, pendientes de autorizaciones explícitas. Vercel/datos habituales conservados.
+**Estado vigente — 26-11:** Google y Gmail reales activos. Registro Google → aprobación → correo recibido → comunidad comprobados con fixture institucional CAI-0002. Recuperación administrativa recibida y formulario abierto, sin cambiar contraseña. Configuración de correo aplicada en despliegue `4a5bc403-66f6-442d-a112-a2eeba98ee89`; los estados anteriores de abajo son antecedentes. Vercel/datos habituales conservados.
+
+## Cierre de Google, Gmail y administración — 26-11
+
+### Permisos y archivos
+
+El titular autorizó explícitamente descargar/usar ambos archivos, conceder gmail.send, guardar la autorización privada e instalarla en cai-piloto, enviar pruebas solo a caiadministrador@gmail.com y leer únicamente los mensajes de prueba de hoy en ese buzón. No repetir esas confirmaciones; no extenderlas a otros destinatarios o mensajes. La aplicación CAI no recibió scope de lectura de Gmail.
+
+La descarga Blob no devolvió archivo recuperable. Se guardaron copias equivalentes mediante controles de UI y un formulario local protegido en loopback, sin imprimir su contenido: `.local/railway-private-2026-11-26/desktop-client.json`, `initial-admin-password.txt` y autorización `gmail.json`. JSON validado para el cliente de escritorio existente y remitente/origen exactos. ACL propietario/SYSTEM; los tres archivos están ignorados por Git. No crear otro cliente ni volver a pedir la contraseña compartida de SMTP.
+
+Asistente OAuth existente ejecutado realmente: PKCE/state, cuenta y scopes comprobados; autorización guardada y transporte.verify correcto sin correo. Se instaló CAI_GMAIL_CONFIG_JSON mediante el panel de Railway con permiso explícito. Servicio activo y API de correo enabled:true/adminEnabled:true. Archivo `/data/railway-gmail.json` comprobado con modo600 y propietario UID1000. Auxiliares temporales locales detenidos; verificación de seis puertos utilizados confirmó cero listeners.
+
+### Pruebas nuevas en el alojamiento
+
+- Acceso administrativo real en IAB y Brave aislado; bandeja y sesión conservadas al recargar. Datos de CAI-0002 creados en IAB aparecieron también en Brave: backend compartido, sin afirmar dos dispositivos físicos.
+- Fixture CAI-0002 «Prueba Institucional», datos ficticios identificados como prueba, clase Inglés y cuenta institucional real con Google. Pendiente antes de aprobación; aprobada exclusivamente esa fixture; acceso a comunidad mediante Google comprobado y ficha con Cuenta activada. CAI-0001/example.test sigue pendiente: no enviar correo a esa dirección.
+- Aviso «Tu solicitud de CAI fue aprobada» aceptado en ficha y recibido en Recibidos de Gmail institucional. Botón Entrar con Google apunta al origen canónico /login y abre la página de acceso. Registro/aprobación/correo/entrada Google completos.
+- Recuperación administrativa solicitada una vez para la misma cuenta. «Recupera tu acceso a CAI» recibido también en Recibidos; enlace privado al origen canónico /recuperar-administracion con token válido en formato. Abre Elige tu nueva contraseña. No se cambió contraseña, ni se probó todavía su sustitución, clave anterior inválida o uso único completo. El enlace vence15 minutos después de emitirse; si venció, solicitar otro cuando el titular esté listo.
+- API /ready200; archivos /data/railway-gmail.json, /railway-gmail.json, /initial-admin-password.txt y /.local/railway-private-2026-11-26/gmail.json404; alumnos401 sin sesión. No se mostraron secretos en esos endpoints.
+- Respaldo actualizado y verificado en Linux como UID1000: esquema23,2 solicitudes,1 alumno,0 cuentas de contraseña,0 publicaciones y0 imágenes. Cero cuentas de contraseña es coherente con el acceso Google ya activado. La copia incluye SQLite, no archivos de credenciales Gmail. Copia externa y restauración hospedada siguen pendientes.
+- Se corrige el aviso textual de solicitud Google que decía Prueba local con datos ficticios: ahora describe cuenta confirmada e inscripción revisada por CAI; no se modifica la lógica ni el diseño.
+
+No se repiten las suites históricas como pruebas nuevas. La primera prueba automatizada de Brave no pudo importar módulos del sistema en su VM; se usó transferencia local autorizada y se completó el acceso. Una búsqueda inicial de correo aún no mostraba recuperación; una búsqueda limitada posterior la confirmó en Recibidos, no Spam. No se reenvió ni se diagnosticó erróneamente fallo del proveedor.
+
+### Pendientes concretos
+
+1. El titular elige su nueva contraseña administrativa; después verificar cambio/entrada y enlace de un uso. El agente no debe introducir una contraseña nueva por él.
+2. Registro/aprobación/activación con contraseña de alumno hospedados; el camino de Google ya pasó. Recuperación de alumno con contraseña después de activar esa cuenta.
+3. Dos dispositivos físicos y2–3 participantes, material oficial privado, copia externa/restauración de respaldo y aceptación final. No afirmar entrega al100%.
+4. Comprobar crédito y vigencia de autorización Gmail antes de lunes30. OAuth sigue en modo Prueba, con duración limitada; no activar pagos ni publicar/verificar la app para todos implícitamente. Rotación y propiedad definitivas de cuenta institucional siguen como cierre previo a entrega operativa.
 
 ## Continuación y autorización
 
@@ -86,18 +115,7 @@ Tipos, build conectado y lint correctos en la preparación anterior. Docker loca
 
 ## Orden para terminar
 
-1. Google de identificación ya comprobado en Railway el26-11: conservar el origen guardado y la corrección del HTML. No recrear cliente ni volver a pedir el mismo permiso de origen. La inscripción/aprobación y entrada de alumno siguen por probar con los siguientes pasos.
-2. Obtener respuesta explícita a la descarga privada de la contraseña inicial para QA administrativo, o completar primero correo y recuperación del titular. No mostrar secretos en chat/Git ni eludir el bloqueo.
-3. Gmail API y cliente de escritorio ya creados por el titular, sin activar facturación. Usar el cliente existente indicado arriba; pedir únicamente el permiso pendiente para descargar/usar privadamente su JSON. Después, conceder solo identificación básica y `gmail.send` a la cuenta institucional, con confirmación ante la pantalla real de Google.
-4. El asistente local `scripts/configure-gmail-oauth.mjs` está preparado para un cliente **de escritorio**, PKCE, state, retorno loopback temporal, comprobación de identidad/cuenta y rechazo de scopes extra. Guarda únicamente en una subcarpeta privada de `.local`, sin sobrescribir; en Windows limita ACL a propietario/SYSTEM. Sintaxis Node, tipos y ESLint comprobados; una prueba nueva verifica PKCE/scopes/state, rechazo de GET con sesión ajena, POST y Host ajeno, sin tokens guardados ni conexión a Google. Primer intento bloqueado por EACCES local; ejecución autorizada correcta. Flujo OAuth real todavía no ejecutado. No envía mensajes ni imprime tokens. Uso tras autorizar el cliente:
-
-   ```powershell
-   node scripts/configure-gmail-oauth.mjs --client .local/railway-private/desktop-client.json --output .local/railway-private/gmail.json --from CORREO-INSTITUCIONAL@gmail.com --origin https://cai-piloto-production.up.railway.app
-   ```
-
-5. Instalar configuración de envío en el servidor con permiso para transmitirla a Railway y probar mensajes únicamente a la cuenta institucional autorizada. Recorrer registro→aprobación→activación→entrada y recuperación; luego dos dispositivos/2–3 participantes autorizados.
-6. Bootstrap deshabilitado (`CAI_INITIALIZE_EMPTY=false`), despliegue `aff10769-a2cc-4a7d-acc6-873ea4711482` observado Active/Deployment successful; comprobar persistencia tras cada cambio operativo. Copia externa del respaldo pendiente; material oficial privado por instalar mediante backend protegido, sin convertirlo en assets públicos.
-7. Revisar crédito y vigencia Gmail antes de lunes30. Ningún cambio de plan, tarjeta o coste recurrente sin decisión del titular. No prometer gratuidad indefinida ni disponibilidad sin límites; Vercel y datos habituales se conservan.
+Usar los pendientes concretos del cierre26-11 de arriba. Google, cliente/API Gmail, archivos autorizados, consentimiento e instalación ya están terminados. No repetir bootstrap, permisos, configuración o envíos; no aprobar CAI-0001/example.test. La siguiente intervención del titular es elegir la contraseña de recuperación, seguida de su validación. Continúan después activación con contraseña de alumno, dispositivos físicos y cierre operativo.
 
 ## Fuentes oficiales
 

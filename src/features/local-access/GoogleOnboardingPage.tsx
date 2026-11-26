@@ -30,7 +30,7 @@ export function GoogleOnboardingPage() {
       <div className={s.card}>
         <Link to="/">Volver al sitio</Link>
         <h1>{title}</h1>
-        <p className={s.notice}>Prueba local con datos ficticios. CAI debe revisar tu solicitud antes de que puedas entrar a la comunidad.</p>
+        <p className={s.notice}>Google confirma tu cuenta. CAI revisa por separado tu inscripción y el acceso a la comunidad.</p>
         {state && 'requestId' in state && <p>Folio <strong>{state.requestId}</strong></p>}
         {state?.status === 'anonymous' && <><p>Usa la misma cuenta de Google con la que empezaste. Si aún no tienes solicitud, te pediremos tus datos.</p><GoogleSignInButton /><Link to="/login">Entrar con contraseña</Link></>}
         {state?.status === 'pending' && <p>Ya recibimos tus datos. CAI comprobará tu inscripción. Podrás volver aquí con la misma cuenta de Google.</p>}

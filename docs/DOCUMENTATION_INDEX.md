@@ -1,6 +1,6 @@
 # CAI — índice y clasificación de toda la documentación
 
-[RAILWAY_PILOT](RAILWAY_PILOT.md) — piloto conectado publicado para lunes30: web/registro, persistencia, respaldo Linux y Google real de identificación comprobados. Correo y pruebas administrativas completas pendientes. No rehacer el diagnóstico del origen de Google; corrección publicada el26-11.
+[RAILWAY_PILOT](RAILWAY_PILOT.md) — piloto conectado con Google/Gmail reales y aviso/recuperación recibidos, administración autenticada y respaldo Linux actualizado. Pendientes: contraseña de recuperación elegida por titular, activación con contraseña hospedada, dispositivos físicos y cierre operativo. No rehacer configuración/permisos ya comprobados.
 
 **Entrada vigente:** [START_HERE](START_HERE.md) y [versión integrada del25-11](INTEGRATED_VERSION.md). Los documentos README_HISTORY y START_HERE_HISTORY conservan instrucciones superadas; no son guías de arranque actuales.
 
