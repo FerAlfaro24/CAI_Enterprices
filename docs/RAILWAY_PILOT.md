@@ -1,6 +1,8 @@
 # CAI — piloto gratuito en Railway
 
-**Estado vigente — 26-11:** Google y Gmail reales activos. Registro Google → aprobación → correo recibido → comunidad comprobados con fixture institucional CAI-0002. Recuperación administrativa recibida y formulario abierto, sin cambiar contraseña. Configuración de correo aplicada en despliegue `4a5bc403-66f6-442d-a112-a2eeba98ee89`; los estados anteriores de abajo son antecedentes. Vercel/datos habituales conservados.
+**Validación nueva — 27-11:** [Informe de pruebas](PILOT_VALIDATION_2026-11-27.md): 361 servidor y196 comprobaciones UI en recorridos completos; publicador con59 comprobaciones previas a límites/intermitencia del guion, detalle y límites registrados. En Railway: contraseña administrativa inicial rechazada, CAI-0003 ficticia registrada/aprobada y correo de activación recibido en el mismo buzón institucional. Formulario abierto; falta que el titular elija contraseña para continuar el recorrido remoto. Corregidos textos antiguos de registro/correo. No repetir permisos, bootstrap o configuración; no aprobar CAI-0001. Mínimo administrativo8 sigue pospuesto. Aviso de privacidad final pendiente de CAI.
+
+**Estado vigente — 26-11:** Google y Gmail reales activos. Registro Google → aprobación → correo recibido → comunidad comprobados con fixture institucional CAI-0002. Recuperación administrativa completada manualmente por el titular y nueva entrada al panel comprobada. Configuración de correo aplicada en despliegue `4a5bc403-66f6-442d-a112-a2eeba98ee89`; los estados anteriores de abajo son antecedentes. Vercel/datos habituales conservados.
 
 ## Cierre de Google, Gmail y administración — 26-11
 
@@ -24,9 +26,13 @@ Asistente OAuth existente ejecutado realmente: PKCE/state, cuenta y scopes compr
 
 No se repiten las suites históricas como pruebas nuevas. La primera prueba automatizada de Brave no pudo importar módulos del sistema en su VM; se usó transferencia local autorizada y se completó el acceso. Una búsqueda inicial de correo aún no mostraba recuperación; una búsqueda limitada posterior la confirmó en Recibidos, no Spam. No se reenvió ni se diagnosticó erróneamente fallo del proveedor.
 
+### Recuperación completada por el titular — 26-11
+
+El primer enlace caducó antes de completarse. Se solicitó otro únicamente para la misma cuenta institucional: recibido a las17:46 CDMX, con vencimiento18:01. Se abrió privadamente y se cedió el formulario al titular. El titular eligió y guardó su contraseña, inició sesión y confirmó la entrada. Observación posterior en navegador: /admin muestra Resumen, Hola Coordinación y Cerrar sesión. No se registró la contraseña en archivos ni Git. No se han comprobado aún el rechazo de la clave anterior ni un nuevo intento con el enlace consumido. El mínimo administrativo de15 sigue vigente; el titular pidió bajarlo a8, sin exigir números, y pospuso expresamente esa implementación.
+
 ### Pendientes concretos
 
-1. El titular elige su nueva contraseña administrativa; después verificar cambio/entrada y enlace de un uso. El agente no debe introducir una contraseña nueva por él.
+1. Recuperación administrativa y nueva entrada completadas por el titular. Quedan comprobaciones de rechazo de clave anterior y enlace consumido; no solicitar ni repetir una contraseña nueva.
 2. Registro/aprobación/activación con contraseña de alumno hospedados; el camino de Google ya pasó. Recuperación de alumno con contraseña después de activar esa cuenta.
 3. Dos dispositivos físicos y2–3 participantes, material oficial privado, copia externa/restauración de respaldo y aceptación final. No afirmar entrega al100%.
 4. Comprobar crédito y vigencia de autorización Gmail antes de lunes30. OAuth sigue en modo Prueba, con duración limitada; no activar pagos ni publicar/verificar la app para todos implícitamente. Rotación y propiedad definitivas de cuenta institucional siguen como cierre previo a entrega operativa.
@@ -115,7 +121,7 @@ Tipos, build conectado y lint correctos en la preparación anterior. Docker loca
 
 ## Orden para terminar
 
-Usar los pendientes concretos del cierre26-11 de arriba. Google, cliente/API Gmail, archivos autorizados, consentimiento e instalación ya están terminados. No repetir bootstrap, permisos, configuración o envíos; no aprobar CAI-0001/example.test. La siguiente intervención del titular es elegir la contraseña de recuperación, seguida de su validación. Continúan después activación con contraseña de alumno, dispositivos físicos y cierre operativo.
+Usar los pendientes concretos del cierre26-11 de arriba. Google, cliente/API Gmail, archivos autorizados, consentimiento e instalación ya están terminados. No repetir bootstrap, permisos, configuración o envíos; no aprobar CAI-0001/example.test. El titular ya completó la recuperación y nueva entrada, observada en navegador. Quedan rechazo de clave anterior y enlace consumido. Continúan después activación con contraseña de alumno, dispositivos físicos y cierre operativo.
 
 ## Fuentes oficiales
 

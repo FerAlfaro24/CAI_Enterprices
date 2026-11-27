@@ -1,6 +1,8 @@
 # CAI — índice y clasificación de toda la documentación
 
-[RAILWAY_PILOT](RAILWAY_PILOT.md) — piloto conectado con Google/Gmail reales y aviso/recuperación recibidos, administración autenticada y respaldo Linux actualizado. Pendientes: contraseña de recuperación elegida por titular, activación con contraseña hospedada, dispositivos físicos y cierre operativo. No rehacer configuración/permisos ya comprobados.
+**Validación nueva — 27-11:** [Informe de pruebas](PILOT_VALIDATION_2026-11-27.md): 361 servidor y196 comprobaciones UI en recorridos completos; publicador con59 comprobaciones previas a límites/intermitencia del guion, detalle y límites registrados. En Railway: contraseña administrativa inicial rechazada, CAI-0003 ficticia registrada/aprobada y correo de activación recibido en el mismo buzón institucional. Formulario abierto; falta que el titular elija contraseña para continuar el recorrido remoto. Corregidos textos antiguos de registro/correo. No repetir permisos, bootstrap o configuración; no aprobar CAI-0001. Mínimo administrativo8 sigue pospuesto. Aviso de privacidad final pendiente de CAI.
+
+[RAILWAY_PILOT](RAILWAY_PILOT.md) — piloto conectado con Google/Gmail reales y aviso/recuperación recibidos, administración autenticada y respaldo Linux actualizado. Recuperación completada por el titular y nueva entrada comprobada. Pendientes: clave anterior/enlace consumido, activación con contraseña hospedada, dispositivos físicos y cierre operativo. No rehacer configuración/permisos ya comprobados.
 
 **Entrada vigente:** [START_HERE](START_HERE.md) y [versión integrada del25-11](INTEGRATED_VERSION.md). Los documentos README_HISTORY y START_HERE_HISTORY conservan instrucciones superadas; no son guías de arranque actuales.
 
