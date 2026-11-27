@@ -231,7 +231,7 @@ export function SignupForm({ local = false, google }: { local?: boolean; google?
 
           <div className={s.divider}><span>{local ? 'Correo de contacto' : 'Datos de acceso'}</span></div>
 
-          <Field label={'Correo electrónico'} htmlFor={`${id}-email`} hint={google ? 'Cuenta confirmada por Google. Completa los datos del alumno; CAI revisará su inscripción.' : local ? 'Con este correo entrarás después de la aprobación y activación. Por ahora no se envían correos automáticos.' : 'Usa un correo ficticio: en la demo no se envían mensajes.'} hintId={`${id}-email-hint`} error={err('email')} errorId={`${id}-email-error`}>
+          <Field label={'Correo electrónico'} htmlFor={`${id}-email`} hint={google ? 'Cuenta confirmada por Google. Completa los datos del alumno; CAI revisará su inscripción.' : local ? 'Con este correo recibirás las instrucciones de acceso después de que CAI apruebe tu solicitud.' : 'Usa un correo ficticio: en la demo no se envían mensajes.'} hintId={`${id}-email-hint`} error={err('email')} errorId={`${id}-email-error`}>
             <input {...fieldProps('email', true)} type="email" inputMode="email" autoComplete="off" maxLength={120} value={values.email} readOnly={Boolean(google)} onChange={onText('email')} placeholder="demo@example.test" />
           </Field>
 

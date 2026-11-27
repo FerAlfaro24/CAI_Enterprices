@@ -105,7 +105,7 @@ export function AdminRequestsPage() {
         )}
       </section>
       <p className={s.footnote}>
-        Las decisiones se conservan al recargar. Aprobar incorpora al alumno al directorio; la activación de cuenta se prepara desde su ficha.
+        Las decisiones se conservan al recargar. Aprobar incorpora al alumno al directorio. Consulta el estado del correo y las opciones de activación en su ficha.
       </p>
 
       <RequestDialog request={state.requests.find((r) => r.id === selectedId) ?? null} onClose={() => setSelectedId(null)} />

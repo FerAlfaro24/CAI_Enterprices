@@ -1,5 +1,9 @@
 # CAI — sitio institucional, comunidad y administración
 
+**Validación nueva — 27-11:** [Informe de pruebas](docs/PILOT_VALIDATION_2026-11-27.md): 361 servidor y196 comprobaciones UI en recorridos completos; publicador con59 comprobaciones previas a límites/intermitencia del guion, detalle y límites registrados. En Railway: contraseña administrativa inicial rechazada, CAI-0003 ficticia registrada/aprobada y correo de activación recibido en el mismo buzón institucional. Formulario abierto; falta que el titular elija contraseña para continuar el recorrido remoto. Corregidos textos antiguos de registro/correo. No repetir permisos, bootstrap o configuración; no aprobar CAI-0001. Mínimo administrativo8 sigue pospuesto. Aviso de privacidad final pendiente de CAI.
+
+**Piloto conectado — 26-11:** [Abrir CAI en Railway](https://cai-piloto-production.up.railway.app/), rama `ops/cai-railway-pilot-2026-11-25`, PR#44. Registro con Google → aprobación → aviso recibido → comunidad comprobados con cuenta institucional ficticia. Gmail por HTTPS activo; recuperación administrativa completada por el titular y nueva entrada al panel comprobada. [Evidencia y pendientes](docs/RAILWAY_PILOT.md). Funciona sin la computadora encendida. Vercel sigue como presentación independiente.
+
 **Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](docs/HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
 
 

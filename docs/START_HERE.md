@@ -1,5 +1,9 @@
 # CAI — empieza aquí
 
+**Validación nueva — 27-11:** [Informe de pruebas](PILOT_VALIDATION_2026-11-27.md): 361 servidor y196 comprobaciones UI en recorridos completos; publicador con59 comprobaciones previas a límites/intermitencia del guion, detalle y límites registrados. En Railway: contraseña administrativa inicial rechazada, CAI-0003 ficticia registrada/aprobada y correo de activación recibido en el mismo buzón institucional. Formulario abierto; falta que el titular elija contraseña para continuar el recorrido remoto. Corregidos textos antiguos de registro/correo. No repetir permisos, bootstrap o configuración; no aprobar CAI-0001. Mínimo administrativo8 sigue pospuesto. Aviso de privacidad final pendiente de CAI.
+
+**Paso actual — 26-11:** continuar [piloto Railway](RAILWAY_PILOT.md), rama `ops/cai-railway-pilot-2026-11-25`, PR#44. Google y Gmail reales activos: CAI-0002 registrada/aprobada, aviso recibido y comunidad abierta; recuperación administrativa completada por el titular y nueva entrada al panel comprobada. No rehacer cliente, permisos, instalación de Gmail o el arreglo del origen. Archivos privados autorizados recuperados y excluidos de Git; ver guía antes de acceder. Ahora comprobar rechazo de clave anterior/enlace consumido, activación con contraseña hospedada y dos dispositivos físicos. Bootstrap=false; sin pagos, cambios en Vercel o datos habituales.
+
 **Continuación para entrega:** `release/cai-v1-candidate-2026-11-25`, desde la integrada `04bb0df`. Leer [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md) y [HOSTING_OPTIONS](HOSTING_OPTIONS.md). No fusionar adaptador, cuentas o ejemplos ficticios de la presentación. La muestra Vercel sigue publicada aparte en `feat/demo-community-content`/PR#41. Solo opciones gratuitas; no crear cuentas, activar facturación o adoptar bases implícitamente. Cliente aprobó presentación/diseño general, no operación productiva. Top y vídeos conservan su estado pendiente.
 
 
@@ -27,7 +31,7 @@ Node >=24.12.0 y npm >=10. Para un clon existente, comprobar `git status`, guard
 
 [RUN_LOCAL](RUN_LOCAL.md) explica cómo iniciar una fixture nueva de comunidad, separada de `.local/cai.sqlite`, con cuenta exclusivamente ficticia. No ejecutar setup o backend sobre una instalación previa para probar la rama. La versión actual requiere esquema23 en sus nuevas fixtures; las bases antiguas no retroceden al cambiar de rama.
 
-Rutas: `/` portada, `/registro` solicitud, `/login` alumno, `/community` comunidad protegida, `/admin` panel. El alumno necesita aprobación y acceso activado; administrar no crea una sesión de alumno. Verificar renderizado además de HTTP. No hay un servidor o enlace público que se mantenga activo por tener esta documentación.
+Rutas: `/` portada, `/registro` solicitud, `/login` alumno, `/community` comunidad protegida, `/admin` panel. El alumno necesita aprobación y acceso activado; administrar no crea una sesión de alumno. Verificar renderizado además de HTTP. El piloto Railway indicado arriba ya está publicado; los servidores de pruebas locales no se mantienen activos por tener esta documentación.
 
 ## Qué está integrado
 

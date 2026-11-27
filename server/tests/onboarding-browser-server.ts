@@ -19,7 +19,9 @@ if(realGoogle&&!clientId)throw Error('Falta el identificador público de Google 
 const mailbox:AccountMail[]=[];let failNext=false
 const mailPath=process.env.CAI_F6_MAIL_CONFIG
 if(realMail&&!mailPath)throw Error('Falta CAI_F6_MAIL_CONFIG privado para la prueba SMTP.')
-const mailSettings=realMail?readMailSettings({policy:{mode:'local'},host:'127.0.0.1',port:apiPort,dataDirectory:dirname(resolve(mailPath!)),databasePath:join(directory,'fixture.sqlite'),mailConfigPath:resolve(mailPath!)}):undefined
+const configuredMail=realMail?readMailSettings({policy:{mode:'local'},host:'127.0.0.1',port:apiPort,dataDirectory:dirname(resolve(mailPath!)),databasePath:join(directory,'fixture.sqlite'),mailConfigPath:resolve(mailPath!)}):undefined
+if(configuredMail&&'provider' in configuredMail)throw Error('Esta fixture histórica requiere SMTP; no usará otra credencial de correo.')
+const mailSettings=configuredMail
 if(mailSettings&&mailSettings.publicOrigin!==`http://localhost:${webPort}`)throw Error('El origen del correo debe coincidir con el puerto de esta fixture.')
 const smtp=mailSettings?smtpDelivery(mailSettings):undefined
 const app=createApplication(join(directory,'fixture.sqlite'),{clientId,...(realGoogle?{}:{verify:async(credential:string)=>{if(!credential.startsWith('fixture:'))throw Error('Identidad ficticia inválida');return JSON.parse(credential.slice(8)) as GoogleIdentity}})},

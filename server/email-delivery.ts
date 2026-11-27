@@ -1,10 +1,15 @@
 import nodemailer from 'nodemailer'
+import MailComposer from 'nodemailer/lib/mail-composer/index.js'
+import { OAuth2Client } from 'google-auth-library'
 import { lstatSync, readFileSync, realpathSync } from 'node:fs'
 import { isAbsolute } from 'node:path'
 import { isWithin, productionPolicy, type RuntimeConfig } from './runtime-config.ts'
+import { validClientId } from './google-auth.ts'
 import type { AccountMail, AccountMailDelivery } from './account-email.ts'
 
 export type SmtpSettings = { host: string; port: 465 | 587; user: string; password: string; from: string; publicOrigin: string }
+export type GmailSettings = { provider: 'gmail-api'; clientId: string; clientSecret: string; refreshToken: string; from: string; publicOrigin: string }
+export type MailSettings = SmtpSettings | GmailSettings
 const address = (value: unknown): value is string => typeof value === 'string' && value.length <= 160 && /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/i.test(value)
 
 export function validateMailSettings(value: unknown, policy: RuntimeConfig['policy']): SmtpSettings {
@@ -23,13 +28,29 @@ export function validateMailSettings(value: unknown, policy: RuntimeConfig['poli
   return data as SmtpSettings
 }
 
-export function readMailSettings(config: RuntimeConfig): SmtpSettings | undefined {
+export function validateGmailSettings(value: unknown, policy: RuntimeConfig['policy']): GmailSettings {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw Error('Revisa la configuración privada de Gmail.')
+  const data = value as Record<string, unknown>
+  const credential = (key: string, min: number, max: number) => typeof data[key] === 'string' && data[key].length >= min && data[key].length <= max && !/[\s\0]/.test(data[key])
+  if (Object.keys(data).some(key => !['provider', 'clientId', 'clientSecret', 'refreshToken', 'from', 'publicOrigin'].includes(key)) ||
+      data.provider !== 'gmail-api' || typeof data.clientId !== 'string' || !validClientId(data.clientId) ||
+      !credential('clientSecret', 10, 1024) || !credential('refreshToken', 20, 4096) ||
+      !address(data.from) || !/^[^@]+@gmail\.com$/i.test(data.from) || typeof data.publicOrigin !== 'string') throw Error('Revisa la configuración privada de Gmail; no se mostraron credenciales.')
+  const origin = data.publicOrigin
+  const local = policy.mode === 'local' && /^http:\/\/localhost:\d+$/.test(origin)
+  if (!local) productionPolicy(origin)
+  if (new URL(origin).origin !== origin || policy.mode === 'production' && origin !== policy.publicOrigin) throw Error('El origen de Gmail debe coincidir con el de CAI.')
+  return data as GmailSettings
+}
+
+export function readMailSettings(config: RuntimeConfig): MailSettings | undefined {
   if (!config.mailConfigPath) return
   try {
     const path = config.mailConfigPath, stat = lstatSync(path)
     if (!isAbsolute(path) || !stat.isFile() || stat.isSymbolicLink() || stat.size > 8192 ||
       !isWithin(realpathSync(config.dataDirectory), realpathSync(path))) throw Error('unsafe-file')
-    return validateMailSettings(JSON.parse(readFileSync(path, 'utf8')), config.policy)
+    const data = JSON.parse(readFileSync(path, 'utf8'))
+    return data?.provider === 'gmail-api' ? validateGmailSettings(data, config.policy) : validateMailSettings(data, config.policy)
   } catch { throw Error('CAI_MAIL_CONFIG debe apuntar a un archivo JSON privado válido dentro del directorio de datos; no se mostraron credenciales.') }
 }
 
@@ -62,3 +83,34 @@ export function smtpDelivery(settings: SmtpSettings) {
   }
   return { deliver, verify: () => transport.verify(), close: () => transport.close() }
 }
+
+/** Gmail por HTTPS: solo envío, sin leer el buzón y sin reintentos automáticos del POST. */
+export function gmailDelivery(settings: GmailSettings, dependencies: { accessToken?: () => Promise<string>; request?: typeof fetch } = {}) {
+  const client = new OAuth2Client({ clientId: settings.clientId, clientSecret: settings.clientSecret })
+  client.setCredentials({ refresh_token: settings.refreshToken })
+  const accessToken = dependencies.accessToken ?? (async () => {
+    const result = await client.getAccessToken()
+    if (!result.token) throw Error('Gmail no concedió acceso de envío.')
+    return result.token
+  })
+  const request = dependencies.request ?? fetch
+  const deliver: AccountMailDelivery = async message => {
+    // Validar destino/enlace antes de pedir credenciales o realizar una solicitud.
+    const content = accountEmailContent(message, settings.publicOrigin)
+    try {
+      const mime = await new MailComposer({ from: { name: 'CAI', address: settings.from }, to: message.to,
+        ...content, headers: { 'Auto-Submitted': 'auto-generated' }, disableFileAccess: true, disableUrlAccess: true }).compile().build()
+      const token = await accessToken()
+      const response = await request('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+        method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ raw: mime.toString('base64url') }), redirect: 'error', signal: AbortSignal.timeout(20_000),
+      })
+      if (!response.ok) { await response.body?.cancel(); throw Error('delivery-rejected') }
+      const result: unknown = await response.json()
+      if (!result || typeof result !== 'object' || !('id' in result) || typeof result.id !== 'string' || !result.id) throw Error('unconfirmed-delivery')
+    } catch { throw Error('Gmail no confirmó el envío. Revisa la autorización privada y reintenta desde coordinación; no se mostraron credenciales.') }
+  }
+  return { deliver, verify: async () => { try { await accessToken(); return true } catch { throw Error('No se pudo comprobar la autorización de Gmail.') } }, close: () => {} }
+}
+
+export const mailDelivery = (settings: MailSettings) => 'provider' in settings ? gmailDelivery(settings) : smtpDelivery(settings)
